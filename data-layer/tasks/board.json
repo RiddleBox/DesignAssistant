@@ -1,0 +1,47 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2026-02-12T02:50:42.256382Z",
+  "tasks": [
+    {
+      "projectId": "proj_001",
+      "name": "测试任务_需求分析",
+      "description": "完成产品需求文档",
+      "assignee": "emp_001",
+      "status": "todo",
+      "priority": "high",
+      "dependencies": [],
+      "createdAt": "2026-02-12T02:50:12.208057Z",
+      "updatedAt": "2026-02-12T02:50:12.208141Z",
+      "dueDate": "2026-02-20T00:00:00Z",
+      "tags": [
+        "需求",
+        "文档"
+      ],
+      "id": "task_001"
+    },
+    {
+      "projectId": "proj_001",
+      "name": "测试任务_需求分析",
+      "description": "完成产品需求文档",
+      "assignee": "emp_001",
+      "status": "todo",
+      "priority": "high",
+      "dependencies": [],
+      "createdAt": "2026-02-12T02:50:42.256265Z",
+      "updatedAt": "2026-02-12T02:50:42.256275Z",
+      "dueDate": "2026-02-20T00:00:00Z",
+      "tags": [
+        "需求",
+        "文档"
+      ],
+      "id": "task_002"
+    }
+  ],
+  "statistics": {
+    "total": 2,
+    "todo": 2,
+    "inProgress": 0,
+    "completed": 0,
+    "blocked": 0
+  }
+}

@@ -1,0 +1,214 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2026-02-12T02:50:42.261136Z",
+  "logs": [
+    {
+      "id": "log_001",
+      "timestamp": "2026-02-12T02:50:12.200061Z",
+      "action": "roster_updated",
+      "details": {
+        "count": 1
+      }
+    },
+    {
+      "id": "log_002",
+      "timestamp": "2026-02-12T02:50:12.200754Z",
+      "action": "employee_added",
+      "details": {
+        "employeeId": "emp_001",
+        "name": "测试员工_张三"
+      }
+    },
+    {
+      "id": "log_003",
+      "timestamp": "2026-02-12T02:50:12.202638Z",
+      "action": "project_index_updated",
+      "details": {
+        "count": 1
+      }
+    },
+    {
+      "id": "log_004",
+      "timestamp": "2026-02-12T02:50:12.203121Z",
+      "action": "project_added",
+      "details": {
+        "projectId": "proj_001",
+        "name": "测试项目_电商App"
+      }
+    },
+    {
+      "id": "log_005",
+      "timestamp": "2026-02-12T02:50:12.204640Z",
+      "action": "roster_updated",
+      "details": {
+        "count": 1
+      }
+    },
+    {
+      "id": "log_006",
+      "timestamp": "2026-02-12T02:50:12.205045Z",
+      "action": "employee_projects_updated",
+      "details": {
+        "employeeId": "emp_001",
+        "projectId": "proj_001",
+        "operation": "add"
+      }
+    },
+    {
+      "id": "log_007",
+      "timestamp": "2026-02-12T02:50:12.206472Z",
+      "action": "roster_updated",
+      "details": {
+        "count": 1
+      }
+    },
+    {
+      "id": "log_008",
+      "timestamp": "2026-02-12T02:50:12.206958Z",
+      "action": "employee_projects_updated",
+      "details": {
+        "employeeId": "emp_001",
+        "projectId": "proj_001",
+        "operation": "remove"
+      }
+    },
+    {
+      "id": "log_009",
+      "timestamp": "2026-02-12T02:50:12.208765Z",
+      "action": "task_board_updated",
+      "details": {
+        "count": 1
+      }
+    },
+    {
+      "id": "log_010",
+      "timestamp": "2026-02-12T02:50:12.209303Z",
+      "action": "task_added",
+      "details": {
+        "taskId": "task_001",
+        "name": "测试任务_需求分析"
+      }
+    },
+    {
+      "id": "log_011",
+      "timestamp": "2026-02-12T02:50:12.211093Z",
+      "action": "asset_metadata_updated",
+      "details": {
+        "count": 1
+      }
+    },
+    {
+      "id": "log_012",
+      "timestamp": "2026-02-12T02:50:12.211527Z",
+      "action": "asset_added",
+      "details": {
+        "assetId": "asset_001",
+        "name": "测试文档_产品需求文档.md"
+      }
+    },
+    {
+      "id": "log_013",
+      "timestamp": "2026-02-12T02:50:42.249376Z",
+      "action": "roster_updated",
+      "details": {
+        "count": 2
+      }
+    },
+    {
+      "id": "log_014",
+      "timestamp": "2026-02-12T02:50:42.249967Z",
+      "action": "employee_added",
+      "details": {
+        "employeeId": "emp_002",
+        "name": "测试员工_张三"
+      }
+    },
+    {
+      "id": "log_015",
+      "timestamp": "2026-02-12T02:50:42.251235Z",
+      "action": "project_index_updated",
+      "details": {
+        "count": 2
+      }
+    },
+    {
+      "id": "log_016",
+      "timestamp": "2026-02-12T02:50:42.251786Z",
+      "action": "project_added",
+      "details": {
+        "projectId": "proj_002",
+        "name": "测试项目_电商App"
+      }
+    },
+    {
+      "id": "log_017",
+      "timestamp": "2026-02-12T02:50:42.253144Z",
+      "action": "roster_updated",
+      "details": {
+        "count": 2
+      }
+    },
+    {
+      "id": "log_018",
+      "timestamp": "2026-02-12T02:50:42.253576Z",
+      "action": "employee_projects_updated",
+      "details": {
+        "employeeId": "emp_001",
+        "projectId": "proj_001",
+        "operation": "add"
+      }
+    },
+    {
+      "id": "log_019",
+      "timestamp": "2026-02-12T02:50:42.254615Z",
+      "action": "roster_updated",
+      "details": {
+        "count": 2
+      }
+    },
+    {
+      "id": "log_020",
+      "timestamp": "2026-02-12T02:50:42.255076Z",
+      "action": "employee_projects_updated",
+      "details": {
+        "employeeId": "emp_001",
+        "projectId": "proj_001",
+        "operation": "remove"
+      }
+    },
+    {
+      "id": "log_021",
+      "timestamp": "2026-02-12T02:50:42.256842Z",
+      "action": "task_board_updated",
+      "details": {
+        "count": 2
+      }
+    },
+    {
+      "id": "log_022",
+      "timestamp": "2026-02-12T02:50:42.257310Z",
+      "action": "task_added",
+      "details": {
+        "taskId": "task_002",
+        "name": "测试任务_需求分析"
+      }
+    },
+    {
+      "id": "log_023",
+      "timestamp": "2026-02-12T02:50:42.260211Z",
+      "action": "asset_metadata_updated",
+      "details": {
+        "count": 2
+      }
+    },
+    {
+      "id": "log_024",
+      "timestamp": "2026-02-12T02:50:42.261131Z",
+      "action": "asset_added",
+      "details": {
+        "assetId": "asset_002",
+        "name": "测试文档_产品需求文档.md"
+      }
+    }
+  ]
+}

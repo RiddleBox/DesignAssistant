@@ -1,0 +1,68 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2026-02-12T02:50:42.259490Z",
+  "assets": [
+    {
+      "projectId": "proj_001",
+      "name": "测试文档_产品需求文档.md",
+      "type": "document",
+      "category": "docs",
+      "path": "projects/proj_001/shared/docs/产品需求文档.md",
+      "creator": "emp_001",
+      "createdAt": "2026-02-12T02:50:12.210212Z",
+      "updatedAt": "2026-02-12T02:50:12.210262Z",
+      "version": "1.0.0",
+      "description": "电商App产品需求文档",
+      "tags": [
+        "需求",
+        "文档"
+      ],
+      "references": [],
+      "changeLog": [
+        {
+          "version": "1.0.0",
+          "date": "2026-02-12T02:50:12.210310Z",
+          "author": "emp_001",
+          "changes": "初始版本"
+        }
+      ],
+      "id": "asset_001"
+    },
+    {
+      "projectId": "proj_001",
+      "name": "测试文档_产品需求文档.md",
+      "type": "document",
+      "category": "docs",
+      "path": "projects/proj_001/shared/docs/产品需求文档.md",
+      "creator": "emp_001",
+      "createdAt": "2026-02-12T02:50:42.259281Z",
+      "updatedAt": "2026-02-12T02:50:42.259327Z",
+      "version": "1.0.0",
+      "description": "电商App产品需求文档",
+      "tags": [
+        "需求",
+        "文档"
+      ],
+      "references": [],
+      "changeLog": [
+        {
+          "version": "1.0.0",
+          "date": "2026-02-12T02:50:42.259336Z",
+          "author": "emp_001",
+          "changes": "初始版本"
+        }
+      ],
+      "id": "asset_002"
+    }
+  ],
+  "statistics": {
+    "total": 2,
+    "byType": {
+      "document": 2,
+      "code": 0,
+      "design": 0,
+      "config": 0,
+      "other": 0
+    }
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2026-02-12T02:50:42.254121Z",
+  "employees": [
+    {
+      "name": "测试员工_张三",
+      "industry": "互联网",
+      "position": "产品经理",
+      "createdAt": "2026-02-12T02:50:12.198770Z",
+      "workspacePath": "~/Documents/digital_employees/测试员工_张三",
+      "status": "active",
+      "projects": [],
+      "skills": [
+        "需求分析",
+        "用户研究",
+        "Axure",
+        "产品规划"
+      ],
+      "id": "emp_001"
+    },
+    {
+      "name": "测试员工_张三",
+      "industry": "互联网",
+      "position": "产品经理",
+      "createdAt": "2026-02-12T02:50:42.248675Z",
+      "workspacePath": "~/Documents/digital_employees/测试员工_张三",
+      "status": "active",
+      "projects": [],
+      "skills": [
+        "需求分析",
+        "用户研究",
+        "Axure",
+        "产品规划"
+      ],
+      "id": "emp_002"
+    }
+  ],
+  "statistics": {
+    "total": 2,
+    "active": 2,
+    "inactive": 0
+  }
+}
