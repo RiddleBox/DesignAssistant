@@ -1,43 +1,113 @@
 {
-  "version": "1.0.0",
-  "lastUpdated": "2026-02-12T02:50:42.254121Z",
+  "version": "2.0.0",
+  "lastUpdated": "2026-02-13T10:28:50+08:00",
   "employees": [
     {
-      "name": "测试员工_张三",
-      "industry": "互联网",
-      "position": "产品经理",
-      "createdAt": "2026-02-12T02:50:12.198770Z",
-      "workspacePath": "~/Documents/digital_employees/测试员工_张三",
+      "name": "首席模拟经营研究员",
+      "industry": "游戏设计",
+      "position": "Lead Simulation Game Design Researcher",
+      "createdAt": "2026-02-13T10:28:50+08:00",
+      "workspacePath": "~/Documents/digital_employees/首席模拟经营研究员",
       "status": "active",
       "projects": [],
       "skills": [
-        "需求分析",
-        "用户研究",
-        "Axure",
-        "产品规划"
+        "Game Design Theory",
+        "Simulation Game Analysis",
+        "Case Study Research",
+        "Research Methodology",
+        "System Thinking"
       ],
-      "id": "emp_001"
+      "id": "EMP-004"
     },
     {
-      "name": "测试员工_张三",
-      "industry": "互联网",
-      "position": "产品经理",
-      "createdAt": "2026-02-12T02:50:42.248675Z",
-      "workspacePath": "~/Documents/digital_employees/测试员工_张三",
+      "name": "经济系统研究专员",
+      "industry": "游戏设计",
+      "position": "Economic System & Numerical Design Researcher",
+      "createdAt": "2026-02-13T10:28:50+08:00",
+      "workspacePath": "~/Documents/digital_employees/经济系统研究专员",
       "status": "active",
       "projects": [],
       "skills": [
-        "需求分析",
-        "用户研究",
-        "Axure",
-        "产品规划"
+        "Numerical Design",
+        "Economic System Design",
+        "Data Modeling",
+        "Excel/Python Analysis",
+        "System Balance"
       ],
-      "id": "emp_002"
+      "id": "EMP-005"
+    },
+    {
+      "name": "生产链研究专员",
+      "industry": "游戏设计",
+      "position": "Production Chain & Resource Management Researcher",
+      "createdAt": "2026-02-13T10:28:50+08:00",
+      "workspacePath": "~/Documents/digital_employees/生产链研究专员",
+      "status": "active",
+      "projects": [],
+      "skills": [
+        "System Design",
+        "Logic Thinking",
+        "Process Design",
+        "Optimization Thinking",
+        "Flowchart Design"
+      ],
+      "id": "EMP-006"
+    },
+    {
+      "name": "决策策略研究专员",
+      "industry": "游戏设计",
+      "position": "Player Decision & Strategy Depth Researcher",
+      "createdAt": "2026-02-13T10:28:50+08:00",
+      "workspacePath": "~/Documents/digital_employees/决策策略研究专员",
+      "status": "active",
+      "projects": [],
+      "skills": [
+        "Game Design",
+        "Strategy Game Experience",
+        "Player Psychology Analysis",
+        "Game Theory Fundamentals",
+        "User Research"
+      ],
+      "id": "EMP-007"
+    },
+    {
+      "name": "内容目标研究专员",
+      "industry": "游戏设计",
+      "position": "Content & Goal Design Researcher",
+      "createdAt": "2026-02-13T10:28:50+08:00",
+      "workspacePath": "~/Documents/digital_employees/内容目标研究专员",
+      "status": "active",
+      "projects": [],
+      "skills": [
+        "Content Design",
+        "Goal Design",
+        "Pacing Control",
+        "Creative Thinking",
+        "Narrative Design"
+      ],
+      "id": "EMP-008"
+    },
+    {
+      "name": "知识管理专员",
+      "industry": "游戏设计",
+      "position": "Knowledge Management & Sharing Specialist",
+      "createdAt": "2026-02-13T10:28:50+08:00",
+      "workspacePath": "~/Documents/digital_employees/知识管理专员",
+      "status": "active",
+      "projects": [],
+      "skills": [
+        "Knowledge Management",
+        "Documentation",
+        "Presentation Design",
+        "Information Organization",
+        "Community Operation"
+      ],
+      "id": "EMP-009"
     }
   ],
   "statistics": {
-    "total": 2,
-    "active": 2,
+    "total": 6,
+    "active": 6,
     "inactive": 0
   }
 }

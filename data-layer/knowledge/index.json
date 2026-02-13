@@ -1,0 +1,42 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2026-02-13T10:19:00Z",
+  "knowledge": [
+    {
+      "id": "know_20260213_001",
+      "title": "游戏系统设计全流程案例：星露谷物语农场系统",
+      "category": "最佳实践",
+      "type": "document",
+      "scope": "team",
+      "projectId": null,
+      "projectName": null,
+      "authorId": "system",
+      "authorName": "设计研究团队",
+      "createdAt": "2026-02-13T10:19:00Z",
+      "updatedAt": "2026-02-13T10:19:00Z",
+      "tags": ["游戏设计", "系统设计", "案例分析", "设计流程", "模拟经营", "星露谷物语"],
+      "summary": "以《星露谷物语》为例，完整展示从概念到实现的游戏系统设计全流程，包括核心循环设计、系统模块拆解、经济平衡、时间节奏等关键环节，揭示成熟设计师的思维模式。",
+      "path": "data-layer/assets/knowledge/practices/游戏系统设计全流程案例_星露谷物语农场系统.md",
+      "referenceCount": 0,
+      "viewCount": 0,
+      "relatedKnowledge": [],
+      "keywords": ["游戏设计", "系统架构", "核心循环", "经济系统", "平衡性设计", "迭代开发", "数据驱动", "模拟经营"]
+    }
+  ],
+  "statistics": {
+    "total": 1,
+    "byScope": {
+      "team": 1,
+      "personal": 0
+    },
+    "byCategory": {
+      "技术方案": 0,
+      "业务规范": 0,
+      "行业趋势": 0,
+      "最佳实践": 1
+    },
+    "byProject": {},
+    "totalReferences": 0,
+    "totalViews": 0
+  }
+}

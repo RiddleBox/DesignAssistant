@@ -1,103 +1,196 @@
 {
   "employees": [
     {
-      "id": "EMP-001",
-      "code_name": "主策划-CORE",
-      "role": "Lead Designer",
-      "role_cn": "主策划",
-      "department": "游戏设计核心团队",
+      "id": "EMP-004",
+      "code_name": "首席模拟经营研究员",
+      "role": "Lead Simulation Game Design Researcher",
+      "role_cn": "首席模拟经营设计研究员",
+      "department": "游戏设计研究团队",
       "level": "核心成员",
       "skills": [
-        "整体设计方向把控",
-        "核心玩法定义",
-        "团队协调与决策",
-        "设计文档审核",
-        "跨部门沟通"
+        "Game Design Theory",
+        "Simulation Game Analysis",
+        "Case Study Research",
+        "Research Methodology",
+        "System Thinking"
       ],
       "responsibilities": [
-        "制定赛季系统的整体设计方向和核心玩法",
-        "协调系统策划和数值策划的工作",
-        "审核和批准关键设计决策",
-        "把控设计质量和玩家体验",
-        "与其他部门（美术、程序、运营）沟通协调"
+        "Research core design theories of simulation management games",
+        "Analyze different sub-genres design characteristics",
+        "Study player psychology in simulation games",
+        "Develop team research framework and methodology",
+        "Write comprehensive research reports"
       ],
       "expertise": [
-        "游戏设计理论",
-        "玩家心理学",
-        "市场趋势分析",
-        "团队管理",
-        "POE系列游戏深度理解"
+        "Simulation game deep player experience",
+        "Classic games analysis (SimCity, RollerCoaster Tycoon, Stardew Valley)",
+        "Player satisfaction research",
+        "Long-term planning mechanics",
+        "Economic system fundamentals"
       ],
       "status": "active",
-      "created_at": "2026-02-12T15:03:27+08:00"
+      "created_at": "2026-02-13T10:28:50+08:00"
     },
     {
-      "id": "EMP-002",
-      "code_name": "系统策划-CORE",
-      "role": "System Designer",
-      "role_cn": "系统策划",
-      "department": "游戏设计核心团队",
+      "id": "EMP-005",
+      "code_name": "经济系统研究专员",
+      "role": "Economic System & Numerical Design Researcher",
+      "role_cn": "经济系统与数值设计研究专员",
+      "department": "游戏设计研究团队",
       "level": "核心成员",
       "skills": [
-        "游戏机制设计",
-        "系统架构规划",
-        "规则制定",
-        "交互逻辑设计",
-        "技术可行性评估"
+        "Numerical Design",
+        "Economic System Design",
+        "Data Modeling",
+        "Excel/Python Analysis",
+        "System Balance"
       ],
       "responsibilities": [
-        "设计赛季系统的核心机制和玩法规则",
-        "制定系统架构和模块划分",
-        "编写详细的系统设计文档",
-        "与数值策划协作确定系统参数",
-        "与程序团队沟通技术实现方案"
+        "Research in-game economic system design",
+        "Analyze resource production and consumption balance",
+        "Study numerical growth curves and long-term goals",
+        "Build economic system models and simulation tools",
+        "Summarize common economic issues and solutions"
       ],
       "expertise": [
-        "系统设计方法论",
-        "游戏机制分析",
-        "流程图和架构设计",
-        "ARPG系统设计经验",
-        "POE联盟机制深度研究"
+        "Economics fundamentals",
+        "Mathematical modeling",
+        "Currency circulation systems",
+        "Inflation control mechanisms",
+        "Price mechanism design"
       ],
       "status": "active",
-      "created_at": "2026-02-12T15:03:27+08:00"
+      "created_at": "2026-02-13T10:28:50+08:00"
     },
     {
-      "id": "EMP-003",
-      "code_name": "数值策划-CORE",
-      "role": "Numerical Designer",
-      "role_cn": "数值策划",
-      "department": "游戏设计核心团队",
+      "id": "EMP-006",
+      "code_name": "生产链研究专员",
+      "role": "Production Chain & Resource Management Researcher",
+      "role_cn": "生产链与资源管理研究专员",
+      "department": "游戏设计研究团队",
       "level": "核心成员",
       "skills": [
-        "数值体系设计",
-        "平衡性调整",
-        "数据分析",
-        "奖励曲线设计",
-        "经济系统设计"
+        "System Design",
+        "Logic Thinking",
+        "Process Design",
+        "Optimization Thinking",
+        "Flowchart Design"
       ],
       "responsibilities": [
-        "设计赛季系统的数值体系和成长曲线",
-        "制定奖励分配和掉落概率",
-        "进行数值平衡性测试和调整",
-        "分析玩家数据并优化数值",
-        "确保系统的长期可玩性和经济平衡"
+        "Research production chain design methods",
+        "Analyze resource management complexity design",
+        "Study supply-demand relationships and logistics systems",
+        "Summarize production chain depth vs usability balance",
+        "Build production chain design pattern library"
       ],
       "expertise": [
-        "数学建模",
-        "概率论与统计",
-        "Excel/Python数值工具",
-        "游戏经济学",
-        "POE数值体系深度理解"
+        "Multi-tier production chain analysis",
+        "Factorio and Oxygen Not Included case studies",
+        "Bottleneck design strategies",
+        "Automation system design",
+        "Industrial engineering fundamentals"
       ],
       "status": "active",
-      "created_at": "2026-02-12T15:03:27+08:00"
+      "created_at": "2026-02-13T10:28:50+08:00"
+    },
+    {
+      "id": "EMP-007",
+      "code_name": "决策策略研究专员",
+      "role": "Player Decision & Strategy Depth Researcher",
+      "role_cn": "玩家决策与策略深度研究专员",
+      "department": "游戏设计研究团队",
+      "level": "核心成员",
+      "skills": [
+        "Game Design",
+        "Strategy Game Experience",
+        "Player Psychology Analysis",
+        "Game Theory Fundamentals",
+        "User Research"
+      ],
+      "responsibilities": [
+        "Research player decision point design",
+        "Analyze strategy depth construction methods",
+        "Study difficulty curves and challenge design",
+        "Analyze different player type strategy preferences",
+        "Summarize replayability enhancement strategies"
+      ],
+      "expertise": [
+        "Short-term vs long-term decision design",
+        "Trade-off mechanics",
+        "Risk management systems",
+        "Multiple development path design",
+        "Player behavior pattern analysis"
+      ],
+      "status": "active",
+      "created_at": "2026-02-13T10:28:50+08:00"
+    },
+    {
+      "id": "EMP-008",
+      "code_name": "内容目标研究专员",
+      "role": "Content & Goal Design Researcher",
+      "role_cn": "内容与目标设计研究专员",
+      "department": "游戏设计研究团队",
+      "level": "核心成员",
+      "skills": [
+        "Content Design",
+        "Goal Design",
+        "Pacing Control",
+        "Creative Thinking",
+        "Narrative Design"
+      ],
+      "responsibilities": [
+        "Research short/mid/long-term goal design",
+        "Analyze content unlock pacing and freshness maintenance",
+        "Study narrative and worldbuilding in simulation games",
+        "Analyze random events and dynamic content design",
+        "Summarize content production efficiency and player retention"
+      ],
+      "expertise": [
+        "Task and achievement system design",
+        "Milestone design",
+        "Random event mechanics",
+        "NPC interaction systems",
+        "Content progression analysis"
+      ],
+      "status": "active",
+      "created_at": "2026-02-13T10:28:50+08:00"
+    },
+    {
+      "id": "EMP-009",
+      "code_name": "知识管理专员",
+      "role": "Knowledge Management & Sharing Specialist",
+      "role_cn": "知识管理与分享专员",
+      "department": "游戏设计研究团队",
+      "level": "核心成员",
+      "skills": [
+        "Knowledge Management",
+        "Documentation",
+        "Presentation Design",
+        "Information Organization",
+        "Community Operation"
+      ],
+      "responsibilities": [
+        "Build simulation game design knowledge base",
+        "Collect and organize classic case studies",
+        "Organize regular sharing sessions and workshops",
+        "Create research reports and presentation materials",
+        "Track latest trends in simulation games"
+      ],
+      "expertise": [
+        "Classic games database (Civilization, Cities Skylines, RimWorld, Dyson Sphere Program)",
+        "Trend analysis (automation, sandbox, roguelike fusion)",
+        "Video editing and chart design",
+        "Knowledge base architecture",
+        "Workshop facilitation"
+      ],
+      "status": "active",
+      "created_at": "2026-02-13T10:28:50+08:00"
     }
   ],
   "metadata": {
-    "total_count": 3,
-    "last_updated": "2026-02-12T15:03:27+08:00",
-    "version": "1.0.0",
-    "description": "POE2赛季系统设计核心团队 - 3人核心配置"
+    "total_count": 6,
+    "last_updated": "2026-02-13T10:28:50+08:00",
+    "version": "2.0.0",
+    "description": "Simulation Management Game Design Research Team - 6 Member Configuration"
   }
 }
