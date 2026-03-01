@@ -1,0 +1,56 @@
+{
+  "version": "1.0.0",
+  "templateInfo": {
+    "id": "tmpl_builtin_003",
+    "name": "咨询团队",
+    "category": "商业咨询",
+    "type": "builtin",
+    "description": "适用于企业咨询/策略规划/业务优化的标准团队配置",
+    "author": "系统内置",
+    "createdAt": "2026-02-12T00:00:00Z",
+    "updatedAt": "2026-02-12T00:00:00Z"
+  },
+  "members": [
+    {
+      "role": "项目经理",
+      "count": 1,
+      "responsibilities": ["明确问题定义与范围", "推进访谈/调研计划", "汇总产出并对齐干系人"],
+      "skills": ["项目管理", "沟通协作", "问题定义"],
+      "defaultName": "项目经理"
+    },
+    {
+      "role": "业务分析师",
+      "count": 1,
+      "responsibilities": ["拆解业务流程与痛点", "输出方案与落地路径", "定义关键指标"],
+      "skills": ["业务分析", "流程设计", "方案撰写"],
+      "defaultName": "业务分析师"
+    },
+    {
+      "role": "数据分析师",
+      "count": 1,
+      "responsibilities": ["数据口径定义", "分析与建模", "输出洞察与建议"],
+      "skills": ["数据分析", "指标体系", "统计思维"],
+      "defaultName": "数据分析师"
+    }
+  ],
+  "projectTemplate": {
+    "namePattern": "{模板名称}项目",
+    "descriptionPattern": "基于{模板名称}模板创建的咨询项目",
+    "defaultTags": ["咨询", "模板部署"]
+  },
+  "collaborationFlow": {
+    "description": "诊断 → 分析 → 方案 → 落地 → 复盘",
+    "phases": [
+      {"name": "诊断", "participants": ["项目经理", "业务分析师"], "outputs": ["问题定义", "范围边界", "访谈提纲"]},
+      {"name": "分析", "participants": ["业务分析师", "数据分析师"], "outputs": ["现状分析", "指标分析", "机会点"]},
+      {"name": "方案与落地", "participants": ["项目经理", "业务分析师"], "outputs": ["方案报告", "落地计划", "风险清单"]}
+    ]
+  },
+  "quickStartGuide": {
+    "title": "咨询团队快速入门",
+    "sections": [
+      {"title": "怎么用", "content": "对我说：\"我想解决业务问题X，帮我用咨询团队做诊断并给方案\"。"},
+      {"title": "交付物", "content": "问题定义、现状分析、方案报告、落地计划、复盘。"}
+    ]
+  }
+}

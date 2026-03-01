@@ -1,0 +1,55 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2026-02-20T11:03:29Z",
+  "templates": [
+    {
+      "id": "tmpl_builtin_001",
+      "name": "软件开发团队",
+      "category": "技术开发",
+      "type": "builtin",
+      "description": "适用于 Web/移动应用开发的标准团队配置",
+      "memberCount": 5,
+      "roles": ["产品经理", "前端工程师", "后端工程师", "测试工程师", "UI设计师"],
+      "createdAt": "2026-02-12T00:00:00Z",
+      "usageCount": 0
+    },
+    {
+      "id": "tmpl_builtin_002",
+      "name": "内容创作团队",
+      "category": "内容制作",
+      "type": "builtin",
+      "description": "适用于文章/视频/直播等内容生产的标准团队配置",
+      "memberCount": 4,
+      "roles": ["内容策划", "文案编辑", "视觉设计师", "视频剪辑师"],
+      "createdAt": "2026-02-12T00:00:00Z",
+      "usageCount": 0
+    },
+    {
+      "id": "tmpl_builtin_003",
+      "name": "咨询团队",
+      "category": "商业咨询",
+      "type": "builtin",
+      "description": "适用于企业咨询/策略规划/业务优化的标准团队配置",
+      "memberCount": 3,
+      "roles": ["项目经理", "业务分析师", "数据分析师"],
+      "createdAt": "2026-02-12T00:00:00Z",
+      "usageCount": 0
+    },
+    {
+      "id": "tmpl_custom_001",
+      "name": "需求转译与团队编排团队",
+      "category": "协作基础",
+      "type": "custom",
+      "description": "将用户自然语言目标转译为清晰的需求边界、验收标准、可执行提示词包，并给出最合适的数字员工团队组合与协作关系。",
+      "memberCount": 4,
+      "roles": ["需求澄清官", "提示词架构师", "团队编排官", "边界与质量审计官"],
+      "createdAt": "2026-02-20T11:03:29Z",
+      "usageCount": 0
+    }
+  ],
+  "statistics": {
+    "total": 4,
+    "builtin": 3,
+    "custom": 1
+  }
+}

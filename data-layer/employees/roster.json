@@ -1,6 +1,6 @@
 {
   "version": "2.0.0",
-  "lastUpdated": "2026-02-13T10:28:50+08:00",
+  "lastUpdated": "2026-03-01T00:00:00Z",
   "employees": [
     {
       "name": "首席模拟经营研究员",
@@ -103,11 +103,87 @@
         "Community Operation"
       ],
       "id": "EMP-009"
+    },
+    {
+      "name": "战术射击研究负责人",
+      "industry": "游戏设计",
+      "position": "Tactical Shooter Design Research Lead",
+      "createdAt": "2026-03-01T00:00:00Z",
+      "workspacePath": "~/Documents/digital_employees/战术射击研究负责人",
+      "status": "active",
+      "projects": [
+        "proj_003"
+      ],
+      "skills": [
+        "Tactical Shooter Analysis",
+        "Mechanics-Phenomena-Governance Framework",
+        "LiveOps Governance",
+        "Systems Thinking",
+        "Evidence-based Research"
+      ],
+      "id": "EMP-010"
+    },
+    {
+      "name": "信息博弈研究专员",
+      "industry": "游戏设计",
+      "position": "Information Game & Recon-Counter Researcher",
+      "createdAt": "2026-03-01T00:00:00Z",
+      "workspacePath": "~/Documents/digital_employees/信息博弈研究专员",
+      "status": "active",
+      "projects": [
+        "proj_003"
+      ],
+      "skills": [
+        "Information System Design",
+        "Recon / Counter-Recon",
+        "Cost Model",
+        "Readability & Learnability",
+        "Evidence-based Research"
+      ],
+      "id": "EMP-011"
+    },
+    {
+      "name": "破坏与地图系统研究专员",
+      "industry": "游戏设计",
+      "position": "Destruction System & Map Topology Researcher",
+      "createdAt": "2026-03-01T00:00:00Z",
+      "workspacePath": "~/Documents/digital_employees/破坏与地图系统研究专员",
+      "status": "active",
+      "projects": [
+        "proj_003"
+      ],
+      "skills": [
+        "Map Topology Analysis",
+        "Soft/Hard Breach System",
+        "LOS Governance",
+        "Level Design Iteration",
+        "Evidence-based Research"
+      ],
+      "id": "EMP-012"
+    },
+    {
+      "name": "版本考据与归档专员",
+      "industry": "游戏设计",
+      "position": "Patch Provenance & Knowledge Archivist",
+      "createdAt": "2026-03-01T00:00:00Z",
+      "workspacePath": "~/Documents/digital_employees/版本考据与归档专员",
+      "status": "active",
+      "projects": [
+        "proj_003"
+      ],
+      "skills": [
+        "Source Tracking",
+        "Evidence Grading",
+        "Knowledge Indexing",
+        "Metadata Management",
+        "Cross-linking"
+      ],
+      "id": "EMP-013"
     }
   ],
   "statistics": {
-    "total": 6,
-    "active": 6,
+    "total": 10,
+    "active": 10,
     "inactive": 0
   }
 }

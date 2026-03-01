@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "lastUpdated": "2026-02-12T02:50:42.250716Z",
+  "lastUpdated": "2026-03-01T00:00:00Z",
   "projects": [
     {
       "name": "测试项目_电商App",
@@ -23,11 +23,25 @@
       ],
       "workspacePath": "data-layer/projects/proj_001",
       "id": "proj_002"
+    },
+    {
+      "id": "proj_003",
+      "name": "战术射击游戏设计研究（R6围攻）",
+      "description": "围绕《彩虹六号：围攻》进行设计支柱与系统演进复盘：硬破轴、拒止/节奏轴、信息轴，并形成可迁移的分析框架与知识条目。",
+      "createdAt": "2026-03-01T00:00:00Z",
+      "status": "active",
+      "members": [
+        "EMP-010",
+        "EMP-011",
+        "EMP-012",
+        "EMP-013"
+      ],
+      "workspacePath": "data-layer/projects/proj_003"
     }
   ],
   "statistics": {
-    "total": 2,
-    "active": 2,
+    "total": 3,
+    "active": 3,
     "completed": 0,
     "archived": 0
   }

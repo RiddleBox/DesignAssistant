@@ -1,0 +1,42 @@
+{
+  "id": "proj_003",
+  "name": "战术射击游戏设计研究（R6围攻）",
+  "description": "围绕《彩虹六号：围攻》进行设计支柱与系统演进复盘：硬破轴、拒止/节奏轴、信息轴，并形成可迁移的分析框架与知识条目。",
+  "createdAt": "2026-03-01T00:00:00Z",
+  "updatedAt": "2026-03-01T00:00:00Z",
+  "status": "active",
+  "members": [
+    {
+      "employeeId": "EMP-010",
+      "role": "研究负责人",
+      "permission": "admin",
+      "joinedAt": "2026-03-01T00:00:00Z"
+    },
+    {
+      "employeeId": "EMP-011",
+      "role": "信息博弈研究",
+      "permission": "write",
+      "joinedAt": "2026-03-01T00:00:00Z"
+    },
+    {
+      "employeeId": "EMP-012",
+      "role": "破坏与地图系统研究",
+      "permission": "write",
+      "joinedAt": "2026-03-01T00:00:00Z"
+    },
+    {
+      "employeeId": "EMP-013",
+      "role": "版本考据与归档",
+      "permission": "write",
+      "joinedAt": "2026-03-01T00:00:00Z"
+    }
+  ],
+  "sharedResources": {
+    "docs": "shared/docs",
+    "code": "shared/code",
+    "design": "shared/design",
+    "config": "shared/config",
+    "other": "shared/other"
+  },
+  "milestones": []
+}

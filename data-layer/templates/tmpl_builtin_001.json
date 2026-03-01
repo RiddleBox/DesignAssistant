@@ -1,0 +1,118 @@
+{
+  "version": "1.0.0",
+  "templateInfo": {
+    "id": "tmpl_builtin_001",
+    "name": "软件开发团队",
+    "category": "技术开发",
+    "type": "builtin",
+    "description": "适用于 Web/移动应用开发的标准团队配置",
+    "author": "系统内置",
+    "createdAt": "2026-02-12T00:00:00Z",
+    "updatedAt": "2026-02-12T00:00:00Z"
+  },
+  "members": [
+    {
+      "role": "产品经理",
+      "count": 1,
+      "responsibilities": [
+        "目标与范围澄清，建立需求边界与验收标准",
+        "产出需求文档/用户故事/优先级",
+        "推动跨角色协作与风险管理"
+      ],
+      "skills": ["需求分析", "产品规划", "沟通协作", "项目管理"],
+      "defaultName": "产品经理"
+    },
+    {
+      "role": "前端工程师",
+      "count": 1,
+      "responsibilities": [
+        "实现前端页面与交互",
+        "对接后端 API 并处理错误边界",
+        "前端性能与工程化"
+      ],
+      "skills": ["HTML/CSS", "JavaScript", "React/Vue", "前端工程化"],
+      "defaultName": "前端工程师"
+    },
+    {
+      "role": "后端工程师",
+      "count": 1,
+      "responsibilities": [
+        "设计与实现后端 API",
+        "数据库设计与性能优化",
+        "部署与运维支持"
+      ],
+      "skills": ["API 设计", "数据库", "后端开发", "运维"],
+      "defaultName": "后端工程师"
+    },
+    {
+      "role": "测试工程师",
+      "count": 1,
+      "responsibilities": [
+        "制定测试策略与用例",
+        "执行功能/回归/冒烟测试",
+        "跟踪缺陷并推动闭环"
+      ],
+      "skills": ["测试用例", "缺陷管理", "自动化测试"],
+      "defaultName": "测试工程师"
+    },
+    {
+      "role": "UI设计师",
+      "count": 1,
+      "responsibilities": [
+        "输出 UI 视觉与交互规范",
+        "沉淀组件/版式/色彩规范",
+        "参与评审并迭代设计"
+      ],
+      "skills": ["UI 设计", "交互设计", "设计规范"],
+      "defaultName": "UI设计师"
+    }
+  ],
+  "projectTemplate": {
+    "namePattern": "{模板名称}项目",
+    "descriptionPattern": "基于{模板名称}模板创建的项目",
+    "defaultTags": ["团队协作", "软件开发"]
+  },
+  "collaborationFlow": {
+    "description": "需求 → 设计 → 开发 → 测试 → 发布",
+    "phases": [
+      {
+        "name": "需求阶段",
+        "participants": ["产品经理"],
+        "outputs": ["需求文档", "验收标准", "优先级"]
+      },
+      {
+        "name": "设计阶段",
+        "participants": ["UI设计师", "产品经理"],
+        "outputs": ["UI设计稿", "交互说明", "设计规范"]
+      },
+      {
+        "name": "开发阶段",
+        "participants": ["前端工程师", "后端工程师"],
+        "outputs": ["前端代码", "后端代码", "API文档"]
+      },
+      {
+        "name": "测试阶段",
+        "participants": ["测试工程师"],
+        "outputs": ["测试用例", "缺陷列表", "测试报告"]
+      },
+      {
+        "name": "发布阶段",
+        "participants": ["后端工程师", "产品经理"],
+        "outputs": ["部署文档", "发布说明"]
+      }
+    ]
+  },
+  "quickStartGuide": {
+    "title": "软件开发团队快速入门",
+    "sections": [
+      {
+        "title": "怎么用",
+        "content": "对我说：\"用软件开发团队模板创建团队\" 或 \"我想做一个Web应用，帮我搭建团队\"。"
+      },
+      {
+        "title": "交付物",
+        "content": "需求文档、设计规范、API文档、测试报告、部署说明。"
+      }
+    ]
+  }
+}
