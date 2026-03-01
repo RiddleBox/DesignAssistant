@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "lastUpdated": "2026-02-13T10:19:00Z",
+  "lastUpdated": "2026-03-01T01:00:00Z", 
   "knowledge": [
     {
       "id": "know_20260213_001",
@@ -19,23 +19,85 @@
       "path": "data-layer/assets/knowledge/practices/游戏系统设计全流程案例_星露谷物语农场系统.md",
       "referenceCount": 0,
       "viewCount": 0,
-      "relatedKnowledge": [],
+      "relatedKnowledge": ["know_20260214_001", "know_20260215_001"],
       "keywords": ["游戏设计", "系统架构", "核心循环", "经济系统", "平衡性设计", "迭代开发", "数据驱动", "模拟经营"]
+    },
+    {
+      "id": "know_20260214_001",
+      "title": "游戏系统设计全流程案例：Factorio（异星工厂）生产链系统",
+      "category": "最佳实践",
+      "type": "document",
+      "scope": "team",
+      "projectId": null,
+      "projectName": null,
+      "authorId": "system",
+      "authorName": "设计研究团队",
+      "createdAt": "2026-02-14T12:00:00Z",
+      "updatedAt": "2026-02-15T10:00:00Z",
+      "tags": ["游戏设计", "生产链设计", "自动化", "系统架构", "Factorio", "复杂系统"],
+      "summary": "以《Factorio》为例，深入分析生产链系统的设计原理，包括层级进化、配方平衡、物流系统、科技树等核心设计，揭示'故意不完美'的设计哲学如何创造无限优化空间。",
+      "path": "data-layer/assets/knowledge/practices/游戏系统设计全流程案例_Factorio生产链系统.md",
+      "referenceCount": 0,
+      "viewCount": 0,
+      "relatedKnowledge": ["know_20260213_001", "know_20260215_001"],
+      "keywords": ["生产链", "自动化", "物流系统", "科技树", "配方设计", "速率优化", "复杂度管理", "投资保护"]
+    },
+    {
+      "id": "know_20260215_001",
+      "title": "游戏系统设计演进复盘：Factorio（异星工厂）复杂系统的诞生",
+      "category": "最佳实践",
+      "type": "document",
+      "scope": "team",
+      "projectId": null,
+      "projectName": null,
+      "authorId": "system",
+      "authorName": "设计研究团队",
+      "createdAt": "2026-02-15T10:00:00Z",
+      "updatedAt": "2026-02-15T10:00:00Z",
+      "tags": ["游戏设计", "案例分析", "迭代开发", "系统演进", "自动化", "生产链", "Factorio"],
+      "summary": "以“旁观者视角”对《Factorio》进行逆向复盘式推演，按迭代顺序解释设计者如何用研究吞吐/资源枯竭/污染压力三条引擎，把系统从手工原型一步步推到可控的复杂工业网络，并用蓝图/统计等工具让复杂变得可操作。",
+      "path": "data-layer/assets/knowledge/practices/游戏系统设计演进复盘_Factorio复杂系统的诞生.md",
+      "referenceCount": 0,
+      "viewCount": 0,
+      "relatedKnowledge": ["know_20260213_001", "know_20260214_001"],
+      "keywords": ["设计复盘", "系统演进", "迭代开发", "自动化", "科研吞吐", "资源枯竭", "污染压力", "工具系统"]
+    },
+    {
+      "id": "know_20260301_001",
+      "title": "游戏系统设计演进复盘：R6围攻（第1-5章）硬破轴×节奏轴×信息轴",
+      "category": "最佳实践",
+      "type": "document",
+      "scope": "team",
+      "projectId": "proj_003",
+      "projectName": "战术射击游戏设计研究（R6围攻）",
+      "authorId": "system",
+      "authorName": "设计研究团队",
+      "createdAt": "2026-03-01T00:00:00Z",
+      "updatedAt": "2026-03-01T01:00:00Z",
+      "tags": ["游戏设计", "战术射击", "R6S", "Rainbow Six Siege", "设计复盘", "信息博弈", "节奏治理", "拒止", "硬破"],
+      "summary": "以首发干员为锚点，拆解硬破轴、拒止/节奏轴与信息轴如何共同塑造‘从开局到进点’的节奏表，并以星露谷式卡片方式继续整理信息类转折点与治理链路（缺证据处标注INFERENCE/UNKNOWN）。",
+      "path": "data-layer/assets/knowledge/practices/游戏系统设计演进复盘_R6围攻硬破-节奏-信息轴_第1-4章.md",
+      "referenceCount": 0,
+      "viewCount": 0,
+      "relatedKnowledge": ["know_20260213_001", "know_20260214_001", "know_20260215_001"],
+      "keywords": ["hard breach", "tempo", "information", "execute", "utility", "meta", "governance"]
     }
   ],
   "statistics": {
-    "total": 1,
+    "total": 4,
     "byScope": {
-      "team": 1,
+      "team": 4,
       "personal": 0
     },
     "byCategory": {
       "技术方案": 0,
       "业务规范": 0,
       "行业趋势": 0,
-      "最佳实践": 1
+      "最佳实践": 4
     },
-    "byProject": {},
+    "byProject": {
+      "proj_003": 1
+    },
     "totalReferences": 0,
     "totalViews": 0
   }
