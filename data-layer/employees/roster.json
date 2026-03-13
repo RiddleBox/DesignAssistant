@@ -312,11 +312,125 @@
         "进度跟踪"
       ],
       "id": "EMP-020"
+    },
+    {
+      "name": "知识库架构师",
+      "industry": "AI系统开发",
+      "position": "Knowledge Base Architect",
+      "createdAt": "2026-03-13T00:00:00Z",
+      "workspacePath": "~/Documents/digital_employees/知识库架构师",
+      "status": "active",
+      "projects": [
+        "proj_004"
+      ],
+      "skills": [
+        "数据架构设计",
+        "向量数据库选型",
+        "项目管理",
+        "跨团队沟通",
+        "接口设计"
+      ],
+      "id": "EMP-021"
+    },
+    {
+      "name": "数据工程师",
+      "industry": "AI系统开发",
+      "position": "Data Engineer",
+      "createdAt": "2026-03-13T00:00:00Z",
+      "workspacePath": "~/Documents/digital_employees/数据工程师",
+      "status": "active",
+      "projects": [
+        "proj_004"
+      ],
+      "skills": [
+        "数据建模",
+        "ETL流程设计",
+        "数据质量管理",
+        "Python数据处理",
+        "YAML Schema设计"
+      ],
+      "id": "EMP-022"
+    },
+    {
+      "name": "向量化专家",
+      "industry": "AI系统开发",
+      "position": "Embedding Specialist",
+      "createdAt": "2026-03-13T00:00:00Z",
+      "workspacePath": "~/Documents/digital_employees/向量化专家",
+      "status": "active",
+      "projects": [
+        "proj_004"
+      ],
+      "skills": [
+        "Embedding模型使用",
+        "向量相似度算法",
+        "性能优化",
+        "OpenAI API",
+        "向量索引构建"
+      ],
+      "id": "EMP-023"
+    },
+    {
+      "name": "RAG引擎工程师",
+      "industry": "AI系统开发",
+      "position": "RAG Engine Engineer",
+      "createdAt": "2026-03-13T00:00:00Z",
+      "workspacePath": "~/Documents/digital_employees/RAG引擎工程师",
+      "status": "active",
+      "projects": [
+        "proj_004"
+      ],
+      "skills": [
+        "LangChain深度使用",
+        "RAG架构设计",
+        "API设计",
+        "Claude API集成",
+        "混合检索实现"
+      ],
+      "id": "EMP-024"
+    },
+    {
+      "name": "检索优化专家",
+      "industry": "AI系统开发",
+      "position": "Retrieval Optimization Specialist",
+      "createdAt": "2026-03-13T00:00:00Z",
+      "workspacePath": "~/Documents/digital_employees/检索优化专家",
+      "status": "active",
+      "projects": [
+        "proj_004"
+      ],
+      "skills": [
+        "信息检索理论",
+        "性能优化",
+        "缓存系统设计",
+        "监控指标定义",
+        "参数调优"
+      ],
+      "id": "EMP-025"
+    },
+    {
+      "name": "接口设计师",
+      "industry": "AI系统开发",
+      "position": "API Interface Designer",
+      "createdAt": "2026-03-13T00:00:00Z",
+      "workspacePath": "~/Documents/digital_employees/接口设计师",
+      "status": "active",
+      "projects": [
+        "proj_004"
+      ],
+      "skills": [
+        "RESTful API设计",
+        "OpenAPI文档编写",
+        "接口版本管理",
+        "技术文档写作",
+        "接口测试"
+      ],
+      "id": "EMP-026"
     }
   ],
   "statistics": {
-    "total": 17,
-    "active": 17,
+    "total": 23,
+    "active": 23,
     "inactive": 0
   }
 }
