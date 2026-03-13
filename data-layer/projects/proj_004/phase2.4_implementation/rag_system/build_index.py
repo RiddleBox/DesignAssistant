@@ -36,12 +36,13 @@ def load_documents(data_dir: str) -> list[Document]:
     return documents
 
 
-def build_index(documents: list[Document], openai_key: str, index_path: str, meta_path: str):
+def build_index(documents: list[Document], api_key: str, index_path: str, meta_path: str, provider: str = "zhipu"):
     """构建向量索引"""
     print("\n🔧 开始构建向量索引...")
 
     # 创建Embedding服务
-    embedding_service = EmbeddingService(api_key=openai_key)
+    embedding_service = EmbeddingService(api_key=api_key, provider=provider)
+    print(f"📡 使用 {provider} API，向量维度：{embedding_service.dimension}")
 
     # 准备文本
     texts = []
@@ -54,7 +55,7 @@ def build_index(documents: list[Document], openai_key: str, index_path: str, met
 
     # 批量向量化
     embeddings = []
-    batch_size = 100
+    batch_size = 10  # 智谱API建议小批量
 
     for i in tqdm(range(0, len(texts), batch_size), desc="向量化"):
         batch = texts[i:i+batch_size]
@@ -65,7 +66,7 @@ def build_index(documents: list[Document], openai_key: str, index_path: str, met
     print(f"✅ 向量化完成：{embeddings.shape}")
 
     # 构建索引
-    vector_store = VectorStore(dimension=1536)
+    vector_store = VectorStore(dimension=embedding_service.dimension)
     vector_store.build_index(documents, embeddings)
 
     # 保存索引
@@ -81,12 +82,13 @@ def main():
     parser.add_argument('--data-dir', default='data/documents', help='文档目录')
     parser.add_argument('--index-path', default='data/vector_index.faiss', help='索引保存路径')
     parser.add_argument('--meta-path', default='data/vector_meta.pkl', help='元数据保存路径')
-    parser.add_argument('--openai-key', default=os.getenv('OPENAI_API_KEY'), help='OpenAI API Key')
+    parser.add_argument('--api-key', default=os.getenv('ZHIPU_API_KEY'), help='API Key')
+    parser.add_argument('--provider', default='zhipu', choices=['zhipu', 'openai'], help='API提供商')
 
     args = parser.parse_args()
 
-    if not args.openai_key:
-        print("❌ 请提供OpenAI API Key（--openai-key或OPENAI_API_KEY环境变量）")
+    if not args.api_key:
+        print("❌ 请提供API Key（--api-key或ZHIPU_API_KEY环境变量）")
         return 1
 
     # 加载文档
@@ -97,7 +99,7 @@ def main():
         return 1
 
     # 构建索引
-    build_index(documents, args.openai_key, args.index_path, args.meta_path)
+    build_index(documents, args.api_key, args.index_path, args.meta_path, args.provider)
 
     print("\n🎉 知识库构建完成！")
     return 0

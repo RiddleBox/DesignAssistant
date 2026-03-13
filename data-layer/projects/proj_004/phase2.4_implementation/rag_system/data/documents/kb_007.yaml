@@ -1,0 +1,71 @@
+id: kb_007
+title: "Unity vs Unreal Engine：游戏引擎选型指南"
+category: tech_innovation
+tags:
+  - Unity
+  - Unreal Engine
+  - 游戏引擎
+  - 技术选型
+content: |
+  Unity和Unreal Engine的对比分析与选型建议：
+
+  Unity优势：
+  1. 学习曲线平缓：C#语言，文档丰富
+  2. 跨平台支持：30+平台，移动端优化好
+  3. 资源商店：Asset Store资源丰富
+  4. 2D游戏支持：2D工具链完善
+  5. 轻量级：包体小，适合移动端
+
+  Unreal Engine优势：
+  1. 画面表现力：光追、Nanite、Lumen等先进技术
+  2. 蓝图系统：可视化编程，降低编程门槛
+  3. 开源：可查看和修改引擎源码
+  4. 3A级工具链：适合大型项目
+  5. 免费：5%营收分成（100万美元以下免费）
+
+  适用场景：
+  Unity适合：
+  - 移动游戏（休闲、中度、重度）
+  - 2D游戏
+  - 小团队快速开发
+  - 跨平台发布需求强
+  - 预算有限的项目
+
+  Unreal适合：
+  - 3A级主机/PC游戏
+  - 高画质要求的项目
+  - 开放世界游戏
+  - VR/AR应用
+  - 有技术实力的团队
+
+  成本对比：
+  Unity：
+  - 个人版：免费（年收入<$100k）
+  - Plus：$399/年
+  - Pro：$2,040/年
+  - Enterprise：定制报价
+
+  Unreal：
+  - 完全免费
+  - 营收>$1M后收取5%分成
+
+  性能对比：
+  - 移动端：Unity优化更好，包体更小
+  - PC/主机：Unreal画面表现力更强
+  - 开发效率：Unity迭代更快，Unreal需要更多编译时间
+
+  市场趋势：
+  - Unity：移动游戏市场占有率70%+
+  - Unreal：主机/PC游戏市场份额增长
+  - 跨引擎开发：部分团队同时使用两个引擎
+
+  选型建议：
+  1. 明确项目类型和平台
+  2. 评估团队技术能力
+  3. 考虑长期维护成本
+  4. 参考同类产品的引擎选择
+
+metadata:
+  source: "Game Developer Magazine 2024"
+  confidence: 0.90
+  last_updated: "2024-02-28"

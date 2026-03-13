@@ -1,0 +1,72 @@
+id: kb_037
+title: "游戏性能优化技术"
+category: tech_innovation
+tags:
+  - 性能优化
+  - 帧率
+  - 内存管理
+  - 渲染优化
+content: |
+  游戏性能优化的技术方法：
+
+  性能指标：
+  - 帧率：60fps（主机/PC）、30fps（移动）
+  - 内存：<2GB（移动）、<8GB（PC）
+  - 加载时间：<5秒
+  - 包体大小：<500MB（移动）
+
+  渲染优化：
+  1. LOD（Level of Detail）
+     - 远处物体使用低模
+     - 动态切换LOD级别
+     - 节省GPU性能
+
+  2. 遮挡剔除
+     - 不渲染被遮挡的物体
+     - Occlusion Culling
+     - 视锥体剔除
+
+  3. 批处理
+     - Static Batching：静态物体合批
+     - Dynamic Batching：动态物体合批
+     - GPU Instancing：相同物体实例化
+
+  4. 纹理优化
+     - 压缩格式：ASTC、ETC2
+     - Mipmap：远处使用低分辨率
+     - 图集：减少Draw Call
+
+  CPU优化：
+  - 对象池：复用对象，减少GC
+  - 多线程：并行计算
+  - 算法优化：减少复杂度
+  - 缓存：避免重复计算
+
+  内存优化：
+  - 资源卸载：及时释放不用的资源
+  - 压缩：资源压缩存储
+  - 流式加载：按需加载
+  - 内存池：预分配内存
+
+  移动端特殊优化：
+  - 降低分辨率：动态分辨率
+  - 简化特效：减少粒子数量
+  - 降低阴影质量
+  - 优化UI：减少Overdraw
+
+  性能分析工具：
+  - Unity Profiler
+  - Unreal Insights
+  - Xcode Instruments
+  - Android Profiler
+
+  优化流程：
+  1. 性能分析：找到瓶颈
+  2. 针对性优化：优化热点
+  3. 测试验证：确认效果
+  4. 持续监控：防止性能退化
+
+metadata:
+  source: "游戏性能优化实战2024"
+  confidence: 0.90
+  last_updated: "2024-02-25"

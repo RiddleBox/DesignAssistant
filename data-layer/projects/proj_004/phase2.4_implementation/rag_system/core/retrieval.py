@@ -16,7 +16,7 @@ from .models import Document, DocumentMetadata
 class VectorStore:
     """向量存储 - 使用FAISS"""
 
-    def __init__(self, dimension: int = 1536):
+    def __init__(self, dimension: int = 2048):
         self.dimension = dimension
         self.index = None
         self.documents: dict[str, Document] = {}  # id -> Document
@@ -95,12 +95,20 @@ class VectorStore:
 
 
 class EmbeddingService:
-    """Embedding服务 - 调用OpenAI API"""
+    """Embedding服务 - 支持OpenAI和智谱API"""
 
-    def __init__(self, api_key: str, model: str = "text-embedding-3-large"):
+    def __init__(self, api_key: str, model: str = "embedding-3", provider: str = "zhipu"):
         self.api_key = api_key
         self.model = model
-        self.dimension = 1536
+        self.provider = provider
+
+        # 智谱 embedding-3 维度是 2048，OpenAI text-embedding-3-large 是 1536
+        if provider == "zhipu":
+            self.dimension = 2048
+            self.base_url = "https://open.bigmodel.cn/api/paas/v4/"
+        else:
+            self.dimension = 1536
+            self.base_url = None
 
     def embed(self, texts: List[str]) -> np.ndarray:
         """
@@ -110,8 +118,16 @@ class EmbeddingService:
             numpy array of shape (len(texts), dimension)
         """
         try:
-            import openai
-            client = openai.OpenAI(api_key=self.api_key)
+            from openai import OpenAI
+
+            # 创建客户端
+            if self.provider == "zhipu":
+                client = OpenAI(
+                    api_key=self.api_key,
+                    base_url=self.base_url
+                )
+            else:
+                client = OpenAI(api_key=self.api_key)
 
             response = client.embeddings.create(
                 model=self.model,
@@ -184,15 +200,15 @@ def get_retriever() -> Retriever:
     return _retriever_instance
 
 
-def init_retriever(api_key: str, index_path: str, meta_path: str) -> Retriever:
+def init_retriever(api_key: str, index_path: str, meta_path: str, provider: str = "zhipu") -> Retriever:
     """初始化检索器"""
     global _retriever_instance
 
     # 创建Embedding服务
-    embedding_service = EmbeddingService(api_key=api_key)
+    embedding_service = EmbeddingService(api_key=api_key, provider=provider)
 
     # 加载向量存储
-    vector_store = VectorStore(dimension=1536)
+    vector_store = VectorStore(dimension=embedding_service.dimension)
     if os.path.exists(index_path) and os.path.exists(meta_path):
         vector_store.load(index_path, meta_path)
         print(f"✅ 向量索引加载完成：{len(vector_store.documents)} 条文档")

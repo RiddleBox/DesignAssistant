@@ -1,0 +1,48 @@
+{
+  "test_date": "2026-03-13 22:36:39",
+  "system_config": {
+    "num_documents": 40,
+    "vector_dimension": 2048,
+    "index_type": "FAISS IndexFlatIP",
+    "mode": "mock"
+  },
+  "retrieval_baseline": {
+    "target_p95_ms": 100,
+    "actual_p95_ms": 8.149999999999986,
+    "status": "PASS"
+  },
+  "rag_baseline": {
+    "target_p95_ms": 3500,
+    "actual_p95_ms": 100.0,
+    "status": "PASS"
+  },
+  "quality_baseline": {
+    "target_avg_score": 0.03,
+    "actual_avg_score": 0.04656891115009785,
+    "status": "PASS"
+  },
+  "detailed_stats": {
+    "retrieval": {
+      "total_queries": 10,
+      "avg_time_ms": 1.5,
+      "p50_time_ms": 0.0,
+      "p95_time_ms": 8.149999999999986,
+      "p99_time_ms": 12.830000000000002,
+      "min_time_ms": 0,
+      "max_time_ms": 14
+    },
+    "rag": {
+      "total_queries": 5,
+      "avg_total_time_ms": 100.0,
+      "avg_retrieval_time_ms": 0.0,
+      "avg_generation_time_ms": 100.0,
+      "avg_confidence": 1.0,
+      "p95_total_time_ms": 100.0
+    },
+    "quality": {
+      "avg_top1_score": 0.04656891115009785,
+      "queries_with_results": 10,
+      "avg_docs_per_query": 5.0
+    }
+  }
+}

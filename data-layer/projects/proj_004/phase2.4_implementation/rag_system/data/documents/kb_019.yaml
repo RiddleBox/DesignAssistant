@@ -1,0 +1,45 @@
+id: kb_019
+title: "Unreal Engine 5新特性：Nanite与Lumen"
+category: tech_innovation
+tags:
+  - Unreal Engine 5
+  - Nanite
+  - Lumen
+  - 实时光追
+content: |
+  Unreal Engine 5的革命性技术：
+
+  Nanite虚拟几何体：
+  - 功能：支持数十亿多边形的模型
+  - 原理：动态LOD、虚拟纹理流送
+  - 优势：无需手动制作LOD
+  - 性能：自动优化渲染性能
+  - 适用：静态网格体、场景细节
+
+  Lumen全局光照：
+  - 功能：实时全局光照和反射
+  - 原理：软件光追+硬件光追混合
+  - 优势：动态光照、无需烘焙
+  - 性能：可在主机和PC上运行
+  - 适用：开放世界、动态场景
+
+  其他新特性：
+  - MetaHuman：高保真数字人类
+  - World Partition：大世界流式加载
+  - Chaos物理：高级物理模拟
+  - Niagara：强大的粒子系统
+
+  性能要求：
+  - 推荐配置：RTX 3070+、32GB RAM
+  - 主机：PS5、Xbox Series X/S原生支持
+  - 移动端：部分特性支持
+
+  应用案例：
+  - 《黑神话：悟空》：Nanite+Lumen
+  - 《堡垒之夜》：逐步迁移UE5
+  - 《The Matrix Awakens》：技术演示
+
+metadata:
+  source: "Unreal Engine 5官方文档"
+  confidence: 0.95
+  last_updated: "2024-03-08"

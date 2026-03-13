@@ -1,0 +1,39 @@
+id: kb_004
+title: "Roguelike游戏设计核心机制"
+category: game_design
+tags:
+  - Roguelike
+  - 随机生成
+  - 永久死亡
+  - 游戏设计
+content: |
+  Roguelike游戏的核心设计机制分析：
+
+  核心特征：
+  1. 永久死亡（Permadeath）：角色死亡后重新开始
+  2. 程序生成（Procedural Generation）：关卡、敌人、道具随机生成
+  3. 回合制战斗：策略性强，给玩家思考时间
+  4. 资源管理：血量、饥饿度、装备耐久度等
+  5. 元进度系统（Meta Progression）：解锁新角色、道具、能力
+
+  成功案例：
+  - 《Hades》：将Roguelike与叙事结合，每次死亡推进剧情
+  - 《死亡细胞》：动作+Roguelike，流畅的战斗手感
+  - 《杀戮尖塔》：卡牌构筑+Roguelike，策略深度高
+  - 《吸血鬼幸存者》：简化操作，强调Build构筑
+
+  设计要点：
+  - 短循环+长循环：单局15-60分钟，元进度提供长期目标
+  - 随机性与公平性平衡：避免"不可能获胜"的局面
+  - 学习曲线：通过失败学习敌人模式和道具组合
+  - 重玩价值：每局体验不同，鼓励多次尝试
+
+  商业化策略：
+  - 买断制为主（$15-30）
+  - DLC扩展内容（新角色、新关卡）
+  - 移动端采用IAP模式
+
+metadata:
+  source: "GDC 2023 Roguelike设计专题"
+  confidence: 0.90
+  last_updated: "2024-03-15"

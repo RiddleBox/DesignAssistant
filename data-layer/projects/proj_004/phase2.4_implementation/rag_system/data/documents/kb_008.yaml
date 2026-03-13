@@ -1,0 +1,31 @@
+id: kb_008
+title: "Battle Royale游戏设计要素"
+category: game_design
+tags:
+  - Battle Royale
+  - 多人竞技
+  - 生存游戏
+content: |
+  Battle Royale游戏的核心设计要素：
+
+  核心机制：
+  1. 缩圈机制：强制玩家聚集，加快游戏节奏
+  2. 随机出生：公平性起点
+  3. 资源搜集：武器、装备、道具的获取
+  4. 最后一人/队存活：明确的胜利条件
+
+  成功案例：
+  - 《PUBG》：写实风格，战术性强
+  - 《Fortnite》：建造系统，卡通风格
+  - 《Apex Legends》：英雄技能，团队配合
+
+  关键指标：
+  - 单局时长：20-30分钟
+  - 玩家数量：100人
+  - 地图大小：8x8km
+  - 胜率：1%（100人中1人获胜）
+
+metadata:
+  source: "Gamasutra BR游戏分析"
+  confidence: 0.85
+  last_updated: "2024-01-20"

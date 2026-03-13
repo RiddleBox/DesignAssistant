@@ -1,0 +1,60 @@
+id: kb_018
+title: "游戏用户获取（UA）策略"
+category: market_trend
+tags:
+  - 用户获取
+  - 买量
+  - ASO
+  - 营销
+content: |
+  游戏用户获取的策略和渠道分析：
+
+  主要渠道：
+  1. 付费广告
+     - Facebook Ads：$2-5 CPI
+     - Google Ads：$1.5-4 CPI
+     - TikTok Ads：$1-3 CPI
+     - Unity Ads：$0.5-2 CPI
+
+  2. 应用商店优化（ASO）
+     - 关键词优化：标题、描述
+     - 视觉优化：图标、截图、视频
+     - 评分评论：4.5+星级
+     - 自然下载占比：30-50%
+
+  3. KOL营销
+     - YouTube：游戏主播、评测
+     - Twitch：直播推广
+     - TikTok：短视频传播
+     - CPM：$5-20
+
+  4. 交叉推广
+     - 自有产品矩阵互推
+     - 合作伙伴交换流量
+     - CPI：$0.1-0.5
+
+  关键指标：
+  - CPI（Cost Per Install）：$1-5
+  - IPM（Install Per Mille）：3-8%
+  - CTR（Click Through Rate）：2-5%
+  - CVR（Conversion Rate）：15-30%
+
+  创意素材：
+  - 可玩广告（Playable Ads）：IPM提升50%
+  - 视频广告：15-30秒最佳
+  - 静态图：突出核心玩法
+  - A/B测试：持续优化素材
+
+  LTV优化：
+  - 提升留存：优化新手引导
+  - 提升付费：优化商业化设计
+  - 延长生命周期：内容更新
+
+  ROI计算：
+  ROI = (LTV - CPI) / CPI * 100%
+  目标：ROI > 100%（回本周期<180天）
+
+metadata:
+  source: "Mobile Marketing Report 2024"
+  confidence: 0.87
+  last_updated: "2024-02-22"
