@@ -1,0 +1,17 @@
+{
+  "employee_id": "EMP-020",
+  "name": "阶段2协调官",
+  "role": "Phase 2 Coordinator",
+  "department": "proj_004_phase2.0",
+  "skills": [
+    "项目管理",
+    "资源协调",
+    "风险管理",
+    "沟通协调",
+    "进度跟踪"
+  ],
+  "projects": ["proj_004"],
+  "status": "active",
+  "created_at": "2026-03-12",
+  "description": "负责协调各子阶段团队，管理进度和资源，识别风险并提出应对方案"
+}

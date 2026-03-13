@@ -1,0 +1,17 @@
+{
+  "employee_id": "EMP-019",
+  "name": "阶段2规划师",
+  "role": "Phase 2 Planner",
+  "department": "proj_004_phase2.0",
+  "skills": [
+    "系统化思维",
+    "架构理解",
+    "目标管理",
+    "依赖分析",
+    "文档编写"
+  ],
+  "projects": ["proj_004"],
+  "status": "active",
+  "created_at": "2026-03-12",
+  "description": "负责将阶段2整体目标拆解为可执行的子阶段，定义每个子阶段的目标、产出和验收标准"
+}

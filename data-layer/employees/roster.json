@@ -179,11 +179,144 @@
         "Cross-linking"
       ],
       "id": "EMP-013"
+    },
+    {
+      "name": "阶段1计划设计师",
+      "industry": "项目管理",
+      "position": "Phase1 Planner",
+      "createdAt": "2026-03-12T00:00:00Z",
+      "workspacePath": "~/Documents/digital_employees/阶段1计划设计师",
+      "status": "active",
+      "projects": [
+        "proj_004"
+      ],
+      "skills": [
+        "计划拆解",
+        "里程碑规划",
+        "输出规范",
+        "验收标准设计",
+        "阶段目标转化"
+      ],
+      "id": "EMP-014"
+    },
+    {
+      "name": "阶段1协作架构师",
+      "industry": "项目管理",
+      "position": "Phase1 Collaboration Architect",
+      "createdAt": "2026-03-12T00:00:00Z",
+      "workspacePath": "~/Documents/digital_employees/阶段1协作架构师",
+      "status": "active",
+      "projects": [
+        "proj_004"
+      ],
+      "skills": [
+        "协作流程设计",
+        "依赖梳理",
+        "沟通协议",
+        "角色责任映射",
+        "流程可视化"
+      ],
+      "id": "EMP-015"
+    },
+    {
+      "name": "阶段1交付产物设计师",
+      "industry": "项目管理",
+      "position": "Phase1 Deliverable Designer",
+      "createdAt": "2026-03-12T00:00:00Z",
+      "workspacePath": "~/Documents/digital_employees/阶段1交付产物设计师",
+      "status": "active",
+      "projects": [
+        "proj_004"
+      ],
+      "skills": [
+        "模板设计",
+        "结构化写作",
+        "输出规范",
+        "可复用设计",
+        "质量把控"
+      ],
+      "id": "EMP-016"
+    },
+    {
+      "name": "阶段1验证与反馈官",
+      "industry": "项目管理",
+      "position": "Phase1 Verifier",
+      "createdAt": "2026-03-12T00:00:00Z",
+      "workspacePath": "~/Documents/digital_employees/阶段1验证与反馈官",
+      "status": "active",
+      "projects": [
+        "proj_004"
+      ],
+      "skills": [
+        "输出评估",
+        "验收标准",
+        "反馈拆解",
+        "复盘总结",
+        "问题追踪"
+      ],
+      "id": "EMP-017"
+    },
+    {
+      "name": "阶段1招聘协调官",
+      "industry": "项目管理",
+      "position": "Phase1 Recruitment Coordinator",
+      "createdAt": "2026-03-12T00:00:00Z",
+      "workspacePath": "~/Documents/digital_employees/阶段1招聘协调官",
+      "status": "active",
+      "projects": [
+        "proj_004"
+      ],
+      "skills": [
+        "角色构建",
+        "Prompt 设计",
+        "迭代管理",
+        "验证流程",
+        "团队模板化"
+      ],
+      "id": "EMP-018"
+    },
+    {
+      "name": "阶段2规划师",
+      "industry": "项目管理",
+      "position": "Phase2 Planner",
+      "createdAt": "2026-03-12T00:00:00Z",
+      "workspacePath": "~/Documents/digital_employees/阶段2规划师",
+      "status": "active",
+      "projects": [
+        "proj_004"
+      ],
+      "skills": [
+        "系统化思维",
+        "架构理解",
+        "目标管理",
+        "依赖分析",
+        "文档编写"
+      ],
+      "id": "EMP-019"
+    },
+    {
+      "name": "阶段2协调官",
+      "industry": "项目管理",
+      "position": "Phase2 Coordinator",
+      "createdAt": "2026-03-12T00:00:00Z",
+      "workspacePath": "~/Documents/digital_employees/阶段2协调官",
+      "status": "active",
+      "projects": [
+        "proj_004"
+      ],
+      "skills": [
+        "项目管理",
+        "资源协调",
+        "风险管理",
+        "沟通协调",
+        "进度跟踪"
+      ],
+      "id": "EMP-020"
     }
   ],
   "statistics": {
-    "total": 10,
-    "active": 10,
+    "total": 17,
+    "active": 17,
     "inactive": 0
   }
 }

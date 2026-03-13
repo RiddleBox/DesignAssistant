@@ -45,11 +45,28 @@
       "roles": ["需求澄清官", "提示词架构师", "团队编排官", "边界与质量审计官"],
       "createdAt": "2026-02-20T11:03:29Z",
       "usageCount": 0
+    },
+    {
+      "id": "tmpl_custom_002",
+      "name": "阶段1计划设计团队",
+      "category": "协作基础",
+      "type": "custom",
+      "description": "用于阶段1计划设计的数字员工团队，负责将阶段0成果转化为阶段1计划、交付物与阶段2目标说明。",
+      "memberCount": 5,
+      "roles": [
+        "阶段1计划设计师",
+        "阶段1协作架构师",
+        "阶段1交付产物设计师",
+        "阶段1验证与反馈官",
+        "阶段1招聘协调官"
+      ],
+      "createdAt": "2026-03-12T00:00:00Z",
+      "usageCount": 0
     }
   ],
   "statistics": {
-    "total": 4,
+    "total": 5,
     "builtin": 3,
-    "custom": 1
+    "custom": 2
   }
 }

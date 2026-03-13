@@ -37,11 +37,26 @@
         "EMP-013"
       ],
       "workspacePath": "data-layer/projects/proj_003"
+    },
+    {
+      "id": "proj_004",
+      "name": "预研孵化战略研究和投资团队构建",
+      "description": "构建用于'预研孵化战略研究和投资（游戏向）'岗位的数字员工团队，证明AI Native能力、第一性原理分析、系统化设计与协作能力，并产出可复用的workflow模板与真实评估案例。",
+      "createdAt": "2026-03-12T13:29:12Z",
+      "status": "active",
+      "members": [
+        "EMP-014",
+        "EMP-015",
+        "EMP-016",
+        "EMP-017",
+        "EMP-018"
+      ],
+      "workspacePath": "data-layer/projects/proj_004"
     }
   ],
   "statistics": {
-    "total": 3,
-    "active": 3,
+    "total": 4,
+    "active": 4,
     "completed": 0,
     "archived": 0
   }
