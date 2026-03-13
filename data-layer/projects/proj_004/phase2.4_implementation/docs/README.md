@@ -13,6 +13,7 @@ phase2.4_implementation/
 ├── docs/                           # 模块级文档（本目录）
 │   ├── README.md                   # 本文档
 │   ├── PHASE2_4_ACCEPTANCE_ASSESSMENT.md # Phase 2.4 验收评估归档
+│   ├── PHASE2_4_PRIORITY_AND_REAL_CAPABILITY_QA.md # 优先级拍板与真实能力问答归档
 │   └── SYSTEM_EVOLUTION_ROADMAP.md # 系统演进路线图
 │
 └── rag_system/                     # RAG 系统实现
@@ -43,7 +44,12 @@ phase2.4_implementation/
    - 受众：项目管理者、模块负责人、下游协作团队
    - 状态：✅ 已完成（归档版 v1.0）
 
-2. **SYSTEM_EVOLUTION_ROADMAP.md** - 系统演进路线图
+2. **PHASE2_4_PRIORITY_AND_REAL_CAPABILITY_QA.md** - 优先级拍板与真实能力问答归档
+   - 内容：当前阶段主副线执行策略、A/B 分工边界、真实 embedding 与真实 LLM 的概念解释、验收口径说明
+   - 受众：项目管理者、Phase 2.4 持续实现团队、Phase 2.1 并行团队
+   - 状态：✅ 已完成（归档版 v1.0）
+
+3. **SYSTEM_EVOLUTION_ROADMAP.md** - 系统演进路线图
    - 编写人：EMP-021（知识库架构师）
    - 内容：MVP → 增强版 → 完整版的演进路径
    - 受众：所有团队成员 + 下游模块（2.1/2.2/2.3）
@@ -99,9 +105,10 @@ phase2.4_implementation/
 **阅读顺序**:
 1. 本 README（了解文档结构）
 2. `PHASE2_4_ACCEPTANCE_ASSESSMENT.md`（了解当前验收判断与真实边界）
-3. `SYSTEM_EVOLUTION_ROADMAP.md`（了解系统全貌和演进方向）
-4. `rag_system/docs/API_DOCUMENTATION.md`（了解接口规范）
-5. `rag_system/docs/SYSTEM_VALIDATION_REPORT.md`（了解当前状态）
+3. `PHASE2_4_PRIORITY_AND_REAL_CAPABILITY_QA.md`（了解当前主副线策略与真实能力口径）
+4. `SYSTEM_EVOLUTION_ROADMAP.md`（了解系统全貌和演进方向）
+5. `rag_system/docs/API_DOCUMENTATION.md`（了解接口规范）
+6. `rag_system/docs/SYSTEM_VALIDATION_REPORT.md`（了解当前状态）
 
 ### 下游模块接入
 
