@@ -12,6 +12,7 @@
 phase2.4_implementation/
 ├── docs/                           # 模块级文档（本目录）
 │   ├── README.md                   # 本文档
+│   ├── PHASE2_4_ACCEPTANCE_ASSESSMENT.md # Phase 2.4 验收评估归档
 │   └── SYSTEM_EVOLUTION_ROADMAP.md # 系统演进路线图
 │
 └── rag_system/                     # RAG 系统实现
@@ -37,7 +38,12 @@ phase2.4_implementation/
 **用途**: 跨子系统的规划、架构和治理文档
 
 **当前文档**:
-1. **SYSTEM_EVOLUTION_ROADMAP.md** - 系统演进路线图
+1. **PHASE2_4_ACCEPTANCE_ASSESSMENT.md** - Phase 2.4 验收评估归档
+   - 内容：当前交付验收结论、模块级分析、风险边界、后续执行指令
+   - 受众：项目管理者、模块负责人、下游协作团队
+   - 状态：✅ 已完成（归档版 v1.0）
+
+2. **SYSTEM_EVOLUTION_ROADMAP.md** - 系统演进路线图
    - 编写人：EMP-021（知识库架构师）
    - 内容：MVP → 增强版 → 完整版的演进路径
    - 受众：所有团队成员 + 下游模块（2.1/2.2/2.3）
@@ -92,9 +98,10 @@ phase2.4_implementation/
 
 **阅读顺序**:
 1. 本 README（了解文档结构）
-2. `SYSTEM_EVOLUTION_ROADMAP.md`（了解系统全貌和演进方向）
-3. `rag_system/docs/API_DOCUMENTATION.md`（了解接口规范）
-4. `rag_system/docs/SYSTEM_VALIDATION_REPORT.md`（了解当前状态）
+2. `PHASE2_4_ACCEPTANCE_ASSESSMENT.md`（了解当前验收判断与真实边界）
+3. `SYSTEM_EVOLUTION_ROADMAP.md`（了解系统全貌和演进方向）
+4. `rag_system/docs/API_DOCUMENTATION.md`（了解接口规范）
+5. `rag_system/docs/SYSTEM_VALIDATION_REPORT.md`（了解当前状态）
 
 ### 下游模块接入
 
