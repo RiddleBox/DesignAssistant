@@ -1,0 +1,49 @@
+# RAG系统配置
+
+# OpenAI API配置（用于Embedding）
+openai:
+  api_key: "${OPENAI_API_KEY}"
+  embedding_model: "text-embedding-3-large"
+  dimensions: 1536
+  batch_size: 100
+  max_retries: 3
+  timeout: 30
+
+# Claude API配置（用于生成）
+claude:
+  api_key: "${CLAUDE_API_KEY}"
+  model: "claude-opus-4-6"
+  max_tokens: 4000
+  temperature: 0.7
+
+# 向量数据库配置
+vector_db:
+  type: "faiss"  # MVP使用FAISS，后续可切换
+  index_path: "data/vector_index.faiss"
+  metric: "cosine"  # 相似度度量
+
+# 知识库配置
+knowledge_base:
+  data_path: "data/documents"
+  document_format: "yaml"
+  categories:
+    - game_design      # 游戏设计
+    - market_trend     # 市场趋势
+    - tech_innovation  # 技术创新
+
+# API服务配置
+api:
+  host: "0.0.0.0"
+  port: 8000
+  debug: true  # MVP阶段开启调试
+
+# 检索配置
+retrieval:
+  default_top_k: 5
+  similarity_threshold: 0.7
+  max_query_length: 1000
+
+# 生成配置
+generation:
+  context_window: 4000
+  include_sources: true  # 返回引用来源
