@@ -1,0 +1,16 @@
+# Ignore model binary files
+*.bin
+*.safetensors
+*.onnx
+*.pt
+*.pth
+
+# Keep model configs and tokenizers
+!config.json
+!tokenizer.json
+!tokenizer_config.json
+!vocab.txt
+!special_tokens_map.json
+
+# Keep README
+!README.md
