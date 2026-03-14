@@ -2,7 +2,7 @@
 
 **目录用途**: Phase 2.4 模块级文档中心
 **维护人**: EMP-021（知识库架构师）
-**最后更新**: 2026-03-13
+**最后更新**: 2026-03-14
 
 ---
 
@@ -14,6 +14,11 @@ phase2.4_implementation/
 │   ├── README.md                   # 本文档
 │   ├── PHASE2_4_ACCEPTANCE_ASSESSMENT.md # Phase 2.4 验收评估归档
 │   ├── PHASE2_4_PRIORITY_AND_REAL_CAPABILITY_QA.md # 优先级拍板与真实能力问答归档
+│   ├── PHASE2_4_FIRST_PRINCIPLES_AND_DESIGN_GUIDANCE.md # 第一性原理与设计指导
+│   ├── PHASE2_4_PRODUCT_OPTIMIZATION_RISK_REVIEW.md # 当前 RAG pipeline 的产品优化风险复盘
+│   ├── PHASE2_4_TECHNICAL_VALIDITY_VS_PRODUCT_RISK_MATRIX.md # 技术合理性 / 产品风险对照表
+│   ├── PHASE2_4_TO_2_1_CONTEXT_PROTOCOL_DRAFT.md # 2.4 → 2.1 上下文协议草案
+│   ├── PHASE2_4_TO_2_1_OPTIMIZATION_BACKLOG_DRAFT.md # 2.4 → 2.1 优化 Backlog 草案
 │   └── SYSTEM_EVOLUTION_ROADMAP.md # 系统演进路线图
 │
 └── rag_system/                     # RAG 系统实现
@@ -49,7 +54,32 @@ phase2.4_implementation/
    - 受众：项目管理者、Phase 2.4 持续实现团队、Phase 2.1 并行团队
    - 状态：✅ 已完成（归档版 v1.0）
 
-3. **SYSTEM_EVOLUTION_ROADMAP.md** - 系统演进路线图
+3. **PHASE2_4_FIRST_PRINCIPLES_AND_DESIGN_GUIDANCE.md** - 第一性原理与设计指导
+   - 内容：从第一性原理定义 `2.4` 的本质、规划问题、设计原则、实现优先级与优化评审口径
+   - 受众：Phase 2.4 持续实现团队、Phase 2.1/2.2/2.3 下游模块、项目管理者
+   - 状态：✅ 已完成（参考版 v1.0）
+
+4. **PHASE2_4_PRODUCT_OPTIMIZATION_RISK_REVIEW.md** - 当前 RAG pipeline 的产品优化风险复盘
+   - 内容：系统化归档“问题 2”的完整回答，聚焦当前真实 RAG pipeline 在哪些方面技术上成立、但产品上仍可能未对齐目标
+   - 受众：Phase 2.4 持续实现团队、项目管理者、后续参与复盘与优化的角色
+   - 状态：✅ 已完成（参考版 v1.0）
+
+5. **PHASE2_4_TECHNICAL_VALIDITY_VS_PRODUCT_RISK_MATRIX.md** - 技术合理性 / 产品风险对照表
+   - 内容：按知识组织、召回、排序、协议、生成、评测、日志、下游适配等层次，对比“为什么当前方案技术上合理”与“为什么它产品上未必最优”
+   - 受众：Phase 2.4 持续实现团队、设计评审参与者、项目管理者、Phase 2.1/2.2/2.3 协作方
+   - 状态：✅ 已完成（评审版 v1.0）
+
+6. **PHASE2_4_TO_2_1_CONTEXT_PROTOCOL_DRAFT.md** - `2.4 → 2.1` 上下文协议草案
+   - 内容：定义 `2.4` 应如何以 `ContextPacket` 形式向 `2.1` 交付可解释、可追溯、带用途标记的证据级上下文
+   - 受众：Phase 2.4 持续实现团队、Phase 2.1 结构化契约/实现/评测角色、项目管理者
+   - 状态：✅ 已完成（Draft v0.1）
+
+7. **PHASE2_4_TO_2_1_OPTIMIZATION_BACKLOG_DRAFT.md** - `2.4 → 2.1` 优化 Backlog 草案
+   - 内容：将前述第一性原理判断转成面向执行的 `P0 / P1 / P2` 优化项，便于后续排期、评审和协同推进
+   - 受众：Phase 2.4 持续实现团队、Phase 2.1 设计/实现/评测角色、项目管理者
+   - 状态：✅ 已完成（Draft v0.1）
+
+8. **SYSTEM_EVOLUTION_ROADMAP.md** - 系统演进路线图
    - 编写人：EMP-021（知识库架构师）
    - 内容：MVP → 增强版 → 完整版的演进路径
    - 受众：所有团队成员 + 下游模块（2.1/2.2/2.3）
@@ -106,22 +136,34 @@ phase2.4_implementation/
 1. 本 README（了解文档结构）
 2. `PHASE2_4_ACCEPTANCE_ASSESSMENT.md`（了解当前验收判断与真实边界）
 3. `PHASE2_4_PRIORITY_AND_REAL_CAPABILITY_QA.md`（了解当前主副线策略与真实能力口径）
-4. `SYSTEM_EVOLUTION_ROADMAP.md`（了解系统全貌和演进方向）
-5. `rag_system/docs/API_DOCUMENTATION.md`（了解接口规范）
-6. `rag_system/docs/SYSTEM_VALIDATION_REPORT.md`（了解当前状态）
+4. `PHASE2_4_FIRST_PRINCIPLES_AND_DESIGN_GUIDANCE.md`（理解 `2.4` 的第一性原理、设计原则与优化判断标准）
+5. `PHASE2_4_PRODUCT_OPTIMIZATION_RISK_REVIEW.md`（理解当前真实 RAG pipeline 的产品优化风险与结构性偏差）
+6. `PHASE2_4_TECHNICAL_VALIDITY_VS_PRODUCT_RISK_MATRIX.md`（用于系统化把握“技术成立”和“产品最优”之间的差距）
+7. `PHASE2_4_TO_2_1_CONTEXT_PROTOCOL_DRAFT.md`（理解 `2.4` 面向 `2.1` 的具体交付协议草案）
+8. `PHASE2_4_TO_2_1_OPTIMIZATION_BACKLOG_DRAFT.md`（理解 `2.4 -> 2.1` 的执行优先级与优化 backlog）
+9. `SYSTEM_EVOLUTION_ROADMAP.md`（了解系统全貌和演进方向）
+10. `rag_system/docs/API_DOCUMENTATION.md`（了解接口规范）
+11. `rag_system/docs/SYSTEM_VALIDATION_REPORT.md`（了解当前状态）
 
 ### 下游模块接入
 
 **必读文档**:
 1. `rag_system/docs/API_DOCUMENTATION.md` - 接口规范
 2. `SYSTEM_EVOLUTION_ROADMAP.md` 第七节 - 下游接入指南
+3. `PHASE2_4_FIRST_PRINCIPLES_AND_DESIGN_GUIDANCE.md` - 理解 `2.4` 的产品定位与上下文供应职责
+4. `PHASE2_4_TO_2_1_CONTEXT_PROTOCOL_DRAFT.md` - 理解 `2.4 -> 2.1` 的上下文交付草案
 
 ### 系统优化
 
 **参考文档**:
 1. `rag_system/docs/benchmark_report.json` - 当前性能基线
 2. `SYSTEM_EVOLUTION_ROADMAP.md` 第三~五节 - 优化方向
-3. `SYSTEM_EVOLUTION_ROADMAP.md` 第六节 - 技术债务管理
+3. `PHASE2_4_FIRST_PRINCIPLES_AND_DESIGN_GUIDANCE.md` - 第一性原理、设计原则与优化评审口径
+4. `PHASE2_4_PRODUCT_OPTIMIZATION_RISK_REVIEW.md` - 当前 pipeline 的产品层风险复盘
+5. `PHASE2_4_TECHNICAL_VALIDITY_VS_PRODUCT_RISK_MATRIX.md` - 技术合理性 / 产品风险对照分析
+6. `PHASE2_4_TO_2_1_CONTEXT_PROTOCOL_DRAFT.md` - `2.4 -> 2.1` 协议草案
+7. `PHASE2_4_TO_2_1_OPTIMIZATION_BACKLOG_DRAFT.md` - `2.4 -> 2.1` backlog 草案
+8. `SYSTEM_EVOLUTION_ROADMAP.md` 第六节 - 技术债务管理
 
 ---
 
@@ -199,5 +241,5 @@ phase2.4_implementation/
 ---
 
 **文档状态**: ✅ 已完成
-**版本**: v1.0
+**版本**: v1.2
 **下次更新**: 当增加新文档或调整目录结构时
