@@ -38,7 +38,7 @@ class VectorStore:
             self.id_to_index[doc.id] = i
             self.index_to_id[i] = doc.id
 
-        print(f"✅ 向量索引构建完成：{len(documents)} 条文档")
+        print(f"[OK] Vector index built: {len(documents)} documents")
 
     def search(self, query_embedding: np.ndarray, top_k: int = 5) -> List[tuple[Document, float]]:
         """
@@ -138,7 +138,76 @@ class EmbeddingService:
             return np.array(embeddings)
 
         except Exception as e:
-            print(f"❌ Embedding失败: {e}")
+            print(f"[ERROR] Embedding failed: {e}")
+            raise
+
+    def embed_single(self, text: str) -> np.ndarray:
+        """向量化单条文本"""
+        return self.embed([text])[0]
+
+
+class LocalEmbeddingService:
+    """本地Embedding服务 - 使用开源模型"""
+
+    def __init__(self, model_name: str = "sentence-transformers/all-MiniLM-L6-v2"):
+        """
+        初始化本地embedding服务
+
+        Args:
+            model_name: 模型名称，默认使用all-MiniLM-L6-v2
+        """
+        print(f"[INFO] Loading local embedding model: {model_name}")
+
+        # 使用transformers直接加载，更稳定
+        from transformers import AutoTokenizer, AutoModel
+        import torch
+
+        # sentence-transformers模型需要使用bert作为基础
+        self.tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+        self.model = AutoModel.from_pretrained(model_name, trust_remote_code=True)
+        self.model.eval()  # 设置为评估模式
+        self.model_name = model_name
+        self.device = "cuda" if torch.cuda.is_available() else "cpu"
+        self.model.to(self.device)
+
+        # 获取模型维度
+        self.dimension = self.model.config.hidden_size
+        print(f"[OK] Model loaded successfully, dimension: {self.dimension}, device: {self.device}")
+
+    def _mean_pooling(self, model_output, attention_mask):
+        """Mean pooling - 取token embeddings的平均值"""
+        import torch
+        token_embeddings = model_output[0]
+        input_mask_expanded = attention_mask.unsqueeze(-1).expand(token_embeddings.size()).float()
+        return torch.sum(token_embeddings * input_mask_expanded, 1) / torch.clamp(input_mask_expanded.sum(1), min=1e-9)
+
+    def embed(self, texts: List[str]) -> np.ndarray:
+        """
+        批量向量化文本
+
+        Returns:
+            numpy array of shape (len(texts), dimension)
+        """
+        try:
+            import torch
+
+            # Tokenize
+            encoded_input = self.tokenizer(texts, padding=True, truncation=True, return_tensors='pt', max_length=512)
+            encoded_input = {k: v.to(self.device) for k, v in encoded_input.items()}
+
+            # 计算embeddings
+            with torch.no_grad():
+                model_output = self.model(**encoded_input)
+
+            # Mean pooling
+            embeddings = self._mean_pooling(model_output, encoded_input['attention_mask'])
+
+            # 归一化
+            embeddings = torch.nn.functional.normalize(embeddings, p=2, dim=1)
+
+            return embeddings.cpu().numpy()
+        except Exception as e:
+            print(f"[ERROR] Embedding failed: {e}")
             raise
 
     def embed_single(self, text: str) -> np.ndarray:
@@ -211,9 +280,9 @@ def init_retriever(api_key: str, index_path: str, meta_path: str, provider: str 
     vector_store = VectorStore(dimension=embedding_service.dimension)
     if os.path.exists(index_path) and os.path.exists(meta_path):
         vector_store.load(index_path, meta_path)
-        print(f"✅ 向量索引加载完成：{len(vector_store.documents)} 条文档")
+        print(f"[OK] Vector index loaded: {len(vector_store.documents)} documents")
     else:
-        print(f"⚠️ 索引文件不存在，需要先构建索引")
+        print(f"[WARNING] Index file not found, need to build index first")
 
     _retriever_instance = Retriever(embedding_service, vector_store)
     return _retriever_instance

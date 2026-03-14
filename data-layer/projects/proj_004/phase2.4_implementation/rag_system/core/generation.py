@@ -12,9 +12,10 @@ from .models import Document
 class GenerationService:
     """生成服务 - 调用Claude API"""
 
-    def __init__(self, api_key: str, model: str = "claude-opus-4-6"):
+    def __init__(self, api_key: str, model: str = "claude-opus-4-6", base_url: str = None):
         self.api_key = api_key
         self.model = model
+        self.base_url = base_url
 
     def _build_prompt(self, query: str, context_docs: List[Document]) -> str:
         """构建RAG Prompt"""
@@ -61,7 +62,12 @@ class GenerationService:
         # 调用Claude API
         try:
             import anthropic
-            client = anthropic.Anthropic(api_key=self.api_key)
+
+            # 根据是否有base_url创建客户端
+            if self.base_url:
+                client = anthropic.Anthropic(api_key=self.api_key, base_url=self.base_url)
+            else:
+                client = anthropic.Anthropic(api_key=self.api_key)
 
             response = client.messages.create(
                 model=self.model,
@@ -79,7 +85,7 @@ class GenerationService:
             return answer, generation_time
 
         except Exception as e:
-            print(f"❌ 生成失败: {e}")
+            print(f"[ERROR] Generation failed: {e}")
             raise
 
     def generate_with_confidence(self, query: str, context_docs: List[Document], temperature: float = 0.7) -> tuple[str, float, float]:
