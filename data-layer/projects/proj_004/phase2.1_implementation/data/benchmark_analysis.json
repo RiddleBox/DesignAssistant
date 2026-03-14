@@ -1,0 +1,254 @@
+{
+  "summary": {
+    "needs_optimization": true,
+    "optimization_triggers": [
+      "Precision 偏低 (35.7%)，存在较多误报",
+      "存在 5 个高置信度误报，边界判断不稳定"
+    ],
+    "key_findings": [
+      "market 信号误报最多 (25 个)",
+      "market 信号漏报最多 (2 个)",
+      "边界样本完美率 0.0% (0/3)"
+    ]
+  },
+  "error_profile": {
+    "false_positive_profile": {
+      "by_signal_type": {
+        "market": 25,
+        "capital": 7,
+        "technical": 8,
+        "team": 5
+      },
+      "by_source_type": {
+        "news": 14,
+        "announcement": 12,
+        "report": 19
+      },
+      "high_confidence_fps": [
+        {
+          "sample_id": "S001",
+          "type": "market",
+          "label": "Bungie 战略聚焦调整",
+          "confidence": 10
+        },
+        {
+          "sample_id": "S002",
+          "type": "capital",
+          "label": "微软完成690亿美元收购动视暴雪",
+          "confidence": 10
+        },
+        {
+          "sample_id": "E001",
+          "type": "technical",
+          "label": "Beacon 技术整合失败",
+          "confidence": 10
+        },
+        {
+          "sample_id": "S009",
+          "type": "market",
+          "label": "生成式 AI 在游戏角色创建中的应用趋势",
+          "confidence": 9
+        },
+        {
+          "sample_id": "S006",
+          "type": "technical",
+          "label": "Unity 推出神经网络嵌入技术 Sentis",
+          "confidence": 10
+        }
+      ]
+    },
+    "false_negative_profile": {
+      "by_signal_type": {
+        "market": 2,
+        "team": 2,
+        "capital": 1
+      },
+      "by_source_type": {
+        "news": 2,
+        "announcement": 3
+      }
+    },
+    "boundary_sample_performance": {
+      "total": 3,
+      "perfect": 0,
+      "has_fp": 3,
+      "has_fn": 0
+    }
+  },
+  "optimization_suggestions": [
+    {
+      "priority": "P0",
+      "type": "few_shot",
+      "description": "补充 market 类型的边界样例和负例，压制误报"
+    },
+    {
+      "priority": "P0",
+      "type": "prompt_role",
+      "description": "在角色设定中强化'证据边界'和'克制原则'，避免过度自信"
+    },
+    {
+      "priority": "P1",
+      "type": "constraint",
+      "description": "在 Prompt 中显式说明'模糊样本应降低 confidence_score'"
+    }
+  ],
+  "representative_cases": {
+    "high_quality": [
+      {
+        "sample_id": "S003",
+        "source_type": "news",
+        "title": "Tencent is reportedly refocusing on aggressively seeking full games company acquisitions",
+        "is_high_quality": true,
+        "is_boundary": false,
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "false_positives": [],
+        "false_negatives": []
+      },
+      {
+        "sample_id": "S004",
+        "source_type": "report",
+        "title": "NVIDIA’s Digital Humans Bring AI Game Characters to Life",
+        "is_high_quality": true,
+        "is_boundary": false,
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "false_positives": [],
+        "false_negatives": []
+      }
+    ],
+    "false_positives": [
+      {
+        "sample_id": "S001",
+        "source_type": "news",
+        "title": "Bungie lays off another 220 staff, acknowledging it was \"overly ambitious\"",
+        "is_high_quality": false,
+        "is_boundary": false,
+        "tp": 1,
+        "fp": 1,
+        "fn": 0,
+        "false_positives": [
+          {
+            "actual_type": "market",
+            "actual_label": "Bungie 战略聚焦调整",
+            "actual_description": "Bungie 将开发资源完全聚焦于 Destiny 和 Marathon 两个项目",
+            "confidence_score": 10
+          }
+        ],
+        "false_negatives": []
+      },
+      {
+        "sample_id": "S002",
+        "source_type": "news",
+        "title": "Microsoft closes deal to buy Call of Duty maker Activision Blizzard after antitrust fights",
+        "is_high_quality": false,
+        "is_boundary": false,
+        "tp": 0,
+        "fp": 1,
+        "fn": 1,
+        "false_positives": [
+          {
+            "actual_type": "capital",
+            "actual_label": "微软完成690亿美元收购动视暴雪",
+            "actual_description": "微软以690亿美元完成对游戏制作商动视暴雪的收购，这是科技史上最昂贵的收购之一",
+            "confidence_score": 10
+          }
+        ],
+        "false_negatives": [
+          {
+            "expected_type": "market",
+            "expected_label": "platform_power_shift",
+            "expected_description": "Microsoft 完成对 Activision Blizzard 的收购，该交易在反垄断争议后落地，并被报道为可能对游戏行业产生广泛影响。"
+          }
+        ]
+      }
+    ],
+    "false_negatives": [
+      {
+        "sample_id": "S002",
+        "source_type": "news",
+        "title": "Microsoft closes deal to buy Call of Duty maker Activision Blizzard after antitrust fights",
+        "is_high_quality": false,
+        "is_boundary": false,
+        "tp": 0,
+        "fp": 1,
+        "fn": 1,
+        "false_positives": [
+          {
+            "actual_type": "capital",
+            "actual_label": "微软完成690亿美元收购动视暴雪",
+            "actual_description": "微软以690亿美元完成对游戏制作商动视暴雪的收购，这是科技史上最昂贵的收购之一",
+            "confidence_score": 10
+          }
+        ],
+        "false_negatives": [
+          {
+            "expected_type": "market",
+            "expected_label": "platform_power_shift",
+            "expected_description": "Microsoft 完成对 Activision Blizzard 的收购，该交易在反垄断争议后落地，并被报道为可能对游戏行业产生广泛影响。"
+          }
+        ]
+      },
+      {
+        "sample_id": "S012",
+        "source_type": "news",
+        "title": "腾讯海外工作室Sharkmob宣布裁员！上个月刚关了一家",
+        "is_high_quality": false,
+        "is_boundary": false,
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "false_positives": [],
+        "false_negatives": [
+          {
+            "expected_type": "team",
+            "expected_label": "org_shift",
+            "expected_description": "Sharkmob 在项目收缩后再次裁员，并明确将资源聚焦至 Exoborne，体现组织结构调整与团队收缩。"
+          }
+        ]
+      }
+    ],
+    "boundary": [
+      {
+        "sample_id": "E001",
+        "source_type": "news",
+        "title": "Sega responds to concerns after recording $200 million impairment write-down for Rovio",
+        "is_high_quality": false,
+        "is_boundary": true,
+        "tp": 1,
+        "fp": 1,
+        "fn": 0,
+        "false_positives": [
+          {
+            "actual_type": "technical",
+            "actual_label": "Beacon 技术整合失败",
+            "actual_description": "Sega 未能成功将 Rovio 的 Beacon 技术整合到自有移动游戏中",
+            "confidence_score": 10
+          }
+        ],
+        "false_negatives": []
+      },
+      {
+        "sample_id": "E004",
+        "source_type": "announcement",
+        "title": "Unreal Engine 5.4 is now available",
+        "is_high_quality": false,
+        "is_boundary": true,
+        "tp": 1,
+        "fp": 1,
+        "fn": 0,
+        "false_positives": [
+          {
+            "actual_type": "technical",
+            "actual_label": "Epic 内部工具集对外开放",
+            "actual_description": "Epic Games 将用于开发 Fortnite 系列游戏的内部工具集随 UE 5.4 对外发布",
+            "confidence_score": 10
+          }
+        ],
+        "false_negatives": []
+      }
+    ]
+  }
+}
