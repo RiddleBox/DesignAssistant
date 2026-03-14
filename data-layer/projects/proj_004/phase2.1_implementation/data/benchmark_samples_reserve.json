@@ -1,0 +1,246 @@
+{
+  "samples": [
+    {
+      "sample_id": "B001",
+      "source_type": "news",
+      "title": "2024's games industry lay-offs: The stories so far - all in one place",
+      "content": "Many companies who geared up for endless growth have been shedding staff and winding back plans. Here is a round-up of those pivots, resets, and restructures so far.",
+      "published_at": "2024-08-05",
+      "source_name": "PocketGamer.biz",
+      "source_url": "https://www.pocketgamer.biz/2024s-lay-offs-all-in-one-place/",
+      "annotation": {
+        "expected_signals": []
+      }
+    },
+    {
+      "sample_id": "B002",
+      "source_type": "report",
+      "title": "Tides of Chaos: How Baldur's Gate 3 tackles the RNG of D&D-inspired dice rolls",
+      "content": "With the game now a week into its Early Access cycle, Larian Studios lead systems designer Nick Pechenin sat down with Gamasutra to discuss how the early days of that open development process has gone and offer a D&D-driven dive into how something as core to the tabletop experience as rolling a twenty-sided die becomes ever more complicated in the context of a video game's narrative, combat, and more.",
+      "published_at": "2020-10-16",
+      "source_name": "GameDeveloper",
+      "source_url": "https://www.gamedeveloper.com/design/tides-of-chaos-how-i-baldur-s-gate-3-i-tackles-the-rng-of-d-d-inspired-dice-rolls",
+      "annotation": {
+        "expected_signals": []
+      }
+    },
+    {
+      "sample_id": "E002",
+      "source_type": "report",
+      "title": "EXCLUSIVE: Elden Ring Director Answers All of Our Shadow of the Erdtree DLC Questions | IGN Fan Fest 2024",
+      "content": "Bandai Namco surprised fans all over this morning with the trailer for the hotly-anticipated follow up DLC for Elden Ring, Shadow of the Erdtree. I was fortunate to not only catch an early glimpse of the trailer, which also confirmed the DLC's release date for June 21, but also to sit down and talk with the man himself, Elden Ring director Hidetaka Miyazaki.Over the course of the interview we discuss the details of Shadow of the Erdtree, some of Elden Ring's bolder choices, his thoughts on potentially taking a step back from the director role in the future, and the state of the industry and how it relates to FromSoftware.",
+      "published_at": "2024-03-21",
+      "source_name": "IGN",
+      "source_url": "https://www.ign.com/articles/hidetaka-miyazaki-elden-ring-shadow-of-the-erdtree-interview",
+      "annotation": {
+        "expected_signals": []
+      }
+    },
+    {
+      "sample_id": "E003",
+      "source_type": "report",
+      "title": "Remedy's Sam Lake answers your Alan Wake 2 questions and more",
+      "content": "When I asked you - the Eurogamer readers - whether you had any questions for Remedy Entertainment's Sam Lake, I wasn't expecting quite the outpouring I got. I thought maybe there'd be a couple of dozen questions, perhaps more, but you submitted well over 100. It's a lot more than I imagined would come in, so thank you. It's a really encouraging precedent for doing similar things in the future.",
+      "published_at": "2023-10-19",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/remedys-sam-lake-answers-your-alan-wake-2-questions-and-more",
+      "annotation": {
+        "expected_signals": []
+      }
+    },
+    {
+      "sample_id": "B003",
+      "source_type": "report",
+      "title": "The Legend of Zelda: Tears of the Kingdom will introduce gameplay that changes the whole world",
+      "content": "The Legend of Zelda: Tears of the Kingdom will reportedly feature gameplay elements that will bring about changes to the game world, according to the game's producer Eiji Aonuma.Tears of the Kingdom producer - and overall Zelda boss at Nintendo - Eiji Aonuma recently made an appearance at the Famitsu Game Awards to accept an award for the Breath of the Wild sequel after it won the 'Most Anticipated Game' award during this year's ceremony. ",
+      "published_at": "2023-03-22",
+      "source_name": "GamesRadar",
+      "source_url": "https://www.gamesradar.com/the-legend-of-zelda-tears-of-the-kingdom-will-introduce-gameplay-that-changes-the-whole-world/",
+      "annotation": {
+        "expected_signals": []
+      }
+    },
+    {
+      "sample_id": "B004",
+      "source_type": "report",
+      "title": "The Generative AI Revolution in Games",
+      "content": "The Generative AI Revolution in Games",
+      "published_at": "2022-11-17",
+      "source_name": "a16z",
+      "source_url": "https://a16z.com/the-generative-ai-revolution-in-games/",
+      "annotation": {
+        "expected_signals": []
+      }
+    },
+    {
+      "sample_id": "E006",
+      "source_type": "announcement",
+      "title": "Major milestone ready for testing: Godot 4.0 alpha 1 is out!",
+      "content": "Godot 4.0 Alpha 1 的开发快照体现了开源引擎生态的能力演进，但它是否足以进入 2.1 正式信号集，取决于正文是否明确体现工具链迁移、生产力拐点或生态影响，而不只是常规版本迭代。因此当前更适合作为技术边界样本。",
+      "published_at": "2022-01-24",
+      "source_name": "Godot Engine",
+      "source_url": "https://godotengine.org/article/dev-snapshot-godot-4-0-alpha-1/",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "technical",
+            "signal_label": "open_engine_capability_shift",
+            "description": "Godot 4.0 Alpha 1 体现开源引擎能力演进，但其是否构成明确工具链信号仍需更多证据。",
+            "intensity_score": 4,
+            "confidence_score": 8,
+            "timeliness_score": 1,
+            "entities": [
+              "Godot 4.0"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "sample_id": "S005",
+      "source_type": "report",
+      "title": "Generative Agents: Interactive Simulacra of Human Behavior",
+      "content": "This repository accompanies our research paper titled 'Generative Agents: Interactive Simulacra of Human Behavior.' It contains our core simulation module for generative agents—computational agents that simulate believable human behaviors—and their game environment. Below, we document the steps for setting up the simulation environment on your local machine and for replaying the simulation as a demo animation.",
+      "published_at": "2023",
+      "source_name": "GitHub",
+      "source_url": "https://github.com/joonspk-research/generative_agents",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "technical",
+            "signal_label": "ai_agent_world_model",
+            "description": "Generative Agents 展示了自治角色、记忆与社会模拟结合形成的可运行原型。",
+            "intensity_score": 8,
+            "confidence_score": 9,
+            "timeliness_score": 1,
+            "entities": [
+              "Generative Agents",
+              "agent",
+              "simulation"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "sample_id": "S008",
+      "source_type": "announcement",
+      "title": "Mid-Term Plan",
+      "content": "The business environment surrounding the game industry is continually changing. Along with setting a medium-term management goal of increasing operating income each fiscal year through building up a stable earnings foundation, we have established specific initiatives to accelerate future business growth.",
+      "published_at": "2025-03-13",
+      "source_name": "Capcom IR",
+      "source_url": "https://www.capcom.co.jp/ir/english/management/strategies.html",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "market",
+            "signal_label": "company_strategy_signal",
+            "description": "Capcom 的中期计划披露了持续增长目标与未来业务增长举措，可作为公司长期战略方向的一手信号。",
+            "intensity_score": 7,
+            "confidence_score": 10,
+            "timeliness_score": 1,
+            "entities": [
+              "Capcom"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "sample_id": "R001",
+      "source_type": "report",
+      "title": "June 2025 | Sector Watch: Entertainment • Media • Gaming",
+      "content": "June 2025 saw continued consolidation and realignment across entertainment, media, and gaming. Major incumbents slashed staff, rising streaming pressure prompted reorganizations, game studios closed, and the SAG-AFTRA strike finally ended. These shifts impact employer strategy, workforce planning, and investment priorities throughout the industry.",
+      "published_at": "2025-06-30",
+      "source_name": "Bluprint LLC",
+      "source_url": "https://bluprintllc.com/june-2025-sector-watch-entertainment-media-gaming/",
+      "annotation": {
+        "expected_signals": []
+      }
+    },
+    {
+      "sample_id": "R002",
+      "source_type": "news",
+      "title": "Legal Developments in the Gaming Industry: Second Half of 2025",
+      "content": "The second half of 2025 involved significant legal and regulatory activity across fantasy sports, event contracts, sweepstakes casinos and sports betting. Operators and suppliers confronted a regulatory environment that remained fragmented and uncertain as agencies and courts applied existing laws to fast-evolving business models.",
+      "published_at": "2026-02-06",
+      "source_name": "WilmerHale",
+      "source_url": "https://www.wilmerhale.com/en/insights/client-alerts/20260205-legal-developments-in-the-gaming-industry-second-half-of-2025",
+      "annotation": {
+        "expected_signals": []
+      }
+    },
+    {
+      "sample_id": "R003",
+      "source_type": "report",
+      "title": "Gaming Executives Report Renewed Optimism in Q3 2025",
+      "content": "Executive sentiment across the U.S. gaming industry strengthened in Q3 2025 as key performance indicators improved, with the Gaming Conditions Index showing year-over-year expansion. However, the piece centers on the broader U.S. gaming sector and casino hotel activity rather than the video game industry benchmark scope.",
+      "published_at": "2025-11-06",
+      "source_name": "American Gaming Association",
+      "source_url": "https://www.americangaming.org/gaming-executives-report-renewed-optimism-in-q3-2025/",
+      "annotation": {
+        "expected_signals": []
+      }
+    },
+    {
+      "sample_id": "R004",
+      "source_type": "announcement",
+      "title": "Mattel and OpenAI Announce Strategic Collaboration",
+      "content": "Mattel and OpenAI announced a strategic collaboration to support AI-powered products and experiences based on Mattel’s brands. The announcement emphasizes innovation, privacy, and safety, but it is centered on toys and family entertainment broadly rather than a clearly game-industry-specific production or market signal.",
+      "published_at": "2025-06-12",
+      "source_name": "Mattel",
+      "source_url": "https://corporate.mattel.com/news/mattel-and-openai-announce-strategic-collaboration",
+      "annotation": {
+        "expected_signals": []
+      }
+    },
+    {
+      "sample_id": "R005",
+      "source_type": "announcement",
+      "title": "Evolution and Galaxy Gaming Extend Merger Agreement as Acquisition Progresses; Remaining Regulatory Approvals are Anticipated in Q1 2026",
+      "content": "Evolution and Galaxy Gaming extended the outside date for their merger agreement and said remaining regulatory approvals are expected in Q1 2026. Although this is a clear capital event, the article is focused on casino table games and gaming regulation rather than the video game industry benchmark scope.",
+      "published_at": "2025-11-25",
+      "source_name": "Nasdaq",
+      "source_url": "https://www.nasdaq.com/press-release/evolution-and-galaxy-gaming-extend-merger-agreement-acquisition-progresses-remaining",
+      "annotation": {
+        "expected_signals": []
+      }
+    },
+    {
+      "sample_id": "R006",
+      "source_type": "announcement",
+      "title": "AMD and Meta Announce Expanded Strategic Partnership to Deploy 6 Gigawatts of AMD GPUs",
+      "content": "AMD and Meta announced a large-scale AI infrastructure partnership covering custom GPUs, CPUs, systems, and software. The deal is strategically important, but it is a general AI compute partnership and does not provide a sufficiently game-industry-specific capital or technical signal for the current benchmark set.",
+      "published_at": "2026-02-24",
+      "source_name": "AMD",
+      "source_url": "https://www.amd.com/en/newsroom/press-releases/2026-2-24-amd-and-meta-announce-expanded-strategic-partnersh.html",
+      "annotation": {
+        "expected_signals": []
+      }
+    },
+    {
+      "sample_id": "R007",
+      "source_type": "announcement",
+      "title": "Microsoft announces Experiences + Devices leadership changes",
+      "content": "Microsoft announced senior leadership changes tied to a retirement and broader organizational succession planning. While this is a real team and org-shift signal at the company level, the announcement is not specifically centered on Xbox, gaming studios, or the video game industry benchmark scope.",
+      "published_at": "2026-03-12",
+      "source_name": "Microsoft",
+      "source_url": "https://blogs.microsoft.com/blog/2026/03/12/microsoft-announces-experiences-devices-leadership-changes/",
+      "annotation": {
+        "expected_signals": []
+      }
+    },
+    {
+      "sample_id": "R008",
+      "source_type": "announcement",
+      "title": "An Update to Our Shared Commitment to Safer Gaming",
+      "content": "Nintendo, Sony Interactive Entertainment, and Microsoft updated their shared cross-platform safety principles for gaming, emphasizing player protection, parental controls, research, community support, and evolving technical safeguards. The announcement is relevant to the game ecosystem, but it is primarily a platform trust-and-safety commitment rather than a clear team, capital, market, or technical benchmark signal under the current scope.",
+      "published_at": "2026-01-14",
+      "source_name": "Xbox",
+      "source_url": "https://news.xbox.com/en-us/2026/01/14/online-safety-principles-xbox-nintendo-sony/",
+      "annotation": {
+        "expected_signals": []
+      }
+    }
+  ]
+}

@@ -1,0 +1,790 @@
+{
+  "samples": [
+    {
+      "sample_id": "S001",
+      "source_type": "news",
+      "title": "Bungie lays off another 220 staff, acknowledging it was \"overly ambitious\"",
+      "content": "Bungie is laying off 220 developers. That's 17% of its overall headcount. Bungie boss Pete Parsons says the cuts are needed \"to make substantial changes to our cost structure and focus development efforts entirely on Destiny and Marathon.\"",
+      "published_at": "2024-07-31",
+      "source_name": "GamesIndustry.biz",
+      "source_url": "https://www.gamesindustry.biz/bungie-lays-off-another-220-staff-acknowledging-it-was-overly-ambitious",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "team",
+            "signal_label": "org_shift",
+            "description": "Bungie 宣布裁员 220 人，并说明此举用于调整成本结构和聚焦核心项目。",
+            "intensity_score": 8,
+            "confidence_score": 8,
+            "timeliness_score": 1,
+            "entities": [
+              "Bungie",
+              "Pete Parsons",
+              "Destiny",
+              "Marathon"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "sample_id": "S002",
+      "source_type": "news",
+      "title": "Microsoft closes deal to buy Call of Duty maker Activision Blizzard after antitrust fights",
+      "content": "Microsoft completed its purchase of video game-maker Activision Blizzard for $69 billion on Friday, closing one of the most expensive tech acquisitions in history that could have repercussions across the video game industry.",
+      "published_at": "2023-10-14",
+      "source_name": "AP News",
+      "source_url": "https://apnews.com/article/microsoft-activision-video-game-britain-ed7f6123dd114098fe64c03a88f84327",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "market",
+            "signal_label": "platform_power_shift",
+            "description": "Microsoft 完成对 Activision Blizzard 的收购，该交易在反垄断争议后落地，并被报道为可能对游戏行业产生广泛影响。",
+            "intensity_score": 8,
+            "confidence_score": 9,
+            "timeliness_score": 1,
+            "entities": [
+              "Microsoft",
+              "Activision Blizzard"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "sample_id": "E001",
+      "source_type": "news",
+      "title": "Sega responds to concerns after recording $200 million impairment write-down for Rovio",
+      "content": "Sega addressed the $200 million impairment write-down for Rovio during Q3, with parent company Sega Sammy Holdings referring to difficulties in implementing changes following its $776 million acquisition and was unable to fully implement Rovio's Beacon technology in its own mobile titles.",
+      "published_at": "2026-03-13",
+      "source_name": "GamesIndustry.biz",
+      "source_url": "https://www.gamesindustry.biz/sega-responds-to-concerns-after-recording-200-million-impairment-write-down-for-rovio",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "capital",
+            "signal_label": "acquisition_reassessment",
+            "description": "Sega 在 Rovio 并购后确认减值，并提及整合与技术落地困难，但正文更像一次并购整合受阻的财务反馈，尚不足以单独证明长期并购策略发生明确转向。",
+            "intensity_score": 4,
+            "confidence_score": 3,
+            "timeliness_score": 10,
+            "entities": [
+              "Sega",
+              "Rovio"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "sample_id": "S003",
+      "source_type": "news",
+      "title": "Tencent is reportedly refocusing on aggressively seeking full games company acquisitions",
+      "content": "Chinese gaming giant Tencent is reportedly switching its acquisition strategy and “aggressively seeking” to own majority or controlling stakes in overseas game companies.",
+      "published_at": "2022-10-01",
+      "source_name": "Video Games Chronicle",
+      "source_url": "https://www.videogameschronicle.com/news/tencent-is-reportedly-refocusing-on-aggressively-seeking-full-games-company-acquisitions/",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "capital",
+            "signal_label": "full_acquisition_shift",
+            "description": "Tencent 被报道为重新聚焦整家公司收购，而不再主要停留在少数股权投资。",
+            "intensity_score": 8,
+            "confidence_score": 7,
+            "timeliness_score": 1,
+            "entities": [
+              "Tencent"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "sample_id": "S004",
+      "source_type": "report",
+      "title": "NVIDIA’s Digital Humans Bring AI Game Characters to Life",
+      "content": "At its Game Developers Conference, NVIDIA presented a series of tech demos to demonstrate how their AI tools can be used to voice, animate, and script dialogue for non-playable characters (NPCs). These NPCs are capable of generating unique responses to player actions, enhancing the gaming experience with more dynamic and varied interactions.",
+      "published_at": "2024-03-20",
+      "source_name": "Shelly Palmer",
+      "source_url": "https://shellypalmer.com/2024/03/nvidias-digital-humans-bring-ai-game-characters-to-life/",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "technical",
+            "signal_label": "ai_native_experience_shift",
+            "description": "报道显示 NVIDIA 将语音、动画和对话生成能力用于 NPC 交互，指向 AI 驱动角色体验进入更可落地的游戏场景。",
+            "intensity_score": 7,
+            "confidence_score": 6,
+            "timeliness_score": 1,
+            "entities": [
+              "NVIDIA",
+              "NPCs",
+              "digital humans"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "sample_id": "S009",
+      "source_type": "announcement",
+      "title": "NVIDIA Brings Generative AI for Digital Humans, New RTX Technologies and More DLSS 3.5 Games to GDC",
+      "content": "Generative AI is capable of creating more realistic verbal and facial expressions for digital humans than ever before. This week at GDC 2024, NVIDIA announced that leading AI application developers across a wide range of industries are using NVIDIA digital human technologies to create lifelike avatars for commercial applications and dynamic game characters. NVIDIA enables developers with state-of-the-art digital human technologies, including NVIDIA ACE for speech and animation, NVIDIA NeMo for language, and NVIDIA RTX for ray-traced rendering. Developers showcased new digital human technology demos that used NVIDIA ACE microservices at GDC.",
+      "published_at": "2024-03-18",
+      "source_name": "NVIDIA Blog",
+      "source_url": "https://blogs.nvidia.com/blog/generative-ai-digital-humans-rtx-dlss-gdc/",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "technical",
+            "signal_label": "game_ai_stack_integration",
+            "description": "NVIDIA 在 GDC 将数字人、生成式 AI 与图形能力作为面向游戏的集成技术栈进行展示。",
+            "intensity_score": 7,
+            "confidence_score": 9,
+            "timeliness_score": 1,
+            "entities": [
+              "NVIDIA",
+              "RTX",
+              "DLSS",
+              "digital humans"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "sample_id": "S006",
+      "source_type": "announcement",
+      "title": "Introducing Unity Muse and Unity Sentis, AI-powered creativity",
+      "content": "Today we’re announcing two new AI products: Unity Muse, an expansive platform for AI-driven assistance during creation, and Unity Sentis, which allows you to embed neural networks in your builds to enable previously unimaginable real-time experiences.",
+      "published_at": "2023-06-27",
+      "source_name": "Unity Blog",
+      "source_url": "https://unity.com/blog/engine-platform/introducing-unity-muse-and-unity-sentis-ai",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "technical",
+            "signal_label": "toolchain_shift",
+            "description": "Unity 发布 Muse 与 Sentis，将生成式创作辅助和模型推理能力直接带入引擎工作流。",
+            "intensity_score": 8,
+            "confidence_score": 10,
+            "timeliness_score": 1,
+            "entities": [
+              "Unity",
+              "Muse",
+              "Sentis"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "sample_id": "E004",
+      "source_type": "announcement",
+      "title": "Unreal Engine 5.4 is now available",
+      "content": "Unreal Engine 5.4 is here, and it’s packed with new features and improvements to performance, visual fidelity, and productivity that will benefit game developers and creators across industries. With this release, we’re delivering the toolsets we’ve been using internally to build and ship Fortnite Chapter 5, Rocket Racing, Fortnite Festival, and LEGO Fortnite. Here are some of the highlights.",
+      "published_at": "2024-04-23",
+      "source_name": "Unreal Engine Blog",
+      "source_url": "https://www.unrealengine.com/en-US/blog/unreal-engine-5-4-is-now-available",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "technical",
+            "signal_label": "engine_productivity_update",
+            "description": "UE 5.4 发布强调性能、视觉与生产效率改进，但正文仍不足以单独证明明确的工具链范式转变。",
+            "intensity_score": 4,
+            "confidence_score": 3,
+            "timeliness_score": 1,
+            "entities": [
+              "Unreal Engine 5.4"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "sample_id": "E005",
+      "source_type": "announcement",
+      "title": "What’s Next for Netflix Games",
+      "content": "By year’s end, we’ll have 86 games available —all included with every Netflix membership without ads, in-app purchases or extra fees. And with nearly 90 more games in development, we’re just getting started. We can share more today about four of those games, which are coming in 2024, including the sequel to beloved life sim Cozy Grove, from our internal studio Spry Fox, Cozy Grove: Camp Spirit. ",
+      "published_at": "2023-12-14",
+      "source_name": "Netflix",
+      "source_url": "https://about.netflix.com/en/news/whats-next-for-netflix-games",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "market",
+            "signal_label": "platform_strategy_shift",
+            "description": "Netflix Games 披露在库与在研游戏数量及后续发布计划，但正文更像业务进展更新，尚不足以单独证明明确的平台战略转向。",
+            "intensity_score": 4,
+            "confidence_score": 3,
+            "timeliness_score": 1,
+            "entities": [
+              "Netflix Games",
+              "Netflix"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "sample_id": "S007",
+      "source_type": "announcement",
+      "title": "Embracer Group announces its intention to transform into three standalone publicly listed entities at Nasdaq Stockholm",
+      "content": "INSIDE INFORMATION: The Board of Directors of Embracer Group AB (“Embracer Group”) today announces a transformative step for value creation through a separation of the group into three market-leading games and entertainment companies: Asmodee Group, “Coffee Stain & Friends”[1] and “Middle-earth Enterprises & Friends”[1]. The three entities will be separate, publicly listed companies, enabling each entity to better focus on their respective core strategies and offer more differentiated and distinct equity stories for existing and new shareholders. This will enable the entities to unlock value in the high-quality assets of Embracer Group following the successful completion of the restructuring program.",
+      "published_at": "2024-04-22",
+      "source_name": "Embracer Group",
+      "source_url": "https://embracer.com/releases/embracer-group-announces-its-intention-to-transform-into-three-standalone-publicly-listed-entities-at-nasdaq-stockholm/",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "capital",
+            "signal_label": "org_capital_restructure",
+            "description": "Embracer 宣布拆分为三家独立上市实体，直接体现资本结构和资产配置方式的重组。",
+            "intensity_score": 8,
+            "confidence_score": 10,
+            "timeliness_score": 1,
+            "entities": [
+              "Embracer Group"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "sample_id": "S010",
+      "source_type": "news",
+      "title": "Laid off ZeniMax Online Studios developers form Sackbird Studios",
+      "content": "A group of ZeniMax Online Studios developers who were recently laid off by Microsoft have reunited to form Sackbird Studios. The cohort had been working on an online looter shooter codenamed Project Blackbird at ZOS. Microsoft canceled Blackbird despite the project seemingly impressing Xbox executives during an internal demonstration. Now, key members of the ZOS team have co-founded Sackbird and begun active development on an original project for PC and consoles.",
+      "published_at": "2025-10-09",
+      "source_name": "Game Developer",
+      "source_url": "https://www.gamedeveloper.com/business/laid-off-zenimax-online-studios-developers-form-sackbird-studios",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "team",
+            "signal_label": "new_studio_formation",
+            "description": "被裁的 ZeniMax Online Studios 核心成员重新集结并成立 Sackbird Studios，体现团队在项目取消和裁员后的重组与创业化流动。",
+            "intensity_score": 7,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": [
+              "ZeniMax Online Studios",
+              "Microsoft",
+              "Sackbird Studios",
+              "Project Blackbird"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "sample_id": "S011",
+      "source_type": "news",
+      "title": "Skybound spins up new fighting game studio Quarter Up",
+      "content": "Skybound Entertainment is expanding its video game interests with a new in-house game studio called Quarter Up. The studio's debut game will be Invincible VS, a tag-team fighting game based on Skybound founder Robert Kirkman's superhero comic Invincible. Skybound had previously licensed its properties to external game studios, but spent 2024 hiring game industry executives, signaling a broader push into internal game development.",
+      "published_at": "2025-06-09",
+      "source_name": "Game Developer",
+      "source_url": "https://www.gamedeveloper.com/business/skybound-spins-up-new-fighting-game-studio-quarter-up",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "team",
+            "signal_label": "new_studio_formation",
+            "description": "Skybound 从授权合作转向自建内部游戏工作室 Quarter Up，并由具有相关经验的负责人带队，体现团队能力与组织边界的扩张。",
+            "intensity_score": 7,
+            "confidence_score": 8,
+            "timeliness_score": 1,
+            "entities": [
+              "Skybound Entertainment",
+              "Quarter Up",
+              "Mike Willette",
+              "Invincible VS"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "sample_id": "S012",
+      "source_type": "news",
+      "title": "腾讯海外工作室Sharkmob宣布裁员！上个月刚关了一家",
+      "content": "据 PC Gamer 报道，总部位于瑞典、隶属腾讯的 Sharkmob 在十月刚宣布，其超自然题材大逃杀游戏《吸血鬼：避世-血猎》将于 2026 年 4 月下线。而如今，该工作室又表示，作为对其“组织架构调整”的一部分，将裁减部分员工。Sharkmob 表示此举是为了聚焦核心方向，将资源集中在《Exoborne》的持续开发上，并为可持续增长打下基础。",
+      "published_at": "2025-11-13",
+      "source_name": "游民星空",
+      "source_url": "https://www.gamersky.com/news/202511/2044884.shtml",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "team",
+            "signal_label": "org_shift",
+            "description": "Sharkmob 在项目收缩后再次裁员，并明确将资源聚焦至 Exoborne，体现组织结构调整与团队收缩。",
+            "intensity_score": 7,
+            "confidence_score": 7,
+            "timeliness_score": 5,
+            "entities": [
+              "Sharkmob",
+              "Tencent",
+              "Exoborne"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "sample_id": "S013",
+      "source_type": "news",
+      "title": "Former Multiversus devs fund independent studio Airlock Games",
+      "content": "Former Multiversus developers have funded a new independent studio called Airlock Games. Via a press release, the self-funded studio is spearheaded by co-founders Justin Fischer and Brock Feldman. The developers said they wanted the freedom to take creative risks, push boundaries, and tell stories that are not feasible for AAA productions.",
+      "published_at": "2025-10-29",
+      "source_name": "Game Developer",
+      "source_url": "https://www.gamedeveloper.com/business/former-multiversus-devs-fund-independent-studio-airlock-games",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "team",
+            "signal_label": "new_studio_formation",
+            "description": "前 MultiVersus 团队成员自筹资金成立 Airlock Games，并强调摆脱 AAA 组织约束开展新项目，体现核心成员重组后的独立化流动。",
+            "intensity_score": 6,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": [
+              "Airlock Games",
+              "Player First Games",
+              "MultiVersus",
+              "Justin Fischer",
+              "Brock Feldman"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "sample_id": "S014",
+      "source_type": "report",
+      "title": "Year in review: 2025 to date",
+      "content": "In 2025, games growth was sustained by engagement depth, not just release volume. The industry movements of 2025 show that growth was shaped less by the timing of major launches and more by long-term engagement, pricing power, and established franchises. The market’s momentum is increasingly driven by depth rather than volume.",
+      "published_at": "2025-12-18",
+      "source_name": "Newzoo",
+      "source_url": "https://newzoo.com/resources/blog/year-in-review-2025-to-date",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "market",
+            "signal_label": "engagement_driven_growth",
+            "description": "Newzoo 指出 2025 年行业增长更多来自长期参与度、定价能力和成熟 IP，而非单纯依赖新作发售节奏，体现市场驱动逻辑的变化。",
+            "intensity_score": 7,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": [
+              "Newzoo"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "sample_id": "S015",
+      "source_type": "report",
+      "title": "Mobile Gaming Market Trends Analysis Report with Growth Forecasts, 2025-2030: In-App Purchases Fuel Mobile Gaming Economy with Personalized Offerings",
+      "content": "The mobile gaming market is projected to grow from USD 139.38 billion in 2024 to USD 256.19 billion by 2030, driven by growing smartphone use and the free-to-play model. Key trends highlighted in the report include rising mobile esports, especially in Latin America, and strategic movements by industry giants like Tencent.",
+      "published_at": "2025-06-27",
+      "source_name": "GlobeNewswire",
+      "source_url": "https://www.globenewswire.com/news-release/2025/06/27/3106566/28124/en/Mobile-Gaming-Market-Trends-Analysis-Report-with-Growth-Forecasts-2025-2030-In-App-Purchases-Fuel-Mobile-Gaming-Economy-with-Personalized-Offerings.html",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "market",
+            "signal_label": "mobile_growth_outlook",
+            "description": "报告给出 2025-2030 年移动游戏市场增长预测，并强调免费模式、应用内购买和移动电竞扩张，体现移动端市场机会仍在放大。",
+            "intensity_score": 6,
+            "confidence_score": 6,
+            "timeliness_score": 1,
+            "entities": [
+              "mobile gaming market",
+              "Tencent"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "sample_id": "S016",
+      "source_type": "report",
+      "title": "Drake Star Global Gaming Report 2025: Landmark Year for Gaming M&A",
+      "content": "The Drake Star Global Gaming Report 2025 describes 2025 as a landmark year for gaming M&A, with record disclosed deal value driven by mega-deals and a rebound in financing activity during the second half of the year. The report also highlights active strategic investors such as Tencent, KRAFTON, and Smilegate, alongside large private financings in mobile and AI.",
+      "published_at": "2026-01-12",
+      "source_name": "Drake Star",
+      "source_url": "https://www.drakestar.com/news/global-gaming-report-2025",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "capital",
+            "signal_label": "ma_consolidation_cycle",
+            "description": "Drake Star 将 2025 年概括为游戏行业并购与融资显著回暖的一年，并以多笔大型交易和融资为证据，体现资本整合周期增强。",
+            "intensity_score": 9,
+            "confidence_score": 7,
+            "timeliness_score": 5,
+            "entities": [
+              "Drake Star",
+              "Tencent",
+              "KRAFTON",
+              "Smilegate"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "sample_id": "S017",
+      "source_type": "report",
+      "title": "The AI Revolution Reshaping Gaming | Q3 2025 Report",
+      "content": "AI captured 53% of global VC funding in H1 2025, yet only 5% of pilot AI projects actually reach production and generate real benefits. The report argues that the real transformation is happening in specific parts of game development, where some tools have crossed into production-ready territory while most remain experimental. It also notes that twenty percent of Steam games now disclose AI usage.",
+      "published_at": "2025-10-15",
+      "source_name": "Hartmann Capital",
+      "source_url": "https://www.hartmanncapital.com/news-insights/the-ai-revolution-reshaping-gaming-q3-2025-report",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "technical",
+            "signal_label": "ai_workflow_adoption",
+            "description": "报告强调 AI 已广泛进入游戏开发工作流，但真正进入生产环节的比例仍有限，体现行业从试点走向可落地应用的技术迁移阶段。",
+            "intensity_score": 7,
+            "confidence_score": 7,
+            "timeliness_score": 5,
+            "entities": [
+              "Hartmann Capital",
+              "Steam",
+              "AI"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "sample_id": "S018",
+      "source_type": "announcement",
+      "title": "90% of Games Developers Already Using AI in Workflows, According to New Google Cloud Research",
+      "content": "Google Cloud released research showing that 97% of surveyed game developers believe generative AI is reshaping the industry, and 90% are already integrating the technology into their workflows. Respondents linked AI to automating repetitive tasks, exploring new gameplay possibilities, and driving innovation in how games are produced.",
+      "published_at": "2025-08-18",
+      "source_name": "Google Cloud",
+      "source_url": "https://www.googlecloudpresscorner.com/2025-08-18-90-of-Games-Developers-Already-Using-AI-in-Workflows,-According-to-New-Google-Cloud-Research",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "technical",
+            "signal_label": "ai_workflow_adoption",
+            "description": "Google Cloud 调研称 90% 的游戏开发者已将生成式 AI 融入工作流，并将其与创新和开发效率提升直接关联，体现 AI 工具链渗透加深。",
+            "intensity_score": 8,
+            "confidence_score": 9,
+            "timeliness_score": 1,
+            "entities": [
+              "Google Cloud",
+              "The Harris Poll",
+              "devcom 2025"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "sample_id": "S019",
+      "source_type": "report",
+      "title": "Global games market to hit $189 billion in 2025 as growth shifts to console",
+      "content": "Newzoo says the global games market will reach $189 billion in 2025 and highlights a shift in growth drivers toward console momentum, new hardware cycles, mobile-first regions, and changing release, pricing, and live-content strategies. The piece frames 2025 as a year of steady but more competitive growth rather than a simple volume rebound.",
+      "published_at": "2025-09-09",
+      "source_name": "Newzoo",
+      "source_url": "https://newzoo.com/resources/blog/global-games-market-to-hit-189-billion-in-2025",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "market",
+            "signal_label": "platform_mix_growth_shift",
+            "description": "Newzoo 预计 2025 年全球游戏市场规模达到 1890 亿美元，并强调增长动力向主机周期、区域结构与发行策略调整迁移，体现市场结构变化。",
+            "intensity_score": 8,
+            "confidence_score": 8,
+            "timeliness_score": 1,
+            "entities": [
+              "Newzoo",
+              "global games market",
+              "console"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "sample_id": "S020",
+      "source_type": "report",
+      "title": "Circana Forecasts a Transformative Year for Video Games in 2026",
+      "content": "Circana reports that U.S. consumer spending on video game hardware, content, and accessories reached $60.7 billion in 2025 and projects it to rise to $62.8 billion in 2026. The forecast ties growth to new hardware, stronger subscription engagement, and major content catalysts such as Nintendo Switch 2's second year and Grand Theft Auto VI anticipation.",
+      "published_at": "2026-02-11",
+      "source_name": "Circana",
+      "source_url": "https://www.circana.com/post/circana-forecasts-a-transformative-year-for-video-games-in-2026",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "market",
+            "signal_label": "consumer_spending_growth_outlook",
+            "description": "Circana 预测 2026 年美国游戏消费将继续创新高，并将增长归因于硬件周期、订阅参与度与头部内容预期，体现需求端仍有扩张动能。",
+            "intensity_score": 7,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": [
+              "Circana",
+              "Nintendo Switch 2",
+              "Grand Theft Auto VI",
+              "U.S. video game industry"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "sample_id": "S021",
+      "source_type": "report",
+      "title": "Drake Star Global Gaming Report Q2 2025: Strong Rebound in Gaming Stocks",
+      "content": "Drake Star says public gaming stocks rebounded strongly in the first half of 2025 and that gaming M&A remained active in Q2 with 46 announced deals. The report also highlights large financings, including Dream Games' $2.5 billion transaction, Tencent's investment in Arrowhead, proposed capital raises by Take-Two and GameStop, and ongoing IPO discussions around Discord.",
+      "published_at": "2025-07-10",
+      "source_name": "Drake Star",
+      "source_url": "https://www.drakestar.com/news/global-gaming-report-q2-2025",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "capital",
+            "signal_label": "financing_and_ma_rebound",
+            "description": "Drake Star 报告显示 2025 年上半年游戏股、并购与融资活动同步回暖，且出现多笔大额交易与募资，体现资本市场活跃度显著提升。",
+            "intensity_score": 8,
+            "confidence_score": 7,
+            "timeliness_score": 1,
+            "entities": [
+              "Drake Star",
+              "Dream Games",
+              "Tencent",
+              "Take-Two",
+              "GameStop",
+              "Discord"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "sample_id": "S022",
+      "source_type": "report",
+      "title": "GDC 2026 State of the Game Industry Reveals Impact of Layoffs, Generative AI, and More",
+      "content": "The 2026 State of the Game Industry report draws on responses from more than 2,300 industry professionals and examines layoffs, generative AI adoption and sentiment, unionization, development platforms, business pressures, and emerging trends. It presents AI usage and production practices as part of a broader shift in how game development work is organized and executed.",
+      "published_at": "2026-01-01",
+      "source_name": "GDC",
+      "source_url": "https://gdconf.com/article/gdc-2026-state-of-the-game-industry-reveals-impact-of-layoffs-generative-ai-and-more/",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "technical",
+            "signal_label": "industry_wide_ai_adoption_signal",
+            "description": "GDC 行业报告将生成式 AI 的采用、开发平台选择与生产压力放在同一框架下讨论，说明 AI 已成为游戏开发流程变化的重要技术信号。",
+            "intensity_score": 7,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": [
+              "GDC",
+              "State of the Game Industry",
+              "generative AI"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "sample_id": "S023",
+      "source_type": "news",
+      "title": "Gaming Industry Off to a Shaky 2026",
+      "content": "Luminate Data describes a difficult start to 2026 for the games industry, marked by January layoffs, continued consolidation pressure, and anxiety around a thin major-release calendar before Grand Theft Auto 6. The piece connects labor cuts, AI-driven efficiency pressure, and blockbuster dependency to a shakier near-term market environment.",
+      "published_at": "2026-02-11",
+      "source_name": "Luminate Data",
+      "source_url": "https://luminatedata.com/blog/gaming-industry-off-to-a-shaky-2026/",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "market",
+            "signal_label": "near_term_market_fragility",
+            "description": "文章将裁员、整合压力、发行空窗与头部产品依赖联系起来，体现 2026 年初游戏市场环境存在脆弱性与不确定性。",
+            "intensity_score": 7,
+            "confidence_score": 6,
+            "timeliness_score": 5,
+            "entities": [
+              "Luminate Data",
+              "Playtika",
+              "Grand Theft Auto 6",
+              "Take-Two Interactive"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "sample_id": "S024",
+      "source_type": "news",
+      "title": "NVIDIA RTX Innovations Are Powering the Next Era of Game Development",
+      "content": "At GDC 2026, NVIDIA outlined new RTX and AI capabilities for game development, including path-traced foliage, indirect lighting updates, improved speech and language support for AI characters, new DirectX APIs, playtesting support, and virtualized studio workflows. The announcement package points to a broader integration of rendering, AI character systems, and developer infrastructure into the production toolchain.",
+      "published_at": "2026-03-10",
+      "source_name": "NVIDIA Developer",
+      "source_url": "https://developer.nvidia.com/blog/nvidia-rtx-innovations-are-powering-the-next-era-of-game-development/",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "technical",
+            "signal_label": "integrated_game_dev_ai_stack",
+            "description": "NVIDIA 在 GDC 2026 展示将图形渲染、AI 角色能力、开发 API 与工作室基础设施一体化推进，体现面向游戏开发的技术栈集成升级。",
+            "intensity_score": 8,
+            "confidence_score": 9,
+            "timeliness_score": 9,
+            "entities": [
+              "NVIDIA",
+              "RTX",
+              "DirectX",
+              "GDC 2026",
+              "GeForce NOW Playtest"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "sample_id": "S025",
+      "source_type": "announcement",
+      "title": "Saudi PIF moving $12bn of games firm shares to subsidiary Savvy",
+      "content": "Saudi Arabia's Public Investment Fund is transferring around $12 billion in holdings across game companies to Savvy Games Group, its games-focused subsidiary. Once completed, Savvy will hold major stakes in companies including Koei Tecmo, NCSoft, Nexon, Square Enix, Nintendo, Bandai Namco, and Take-Two. The move consolidates stewardship of PIF's gaming investments under a dedicated games vehicle rather than the parent sovereign fund.",
+      "published_at": "2026-01-16",
+      "source_name": "GamesIndustry.biz",
+      "source_url": "https://www.gamesindustry.biz/saudi-pif-moving-12bn-of-games-firm-shares-to-savvy",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "capital",
+            "signal_label": "games_investment_consolidation",
+            "description": "沙特 PIF 将约 120 亿美元的游戏公司股权转入 Savvy Games Group，体现其将游戏投资统一归拢到专门平台下进行资本管理。",
+            "intensity_score": 8,
+            "confidence_score": 9,
+            "timeliness_score": 5,
+            "entities": [
+              "Public Investment Fund",
+              "Savvy Games Group",
+              "Nintendo",
+              "Square Enix",
+              "Take-Two"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "sample_id": "S026",
+      "source_type": "announcement",
+      "title": "NetEase Announces Fourth Quarter and Fiscal Year 2025 Unaudited Financial Result",
+      "content": "NetEase reported fourth-quarter 2025 net revenues of RMB27.5 billion, with games and related value-added services contributing RMB22.0 billion, up 3.4% year over year. The company framed games as the core driver of its business mix, while also disclosing broader revenue, profit, and expense performance for the full quarter and fiscal year.",
+      "published_at": "2026-02-11",
+      "source_name": "NetEase",
+      "source_url": "https://ir.netease.com/news-releases/news-release-details/netease-announces-fourth-quarter-and-fiscal-year-2025-unaudited",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "capital",
+            "signal_label": "games_revenue_performance",
+            "description": "网易披露 2025 年第四季度与全年财务结果，其中游戏及相关增值服务仍是核心收入来源，构成明确的游戏业务财务表现信号。",
+            "intensity_score": 6,
+            "confidence_score": 9,
+            "timeliness_score": 5,
+            "entities": [
+              "NetEase",
+              "games and related value-added services",
+              "RMB27.5 billion",
+              "RMB22.0 billion"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "sample_id": "S027",
+      "source_type": "announcement",
+      "title": "UBISOFT ANNOUNCES A MAJOR ORGANIZATIONAL, OPERATIONAL AND PORTFOLIO RESET TO RECLAIM CREATIVE LEADERSHIP AND RESTORE SUSTAINABLE GROWTH",
+      "content": "Ubisoft announced a major organizational, operational, and portfolio reset built around a new operating model, a refocused three-year roadmap, and rightsizing of the organization. The company said the reset was driven by a more selective AAA market, tougher shooter competition, and the need to deliver high-quality games at more competitive costs.",
+      "published_at": "2026-01-21",
+      "source_name": "Ubisoft",
+      "source_url": "https://staticctf.ubisoft.com/8aefmxkxpxwl/59b4Z0RNls45UDTVV6gBNR/801a91a599b337779106af51cf08e539/Ubisoft_Jan_PR_draft_vF.pdf",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "team",
+            "signal_label": "org_reset_and_rightsizing",
+            "description": "Ubisoft 宣布新的运营模式、路线图收缩与组织瘦身，属于明确的组织结构重组与团队调整信号。",
+            "intensity_score": 8,
+            "confidence_score": 9,
+            "timeliness_score": 5,
+            "entities": [
+              "Ubisoft"
+            ]
+          },
+          {
+            "signal_type": "market",
+            "signal_label": "aaa_competition_pressure",
+            "description": "公告明确将 AAA 市场更趋挑剔、射击品类竞争加剧与成本压力作为重组背景，体现市场环境变化正在反向塑造发行商策略。",
+            "intensity_score": 7,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": [
+              "Ubisoft",
+              "AAA market",
+              "shooter landscape"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "sample_id": "S028",
+      "source_type": "announcement",
+      "title": "Tencent Games launches new department to grow Ubisoft franchises",
+      "content": "Tencent Games announced an internal restructuring that includes the creation of a new K9 Cooperation Department to oversee strategic collaborations with Ubisoft and grow core franchises such as Assassin's Creed and Far Cry into long-term properties. The change also dissolves the original UBI department, while related Activision and EA teams are absorbed into other product and publishing units, signaling a broader reorganization around key IP partnerships.",
+      "published_at": "2025-07-08",
+      "source_name": "Tech in Asia",
+      "source_url": "https://www.techinasia.com/news/tencent-games-launches-department-grow-ubisoft-franchises",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "team",
+            "signal_label": "department_reorganization",
+            "description": "Tencent Games 新设 K9 Cooperation Department 统一承接与 Ubisoft 的战略合作，并撤销原有 UBI 部门、重组 Activision 与 EA 相关团队职责，体现围绕核心 IP 协作的明确组织重组信号。",
+            "intensity_score": 8,
+            "confidence_score": 8,
+            "timeliness_score": 1,
+            "entities": [
+              "Tencent Games",
+              "K9 Cooperation Department",
+              "Ubisoft",
+              "Assassin's Creed",
+              "Far Cry",
+              "Activision",
+              "EA"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "sample_id": "N001",
+      "source_type": "report",
+      "title": "How to get a job in the video game industry in 2025",
+      "content": "In this article, we’re going to list some tips and tricks that will increase your chance of landing a job in the games industry as a newbie and expand each point with all the information you need to use them to become the next games industry vet!",
+      "published_at": "2025-01-09",
+      "source_name": "Hitmarker",
+      "source_url": "https://hitmarker.net/career-advice/how-to-get-a-job-in-the-video-game-industry-in-2024",
+      "annotation": {
+        "expected_signals": []
+      }
+    }
+  ]
+}
