@@ -1,0 +1,157 @@
+{
+  "comparison_summary": {
+    "v1.0_version": "v1.0",
+    "v1.1_version": "v1.1",
+    "optimization_effective": true
+  },
+  "metrics_comparison": {
+    "precision": {
+      "v1.0": 0.35714285714285715,
+      "v1.1": 0.42105263157894735,
+      "delta": 0.0639097744360902
+    },
+    "recall": {
+      "v1.0": 0.8333333333333334,
+      "v1.1": 0.8,
+      "delta": -0.033333333333333326
+    },
+    "f1": {
+      "v1.0": 0.5,
+      "v1.1": 0.5517241379310345,
+      "delta": 0.051724137931034475
+    },
+    "tp": {
+      "v1.0": 25,
+      "v1.1": 24,
+      "delta": -1
+    },
+    "fp": {
+      "v1.0": 45,
+      "v1.1": 33,
+      "delta": -12
+    },
+    "fn": {
+      "v1.0": 5,
+      "v1.1": 6,
+      "delta": 1
+    }
+  },
+  "fp_changes_analysis": {
+    "eliminated": {
+      "total": 18,
+      "by_type": {
+        "market": 13,
+        "technical": 4,
+        "team": 1
+      },
+      "samples": [
+        {
+          "sample_id": "S001",
+          "type": "market",
+          "label": "Bungie 战略聚焦调整"
+        },
+        {
+          "sample_id": "S009",
+          "type": "market",
+          "label": "生成式 AI 在游戏角色创建中的应用趋势"
+        },
+        {
+          "sample_id": "E004",
+          "type": "technical",
+          "label": "Epic 内部工具集对外开放"
+        },
+        {
+          "sample_id": "E005",
+          "type": "team",
+          "label": "内部工作室 Spry Fox 开发续作"
+        },
+        {
+          "sample_id": "S007",
+          "type": "market",
+          "label": "重组计划完成后的价值释放"
+        }
+      ]
+    },
+    "persistent": {
+      "total": 28,
+      "by_type": {
+        "capital": 8,
+        "technical": 4,
+        "market": 11,
+        "team": 5
+      },
+      "samples": [
+        {
+          "sample_id": "S002",
+          "type": "capital",
+          "label": "微软完成收购动视暴雪"
+        },
+        {
+          "sample_id": "E001",
+          "type": "technical",
+          "label": "Beacon 技术整合失败"
+        },
+        {
+          "sample_id": "S006",
+          "type": "technical",
+          "label": "Unity 发布神经网络嵌入工具 Sentis"
+        },
+        {
+          "sample_id": "E005",
+          "type": "technical",
+          "label": "Spry Fox 开发 Cozy Grove 续作"
+        },
+        {
+          "sample_id": "S010",
+          "type": "market",
+          "label": "Microsoft 取消 Project Blackbird 项目"
+        }
+      ]
+    },
+    "new": {
+      "total": 5,
+      "samples": [
+        {
+          "sample_id": "E005",
+          "type": "market",
+          "label": "Netflix 在研游戏近 90 款"
+        },
+        {
+          "sample_id": "S010",
+          "type": "team",
+          "label": "前 ZOS 团队成立 Sackbird Studios"
+        },
+        {
+          "sample_id": "S017",
+          "type": "capital",
+          "label": "AI 领域获全球 VC 资金 53%"
+        },
+        {
+          "sample_id": "S022",
+          "type": "technical",
+          "label": "游戏开发工作组织方式转变"
+        },
+        {
+          "sample_id": "S028",
+          "type": "team",
+          "label": "腾讯游戏解散原 UBI 部门"
+        }
+      ]
+    }
+  },
+  "taxonomy_issues": [
+    {
+      "sample_id": "S002",
+      "issue_type": "capital_market_confusion",
+      "actual": "capital",
+      "expected": "market",
+      "note": "大型收购/投资事件的分类歧义"
+    }
+  ],
+  "key_findings": [
+    "Precision 提升 6.4%，误报压制有效",
+    "成功消除 18 个误报",
+    "其中 market 误报消除 13 个",
+    "仍有 28 个顽固误报未解决"
+  ]
+}

@@ -1,32 +1,20 @@
 {
   "benchmark_info": {
-    "run_at": "2026-03-14T18:14:05.251523Z",
-    "decoder_version": "v1.2",
+    "run_at": "2026-03-14T17:15:44.056635Z",
+    "decoder_version": "v1.0",
     "model": "claude-opus-4-6"
   },
   "metrics": {
     "total_samples": 30,
     "schema_valid_rate": 1.0,
-    "avg_processing_time_ms": 6390.966666666666,
-    "signal_level_precision": 0.42857142857142855,
-    "signal_level_recall": 0.8,
-    "signal_level_f1": 0.5581395348837209,
-    "true_positives": 24,
-    "false_positives": 32,
-    "false_negatives": 6,
+    "avg_processing_time_ms": 6902.066666666667,
+    "signal_level_precision": 0.35714285714285715,
+    "signal_level_recall": 0.8333333333333334,
+    "signal_level_f1": 0.5,
+    "true_positives": 25,
+    "false_positives": 45,
+    "false_negatives": 5,
     "high_quality_cases": [
-      {
-        "sample_id": "S001",
-        "source_type": "news",
-        "title": "Bungie lays off another 220 staff, acknowledging it was \"overly ambitious\"",
-        "is_high_quality": true,
-        "is_boundary": false,
-        "tp": 1,
-        "fp": 0,
-        "fn": 0,
-        "false_positives": [],
-        "false_negatives": []
-      },
       {
         "sample_id": "S003",
         "source_type": "news",
@@ -38,32 +26,25 @@
         "fn": 0,
         "false_positives": [],
         "false_negatives": []
+      },
+      {
+        "sample_id": "S004",
+        "source_type": "report",
+        "title": "NVIDIA’s Digital Humans Bring AI Game Characters to Life",
+        "is_high_quality": true,
+        "is_boundary": false,
+        "tp": 1,
+        "fp": 0,
+        "fn": 0,
+        "false_positives": [],
+        "false_negatives": []
       }
     ],
     "false_positive_cases": [
       {
-        "sample_id": "E001",
+        "sample_id": "S001",
         "source_type": "news",
-        "title": "Sega responds to concerns after recording $200 million impairment write-down for Rovio",
-        "is_high_quality": false,
-        "is_boundary": true,
-        "tp": 1,
-        "fp": 1,
-        "fn": 0,
-        "false_positives": [
-          {
-            "actual_type": "technical",
-            "actual_label": "Beacon 技术整合失败",
-            "actual_description": "Sega 未能在自有移动游戏中完全实施 Rovio 的 Beacon 技术",
-            "confidence_score": 10
-          }
-        ],
-        "false_negatives": []
-      },
-      {
-        "sample_id": "S009",
-        "source_type": "announcement",
-        "title": "NVIDIA Brings Generative AI for Digital Humans, New RTX Technologies and More DLSS 3.5 Games to GDC",
+        "title": "Bungie lays off another 220 staff, acknowledging it was \"overly ambitious\"",
         "is_high_quality": false,
         "is_boundary": false,
         "tp": 1,
@@ -71,13 +52,38 @@
         "fn": 0,
         "false_positives": [
           {
-            "actual_type": "technical",
-            "actual_label": "生成式 AI 应用于数字人表情生成",
-            "actual_description": "生成式 AI 技术实现更逼真的数字人语言和面部表情生成",
-            "confidence_score": 9
+            "actual_type": "market",
+            "actual_label": "Bungie 战略聚焦调整",
+            "actual_description": "Bungie 将开发资源完全聚焦于 Destiny 和 Marathon 两个项目",
+            "confidence_score": 10
           }
         ],
         "false_negatives": []
+      },
+      {
+        "sample_id": "S002",
+        "source_type": "news",
+        "title": "Microsoft closes deal to buy Call of Duty maker Activision Blizzard after antitrust fights",
+        "is_high_quality": false,
+        "is_boundary": false,
+        "tp": 0,
+        "fp": 1,
+        "fn": 1,
+        "false_positives": [
+          {
+            "actual_type": "capital",
+            "actual_label": "微软完成690亿美元收购动视暴雪",
+            "actual_description": "微软以690亿美元完成对游戏制作商动视暴雪的收购，这是科技史上最昂贵的收购之一",
+            "confidence_score": 10
+          }
+        ],
+        "false_negatives": [
+          {
+            "expected_type": "market",
+            "expected_label": "platform_power_shift",
+            "expected_description": "Microsoft 完成对 Activision Blizzard 的收购，该交易在反垄断争议后落地，并被报道为可能对游戏行业产生广泛影响。"
+          }
+        ]
       }
     ],
     "false_negative_cases": [
@@ -88,9 +94,16 @@
         "is_high_quality": false,
         "is_boundary": false,
         "tp": 0,
-        "fp": 0,
+        "fp": 1,
         "fn": 1,
-        "false_positives": [],
+        "false_positives": [
+          {
+            "actual_type": "capital",
+            "actual_label": "微软完成690亿美元收购动视暴雪",
+            "actual_description": "微软以690亿美元完成对游戏制作商动视暴雪的收购，这是科技史上最昂贵的收购之一",
+            "confidence_score": 10
+          }
+        ],
         "false_negatives": [
           {
             "expected_type": "market",
@@ -100,9 +113,9 @@
         ]
       },
       {
-        "sample_id": "S006",
-        "source_type": "announcement",
-        "title": "Introducing Unity Muse and Unity Sentis, AI-powered creativity",
+        "sample_id": "S012",
+        "source_type": "news",
+        "title": "腾讯海外工作室Sharkmob宣布裁员！上个月刚关了一家",
         "is_high_quality": false,
         "is_boundary": false,
         "tp": 0,
@@ -111,9 +124,9 @@
         "false_positives": [],
         "false_negatives": [
           {
-            "expected_type": "technical",
-            "expected_label": "toolchain_shift",
-            "expected_description": "Unity 发布 Muse 与 Sentis，将生成式创作辅助和模型推理能力直接带入引擎工作流。"
+            "expected_type": "team",
+            "expected_label": "org_shift",
+            "expected_description": "Sharkmob 在项目收缩后再次裁员，并明确将资源聚焦至 Exoborne，体现组织结构调整与团队收缩。"
           }
         ]
       }
@@ -132,7 +145,7 @@
           {
             "actual_type": "technical",
             "actual_label": "Beacon 技术整合失败",
-            "actual_description": "Sega 未能在自有移动游戏中完全实施 Rovio 的 Beacon 技术",
+            "actual_description": "Sega 未能成功将 Rovio 的 Beacon 技术整合到自有移动游戏中",
             "confidence_score": 10
           }
         ],
@@ -142,12 +155,19 @@
         "sample_id": "E004",
         "source_type": "announcement",
         "title": "Unreal Engine 5.4 is now available",
-        "is_high_quality": true,
+        "is_high_quality": false,
         "is_boundary": true,
         "tp": 1,
-        "fp": 0,
+        "fp": 1,
         "fn": 0,
-        "false_positives": [],
+        "false_positives": [
+          {
+            "actual_type": "technical",
+            "actual_label": "Epic 内部工具集对外开放",
+            "actual_description": "Epic Games 将用于开发 Fortnite 系列游戏的内部工具集随 UE 5.4 对外发布",
+            "confidence_score": 10
+          }
+        ],
         "false_negatives": []
       }
     ]
@@ -157,22 +177,29 @@
       "sample_id": "S001",
       "source_type": "news",
       "expected_count": 1,
-      "actual_count": 1,
+      "actual_count": 2,
       "tp": 1,
-      "fp": 0,
+      "fp": 1,
       "fn": 0,
-      "processing_time_ms": 4034,
+      "processing_time_ms": 5741,
       "warnings": null,
       "case_analysis": {
         "sample_id": "S001",
         "source_type": "news",
         "title": "Bungie lays off another 220 staff, acknowledging it was \"overly ambitious\"",
-        "is_high_quality": true,
+        "is_high_quality": false,
         "is_boundary": false,
         "tp": 1,
-        "fp": 0,
+        "fp": 1,
         "fn": 0,
-        "false_positives": [],
+        "false_positives": [
+          {
+            "actual_type": "market",
+            "actual_label": "Bungie 战略聚焦调整",
+            "actual_description": "Bungie 将开发资源完全聚焦于 Destiny 和 Marathon 两个项目",
+            "confidence_score": 10
+          }
+        ],
         "false_negatives": []
       }
     },
@@ -180,14 +207,12 @@
       "sample_id": "S002",
       "source_type": "news",
       "expected_count": 1,
-      "actual_count": 0,
+      "actual_count": 1,
       "tp": 0,
-      "fp": 0,
+      "fp": 1,
       "fn": 1,
-      "processing_time_ms": 6036,
-      "warnings": [
-        "JSON 解析失败: Expecting value: line 1 column 1 (char 0)"
-      ],
+      "processing_time_ms": 3919,
+      "warnings": null,
       "case_analysis": {
         "sample_id": "S002",
         "source_type": "news",
@@ -195,9 +220,16 @@
         "is_high_quality": false,
         "is_boundary": false,
         "tp": 0,
-        "fp": 0,
+        "fp": 1,
         "fn": 1,
-        "false_positives": [],
+        "false_positives": [
+          {
+            "actual_type": "capital",
+            "actual_label": "微软完成690亿美元收购动视暴雪",
+            "actual_description": "微软以690亿美元完成对游戏制作商动视暴雪的收购，这是科技史上最昂贵的收购之一",
+            "confidence_score": 10
+          }
+        ],
         "false_negatives": [
           {
             "expected_type": "market",
@@ -215,7 +247,7 @@
       "tp": 1,
       "fp": 1,
       "fn": 0,
-      "processing_time_ms": 7313,
+      "processing_time_ms": 4901,
       "warnings": null,
       "case_analysis": {
         "sample_id": "E001",
@@ -230,7 +262,7 @@
           {
             "actual_type": "technical",
             "actual_label": "Beacon 技术整合失败",
-            "actual_description": "Sega 未能在自有移动游戏中完全实施 Rovio 的 Beacon 技术",
+            "actual_description": "Sega 未能成功将 Rovio 的 Beacon 技术整合到自有移动游戏中",
             "confidence_score": 10
           }
         ],
@@ -245,7 +277,7 @@
       "tp": 1,
       "fp": 0,
       "fn": 0,
-      "processing_time_ms": 4038,
+      "processing_time_ms": 3696,
       "warnings": null,
       "case_analysis": {
         "sample_id": "S003",
@@ -268,7 +300,7 @@
       "tp": 1,
       "fp": 0,
       "fn": 0,
-      "processing_time_ms": 7999,
+      "processing_time_ms": 30484,
       "warnings": null,
       "case_analysis": {
         "sample_id": "S004",
@@ -291,7 +323,7 @@
       "tp": 1,
       "fp": 1,
       "fn": 0,
-      "processing_time_ms": 6153,
+      "processing_time_ms": 6871,
       "warnings": null,
       "case_analysis": {
         "sample_id": "S009",
@@ -304,9 +336,9 @@
         "fn": 0,
         "false_positives": [
           {
-            "actual_type": "technical",
-            "actual_label": "生成式 AI 应用于数字人表情生成",
-            "actual_description": "生成式 AI 技术实现更逼真的数字人语言和面部表情生成",
+            "actual_type": "market",
+            "actual_label": "生成式 AI 在游戏角色创建中的应用趋势",
+            "actual_description": "多个行业的领先开发者正在采用生成式 AI 技术创建逼真的数字人角色",
             "confidence_score": 9
           }
         ],
@@ -317,53 +349,59 @@
       "sample_id": "S006",
       "source_type": "announcement",
       "expected_count": 1,
-      "actual_count": 0,
-      "tp": 0,
-      "fp": 0,
-      "fn": 1,
-      "processing_time_ms": 2942,
-      "warnings": [
-        "JSON 解析失败: Expecting value: line 1 column 1 (char 0)"
-      ],
+      "actual_count": 2,
+      "tp": 1,
+      "fp": 1,
+      "fn": 0,
+      "processing_time_ms": 5135,
+      "warnings": null,
       "case_analysis": {
         "sample_id": "S006",
         "source_type": "announcement",
         "title": "Introducing Unity Muse and Unity Sentis, AI-powered creativity",
         "is_high_quality": false,
         "is_boundary": false,
-        "tp": 0,
-        "fp": 0,
-        "fn": 1,
-        "false_positives": [],
-        "false_negatives": [
+        "tp": 1,
+        "fp": 1,
+        "fn": 0,
+        "false_positives": [
           {
-            "expected_type": "technical",
-            "expected_label": "toolchain_shift",
-            "expected_description": "Unity 发布 Muse 与 Sentis，将生成式创作辅助和模型推理能力直接带入引擎工作流。"
+            "actual_type": "technical",
+            "actual_label": "Unity 推出神经网络嵌入技术 Sentis",
+            "actual_description": "Unity 发布 Sentis 技术，允许在游戏构建中嵌入神经网络实现实时 AI 体验",
+            "confidence_score": 10
           }
-        ]
+        ],
+        "false_negatives": []
       }
     },
     {
       "sample_id": "E004",
       "source_type": "announcement",
       "expected_count": 1,
-      "actual_count": 1,
+      "actual_count": 2,
       "tp": 1,
-      "fp": 0,
+      "fp": 1,
       "fn": 0,
-      "processing_time_ms": 4359,
+      "processing_time_ms": 5897,
       "warnings": null,
       "case_analysis": {
         "sample_id": "E004",
         "source_type": "announcement",
         "title": "Unreal Engine 5.4 is now available",
-        "is_high_quality": true,
+        "is_high_quality": false,
         "is_boundary": true,
         "tp": 1,
-        "fp": 0,
+        "fp": 1,
         "fn": 0,
-        "false_positives": [],
+        "false_positives": [
+          {
+            "actual_type": "technical",
+            "actual_label": "Epic 内部工具集对外开放",
+            "actual_description": "Epic Games 将用于开发 Fortnite 系列游戏的内部工具集随 UE 5.4 对外发布",
+            "confidence_score": 10
+          }
+        ],
         "false_negatives": []
       }
     },
@@ -371,11 +409,11 @@
       "sample_id": "E005",
       "source_type": "announcement",
       "expected_count": 1,
-      "actual_count": 2,
+      "actual_count": 3,
       "tp": 1,
-      "fp": 1,
+      "fp": 2,
       "fn": 0,
-      "processing_time_ms": 5062,
+      "processing_time_ms": 6392,
       "warnings": null,
       "case_analysis": {
         "sample_id": "E005",
@@ -384,13 +422,19 @@
         "is_high_quality": false,
         "is_boundary": true,
         "tp": 1,
-        "fp": 1,
+        "fp": 2,
         "fn": 0,
         "false_positives": [
           {
-            "actual_type": "market",
-            "actual_label": "Netflix 在研游戏近 90 款",
-            "actual_description": "Netflix 有近 90 款游戏正在开发中",
+            "actual_type": "technical",
+            "actual_label": "无广告无内购商业模式",
+            "actual_description": "Netflix 游戏采用订阅制，无广告、无应用内购买、无额外费用",
+            "confidence_score": 10
+          },
+          {
+            "actual_type": "team",
+            "actual_label": "内部工作室 Spry Fox 开发续作",
+            "actual_description": "Netflix 内部工作室 Spry Fox 开发 Cozy Grove 续作 Camp Spirit",
             "confidence_score": 10
           }
         ],
@@ -401,22 +445,29 @@
       "sample_id": "S007",
       "source_type": "announcement",
       "expected_count": 1,
-      "actual_count": 1,
+      "actual_count": 2,
       "tp": 1,
-      "fp": 0,
+      "fp": 1,
       "fn": 0,
-      "processing_time_ms": 4185,
+      "processing_time_ms": 5863,
       "warnings": null,
       "case_analysis": {
         "sample_id": "S007",
         "source_type": "announcement",
         "title": "Embracer Group announces its intention to transform into three standalone publicly listed entities at Nasdaq Stockholm",
-        "is_high_quality": true,
+        "is_high_quality": false,
         "is_boundary": false,
         "tp": 1,
-        "fp": 0,
+        "fp": 1,
         "fn": 0,
-        "false_positives": [],
+        "false_positives": [
+          {
+            "actual_type": "market",
+            "actual_label": "重组计划完成后的价值释放",
+            "actual_description": "Embracer Group 完成重组计划，通过拆分释放高质量资产价值，为股东提供差异化投资机会",
+            "confidence_score": 10
+          }
+        ],
         "false_negatives": []
       }
     },
@@ -424,11 +475,11 @@
       "sample_id": "S010",
       "source_type": "news",
       "expected_count": 1,
-      "actual_count": 2,
+      "actual_count": 3,
       "tp": 1,
-      "fp": 1,
+      "fp": 2,
       "fn": 0,
-      "processing_time_ms": 5661,
+      "processing_time_ms": 7031,
       "warnings": null,
       "case_analysis": {
         "sample_id": "S010",
@@ -437,14 +488,20 @@
         "is_high_quality": false,
         "is_boundary": false,
         "tp": 1,
-        "fp": 1,
+        "fp": 2,
         "fn": 0,
         "false_positives": [
           {
-            "actual_type": "team",
-            "actual_label": "Sackbird Studios 成立",
-            "actual_description": "前 ZOS 核心成员联合创立 Sackbird Studios",
-            "confidence_score": 10
+            "actual_type": "market",
+            "actual_label": "Microsoft 取消在线 looter shooter 项目",
+            "actual_description": "Microsoft 取消了 ZeniMax 的在线 looter shooter 项目 Project Blackbird，尽管该项目在内部演示中表现良好",
+            "confidence_score": 8
+          },
+          {
+            "actual_type": "technical",
+            "actual_label": "Sackbird Studios 启动跨平台原创项目",
+            "actual_description": "Sackbird Studios 开始积极开发面向 PC 和主机平台的原创项目",
+            "confidence_score": 9
           }
         ],
         "false_negatives": []
@@ -454,11 +511,11 @@
       "sample_id": "S011",
       "source_type": "news",
       "expected_count": 1,
-      "actual_count": 2,
+      "actual_count": 3,
       "tp": 1,
-      "fp": 1,
+      "fp": 2,
       "fn": 0,
-      "processing_time_ms": 5736,
+      "processing_time_ms": 6858,
       "warnings": null,
       "case_analysis": {
         "sample_id": "S011",
@@ -467,13 +524,19 @@
         "is_high_quality": false,
         "is_boundary": false,
         "tp": 1,
-        "fp": 1,
+        "fp": 2,
         "fn": 0,
         "false_positives": [
           {
             "actual_type": "team",
             "actual_label": "2024 年招募游戏行业高管",
-            "actual_description": "Skybound 在 2024 年招募游戏行业高管，为内部游戏开发做准备",
+            "actual_description": "Skybound 在 2024 年招募游戏行业高管，显示向内部游戏开发的战略转型",
+            "confidence_score": 9
+          },
+          {
+            "actual_type": "market",
+            "actual_label": "IP 持有方转向自研游戏",
+            "actual_description": "从 IP 授权模式转向内部游戏开发，反映 IP 持有方垂直整合趋势",
             "confidence_score": 9
           }
         ],
@@ -488,9 +551,9 @@
       "tp": 0,
       "fp": 0,
       "fn": 1,
-      "processing_time_ms": 6208,
+      "processing_time_ms": 5434,
       "warnings": [
-        "JSON 解析失败: Expecting ',' delimiter: line 21 column 38 (char 673)"
+        "JSON 解析失败: Expecting ',' delimiter: line 21 column 38 (char 703)"
       ],
       "case_analysis": {
         "sample_id": "S012",
@@ -515,11 +578,11 @@
       "sample_id": "S013",
       "source_type": "news",
       "expected_count": 1,
-      "actual_count": 2,
+      "actual_count": 3,
       "tp": 1,
-      "fp": 1,
+      "fp": 2,
       "fn": 0,
-      "processing_time_ms": 9150,
+      "processing_time_ms": 6528,
       "warnings": null,
       "case_analysis": {
         "sample_id": "S013",
@@ -528,14 +591,20 @@
         "is_high_quality": false,
         "is_boundary": false,
         "tp": 1,
-        "fp": 1,
+        "fp": 2,
         "fn": 0,
         "false_positives": [
           {
             "actual_type": "capital",
             "actual_label": "自筹资金成立工作室",
-            "actual_description": "Airlock Games 通过自筹资金方式成立",
-            "confidence_score": 10
+            "actual_description": "Airlock Games 为自筹资金的独立工作室",
+            "confidence_score": 9
+          },
+          {
+            "actual_type": "market",
+            "actual_label": "独立工作室追求创意自由",
+            "actual_description": "开发者寻求创意自由，探索 AAA 制作无法实现的故事和创意风险",
+            "confidence_score": 8
           }
         ],
         "false_negatives": []
@@ -545,153 +614,16 @@
       "sample_id": "S014",
       "source_type": "report",
       "expected_count": 1,
-      "actual_count": 0,
-      "tp": 0,
+      "actual_count": 1,
+      "tp": 1,
       "fp": 0,
-      "fn": 1,
-      "processing_time_ms": 2643,
+      "fn": 0,
+      "processing_time_ms": 4973,
       "warnings": null,
       "case_analysis": {
         "sample_id": "S014",
         "source_type": "report",
         "title": "Year in review: 2025 to date",
-        "is_high_quality": false,
-        "is_boundary": false,
-        "tp": 0,
-        "fp": 0,
-        "fn": 1,
-        "false_positives": [],
-        "false_negatives": [
-          {
-            "expected_type": "market",
-            "expected_label": "engagement_driven_growth",
-            "expected_description": "Newzoo 指出 2025 年行业增长更多来自长期参与度、定价能力和成熟 IP，而非单纯依赖新作发售节奏，体现市场驱动逻辑的变化。"
-          }
-        ]
-      }
-    },
-    {
-      "sample_id": "S015",
-      "source_type": "report",
-      "expected_count": 1,
-      "actual_count": 2,
-      "tp": 1,
-      "fp": 1,
-      "fn": 0,
-      "processing_time_ms": 10638,
-      "warnings": null,
-      "case_analysis": {
-        "sample_id": "S015",
-        "source_type": "report",
-        "title": "Mobile Gaming Market Trends Analysis Report with Growth Forecasts, 2025-2030: In-App Purchases Fuel Mobile Gaming Economy with Personalized Offerings",
-        "is_high_quality": false,
-        "is_boundary": false,
-        "tp": 1,
-        "fp": 1,
-        "fn": 0,
-        "false_positives": [
-          {
-            "actual_type": "market",
-            "actual_label": "拉丁美洲移动电竞增长",
-            "actual_description": "移动电竞在拉丁美洲地区呈现增长趋势",
-            "confidence_score": 7
-          }
-        ],
-        "false_negatives": []
-      }
-    },
-    {
-      "sample_id": "S016",
-      "source_type": "report",
-      "expected_count": 1,
-      "actual_count": 4,
-      "tp": 1,
-      "fp": 3,
-      "fn": 0,
-      "processing_time_ms": 7671,
-      "warnings": null,
-      "case_analysis": {
-        "sample_id": "S016",
-        "source_type": "report",
-        "title": "Drake Star Global Gaming Report 2025: Landmark Year for Gaming M&A",
-        "is_high_quality": false,
-        "is_boundary": false,
-        "tp": 1,
-        "fp": 3,
-        "fn": 0,
-        "false_positives": [
-          {
-            "actual_type": "capital",
-            "actual_label": "2025 下半年融资活动反弹",
-            "actual_description": "2025 年下半年游戏行业融资活动出现反弹",
-            "confidence_score": 9
-          },
-          {
-            "actual_type": "capital",
-            "actual_label": "腾讯、KRAFTON、Smilegate 活跃投资",
-            "actual_description": "腾讯、KRAFTON、Smilegate 作为战略投资者保持活跃",
-            "confidence_score": 9
-          },
-          {
-            "actual_type": "capital",
-            "actual_label": "移动游戏和 AI 领域大额融资",
-            "actual_description": "移动游戏和 AI 领域出现大额私募融资",
-            "confidence_score": 9
-          }
-        ],
-        "false_negatives": []
-      }
-    },
-    {
-      "sample_id": "S017",
-      "source_type": "report",
-      "expected_count": 1,
-      "actual_count": 3,
-      "tp": 1,
-      "fp": 2,
-      "fn": 0,
-      "processing_time_ms": 6022,
-      "warnings": null,
-      "case_analysis": {
-        "sample_id": "S017",
-        "source_type": "report",
-        "title": "The AI Revolution Reshaping Gaming | Q3 2025 Report",
-        "is_high_quality": false,
-        "is_boundary": false,
-        "tp": 1,
-        "fp": 2,
-        "fn": 0,
-        "false_positives": [
-          {
-            "actual_type": "capital",
-            "actual_label": "AI 占全球 VC 投资 53%",
-            "actual_description": "2025 年上半年 AI 领域占据全球风险投资 53%",
-            "confidence_score": 9
-          },
-          {
-            "actual_type": "market",
-            "actual_label": "Steam 游戏 AI 使用披露率 20%",
-            "actual_description": "20% 的 Steam 游戏现已披露使用 AI 技术",
-            "confidence_score": 9
-          }
-        ],
-        "false_negatives": []
-      }
-    },
-    {
-      "sample_id": "S018",
-      "source_type": "announcement",
-      "expected_count": 1,
-      "actual_count": 1,
-      "tp": 1,
-      "fp": 0,
-      "fn": 0,
-      "processing_time_ms": 4183,
-      "warnings": null,
-      "case_analysis": {
-        "sample_id": "S018",
-        "source_type": "announcement",
-        "title": "90% of Games Developers Already Using AI in Workflows, According to New Google Cloud Research",
         "is_high_quality": true,
         "is_boundary": false,
         "tp": 1,
@@ -702,19 +634,91 @@
       }
     },
     {
-      "sample_id": "S019",
+      "sample_id": "S015",
+      "source_type": "report",
+      "expected_count": 1,
+      "actual_count": 3,
+      "tp": 1,
+      "fp": 2,
+      "fn": 0,
+      "processing_time_ms": 6705,
+      "warnings": null,
+      "case_analysis": {
+        "sample_id": "S015",
+        "source_type": "report",
+        "title": "Mobile Gaming Market Trends Analysis Report with Growth Forecasts, 2025-2030: In-App Purchases Fuel Mobile Gaming Economy with Personalized Offerings",
+        "is_high_quality": false,
+        "is_boundary": false,
+        "tp": 1,
+        "fp": 2,
+        "fn": 0,
+        "false_positives": [
+          {
+            "actual_type": "market",
+            "actual_label": "拉美移动电竞崛起",
+            "actual_description": "移动电竞在拉丁美洲地区呈现上升趋势",
+            "confidence_score": 7
+          },
+          {
+            "actual_type": "market",
+            "actual_label": "腾讯战略动作",
+            "actual_description": "行业巨头腾讯等公司的战略性布局动向",
+            "confidence_score": 6
+          }
+        ],
+        "false_negatives": []
+      }
+    },
+    {
+      "sample_id": "S016",
+      "source_type": "report",
+      "expected_count": 1,
+      "actual_count": 3,
+      "tp": 1,
+      "fp": 2,
+      "fn": 0,
+      "processing_time_ms": 6801,
+      "warnings": null,
+      "case_analysis": {
+        "sample_id": "S016",
+        "source_type": "report",
+        "title": "Drake Star Global Gaming Report 2025: Landmark Year for Gaming M&A",
+        "is_high_quality": false,
+        "is_boundary": false,
+        "tp": 1,
+        "fp": 2,
+        "fn": 0,
+        "false_positives": [
+          {
+            "actual_type": "capital",
+            "actual_label": "战略投资者活跃布局",
+            "actual_description": "腾讯、KRAFTON、Smilegate等战略投资者在游戏领域保持活跃投资",
+            "confidence_score": 9
+          },
+          {
+            "actual_type": "market",
+            "actual_label": "移动游戏和AI领域大额融资",
+            "actual_description": "移动游戏和AI领域出现大额私募融资活动",
+            "confidence_score": 9
+          }
+        ],
+        "false_negatives": []
+      }
+    },
+    {
+      "sample_id": "S017",
       "source_type": "report",
       "expected_count": 1,
       "actual_count": 4,
       "tp": 1,
       "fp": 3,
       "fn": 0,
-      "processing_time_ms": 8973,
+      "processing_time_ms": 7464,
       "warnings": null,
       "case_analysis": {
-        "sample_id": "S019",
+        "sample_id": "S017",
         "source_type": "report",
-        "title": "Global games market to hit $189 billion in 2025 as growth shifts to console",
+        "title": "The AI Revolution Reshaping Gaming | Q3 2025 Report",
         "is_high_quality": false,
         "is_boundary": false,
         "tp": 1,
@@ -723,21 +727,87 @@
         "false_positives": [
           {
             "actual_type": "market",
-            "actual_label": "主机平台增长动能增强",
-            "actual_description": "市场增长驱动力转向主机平台动能和新硬件周期",
+            "actual_label": "AI 获全球 VC 资金 53%",
+            "actual_description": "2025 年上半年 AI 领域获得全球风险投资资金的 53%",
+            "confidence_score": 8
+          },
+          {
+            "actual_type": "technical",
+            "actual_label": "游戏开发特定环节 AI 工具生产就绪",
+            "actual_description": "游戏开发特定环节的 AI 工具已进入生产就绪阶段，而大多数仍处于实验阶段",
             "confidence_score": 7
           },
           {
             "actual_type": "market",
-            "actual_label": "移动优先地区成为增长驱动",
-            "actual_description": "移动优先地区成为市场增长的关键驱动因素",
-            "confidence_score": 7
+            "actual_label": "Steam 游戏 20% 披露 AI 使用",
+            "actual_description": "Steam 平台上 20% 的游戏现已披露使用 AI 技术",
+            "confidence_score": 8
+          }
+        ],
+        "false_negatives": []
+      }
+    },
+    {
+      "sample_id": "S018",
+      "source_type": "announcement",
+      "expected_count": 1,
+      "actual_count": 2,
+      "tp": 1,
+      "fp": 1,
+      "fn": 0,
+      "processing_time_ms": 5756,
+      "warnings": null,
+      "case_analysis": {
+        "sample_id": "S018",
+        "source_type": "announcement",
+        "title": "90% of Games Developers Already Using AI in Workflows, According to New Google Cloud Research",
+        "is_high_quality": false,
+        "is_boundary": false,
+        "tp": 1,
+        "fp": 1,
+        "fn": 0,
+        "false_positives": [
+          {
+            "actual_type": "market",
+            "actual_label": "AI驱动的游戏开发趋势",
+            "actual_description": "游戏行业出现明显的AI技术采用趋势，开发者普遍认同AI对行业的重塑作用，并已在实际工作中大规模应用",
+            "confidence_score": 9
+          }
+        ],
+        "false_negatives": []
+      }
+    },
+    {
+      "sample_id": "S019",
+      "source_type": "report",
+      "expected_count": 1,
+      "actual_count": 3,
+      "tp": 1,
+      "fp": 2,
+      "fn": 0,
+      "processing_time_ms": 6937,
+      "warnings": null,
+      "case_analysis": {
+        "sample_id": "S019",
+        "source_type": "report",
+        "title": "Global games market to hit $189 billion in 2025 as growth shifts to console",
+        "is_high_quality": false,
+        "is_boundary": false,
+        "tp": 1,
+        "fp": 2,
+        "fn": 0,
+        "false_positives": [
+          {
+            "actual_type": "market",
+            "actual_label": "主机平台增长动能转移",
+            "actual_description": "市场增长驱动力转向主机平台动能、新硬件周期、移动优先地区以及发行、定价和实时内容策略变化",
+            "confidence_score": 8
           },
           {
             "actual_type": "market",
-            "actual_label": "发行和定价策略变化",
-            "actual_description": "游戏发行策略、定价模式和实时内容策略发生变化",
-            "confidence_score": 7
+            "actual_label": "市场竞争加剧",
+            "actual_description": "2025年市场呈现稳定但竞争更激烈的增长态势，而非简单的量级反弹",
+            "confidence_score": 8
           }
         ],
         "false_negatives": []
@@ -747,11 +817,11 @@
       "sample_id": "S020",
       "source_type": "report",
       "expected_count": 1,
-      "actual_count": 2,
+      "actual_count": 4,
       "tp": 1,
-      "fp": 1,
+      "fp": 3,
       "fn": 0,
-      "processing_time_ms": 6177,
+      "processing_time_ms": 8362,
       "warnings": null,
       "case_analysis": {
         "sample_id": "S020",
@@ -760,14 +830,26 @@
         "is_high_quality": false,
         "is_boundary": false,
         "tp": 1,
-        "fp": 1,
+        "fp": 3,
         "fn": 0,
         "false_positives": [
           {
             "actual_type": "market",
-            "actual_label": "美国游戏市场 2026 年预计增长至 628 亿美元",
-            "actual_description": "预计 2026 年美国游戏市场将增长至 628 亿美元，增长驱动因素包括新硬件、订阅服务增长、Switch 2 和 GTA VI",
-            "confidence_score": 7
+            "actual_label": "Nintendo Switch 2 市场催化剂",
+            "actual_description": "Nintendo Switch 2 第二年表现被视为2026年市场增长的关键内容催化剂之一",
+            "confidence_score": 8
+          },
+          {
+            "actual_type": "market",
+            "actual_label": "GTA VI 市场预期",
+            "actual_description": "Grand Theft Auto VI 的市场预期被认为是2026年游戏市场增长的重要驱动因素",
+            "confidence_score": 8
+          },
+          {
+            "actual_type": "market",
+            "actual_label": "订阅服务参与度增强",
+            "actual_description": "游戏订阅服务的用户参与度增强成为市场增长的关键因素之一",
+            "confidence_score": 8
           }
         ],
         "false_negatives": []
@@ -777,11 +859,11 @@
       "sample_id": "S021",
       "source_type": "report",
       "expected_count": 1,
-      "actual_count": 7,
+      "actual_count": 6,
       "tp": 1,
-      "fp": 6,
+      "fp": 5,
       "fn": 0,
-      "processing_time_ms": 14382,
+      "processing_time_ms": 8995,
       "warnings": null,
       "case_analysis": {
         "sample_id": "S021",
@@ -790,43 +872,37 @@
         "is_high_quality": false,
         "is_boundary": false,
         "tp": 1,
-        "fp": 6,
+        "fp": 5,
         "fn": 0,
         "false_positives": [
           {
             "actual_type": "market",
-            "actual_label": "公开游戏股票强劲反弹",
-            "actual_description": "2025 年上半年公开游戏股票强劲反弹",
-            "confidence_score": 9
-          },
-          {
-            "actual_type": "market",
-            "actual_label": "Q2 游戏并购活跃",
-            "actual_description": "Q2 游戏并购市场活跃，宣布 46 笔交易",
+            "actual_label": "游戏股票强劲反弹",
+            "actual_description": "2025年上半年公开交易的游戏股票强劲反弹",
             "confidence_score": 9
           },
           {
             "actual_type": "capital",
-            "actual_label": "腾讯投资 Arrowhead",
-            "actual_description": "腾讯对 Arrowhead 进行投资",
+            "actual_label": "Dream Games 25亿美元融资",
+            "actual_description": "Dream Games完成25亿美元大额融资交易",
             "confidence_score": 9
           },
           {
             "actual_type": "capital",
-            "actual_label": "Take-Two 拟融资",
-            "actual_description": "Take-Two 提出融资计划",
+            "actual_label": "腾讯投资Arrowhead",
+            "actual_description": "腾讯对Arrowhead进行投资",
+            "confidence_score": 9
+          },
+          {
+            "actual_type": "capital",
+            "actual_label": "Take-Two和GameStop拟融资",
+            "actual_description": "Take-Two和GameStop提出资本募集计划",
             "confidence_score": 8
           },
           {
             "actual_type": "capital",
-            "actual_label": "GameStop 拟融资",
-            "actual_description": "GameStop 提出融资计划",
-            "confidence_score": 8
-          },
-          {
-            "actual_type": "capital",
-            "actual_label": "Discord IPO 讨论",
-            "actual_description": "Discord 正在进行 IPO 讨论",
+            "actual_label": "Discord IPO讨论",
+            "actual_description": "Discord正在进行IPO相关讨论",
             "confidence_score": 7
           }
         ],
@@ -841,7 +917,7 @@
       "tp": 1,
       "fp": 2,
       "fn": 0,
-      "processing_time_ms": 7440,
+      "processing_time_ms": 7120,
       "warnings": null,
       "case_analysis": {
         "sample_id": "S022",
@@ -854,16 +930,16 @@
         "fn": 0,
         "false_positives": [
           {
-            "actual_type": "team",
-            "actual_label": "行业裁员现象",
-            "actual_description": "2026 年游戏行业报告将裁员列为重点调查议题",
-            "confidence_score": 7
+            "actual_type": "market",
+            "actual_label": "游戏行业裁员趋势",
+            "actual_description": "2026年游戏行业报告基于2300多名行业专业人士的反馈，研究了裁员现象作为行业趋势之一",
+            "confidence_score": 9
           },
           {
             "actual_type": "team",
             "actual_label": "游戏行业工会化趋势",
-            "actual_description": "工会化成为 2026 年游戏行业报告的重点调查议题",
-            "confidence_score": 7
+            "actual_description": "2026年游戏行业报告研究了工会化作为行业组织变化的重要趋势",
+            "confidence_score": 9
           }
         ],
         "false_negatives": []
@@ -873,11 +949,11 @@
       "sample_id": "S023",
       "source_type": "news",
       "expected_count": 1,
-      "actual_count": 3,
+      "actual_count": 5,
       "tp": 1,
-      "fp": 2,
+      "fp": 4,
       "fn": 0,
-      "processing_time_ms": 8834,
+      "processing_time_ms": 8714,
       "warnings": null,
       "case_analysis": {
         "sample_id": "S023",
@@ -886,20 +962,32 @@
         "is_high_quality": false,
         "is_boundary": false,
         "tp": 1,
-        "fp": 2,
+        "fp": 4,
         "fn": 0,
         "false_positives": [
           {
             "actual_type": "team",
-            "actual_label": "2026年1月行业裁员",
-            "actual_description": "游戏行业在2026年1月出现裁员潮",
-            "confidence_score": 9
+            "actual_label": "2026年1月游戏行业裁员潮",
+            "actual_description": "2026年初游戏行业出现裁员潮，反映行业困难开局",
+            "confidence_score": 8
           },
           {
             "actual_type": "market",
             "actual_label": "GTA 6前发行日程稀薄",
             "actual_description": "GTA 6发布前主要游戏发行日程稀薄，引发市场焦虑",
-            "confidence_score": 9
+            "confidence_score": 8
+          },
+          {
+            "actual_type": "technical",
+            "actual_label": "AI驱动的效率压力",
+            "actual_description": "AI技术应用带来的效率提升压力影响行业",
+            "confidence_score": 7
+          },
+          {
+            "actual_type": "market",
+            "actual_label": "3A大作依赖症",
+            "actual_description": "行业对3A大作的依赖导致近期市场环境不稳定",
+            "confidence_score": 8
           }
         ],
         "false_negatives": []
@@ -909,11 +997,11 @@
       "sample_id": "S024",
       "source_type": "news",
       "expected_count": 1,
-      "actual_count": 4,
+      "actual_count": 2,
       "tp": 1,
-      "fp": 3,
+      "fp": 1,
       "fn": 0,
-      "processing_time_ms": 8840,
+      "processing_time_ms": 5956,
       "warnings": null,
       "case_analysis": {
         "sample_id": "S024",
@@ -922,26 +1010,14 @@
         "is_high_quality": false,
         "is_boundary": false,
         "tp": 1,
-        "fp": 3,
+        "fp": 1,
         "fn": 0,
         "false_positives": [
           {
             "actual_type": "technical",
-            "actual_label": "AI 角色语音和语言能力升级",
-            "actual_description": "NVIDIA 发布改进的 AI 角色语音和语言支持能力",
-            "confidence_score": 10
-          },
-          {
-            "actual_type": "technical",
-            "actual_label": "新 DirectX API 发布",
-            "actual_description": "NVIDIA 发布新的 DirectX API",
-            "confidence_score": 10
-          },
-          {
-            "actual_type": "technical",
-            "actual_label": "虚拟化工作室工作流",
-            "actual_description": "NVIDIA 推出虚拟化工作室工作流支持",
-            "confidence_score": 10
+            "actual_label": "渲染、AI 与开发工具链深度整合",
+            "actual_description": "渲染技术、AI 角色系统和开发者基础设施正在深度整合到游戏制作工具链中",
+            "confidence_score": 9
           }
         ],
         "false_negatives": []
@@ -951,22 +1027,29 @@
       "sample_id": "S025",
       "source_type": "announcement",
       "expected_count": 1,
-      "actual_count": 1,
+      "actual_count": 2,
       "tp": 1,
-      "fp": 0,
+      "fp": 1,
       "fn": 0,
-      "processing_time_ms": 5566,
+      "processing_time_ms": 6505,
       "warnings": null,
       "case_analysis": {
         "sample_id": "S025",
         "source_type": "announcement",
         "title": "Saudi PIF moving $12bn of games firm shares to subsidiary Savvy",
-        "is_high_quality": true,
+        "is_high_quality": false,
         "is_boundary": false,
         "tp": 1,
-        "fp": 0,
+        "fp": 1,
         "fn": 0,
-        "false_positives": [],
+        "false_positives": [
+          {
+            "actual_type": "market",
+            "actual_label": "沙特资本整合游戏投资布局",
+            "actual_description": "沙特通过专业游戏投资平台整合游戏产业投资，显示中东资本对游戏行业的战略性布局",
+            "confidence_score": 9
+          }
+        ],
         "false_negatives": []
       }
     },
@@ -975,22 +1058,35 @@
       "source_type": "announcement",
       "expected_count": 1,
       "actual_count": 1,
-      "tp": 1,
-      "fp": 0,
-      "fn": 0,
-      "processing_time_ms": 4305,
+      "tp": 0,
+      "fp": 1,
+      "fn": 1,
+      "processing_time_ms": 3529,
       "warnings": null,
       "case_analysis": {
         "sample_id": "S026",
         "source_type": "announcement",
         "title": "NetEase Announces Fourth Quarter and Fiscal Year 2025 Unaudited Financial Result",
-        "is_high_quality": true,
+        "is_high_quality": false,
         "is_boundary": false,
-        "tp": 1,
-        "fp": 0,
-        "fn": 0,
-        "false_positives": [],
-        "false_negatives": []
+        "tp": 0,
+        "fp": 1,
+        "fn": 1,
+        "false_positives": [
+          {
+            "actual_type": "market",
+            "actual_label": "网易游戏业务增长",
+            "actual_description": "网易2025年第四季度游戏及相关增值服务收入220亿元人民币，同比增长3.4%",
+            "confidence_score": 10
+          }
+        ],
+        "false_negatives": [
+          {
+            "expected_type": "capital",
+            "expected_label": "games_revenue_performance",
+            "expected_description": "网易披露 2025 年第四季度与全年财务结果，其中游戏及相关增值服务仍是核心收入来源，构成明确的游戏业务财务表现信号。"
+          }
+        ]
       }
     },
     {
@@ -1001,7 +1097,7 @@
       "tp": 0,
       "fp": 2,
       "fn": 2,
-      "processing_time_ms": 5373,
+      "processing_time_ms": 5089,
       "warnings": null,
       "case_analysis": {
         "sample_id": "S027",
@@ -1015,14 +1111,14 @@
         "false_positives": [
           {
             "actual_type": "team",
-            "actual_label": "组织架构重大调整",
-            "actual_description": "Ubisoft 宣布进行重大组织、运营和产品组合重置，包括新运营模式、三年路线图调整和组织规模优化",
+            "actual_label": "Ubisoft 组织架构重组",
+            "actual_description": "Ubisoft 宣布进行重大组织架构调整，包括新运营模式、三年路线图重新聚焦和组织规模调整",
             "confidence_score": 10
           },
           {
             "actual_type": "market",
             "actual_label": "AAA 市场竞争加剧",
-            "actual_description": "AAA 市场选择性增强，射击游戏竞争更加激烈",
+            "actual_description": "AAA 市场选择性增强，射击游戏竞争更加激烈，需要以更具竞争力的成本交付高质量游戏",
             "confidence_score": 9
           }
         ],
@@ -1048,7 +1144,7 @@
       "tp": 1,
       "fp": 1,
       "fn": 0,
-      "processing_time_ms": 7320,
+      "processing_time_ms": 7504,
       "warnings": null,
       "case_analysis": {
         "sample_id": "S028",
@@ -1062,8 +1158,8 @@
         "false_positives": [
           {
             "actual_type": "market",
-            "actual_label": "腾讯-育碧战略合作深化",
-            "actual_description": "腾讯成立专门部门负责与育碧的战略合作，将刺客信条和孤岛惊魂等核心 IP 发展为长期资产",
+            "actual_label": "腾讯深化育碧 IP 长期运营战略",
+            "actual_description": "腾讯将刺客信条和孤岛惊魂等核心 IP 发展为长期资产，围绕关键 IP 合作伙伴关系进行更广泛的重组",
             "confidence_score": 9
           }
         ],
@@ -1078,7 +1174,7 @@
       "tp": 0,
       "fp": 0,
       "fn": 0,
-      "processing_time_ms": 4486,
+      "processing_time_ms": 1902,
       "warnings": null,
       "case_analysis": {
         "sample_id": "N001",
