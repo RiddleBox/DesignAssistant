@@ -157,25 +157,80 @@ for signal in result.signals:
 | 单次处理耗时 | < 30s | ✅ 预计 6-11s |
 | 输入源覆盖 | 至少 3 类 | ✅ 支持 news/report/announcement |
 
-## 九、下一步工作
+## 九、Benchmark 结果与方法论边界
 
-### 9.1 当前阶段主任务（MVP 验证与轻量升级）
+### 9.1 首轮 Benchmark 完成情况
 
-1. **按升级版 benchmark 草案继续完善正式 benchmark JSON**：
-   - 已建立 `data/benchmark_samples.json` 作为正式 benchmark 样本文件
-   - 当前首批 20 条链接样本已按 `2.1` 正式 JSON 结构收敛
-   - 下一步按条目逐条确认人工真值，并持续回填 `annotation.expected_signals`、`published_at`、`source_name` 等正式字段
+**执行状态**: ✅ 已完��三轮 benchmark（v1.0 → v1.1 → v1.2）
 
-2. **完成首轮 baseline benchmark**：
-   - 运行 benchmark
-   - 计算准确率、召回率、Schema 合法率
-   - 输出误报 / 漏报 / 边界样本分布与代表性案例复盘
+**核心指标**（v1.2 当前版本）:
+- Precision: 42.86%（相比 baseline 提升 7.15%）
+- Recall: 80.00%（保持稳定）
+- F1 Score: 55.81%（相比 baseline 提升 5.81%）
+- Schema 合法率: 100%
+- 误报数量: 32 个（相比 baseline 减少 28.9%）
 
-3. **根据 benchmark 结果决定是否轻量升级 Prompt / few-shot**：
-   - 若误报、边界不稳、命名漂移明显，再做一轮定向 Prompt 轻调
-   - 优先补少量高价值 few-shot，而非立即扩成完整体系
+**优化历程**:
+- v1.0 → v1.1: Precision +6.4%，成功压制 market 误报（25 → 12）
+- v1.1 → v1.2: Precision +0.75%，边际收益递减
 
-### 9.2 后续增强（建议后置拍板）
+**详细报告**:
+- [PHASE2_1_BASELINE_BENCHMARK_REPORT.md](docs/PHASE2_1_BASELINE_BENCHMARK_REPORT.md) - v1.0 baseline 分析
+- [PHASE2_1_V1.0_VS_V1.1_COMPARISON_REPORT.md](docs/PHASE2_1_V1.0_VS_V1.1_COMPARISON_REPORT.md) - 首轮优化对比
+- [PHASE2_1_OPTIMIZATION_SUMMARY.md](docs/PHASE2_1_OPTIMIZATION_SUMMARY.md) - 完整优化历程总结
+
+### 9.2 重要方法论发现：Taxonomy 边界问题
+
+**本轮 benchmark 暴露出的关键问题**：
+
+并非所有被统计为"误报"的信号都是模型判断错误。部分样本的分类差异源于 **signal taxonomy 本身的边界暧昧**，尤其集中在 `market` 与 `capital` 的区分上。
+
+**典型案例**：
+- 微软收购动视暴雪（S002）
+  - 从资本交易视角：690 亿美元收购 → `capital` 信号合理
+  - 从市场格局视角：改变游戏行业平台竞争态势 → `market` 信号合理
+  - **两种解释都具备业务合理性**
+
+**问题本质**：
+- 这不是 Prompt 错误，而是 taxonomy 歧义
+- 同一事件可从多个角度抽取信号，但当前标注只给出单一标签
+- 继续调整 Prompt 无法解决这类分类差异
+
+**当前阶段处理原则**：
+
+1. **不建议立即改为双标签**
+   - 双标签会提高样本要求，可能把"可接受的标签歧义"误转化为"模型漏报"
+   - 会污染阶段性评估结论，使 Precision/Recall 指标失去可比性
+
+2. **定义为独立问题类型**
+   - 标记为 `taxonomy_ambiguity` 或 `annotation_boundary_issue`
+   - 在 benchmark 报告中单独列出，不计入 Prompt 优化的评估范围
+   - 作为后续优化的重要方向
+
+3. **纳入系统能力建设规划**
+   - 这属于系统能力建设的一部分，而非单次 Prompt 调优即可解决
+   - 需要跨模块协同（2.1 → 2.2 → 2.4）共同解决
+
+**后续推进方向**（详见 [PHASE2_1_OPTIMIZATION_SUMMARY.md](docs/PHASE2_1_OPTIMIZATION_SUMMARY.md) 第九章）：
+1. 梳理 `market` / `capital` / `team` / `technical` 的边界定义
+2. 建立"单主标签 / 可接受替代标签 / 真正双信号样本"的判定规则
+3. 对 benchmark 样本中的暧昧样本建立单独清单
+4. 考虑在未来版本中支持"可接受替代标签"的评估逻辑
+5. 将 taxonomy 澄清视为 `2.1 → 2.2 → 2.4` 协同设计的一部分
+
+### 9.3 Prompt 优化的边界
+
+**已确认的结论**：
+- Prompt 优化已接近上限（v1.2 边际收益仅 0.75%）
+- 剩余 32 个误报中，部分属于标注边界问题而非模型错误
+- 不建议继续通过 Prompt 调优追求更高分数
+
+**下一步重点**（优先级排序）：
+1. **P0**: 澄清 taxonomy 定义，解决 market/capital 等边界歧义
+2. **P1**: 引入 Phase 2.4 ContextPacket 增强，通过外部约束提升精度
+3. **P2**: 扩大 benchmark 样本至 50-100 个，更全面评估性能
+
+### 9.4 后续增强（建议后置拍板）
 
 - 规则 + LLM 混合链路（如果准确率/召回率不达标）
 - 扩充信号类别（如果四类无法覆盖主要样本）
