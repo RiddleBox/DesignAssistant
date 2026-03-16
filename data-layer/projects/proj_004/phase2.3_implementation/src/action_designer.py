@@ -53,14 +53,15 @@ class ActionDesigner:
         priority = opp.priority_level.lower()
         assumption_count = len(opp.key_assumptions)
 
-        if priority == "low" or "观察" in priority:
+        # 兼容 2.2 的 priority_level 值（watch/research/deep_dive/escalate）
+        if priority == "watch" or priority == "low" or "观察" in priority:
             return "watch"
-        elif assumption_count > 3 and priority == "medium":
-            return "validate"
-        elif priority == "high" and assumption_count <= 2:
-            return "pilot"
-        elif priority == "critical":
+        elif priority == "escalate" or priority == "critical":
             return "escalate"
+        elif priority == "deep_dive" or (priority == "high" and assumption_count <= 2):
+            return "pilot"
+        elif priority == "research" or (assumption_count > 3 and priority == "medium"):
+            return "validate"
         else:
             return "validate"
 
