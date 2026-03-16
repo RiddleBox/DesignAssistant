@@ -1,0 +1,120 @@
+{
+  "request_id": "req_001",
+  "retrospective": {
+    "retrospective_id": "retro_case_001_1773664400",
+    "case_id": "case_001",
+    "retrospective_version": "0.1.0",
+    "processing_time_ms": 0,
+    "workflow_summary": "信号提取：2个信号；机会判断：布局边缘AI芯片生态；行动设计：pilot；运行正常",
+    "output_checks": [
+      {
+        "check_type": "completeness",
+        "status": "pass",
+        "details": "所有必需字段已生成，输出完整",
+        "evidence": []
+      },
+      {
+        "check_type": "consistency",
+        "status": "pass",
+        "details": "结论与证据一致，模块输出无明显矛盾",
+        "evidence": []
+      },
+      {
+        "check_type": "understandability",
+        "status": "warning",
+        "details": "发现 1 个可理解性问题：2.2 机会论述过短或缺失",
+        "evidence": [
+          "opportunity_thesis 长度: 36"
+        ]
+      }
+    ],
+    "critical_findings": [
+      {
+        "finding_id": "finding_001",
+        "summary": "输出可理解性问题：发现 1 个可理解性问题：2.2 机会论述过短或缺失",
+        "severity": "low",
+        "layer": "opportunity",
+        "evidence": [
+          "opportunity_thesis 长度: 36"
+        ],
+        "impact": "不够清晰的输出可能导致人工复核困难或决策延迟"
+      },
+      {
+        "finding_id": "finding_002",
+        "summary": "性能问题：处理时间过长（330000ms）",
+        "severity": "medium",
+        "layer": "orchestration",
+        "evidence": [
+          "processing_time_ms=330000"
+        ],
+        "impact": "处理时间过长可能影响系统响应速度和用户体验"
+      }
+    ],
+    "suspected_root_causes": [
+      {
+        "cause_id": "cause_001",
+        "suspected_root_cause": "机会判断阶段可能未提供足够的解释或证据",
+        "confidence": "medium_confidence",
+        "reasoning": "基于可理解性检查发现：发现 1 个可理解性问题：2.2 机会论述过短或缺失",
+        "evidence": [
+          "opportunity_thesis 长度: 36"
+        ],
+        "limitations": [
+          "可理解性判断具有主观性，需要人工复核确认"
+        ],
+        "related_findings": [
+          "finding_001"
+        ]
+      },
+      {
+        "cause_id": "cause_002",
+        "suspected_root_cause": "某个模块可能存在性能瓶颈，或模块间调用次数过多",
+        "confidence": "low_confidence",
+        "reasoning": "观察到处理时间为 330000ms，超过预期阈值",
+        "evidence": [
+          "processing_time_ms=330000"
+        ],
+        "limitations": [
+          "需要更详细的性能分析才能确定具体瓶颈"
+        ],
+        "related_findings": [
+          "finding_002"
+        ]
+      }
+    ],
+    "phase3_priorities": [
+      {
+        "priority_id": "priority_001",
+        "title": "改进模块协作的输出质量",
+        "reason": "性能问题：处理时间过长（330000ms）。初步归因：某个模块可能存在性能瓶颈，或模块间调用次数过多",
+        "scope": "system",
+        "suggested_order": 101,
+        "expected_impact": "改进后将提升用户体验和决策可信度，需进一步验证归因后再实施修复",
+        "related_findings": [
+          "finding_002"
+        ]
+      },
+      {
+        "priority_id": "priority_002",
+        "title": "优化机会判断的细节表达",
+        "reason": "输出可理解性问题：发现 1 个可理解性问题：2.2 机会论述过短或缺失。初步归因：机会判断阶段可能未提供足够的解释或证据",
+        "scope": "module",
+        "suggested_order": 202,
+        "expected_impact": "优化后将提升输出的专业性和可读性，需进一步验证归因后再实施修复",
+        "related_findings": [
+          "finding_001"
+        ]
+      }
+    ],
+    "confidence_notes": [
+      "发现 2 个关键问题，归因基于输出检查和运行记录",
+      "1 个归因可信度较低，需进一步验证"
+    ],
+    "warnings": [
+      "样本规模过小：当前仅基于单案例，结论可能不具备普遍性"
+    ]
+  },
+  "global_summary": "工作流：信号提取：2个信号；机会判断：布局边缘AI芯片生态；行动设计：pilot；运行正常；输出检查：2/3 通过；发现 2 个问题；生成 2 个阶段3优先级项",
+  "analyzer_version": "0.1.0",
+  "processing_time_ms": 0
+}
