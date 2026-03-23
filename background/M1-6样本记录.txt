@@ -1,0 +1,122 @@
+样本记录
+M1. Unity 官方：AI 原生能力进入编辑器（更新版）
+Material ID: M1
+Title: Unity Muse & Sentis: AI-powered creativity within the Unity Editor
+Source / Publisher: Unity Official Blog / Unity 6 Documentation
+URL: https://unity.com/blog/engine-platform/ai-model-improvements-higher-quality-muse-textures (2024 更新详情)
+Date: 2024-03-05 (Texture 2 模型更新) / 2025-05 (Sentis 2.1 稳定版发布)
+Material Type: Official Technical Blog & Changelog
+Why this material matters: 记录了 Unity 如何通过 Photo-Real-Unity-Texture-2 模型解决 AI 生成资产在工业管线中的“可用性”问题（如 16-bit 高度图、PBR 规范一致性），以及 Sentis 如何实现“推理原生化”。
+Summary: Unity Muse 在 2024 年完成了向 Unity 6 的原生集成，重点更新了 Texture（PBR 材质生成）和 Behavior（自然语言驱动行为树）。Sentis 则进化为支持 DirectML 的跨平台推理库，允许 AI 模型在不依赖云端的情况下于玩家本地设备运行。
+Direct quote: "The new model generates texture maps with greater detail and color consistency... generated heightmaps are now 16-bit by default, ensuring they meet professional production standards."
+Support or Counter:Support. 证明了工具链正在从“像素生成”向“遵循物理规则的工业资产生成”转移。
+Suggested tag:Engine_Native_AI / PBR_Standardization
+Confidence: High (官方文档级数据)
+Potential bias: 存在商业促销意图，实际操作中对提示词（Prompt）的依赖度仍需人工干预。
+What question this helps answer: AI 工具是否能产出符合现有工业管线（如 PBR）标准的资产？
+This helps prove: 引擎方正在通过自研模型（基于授权数据训练）解决版权和技术规格的兼容性屏障。
+This does NOT prove: 纯 AI 生成可以完全替代技术美术（TA）对复杂着色器的精调。
+Best fit in the workflow:2.2 (Content Creation)
+
+M2. Unreal / Epic：AI 助手与程序化生成
+Title: Unreal Engine 5.7 is now available & Roadmap
+Source / Publisher: Epic Games Official
+URL: https://www.unrealengine.com/en-US/news/unreal-engine-5-7-is-now-available
+Date: 2025-11-12
+Material Type: Release Notes
+Why this material matters: Epic 在 UE5.7 中正式引入了“In-editor AI Assistant”，标志着头部引擎开始尝试“对话式驱动”研发。
+Summary: UE5.7 强化了 PCG（程序化内容生成）框架，并新增了实验性的 AI Assistant，旨在通过编辑器内交互引导开发者完成复杂工作流。
+Direct quote: "The latest release empowers you to build... with a little help from our AI Assistant."
+Support or Counter: Support (平台侧已出现将 AI 嵌入编辑器工作流的明确方向信号，但生产级稳定性仍待验证。)
+Suggested tag:AI_Assistant_Workflow
+Confidence: High
+Potential bias: 实验性功能（Experimental），实际生产稳定性有待观察。
+What question this helps answer: AI 如何嵌入传统的 3D 引擎操作流？
+This helps prove: 引擎方正在构建“AI 导航”系统来降低复杂工具的学习门槛。
+This does NOT prove: AI 助手能够独立完成复杂的逻辑架构设计。
+Best fit in the workflow: 2.1 (Core Engine Workflow)
+
+M3. 行业调查：开发者采纳率的“波峰后平稳期”
+Title: Developer use of generative AI may be declining (2026 Data)
+Source / Publisher: Game Developer / Omdia
+URL: https://www.gamedeveloper.com/production/developer-use-of-generative-ai-may-be-declining
+Date: 2026-03-06
+Material Type: Industry Survey
+Why this material matters: 提供了 2024-2026 年跨度的对比数据，反映了 AI 从“狂热实验”到“务实筛选”的过程。
+Summary: 2026 年初调研显示，开发者对生成式 AI 的采纳率从 2025 年的 36% 略降至 29%。尽管 87% 的开发者在某些环节使用 AI Agent，但对成本削减的乐观态度正在下降。
+Direct quote: "27 percent of panelists were bullish on genAI's cost reduction abilities in the first half of 2025, and only 21 percent echoed that sentiment in the start of 2026."
+Support or Counter: Counter/Nuanced (提醒范式转移并非一蹴而就，存在生产力边际效应下降的情况)
+Suggested tag:Adoption_Statistics
+Confidence: High
+Potential bias: 受访者多为北美/欧洲开发者，可能不代表亚洲大厂情况。
+What question this helps answer: 行业是否真的在全面转向 AI 驱动？
+This helps prove: AI 正在经历“幻灭的低谷期”，进入实用化筛选阶段。
+This does NOT prove: AI 技术本身在退场，而是在整合进垂直管线。
+Best fit in the workflow: 2.3 (Management & Strategy)
+
+M4. NVIDIA：基础设施与数字人推理流
+Title: NVIDIA Releases Digital Human Microservices (ACE)
+Source / Publisher: NVIDIA Newsroom
+URL: https://nvidianews.nvidia.com/news/digital-humans-ace-generative-ai-microservices
+Date: 2024-06-02 (Ongoing updates in 2025)
+Material Type: Technology Announcement
+Why this material matters: 定义了 AI 如何从底层硬件和微服务层面改变 NPC 的生产与运行方式。
+Summary: NVIDIA ACE 现已商用，支持在 RTX PC 或云端运行 Audio2Face、Riva ASR 等微服务。完美世界等公司已开始将其整合进生产流。
+Direct quote: "NVIDIA ACE is a suite of technologies... optimized for on-device inference alongside graphics."
+Support or Counter: Support (基础设施层已提供即时推理进入运行时的技术路径，但其成本与规模化适配性仍需验证。)
+Suggested tag:Inference_Infra
+Confidence: High
+Potential bias: 硬件厂商视角，侧重于推动 RTX 显卡销量。
+What question this helps answer: AI 如何改变游戏内容的交付方式（Static vs. Generative）？
+This helps prove: 实时 AI 推理正成为游戏运行环境（Runtime）的一部分。
+This does NOT prove: 这种方案在大规模在线多人游戏中的成本可行性。
+Best fit in the workflow: 2.2 (Content Creation / Runtime)
+
+Material ID:M5
+Title:How Embark Studios uses AI to "unleash" its developers (CCO Interview)
+Source / Publisher:Eurogamer
+URL:https://www.eurogamer.net/theres-no-shortcut-to-making-great-games-embark-studios-cco-responds-to-and-defends-ai-use-in-arc-raiders
+Date:2024-10-31
+Material Type:Executive Interview / Studio Practice Case
+Why this material matters:
+这是关于 AI 进入真实 production pipeline 的高质量团队实践证据，且明确区分了 Generative AI 与 Machine Learning 在实际项目中的不同作用边界。
+1-3 sentence summary:
+Embark 展示了 AI/ML 在实际项目中的工业化使用方式：一方面通过机器学习驱动部分敌人的动态 locomotion 与物理反馈，另一方面通过 TTS 扩展高重复、长尾语音内容的生产覆盖范围。这说明 AI 的应用正在从静态资产生成延伸到动态行为与内容交付相关环节。
+Direct quote:
+"The locomotion for some of our ARC enemies has been trained with machine learning... If you shoot off a leg, it’ll try to rebalance. That’s AI, if you will."
+"TTS allows us to increase the scope of the game in some areas where we think it's needed, or where there's tedious repetition, in situations where the voice actors may not see it as valuable work. So it's a wide umbrella, but the experience of the game doesn't use any generative AI."
+Support or Counter:
+Support (team-practice evidence)
+说明 AI 的应用已超出静态资产生成，开始进入动态行为与内容生产的部分关键环节，构成“生产栈正在扩展”的强实践信号。
+Suggested tag:
+Team_Practice / ML_Locomotion / Dynamic_Audio_Pipeline / Production_Embedding
+Confidence:
+High
+Potential bias / limitation:
+Embark 属于技术驱动型工作室，其经验未必可直接迁移到传统内容管线团队；此外，该案例证明的是领先团队中的高价值实践样本，而非行业已普遍完成相同迁移。
+What question this helps answer:
+真实团队中，AI 是否已经进入核心 production pipeline，而不仅停留在静态资产生成或外围辅助阶段？
+This helps prove:
+1. AI/ML 能进入动态行为与物理反馈相关的 gameplay/content pipeline；2. TTS 可用于扩展长尾、重复性语音内容的生产覆盖范围，说明 AI 已开始进入动态音频生产环节。
+This does NOT prove:
+这类实践已在行业中广泛复制，也不能单独证明 AI 已完成游戏研发范式的普遍性转移。
+Best fit in the workflow:
+2.1 / 2.2 bridge
+
+6. 限制与风险：版权与确定性的法律博弈
+Title: Copyright and Artificial Intelligence, Part 2: Copyrightability Report
+Source / Publisher: U.S. Copyright Office
+URL:https://www.copyright.gov/ai/
+Date: 2025-01-29
+Material Type: Government Report / Legal Policy
+Why this material matters: 这是目前关于 AI 产出物版权归属最权威的一手法律文件，直接决定了工业管线是否敢大规模采用 AI。
+Summary: 报告强调了 AI 生成内容的可版权性取决于人类“创造性控制”的程度。若 AI 主导生成，该部分内容可能无法获得版权保护。
+Direct quote: "The output of current generative AI systems may include... uncertainty around how a particular prompt will influence the output."
+Support or Counter: Counter (法律不确定性是范式转移的最大“刹车”)
+Suggested tag:Risk_and_Constraint
+Confidence: High
+Potential bias: 仅限美国法律框架，但对全球游戏工业具有风向标意义。
+What question this helps answer: 为什么大厂在替换核心资产管线时依然谨慎？
+This helps prove: 纯 AI 生成资产面临严重的知识产权（IP）资产化风险。
+This does NOT prove: 辅助类 AI 工具（不直接生成资产）也面临同样的法律困境。
+Best fit in the workflow: 2.3 (Strategy & Legal
