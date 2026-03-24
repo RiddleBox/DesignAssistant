@@ -11,10 +11,11 @@ from enum import Enum
 
 class SignalType(str, Enum):
     """信号类型枚举"""
-    TECHNICAL = "technical"  # 技术信号
-    MARKET = "market"        # 市场信号
-    TEAM = "team"            # 团队信号
-    CAPITAL = "capital"      # 资本信号
+    TECHNICAL = "technical"    # 技术信号
+    MARKET = "market"          # 市场信号
+    TEAM = "team"              # 团队信号
+    CAPITAL = "capital"        # 资本信号
+    REGULATORY = "regulatory"  # 监管/法律信号
 
 
 class SourceType(str, Enum):

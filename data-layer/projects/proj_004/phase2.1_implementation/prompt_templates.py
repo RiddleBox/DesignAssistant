@@ -8,18 +8,27 @@ from schemas import SCORING_CRITERIA
 # System Prompt
 SYSTEM_PROMPT = """你是一个游戏行业范式信号解码器，负责从非结构化文本中提取可进入战略工作流的正式信号。
 
-范式信号分为四类：
+范式信号分为五类：
 1. technical（技术信号）：新技术采用、引擎升级、跨平台发布、技术创新
 2. market（市场信号）：市场格局变化、用户需求迁移、竞品动态、品类机会
 3. team（团队信号）：核心团队变动、关键人才加入、组织架构调整
 4. capital（资本信号）：融资、收购、投资、财务状况
+5. regulatory（监管/法律信号）：版权政策、AI 内容法规、游戏监管、IP 合规风险、政府报告中影响行业游戏规则的法律裁定
 
 信号准入原则：
 - 每个信号应该是独立的、可被后续工作流单独评估的变化事实
 - 如果某个信息只是用来解释主信号的背景，不应单独抽取
 - 例如："裁员 200 人以聚焦核心项目" → 只抽裁员信号，"聚焦核心项目"是原因说明
 
-market 信号注意事项：
+regulatory 信号注意事项：
+- 优先抽取：
+  * 政府机构/法院/监管部门的正式裁定（版权局、法院判决、立法机构通过的法规）
+  * 明确改变行业游戏规则的政策变化（影响 IP 所有权、AI 内容合规、游戏发行资质等）
+  * 大厂行为明确由监管压力驱动的情况（如因法规收紧导致的管线调整）
+- 谨慎对待：
+  * 非官方的监管预测或律师观点文章
+  * 泛泛而谈的行业合规分析（无具体法律效力的文章）
+  * 尚未生效或处于草案阶段的法规（confidence_score 应偏低）
 - 优先抽取：
   * 具体的市场格局变化（行业层面的、影响多个参与者的变化）
   * 明确的数据支撑的品类增长（有具体数字或市场份额变化）
@@ -36,7 +45,7 @@ market 信号注意事项：
   "signals": [
     {{
       "signal_id": "string",
-      "signal_type": "technical|market|team|capital",
+      "signal_type": "technical|market|team|capital|regulatory",
       "signal_label": "string",
       "description": "string",
       "evidence_text": "string",
@@ -65,7 +74,7 @@ market 信号注意事项：
 4. 不确定时可以抽取，但通过 confidence_score 反映证据强度
 """
 
-# Few-shot 样例集（9 个样例）
+# Few-shot 样例集（11 个样例）
 FEW_SHOT_EXAMPLES = [
     # 样例 1：技术信号
     {
@@ -257,6 +266,28 @@ FEW_SHOT_EXAMPLES = [
                 }
             ]
         }
+    },
+
+    # 样例 11：监管/法律信号（版权局裁定影响 AI 内容管线）
+    {
+        "input": "美国版权局发布报告，确认纯粹由 AI 生成的内容不受版权法保护，人类创作者必须对作品有实质性创意贡献方可主张版权。多家大型游戏公司法务团队随即开始审查 AI 辅助生成资产的合规风险。",
+        "output": {
+            "signals": [
+                {
+                    "signal_id": "sig_example_11",
+                    "signal_type": "regulatory",
+                    "signal_label": "AI 生成内容版权保护裁定",
+                    "description": "美国版权局正式确认纯 AI 生成内容不受版权保护，游戏行业 AI 资产管线面临 IP 归属风险",
+                    "evidence_text": "美国版权局发布报告，确认纯粹由 AI 生成的内容不受版权法保护，人类创作者必须对作品有实质性创意贡献方可主张版权。",
+                    "entities": ["美国版权局", "AI 生成内容", "版权法"],
+                    "intensity_score": 9,
+                    "confidence_score": 10,
+                    "timeliness_score": 9,
+                    "source_ref": "example",
+                    "extracted_at": "2026-03-14T00:00:00Z"
+                }
+            ]
+        }
     }
 ]
 
@@ -288,7 +319,7 @@ def build_prompt(content: str, source_id: str) -> str:
 
 
 # Prompt 版本管理
-PROMPT_VERSION = "v1.2"
+PROMPT_VERSION = "v1.3"
 PROMPT_CHANGELOG = {
     "v1.0": {
         "date": "2026-03-14",
@@ -309,5 +340,12 @@ PROMPT_CHANGELOG = {
         "optimization_targets": ["解决 11 个顽固 market 误报", "明确 capital vs market 分类规则"],
         "v1_1_results": "Precision 42.11%, Recall 80.00%, F1 55.17%",
         "target": "Precision ≥ 50%, 保持 Recall ≥ 75%"
+    },
+    "v1.3": {
+        "date": "2026-03-24",
+        "changes": "新增 regulatory（监管/法律）信号类型：(1) SignalType taxonomy 从4类扩展为5类；(2) 加入 regulatory 准入原则（优先官方正式裁定，谨慎对待非官方预测）；(3) 补充 few-shot 样例11：美国版权局 AI 内容版权裁定 → regulatory 信号",
+        "few_shot_count": 11,
+        "optimization_targets": ["修复 M6 版权类文本提取 0 信号问题", "防止 regulatory 信号被错误归类为 market"],
+        "trigger": "benchmark 压力测试 M6（美国版权局 AI 内容版权报告）暴露 2.1 对监管/法律类文本提取 0 信号"
     }
 }

@@ -111,14 +111,10 @@
 - `topic`
 - `tags`
 - `reason_for_match`
-- `use_as`
-  - `glossary`
-  - `few_shot`
-  - `constraint`
-  - `background`
+- `content_type`（内容自描述：如 `glossary` / `few_shot_example` / `constraint_rule` / `background`）
 - `trust_level`
 
-这样，下游不需要再重新猜“这段材料该怎么用”。
+> **设计决策**：上述字段以 `content_type` 替换 `use_as`。`content_type` 描述内容的性质（是什么），而非用途（怎么用）。同一条证据在不同下游判断语境中扮演的角色可能不同，由 2.4 预先声明用途会越权且引入歧义；`content_type` 提供足够线索，由下游模块（2.1/2.2/2.3）在自身判断流程中自行决定如何消费。
 
 因此，从设计上看，**`2.4` 不是文档召回器，而是上下文装配器。**
 

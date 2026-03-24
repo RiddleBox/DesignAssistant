@@ -232,8 +232,8 @@
 | 上游模块（2.1~2.4）输出不稳定 | 中 | 监控中 | 优先暴露并归因问题，不在 2.5 内吞掉 |
 | 真实案例质量不足 | 中 | 待评估 | 选择能暴露系统边界的压力样本 |
 | 归因逻辑过于复杂 | 低 | 可控 | 保持 MVP 范围，先做基础归因 |
-| 2.2 opportunity_title 语义化不足 | 中 | 待修复 | `_cluster_signals_and_identify_theme()` 直接输出枚举值，需改为语义化中文标题 |
-| M6 版权类文本 2.1 提取 0 信号 | 中 | 待修复 | 2.1 prompt taxonomy 缺少 regulatory/legal 类型，Counter 类信号无法被提取 |
+| 2.2 opportunity_title 语义化不足 | 中 | ✅ 已修复 | 已更新 `_cluster_signals_and_identify_theme()`，用 `type_labels` 映射 + 最强信号标签构建语义化中文标题 |
+| M6 版权类文本 2.1 提取 0 信号 | 中 | ✅ 已修复 | 已扩展 SignalType 枚举（加入 regulatory）、更新 Prompt taxonomy、补充 few-shot 样例 |
 
 ### 4.2 已解决问题
 
@@ -245,6 +245,7 @@
 | Python 导入错误 | 使用 sys.path 操作和绝对导入 | 2026-03-16 |
 | Windows 控制台编码问题 | 替换 Unicode 符号为 ASCII | 2026-03-16 |
 | M1-M6 多文档批量运行验证 | run_samples_m1_6.py 跑通完整链路（11信号→deep_dive→pilot），2.5 复盘识别到 2.2 主题聚类语义化问题 | 2026-03-24 |
+| 2.2 opportunity_title 枚举值直出 | 更新 `_cluster_signals_and_identify_theme()`：加入 `type_labels` 映射 + 最强信号标签，输出语义化中文标题 | 2026-03-24 |
 
 ---
 
