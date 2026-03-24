@@ -160,14 +160,43 @@ class JudgmentEngine:
 
     def _cluster_signals_and_identify_theme(self, signals: List[Dict[str, Any]]) -> str:
         """步骤1：信号聚类与主题识别"""
-        # MVP实现：基于信号类型简单聚类
+        # 统计各类型信号数量
         signal_types = [s.get("signal_type", "unknown") for s in signals]
         type_counts = {}
         for st in signal_types:
             type_counts[st] = type_counts.get(st, 0) + 1
 
         dominant_type = max(type_counts, key=type_counts.get)
-        return f"{dominant_type}类机会主题"
+
+        # 语义化类型标签
+        type_labels = {
+            "technical":  "技术",
+            "market":     "市场",
+            "team":       "团队",
+            "capital":    "资本",
+            "regulatory": "监管",
+        }
+        dominant_label = type_labels.get(dominant_type, dominant_type)
+
+        # 从强度最高的前3个信号提取关键词构建标题
+        sorted_signals = sorted(signals, key=lambda s: s.get("intensity_score", 0), reverse=True)
+        top_labels = [
+            s.get("signal_label", "").strip()
+            for s in sorted_signals[:3]
+            if s.get("signal_label", "").strip()
+        ]
+
+        if top_labels:
+            # 用最强信号标签作为主题核心
+            core = top_labels[0]
+            total = len(signals)
+            dominant_count = type_counts[dominant_type]
+            other_types = [type_labels.get(t, t) for t in type_counts if t != dominant_type]
+            other_str = ("、".join(other_types) + "信号交叉印证") if other_types else ""
+            suffix = f"（{other_str}）" if other_str else ""
+            return f"{core}：{dominant_label}类机会（{dominant_count}/{total} 个{dominant_label}信号{suffix}）"
+        else:
+            return f"{dominant_label}类机会（{type_counts[dominant_type]}/{len(signals)} 个信号）"
 
     def _form_opportunity_thesis(
         self,

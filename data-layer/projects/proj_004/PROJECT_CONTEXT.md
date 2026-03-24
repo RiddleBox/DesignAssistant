@@ -143,19 +143,34 @@
 
 ## 三、模块间接口关系
 
+### 3.1 标准运作流程（多文档 → 多信号聚合 → 单次判断）
+
 ```
-外部输入（新闻/报告）
+外部输入文档批次（新闻/报告/公告，N 篇）
+    ↓ 逐篇解码
+[2.1 情报解码 ×N] → DecodedIntelligence × N（各含 signals 列表）
+    ↓ 合并所有 signals 为统一信号池
+[2.2 机会判断 ×1] → OpportunityObject（基于多源信号，priority: watch/research/deep_dive/escalate）
     ↓
-[2.1 情报解码] → DecodedIntelligence
+[2.3 行动设计 ×1] → ActionDesignResult（posture: watch/validate/pilot/escalate/hold/stop）
     ↓
-[2.2 机会判断] → OpportunityObject (priority: watch/research/deep_dive/escalate)
-    ↓
-[2.3 行动设计] → ActionDesignResult (posture: watch/validate/pilot/escalate/hold/stop)
-    ↓
-[2.5 整合验证] → SystemRetrospectiveObject + Phase3 优先级
+[2.5 整合验证 ×1] → SystemRetrospectiveObject + Phase3 优先级
 
 [2.4 知识库] ──→ 可选注入 2.1 / 2.2 / 2.3 任意节点
 ```
+
+**关键设计意图**（来自 2.2 First Principles 文档第 15.1 节）：
+> 2.2 的本质是把「多个 2.1 信号」组织成「一个机会候选对象」，而不是逐条点评单篇文档。
+> 信号聚合发生在 2.1 → 2.2 的边界：将 N 篇文档产生的 signals 合并后整体送入 2.2 判断。
+> 2.3 拿到的是「多源信号驱动的机会判断」，而不是单篇文本的孤立判断。
+
+### 3.2 联调 MVP 简化模式（单文档验证接口契约）
+
+```
+单篇文本 → [2.1] → [2.2] → [2.3] → [2.5]
+```
+
+> 用于接口联调和回归测试。不代表生产运行模式。
 
 **关键接口约定（联调前必须完成拍板）**：
 
