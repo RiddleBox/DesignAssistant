@@ -1,0 +1,10 @@
+{
+  "source_id": "real_006",
+  "source_type": "news",
+  "title": "Google's Gemini AI will power NPC dialogue in Dragon Quest X",
+  "content": "Square Enix has announced a partnership with Google to integrate Gemini AI into Dragon Quest X Online, enabling dynamic NPC conversations. Players will be able to hold open-ended conversations with NPCs powered by large language models, with the AI responding contextually to player queries. This marks one of the first major JRPG franchises to embed generative AI directly into live game dialogue systems. Square Enix said the feature will roll out in a beta test for Japanese players in Q3 2026.",
+  "published_at": "2026-03-23T00:00:00Z",
+  "source_name": "Game Developer",
+  "language": "en",
+  "mode": "prompt_first"
+}

@@ -288,6 +288,14 @@ FEW_SHOT_EXAMPLES = [
                 }
             ]
         }
+    },
+
+    # 样例 12：负例（标准季报套话，无具体战略信号）
+    {
+        "input": "Activision Blizzard today reported financial results for the quarter ended December 31, 2025. Net revenues were $2.34 billion. 'We are pleased with our strong performance,' said the CEO. 'Our world-class franchises continue to deliver exceptional entertainment. We remain committed to delivering long-term value to our shareholders.' The Board declared a cash dividend of $0.47 per share.",
+        "output": {
+            "signals": []
+        }
     }
 ]
 
@@ -319,7 +327,7 @@ def build_prompt(content: str, source_id: str) -> str:
 
 
 # Prompt 版本管理
-PROMPT_VERSION = "v1.3"
+PROMPT_VERSION = "v1.4"
 PROMPT_CHANGELOG = {
     "v1.0": {
         "date": "2026-03-14",
@@ -347,5 +355,12 @@ PROMPT_CHANGELOG = {
         "few_shot_count": 11,
         "optimization_targets": ["修复 M6 版权类文本提取 0 信号问题", "防止 regulatory 信号被错误归类为 market"],
         "trigger": "benchmark 压力测试 M6（美国版权局 AI 内容版权报告）暴露 2.1 对监管/法律类文本提取 0 信号"
+    },
+    "v1.4": {
+        "date": "2026-03-25",
+        "changes": "财报套话误报修复：(1) 补充 few-shot 样例12：标准季报套话负例（净收入 + CEO 套话 + 分红声明 → 0 信号）；(2) 同步修复 decoder _generate_summary 缺少 regulatory 类型映射的 KeyError",
+        "few_shot_count": 12,
+        "optimization_targets": ["压制标准财报套话误报", "修复 regulatory 信号 KeyError"],
+        "trigger": "Iteration 1 真实数据运行：noise_001 财报套话被误提取为 capital 信号"
     }
 }

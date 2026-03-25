@@ -6,8 +6,10 @@ Phase 2.1 情报解码模块 - 核心解码器
 import json
 import re
 import time
+import os
 from datetime import datetime
 from typing import List, Dict, Any
+import requests as _requests
 from anthropic import Anthropic
 
 from schemas import (
@@ -31,9 +33,15 @@ class IntelligenceDecoder:
             api_key: Anthropic API key
             model: 使用的模型，默认 Claude Opus 4.6
         """
-        self.client = Anthropic(api_key=api_key)
+        self.api_key = api_key
+        self.base_url = os.environ.get("ANTHROPIC_BASE_URL", "https://api.anthropic.com")
         self.model = model
         self.decoder_version = PROMPT_VERSION
+        # 保留 client 仅用于非代理场景的兼容性
+        if not os.environ.get("ANTHROPIC_BASE_URL"):
+            self.client = Anthropic(api_key=api_key)
+        else:
+            self.client = None
 
     def decode(self, request: IntelligenceDecodeRequest) -> DecodedIntelligence:
         """
@@ -126,19 +134,39 @@ class IntelligenceDecoder:
         """
         for attempt in range(max_retries):
             try:
-                message = self.client.messages.create(
-                    model=self.model,
-                    max_tokens=4096,
-                    temperature=0.0,  # 使用 0 温度保证稳定性
-                    messages=[
-                        {"role": "user", "content": prompt}
-                    ]
-                )
-                return message.content[0].text
+                if self.base_url != "https://api.anthropic.com":
+                    # 中转代理：直接用 requests 发送，避免 SDK 认证头污染
+                    url = self.base_url.rstrip("/") + "/v1/messages"
+                    headers = {
+                        "Authorization": f"Bearer {self.api_key}",
+                        "anthropic-version": "2023-06-01",
+                        "content-type": "application/json",
+                    }
+                    payload = {
+                        "model": self.model,
+                        "max_tokens": 4096,
+                        "temperature": 0.0,
+                        "messages": [{"role": "user", "content": prompt}],
+                    }
+                    resp = _requests.post(url, headers=headers, json=payload, timeout=(30, 180))
+                    resp.raise_for_status()
+                    data = resp.json()
+                    # 提取文本内容（跳过 thinking 块）
+                    for block in data["content"]:
+                        if block.get("type") == "text":
+                            return block["text"]
+                    return ""
+                else:
+                    message = self.client.messages.create(
+                        model=self.model,
+                        max_tokens=4096,
+                        temperature=0.0,
+                        messages=[{"role": "user", "content": prompt}]
+                    )
+                    return message.content[0].text
 
             except Exception as e:
                 if attempt < max_retries - 1:
-                    # 指数退避
                     wait_time = 2 ** attempt
                     time.sleep(wait_time)
                 else:
@@ -272,10 +300,11 @@ class IntelligenceDecoder:
             "technical": "技术信号",
             "market": "市场信号",
             "team": "团队信号",
-            "capital": "资本信号"
+            "capital": "资本信号",
+            "regulatory": "监管信号"
         }
 
         for signal_type, count in signal_counts.items():
-            summary_parts.append(f"{type_names[signal_type]} {count} 个")
+            summary_parts.append(f"{type_names.get(signal_type, signal_type)} {count} 个")
 
         return f"检测到 {len(signals)} 个范式信号：" + "、".join(summary_parts)
