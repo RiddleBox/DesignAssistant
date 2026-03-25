@@ -1,10 +1,11 @@
 {
   "source_id": "incoming_004",
   "source_type": "news",
-  "title": "Monster Hunter Wilds crosses 10 million units sold in 3 days, fastest in series history",
-  "content": "Capcom announced that Monster Hunter Wilds sold over 10 million units in its first three days, making it the fastest-selling entry in the franchise and one of the fastest-selling games in Capcom's history. The title launched simultaneously on PC, PS5, and Xbox Series X|S. Steam concurrent players peaked at 1.4 million. Capcom CEO Haruhiro Tsujimoto credited the simultaneous global launch and day-one PC release as key factors, signaling a strategic shift away from console-first windows. The result significantly outpaced the previous record holder Monster Hunter: World, which sold 5 million units in its first three days.",
-  "published_at": "2026-03-05T00:00:00Z",
-  "source_name": "Famitsu",
+  "title": "Monster Hunter Wilds tops 10 million units sold in one month, sets Capcom first-month sales record",
+  "content": "Capcom announced on March 31, 2025 that Monster Hunter Wilds has surpassed 10 million units sold since its launch on February 28, 2025, setting a new company first-month sales record. The title launched simultaneously on PC, PS5, and Xbox Series X|S. Steam concurrent players peaked at 1.4 million at launch. Capcom credited the simultaneous global multiplatform launch as a key factor. The result significantly outpaced the previous record holder Monster Hunter: World.",
+  "published_at": "2025-03-31T00:00:00Z",
+  "source_name": "Capcom IR / Game Developer",
+  "source_url": "https://www.capcom.co.jp/ir/english/news/html/e250331.html",
   "language": "en",
   "mode": "prompt_first"
 }

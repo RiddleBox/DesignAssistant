@@ -1,10 +1,11 @@
 {
   "source_id": "incoming_005",
   "source_type": "news",
-  "title": "EU Digital Markets Act enforcement targets Apple App Store game distribution rules",
-  "content": "The European Commission has opened formal proceedings against Apple under the Digital Markets Act, specifically targeting App Store rules that restrict alternative payment processors and third-party app distribution for games. The investigation focuses on Apple's 'core technology fee' of €0.50 per install after 1 million downloads, which the Commission argues effectively nullifies the DMA's intent. Apple faces fines of up to 10% of global annual turnover if found in violation. Multiple major mobile game publishers including Supercell, King, and Playtika have submitted testimony supporting the Commission's case. Analysts expect a final ruling by Q4 2026, with significant implications for mobile game monetization globally.",
-  "published_at": "2026-03-19T00:00:00Z",
-  "source_name": "Reuters",
+  "title": "European Commission fines Apple €500 million for breaching Digital Markets Act anti-steering rules",
+  "content": "On April 23, 2025, the European Commission found Apple in breach of the Digital Markets Act (DMA), specifically its anti-steering obligation that prevents developers from directing users to better deals outside the App Store. Apple was fined €500 million ($570 million). The Commission found that Apple's App Store rules did not allow developers to freely steer consumers to alternative offers. Apple was given 60 days to comply or face further fines of up to 5% of average daily worldwide turnover.",
+  "published_at": "2025-04-23T00:00:00Z",
+  "source_name": "European Commission",
+  "source_url": "https://ec.europa.eu/commission/presscorner/api/files/document/print/en/ip_25_1085/IP_25_1085_EN.pdf",
   "language": "en",
   "mode": "prompt_first"
 }
