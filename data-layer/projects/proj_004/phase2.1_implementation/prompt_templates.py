@@ -6,7 +6,9 @@ Phase 2.1 情报解码模块 - Prompt 模板
 from schemas import SCORING_CRITERIA
 
 # System Prompt
-SYSTEM_PROMPT = """你是一个游戏行业范式信号解码器，负责从非结构化文本中提取可进入战略工作流的正式信号。
+SYSTEM_PROMPT = """你是一个游戏行业范式信号解码器，服务于战略研究、项目孵化与生态投资工作流。
+你的职责是：把非结构化外部情报，压缩成可进入后续战略判断流程的低歧义信号单元。
+你不是资讯摘要器，也不是结论生成器。你负责的是"信号级准入判断"，而不是"机会级结论判断"。
 
 范式信号分为五类：
 1. technical（技术信号）：新技术采用、引擎升级、跨平台发布、技术创新
@@ -20,6 +22,30 @@ SYSTEM_PROMPT = """你是一个游戏行业范式信号解码器，负责从非�
 - 如果某个信息只是用来解释主信号的背景，不应单独抽取
 - 例如："裁员 200 人以聚焦核心项目" → 只抽裁员信号，"聚焦核心项目"是原因说明
 
+【market 信号核心判断框架】
+
+market 信号的本质问题是：这个变化是否改变了"行业理解某件事的基准线"？
+
+✅ 应抽取为 market 信号（以下任一条件成立）：
+  - 销售/DAU 数据明确"打破历史记录"或"超出行业预期"，且原文指出这一点（如"首月销量超越同类历史记录"）
+  - 代表某个此前被低估的品类、地区或制作模式的首次大规模验证
+    （例：亚洲工作室在西方单机 AAA 市场的首日 2M，验证了此前存疑的商业可行性）
+  - 品类 DAU/用户规模首次达到"前所未有"量级，且分析师明确指出"史上最高"
+  - 市场格局变化影响多个参与者（如平台规则变化、品类重新定价）
+  - 发行模式、区域策略或竞争格局出现可追踪的结构性变化
+
+❌ 不应抽取为 market 信号（以下特征存在时克制）：
+  - 单纯销量数字，无"历史基准对比"或"超出预期"的原文支撑
+    （"某游戏首周卖了50万"→ 不抽，无法判断这是否是格局变化）
+  - 纯趋势预测，无具体事实支撑（"AI 将改变行业"）
+  - 未来展望（"预计未来市场规模将达到..."）
+  - 单一公司内部调整，对行业整体无影响
+
+【market 信号的评分校准】：
+  - 销售里程碑类：若原文明确"创历史"或"超行业预期"→ intensity 7-9，否则 intensity 3-5，confidence 跟随原文证据强度
+  - 品类验证类（新区域/新制作模式的商业可行性验证）→ intensity 6-8
+  - 市场预测、泛影响分析 → confidence_score ≤ 4
+
 regulatory 信号注意事项：
 - 优先抽取：
   * 政府机构/法院/监管部门的正式裁定（版权局、法院判决、立法机构通过的法规）
@@ -29,15 +55,6 @@ regulatory 信号注意事项：
   * 非官方的监管预测或律师观点文章
   * 泛泛而谈的行业合规分析（无具体法律效力的文章）
   * 尚未生效或处于草案阶段的法规（confidence_score 应偏低）
-- 优先抽取：
-  * 具体的市场格局变化（行业层面的、影响多个参与者的变化）
-  * 明确的数据支撑的品类增长（有具体数字或市场份额变化）
-  * 可追踪的竞品动态（具体产品、具体策略、具体市场行为）
-- 谨慎对待：
-  * 纯趋势预测（"AI 将改变行业"）
-  * 未来展望（"预计未来..."）
-  * 泛泛影响解读（"可能对行业产生影响"）
-  * 单一公司的内部调整（除非明确改变市场格局）
 - 大型收购/投资：优先标注为 capital 信号，除非原文明确强调市场格局影响
 
 请严格按照以下 JSON Schema 输出：
@@ -296,7 +313,59 @@ FEW_SHOT_EXAMPLES = [
         "output": {
             "signals": []
         }
-    }
+    },
+
+    # 样例 13：market 信号（亚洲工作室单机 AAA 在西方市场首日 2M——品类/区域可行性验证）
+    {
+        "input": "Pearl Abyss's open-world action RPG Crimson Desert surpassed 2 million units sold within a day of its launch. The title launched on PC via Steam and saw strong day-one numbers despite launch performance issues on Intel GPUs. Pearl Abyss has pledged rapid updates and additional content. The game subsequently reached 3 million sales within five days of launch.",
+        "output": {
+            "signals": [
+                {
+                    "signal_id": "sig_example_13",
+                    "signal_type": "market",
+                    "signal_label": "韩国工作室单机 RPG 西方市场首日 2M 验证",
+                    "description": "Crimson Desert 首日销量 2M，验证了亚洲 AA 级单机 RPG 在西方市场的高端商业可行性",
+                    "evidence_text": "Pearl Abyss's open-world action RPG Crimson Desert surpassed 2 million units sold within a day of its launch.",
+                    "entities": ["Pearl Abyss", "Crimson Desert"],
+                    "intensity_score": 7,
+                    "confidence_score": 9,
+                    "timeliness_score": 9,
+                    "source_ref": "example",
+                    "extracted_at": "2026-03-27T00:00:00Z"
+                }
+            ]
+        }
+    },
+
+    # 样例 14：market 信号（品类历史最高 DAU——deckbuilder 市场规模验证）
+    {
+        "input": "Analysts say Slay the Spire 2 is the best-performing deckbuilder of all time, averaging over one million daily active users since its launch, an unprecedented number for the genre.",
+        "output": {
+            "signals": [
+                {
+                    "signal_id": "sig_example_14",
+                    "signal_type": "market",
+                    "signal_label": "deckbuilder 品类历史最高 DAU",
+                    "description": "Slay the Spire 2 DAU 超 100 万，分析师确认为 deckbuilder 史上最高，验证品类市场规模上限突破",
+                    "evidence_text": "Analysts say Slay the Spire 2 is the best-performing deckbuilder of all time, averaging over one million daily active users since its launch, an unprecedented number for the genre.",
+                    "entities": ["Slay the Spire 2", "deckbuilder"],
+                    "intensity_score": 8,
+                    "confidence_score": 8,
+                    "timeliness_score": 9,
+                    "source_ref": "example",
+                    "extracted_at": "2026-03-27T00:00:00Z"
+                }
+            ]
+        }
+    },
+
+    # 样例 15：负例（普通销量数字，无历史基准对比或超预期说明）
+    {
+        "input": "Action RPG 'Iron Veil' sold 500,000 copies in its first week on Steam. Developer Forge Studios says they are happy with the reception and will continue to release updates.",
+        "output": {
+            "signals": []
+        }
+    },
 ]
 
 
@@ -327,7 +396,7 @@ def build_prompt(content: str, source_id: str) -> str:
 
 
 # Prompt 版本管理
-PROMPT_VERSION = "v1.4"
+PROMPT_VERSION = "v1.5"
 PROMPT_CHANGELOG = {
     "v1.0": {
         "date": "2026-03-14",
@@ -355,6 +424,18 @@ PROMPT_CHANGELOG = {
         "few_shot_count": 11,
         "optimization_targets": ["修复 M6 版权类文本提取 0 信号问题", "防止 regulatory 信号被错误归类为 market"],
         "trigger": "benchmark 压力测试 M6（美国版权局 AI 内容版权报告）暴露 2.1 对监管/法律类文本提取 0 信号"
+    },
+    "v1.5": {
+        "date": "2026-03-27",
+        "changes": "market 信号判断框架重写：(1) 引入'基准线改变'核心判断标准，取代原有模糊的'市场格局变化'表述；(2) 明确'应抽取'5条正向标准（历史记录/超出预期/首次大规模验证/品类最高/结构性变化），明确'不应抽取'4条负向标准；(3) 新增 market 评分校准规则（销售里程碑必须有原文基准对比才给高 intensity）；(4) 升级系统角色设定：明确'服务于战略研究/孵化/投资工作流'，强调'信号级准入判断而非机会级结论判断'；(5) 补充 few-shot 样例 13/14/15：品类验证型 market 正例 ×2（Crimson Desert 亚洲工作室验证、Slay the Spire 2 品类历史最高）+ 普通销量负例 ×1",
+        "few_shot_count": 15,
+        "optimization_targets": [
+            "解决 market 类'销售里程碑'误判问题（过度压制有效信号 or 过度放开无效数据）",
+            "引入'基准线改变'判断维度，让 market 信号有更清晰的准入标准",
+            "保持 Recall 不下降的同时提升 Precision ≥ 60%"
+        ],
+        "trigger": "Iteration 4 分析：sample_008/incoming_018/incoming_023/incoming_004 等销量类样本边界判断不一致",
+        "first_principles_alignment": "遵循 FIRST_PRINCIPLES 第 7.1 节：先定义'什么值得进入战略雷达'，market 信号的核心价值在于改变行业对某件事的基准理解，而非单纯记录商业表现"
     },
     "v1.4": {
         "date": "2026-03-25",
