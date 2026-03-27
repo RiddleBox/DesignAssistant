@@ -1,4 +1,7 @@
 """Phase 2.3 行动设计核心处理器"""
+import importlib.util
+import json
+import os
 from typing import List
 from models import (
     ActionDesignRequest, ActionDecisionObject, ActionDesignResult,
@@ -6,31 +9,207 @@ from models import (
 )
 
 class ActionDesigner:
-    """行动设计器 - MVP最小实现"""
+    """行动设计器 - LLM 判断模式（规则引擎 fallback）"""
+
+    def __init__(self, api_key: str = None, model: str = "claude-opus-4-6"):
+        self.api_key = api_key or os.environ.get("ANTHROPIC_API_KEY", "")
+        self.model = model
+        self.base_url = os.environ.get("ANTHROPIC_BASE_URL", "https://api.anthropic.com")
+        self._llm = self._load_llm_client()
+
+    def _load_llm_client(self):
+        """动态加载项目根目录的 llm_client.py"""
+        try:
+            root = os.path.normpath(os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", ".."))
+            path = os.path.join(root, "llm_client.py")
+            if not os.path.exists(path):
+                return None
+            spec = importlib.util.spec_from_file_location("llm_client", path)
+            mod = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(mod)
+            return mod.LLMClient(api_key=self.api_key, base_url=self.base_url)
+        except Exception:
+            return None
+
+    def _call_llm(self, prompt: str) -> dict:
+        """调用统一 LLM 客户端并解析 JSON 响应"""
+        if not self._llm:
+            raise RuntimeError("LLM client is not initialized")
+        response = self._llm.call(prompt=prompt, model=self.model, step="phase2.3_action")
+        if not response or not response.strip():
+            raise ValueError("LLM returned empty response")
+        text = response.strip()
+        if text.startswith("```"):
+            lines = text.splitlines()
+            lines = lines[1:] if lines and lines[0].startswith("```") else lines
+            lines = lines[:-1] if lines and lines[-1].strip() == "```" else lines
+            text = "\n".join(lines).strip()
+            if text.startswith("json"):
+                text = text[4:].strip()
+        try:
+            return json.loads(text)
+        except json.JSONDecodeError as e:
+            raise ValueError(f"Failed to parse LLM JSON: {e}") from e
+
+    def _llm_design(self, opp) -> dict:
+        """三轮辩论：鹰派 → 鸽派 → 仲裁，最终输出行动设计"""
+        uncertainty_text = ""
+        if isinstance(opp.uncertainty_map, dict):
+            uncertainty_text = "; ".join(f"{k}: {v}" for k, v in opp.uncertainty_map.items())
+        elif isinstance(opp.uncertainty_map, list):
+            uncertainty_text = "; ".join(opp.uncertainty_map)
+
+        opp_context = f"""机会：{opp.opportunity_title}
+论点：{opp.opportunity_thesis}
+优先级：{opp.priority_level}
+支持证据：{json.dumps(opp.supporting_evidence, ensure_ascii=False)}
+反对证据：{json.dumps(opp.counter_evidence, ensure_ascii=False)}
+关键假设：{json.dumps(opp.key_assumptions, ensure_ascii=False)}
+不确定性：{uncertainty_text}"""
+
+        # --- 第一轮：鹰派（激进行动） ---
+        hawk_prompt = f"""你是激进派战略顾问。你倾向于抓住机会、快速行动、接受风险。
+请基于以下机会信息，给出你的行动建议（纯文字，不超过200字）：
+
+{opp_context}
+
+重点：放大支持证据，论证为何应该立即推进，提出激进的行动姿态和计划。"""
+        hawk_view = self._llm.call(prompt=hawk_prompt, model=self.model, step="phase2.3_debate_hawk")
+        if not hawk_view:
+            raise ValueError("Hawk agent returned empty response")
+
+        # --- 第二轮：鸽派（保守谨慎） ---
+        dove_prompt = f"""你是保守派风险顾问。你倾向于审慎验证、降低风险、分阶段承诺。
+请基于以下机会信息，给出你的行动建议（纯文字，不超过200字）：
+
+{opp_context}
+
+重点：放大反对证据和不确定性，论证为何应该谨慎，指出激进行动的潜在风险。"""
+        dove_view = self._llm.call(prompt=dove_prompt, model=self.model, step="phase2.3_debate_dove")
+        if not dove_view:
+            raise ValueError("Dove agent returned empty response")
+
+        # --- 第三轮：仲裁者（综合输出 JSON） ---
+        arbitrator_prompt = f"""你是 Phase 2.3 行动设计仲裁者。你听取了两方观点后，做出平衡的最终判断。
+
+机会背景：
+{opp_context}
+
+激进派观点：
+{hawk_view.strip()}
+
+保守派观点：
+{dove_view.strip()}
+
+请综合两方观点，输出最终行动设计。只输出合法 JSON，不要任何额外说明。
+
+输出 JSON schema：
+{{
+  "decision_posture": "watch|validate|pilot|escalate",
+  "why_this_posture": "string（综合两方观点，100字以内）",
+  "debate_summary": {{
+    "hawk_stance": "string（鹰派核心论点，50字以内）",
+    "dove_stance": "string（鸽派核心论点，50字以内）",
+    "resolution": "string（仲裁理由，50字以内）"
+  }},
+  "phased_plan": [
+    {{
+      "stage": "string",
+      "objective": "string",
+      "key_assumptions_to_test": ["string"],
+      "actions": ["string"],
+      "resources": {{"people": "string", "budget": "string", "time": "string"}},
+      "milestones": ["string"],
+      "go_no_go_criteria": ["string"],
+      "exit_conditions": ["string"]
+    }}
+  ],
+  "top_risks": [
+    {{"risk": "string", "impact_on_plan": "string", "mitigation": "string"}}
+  ],
+  "resource_commitment_logic": "string",
+  "fallback_path": "string",
+  "open_questions": ["string"]
+}}
+
+要求：
+1. decision_posture 必须是 watch/validate/pilot/escalate 之一。
+2. phased_plan 1-3 个阶段，watch 姿态只需 1 个阶段。
+3. top_risks 2-3 条。
+4. 只输出合法 JSON，不要任何额外说明。
+5. 禁止在 JSON 字符串值内使用中文引号（""「」），只允许使用半角双引号。"""
+
+        result = self._call_llm(arbitrator_prompt)
+
+        # 校验
+        if result.get("decision_posture") not in {"watch", "validate", "pilot", "escalate"}:
+            result["decision_posture"] = "validate"
+        for key in ["why_this_posture", "resource_commitment_logic", "fallback_path"]:
+            if not result.get(key):
+                result[key] = "待补充"
+        for key in ["phased_plan", "top_risks", "open_questions"]:
+            if not isinstance(result.get(key), list) or not result[key]:
+                result[key] = []
+        return result
 
     def design_action(self, request: ActionDesignRequest) -> ActionDesignResult:
         """核心方法：从机会对象生成行动决策对象"""
         opp = request.opportunity_object
 
-        # 步骤1：判断行动姿态
+        if self.api_key:
+            try:
+                llm_result = self._llm_design(opp)
+                phased_plan = [
+                    PhasedPlanStage(
+                        stage=s.get("stage", ""),
+                        objective=s.get("objective", ""),
+                        key_assumptions_to_test=s.get("key_assumptions_to_test", []),
+                        actions=s.get("actions", []),
+                        resources=PhaseResources(
+                            people=s.get("resources", {}).get("people", ""),
+                            budget=s.get("resources", {}).get("budget", ""),
+                            time=s.get("resources", {}).get("time", ""),
+                        ),
+                        milestones=s.get("milestones", []),
+                        go_no_go_criteria=s.get("go_no_go_criteria", []),
+                        exit_conditions=s.get("exit_conditions", []),
+                    )
+                    for s in llm_result.get("phased_plan", [])
+                ]
+                top_risks = [
+                    TopRisk(
+                        risk=r.get("risk", ""),
+                        impact_on_plan=r.get("impact_on_plan", ""),
+                        mitigation=r.get("mitigation", ""),
+                    )
+                    for r in llm_result.get("top_risks", [])
+                ]
+                action_decision = ActionDecisionObject(
+                    opportunity_title=opp.opportunity_title,
+                    decision_posture=llm_result["decision_posture"],
+                    why_this_posture=llm_result["why_this_posture"],
+                    phased_plan=phased_plan,
+                    top_risks=top_risks,
+                    resource_commitment_logic=llm_result["resource_commitment_logic"],
+                    fallback_path=llm_result["fallback_path"],
+                    open_questions=llm_result.get("open_questions", []),
+                )
+                return ActionDesignResult(
+                    request_id=request.request_id,
+                    action_decision=action_decision,
+                    designer_version="v1.0-llm",
+                )
+            except Exception as e:
+                print(f"  [2.3 LLM] 调用失败，fallback 到规则引擎: {e}")
+
+        # 规则引擎 fallback
         posture = self._determine_posture(opp)
-
-        # 步骤2：设计分阶段计划
         phased_plan = self._design_phased_plan(opp, posture)
-
-        # 步骤3：识别顶级风险
         top_risks = self._identify_top_risks(opp)
-
-        # 步骤4：生成资源承诺逻辑
         resource_logic = self._generate_resource_commitment_logic(phased_plan, posture)
-
-        # 步骤5：设计备选路径
         fallback = self._design_fallback_path(opp, posture)
-
-        # 步骤6：整理开放问题
         open_questions = self._collect_open_questions(opp)
 
-        # 构建行动决策对象
         action_decision = ActionDecisionObject(
             opportunity_title=opp.opportunity_title,
             decision_posture=posture,

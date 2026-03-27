@@ -2,8 +2,8 @@
 
 > **文档类型**：执行进度跟踪文档
 > **适用模块**：Phase 3 真实数据管道 + 螺旋质量迭代
-> **状态**：执行中
-> **最后更新**：2026-03-25
+> **状态**：执行中（Iteration 3 进行中）
+> **最后更新**：2026-03-26
 
 ---
 
@@ -62,8 +62,9 @@ Phase 2 证明的是「链路能跑通」。Phase 3 要证明的是「链路能�
 
 **主要工作**（由 Iteration 1 复盘驱动，以下为预期方向）：
 - [x] 2.1 Prompt/few-shot 定向修复（基于真实数据暴露的误报/漏报）
-- [ ] 扩展到 20-30 条真实样本（含更多预期噪音）
-- [ ] 再跑完整链路 → 再 2.5 复盘
+- [x] 扩展到 37 条真实样本（含 7 条噪音，33 条信号样本）
+- [x] 再跑完整链路 → 再 2.5 复盘
+- [x] 扩样后暴露新噪音误报 → 二次修复（prompt v1.5）
 
 **当前修复结果（2026-03-25）**：
 - 已修复 `real_010` 的 `regulatory` 类型 KeyError（decoder summary 映射缺失）
@@ -84,21 +85,96 @@ Phase 2 证明的是「链路能跑通」。Phase 3 要证明的是「链路能�
 - `real_010` 成功提取 `regulatory` 信号，兼容性问题已确认修复
 - 2.2 / 2.3 / 2.5 全链路运行成功
 
-**状态**：进行中（核心误报/兼容性问题已修复，待扩大样本并复跑）
+**状态**：已完成（37 条扩样完整链路验证通过，prompt 升级至 v1.5，噪音抑制稳定）
 
 ---
 
 ### Iteration 3 — 规模化 + RAG 接入
 
-**目标**：obsidian 知识库内容入库 2.4 RAG，验证 100 条量级全链路
+**目标**：obsidian 知识库内容入库 2.4 RAG，验证 51 条量级全链路，架构改造 RAG 为按需检索
 
 **主要工作**：
-- [ ] obsidian 内容格式化 → 2.4 RAG 索引建立
-- [ ] 2.4 → 2.1 联调（ContextPacket 协议对接）
-- [ ] 100 条量级批量运行
-- [ ] 验证实际决策可用性
+- [x] obsidian 内容格式化 → 2.4 RAG 索引建立（40 条文档，FAISS IndexFlatIP，dim=768）
+- [x] 2.4 → 2.2 联调架构改造：RAG 由 2.2 在形成判断主题后按需发起查询（非预取）
+- [x] 51 条量级批量运行验证（RAG 正常检索，全链路无崩溃）
+- [x] 2.2 LLM 判断模式上线：补写 `_call_llm` + `_llm_judge`，修复 `'JudgmentEngine' object has no attribute '_llm_judge'` bug（2026-03-27）
+- [x] record 模式验证 LLM 路径：priority_level=research，supporting/counter 各 6 条，$0.1225/次（2026-03-27）
+- [x] phase3_执行进度.md 更新完整 Iteration 3 状态
 
-**状态**：待 Iteration 2 收口后启动
+**架构决策记录（2026-03-26）**：
+- RAG 查询由 2.2 在 Step2（论点形成）后发起，而非在 2.2 执行前预取
+- 查询内容为 2.2 已识别的 theme + thesis，语义精度高于原始信号文本
+- 2.4 文档类别（game_design/market_trend/tech_innovation）与 2.1 信号类型（market/technical/capital/team/regulatory）维度不同，不建议强行对齐；2.2 应使用纯语义查询跨类别检索
+
+**验收结果（2026-03-27）**：
+- 输入样本：3 条（2 信号样本 + 1 噪音样本，record 模式验证）
+- 2.1 输出：3 条信号，噪音正确过滤 0 信号
+- 2.2 LLM 路径：priority_level=research，supporting 6 条，counter 6 条，$0.1225
+- 2.4 RAG：命中 3 条相关文档，按需查询架构稳定
+- 全链路：无崩溃，无 fallback 错误
+
+**状态**：已完成
+
+---
+
+### Iteration 4 — 2.1 精度提升 + 规模化 replay 缓存
+
+**目标**：提升 2.1 信号提取 Precision，补录全量缓存，让 replay 零费用覆盖全部样本
+
+**主要工作**：
+- [ ] 2.1 prompt 升级至 v1.6：加强 market 类误报抑制，新增范式边界 few-shot
+- [ ] 对 37+ 条样本做 Precision 测量，目标 ≥ 60%
+- [ ] 批量 record 录制：将全部 37 条样本的 2.1 + 2.2 响应缓存入 .api_recordings/
+- [ ] 验证 replay 模式全量跑通（零费用，无 cache miss）
+
+**状态**：待开始
+
+---
+
+## 二.五、模块待完善计划
+
+> 以下为各模块识别出的待完善项，按优先级排序，将在后续 Iteration 中逐步推进。
+
+### 2.1 情报解码模块
+
+**短期（下一 Iteration）**：
+- [ ] 加强 market 类误报抑制：销量/收入数字类事件，只在明确超出同类历史记录、或原文指出预期被颠覆时提取为 market 信号
+- [ ] 新增范式边界 few-shot：区分「销量里程碑（背景信息）」vs「范式突破验证（市场信号）」
+- [ ] prompt 升级至 v1.6，Precision 目标 ≥ 60%
+
+**中期（后续 Iteration）**：
+- [ ] 与 2.4 知识库联调，用历史基线上下文辅助判断信号强度
+- [ ] benchmark 升级：引入信号价值密度、噪音抑制率指标（参考 PHASE2_1_BENCHMARK_UPGRADE_DRAFT.md）
+
+### 2.2 机会判断模块
+
+**短期**：
+- [x] RAG 按需查询架构（2026-03-26 完成）
+- [x] LLM 判断模式：`_call_llm` + `_llm_judge` 实现并验证（2026-03-27 完成）
+- [x] 修复 LLM 响应中文引号导致 JSON 解析失败 bug（2026-03-27）
+
+**中期**：
+- [ ] 实现多信号范式合成能力：多个中低强度信号 + 2.4 知识 → 识别范式突破机会
+- [ ] 多 Agent 辩论作为可选优化手段（参考 PHASE2_2_FIRST_PRINCIPLES_AND_ROLE_ESSENCE.md）
+
+### 2.3 行动设计模块
+
+**短期**：
+- [x] LLM 判断模式：`_call_llm` + `_llm_design` 实现并验证，规则引擎 fallback（2026-03-27 完成）
+- [x] 修复 llm_client.py 路径深度错误（2026-03-27）
+- [x] 轻量版多 Agent 辩论：鹰派 + 鸽派 + 仲裁者三轮调用，避免单次 LLM 确认偏误（2026-03-27 完成）
+
+**中期**：
+- [ ] Go/No-Go 门槛结构化（当前行动姿态判断为规则驱动，缺乏退出条件设计）
+- [ ] 分阶段承诺设计（watch/pilot/build/pass 各阶段的资源承诺结构）
+- [ ] 多 Agent 辩论完整版：多轮对话迭代，Agent 之间有反驳回合，模拟真实决策辩论（轻量版完成后推进）
+
+### 2.4 知识库模块
+
+**中期**：
+- [ ] 扩充行业范式假设类文档（历史基线、市场预期、品类天花板），供 2.2 范式合成使用
+- [ ] 知识类别扩展（加入 business_model/studio_management）
+- [ ] 文档数量从 40 条扩充至 100 条
 
 ---
 
@@ -106,11 +182,11 @@ Phase 2 证明的是「链路能跑通」。Phase 3 要证明的是「链路能�
 
 | 位置 | 用途 | 当前数量 |
 |------|------|----------|
-| `background/real_intel_samples/incoming/` | openclaw 定期投放新样本 | 已建立 |
-| `background/real_intel_samples/processed/` | 已处理样本归档 | 已建立（当前已归档 14 条） |
-| `background/real_intel_samples/` (根目录) | 当前手动样本 | 14 条（11信号+3噪音）|
+| `background/real_intel_samples/incoming/` | openclaw 定期投放新样本 | 51 条（测试运行时回填） |
+| `background/real_intel_samples/processed/` | 已处理样本归档 | 51 条 |
+| `background/real_intel_samples/` (根目录) | 当前手动样本 | 51 条（含噪音样本）|
 
-**样本覆盖类型**：capital × 3 / technical × 3 / market × 3 / team × 2 / 噪音 × 3
+**样本覆盖类型**：market × 多 / capital × 多 / technical × 多 / team × 多 / regulatory × 多 / 噪音 × 多（共 51 条）
 
 ---
 
@@ -146,5 +222,5 @@ Phase 2 证明的是「链路能跑通」。Phase 3 要证明的是「链路能�
 ---
 
 **文档状态**：执行中
-**版本**：v0.2
-**最后更新**：2026-03-25
+**版本**：v0.3
+**最后更新**：2026-03-26

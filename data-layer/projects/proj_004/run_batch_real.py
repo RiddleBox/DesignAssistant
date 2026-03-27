@@ -1,8 +1,8 @@
 """
-Iteration 1 批量真实样本运行脚本
+Iteration 3 批量真实样本运行脚本（RAG 集成版）
 
 流程：
-  incoming/*.json -> 2.1 解码 -> 2.2 机会判断 -> 2.3 行动设计 -> 2.5 复盘
+  incoming/*.json -> 2.1 解码 -> 2.2 机会判断（内部按需调用 2.4 RAG）-> 2.3 行动设计 -> 2.5 复盘
   处理完成后将样本移动到 processed/，避免重复处理
 
 运行方式:
@@ -19,6 +19,18 @@ import time
 import shutil
 import importlib.util
 from datetime import datetime
+
+# token 监控（可选，文件不存在时静默跳过）
+try:
+    _monitor_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..', 'token_monitor.py')
+    _monitor_spec = importlib.util.spec_from_file_location('token_monitor', _monitor_path)
+    _monitor_mod = importlib.util.module_from_spec(_monitor_spec)
+    _monitor_spec.loader.exec_module(_monitor_mod)
+    patch_decoder = _monitor_mod.patch_decoder
+    show_token_summary = _monitor_mod.show_summary
+except Exception:
+    patch_decoder = lambda x: None
+    show_token_summary = lambda: None
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 SAMPLES_ROOT = os.path.join(BASE, "..", "..", "..", "background", "real_intel_samples")
@@ -81,6 +93,10 @@ sys.path.insert(0, os.path.join(BASE, 'phase2.3_implementation', 'src'))
 from models import OpportunityObject as OppObj23, ActionDesignRequest
 from action_designer import ActionDesigner
 
+
+# 2.4 RAG (modules loaded lazily inside build_rag_retriever to avoid sys.path conflicts)
+RAG_SYSTEM_DIR = os.path.join(BASE, 'phase2.4_implementation', 'rag_system')
+_rag_available = None  # None = not yet checked
 # 2.5
 impl25_dir = os.path.join(BASE, 'phase2.5_implementation')
 sys.path.insert(0, impl25_dir)
@@ -116,7 +132,8 @@ def load_samples(file_paths):
 
 
 def run_step1_decode(samples, api_key):
-    decoder = IntelligenceDecoder(api_key=api_key)
+    decoder = IntelligenceDecoder(api_key=api_key, model="claude-sonnet-4-6")
+    patch_decoder(decoder)
 
     all_signals = []
     decode_results = []
@@ -173,9 +190,80 @@ def run_step1_decode(samples, api_key):
     return all_signals, decode_results, per_sample_stats
 
 
-def run_step2_judgment(all_signals, sample_count):
+
+def build_rag_retriever():
+    """构建 RAG 检索函数并返回。返回 (query: str) -> Optional[ContextPacket] 的可调用对象，
+    供 JudgmentEngine 在 Step2 后按需调用。返回 None 表示 RAG 不可用。"""
+    sep60 = "=" * 60
+    print()
+    print(sep60)
+    print("Step 1.5: 2.4 RAG 检索器初始化")
+    print(sep60)
+
+    # Load RAG modules by file path to avoid 'core' namespace conflict with phase2.5
+    try:
+        _rag_core = os.path.join(RAG_SYSTEM_DIR, 'core')
+        _models_mod = load_module('rag_core.models', os.path.join(_rag_core, 'models.py'))
+        sys.modules['core.models'] = _models_mod
+        _retrieval_mod = load_module('rag_core.retrieval', os.path.join(_rag_core, 'retrieval.py'),
+                                     dep_modules={'rag_core.models': _models_mod})
+        LocalEmbeddingService = _retrieval_mod.LocalEmbeddingService
+        VectorStore = _retrieval_mod.VectorStore
+        Retriever = _retrieval_mod.Retriever
+    except Exception as _e:
+        print(f"  [RAG] module load failed, skipping: {_e}")
+        return None
+
+    ContextPacket = m22_schemas.ContextPacket
+
+    rag_data_dir = os.path.join(RAG_SYSTEM_DIR, "data")
+    index_path = os.path.join(rag_data_dir, "vector_index_local.faiss")
+    meta_path = os.path.join(rag_data_dir, "vector_meta_local.pkl")
+    model_path = os.path.join(RAG_SYSTEM_DIR, "models", "bert-base-uncased")
+
+    if not os.path.exists(index_path):
+        print("  [RAG] index file not found, skipping")
+        return None
+
+    try:
+        emb_svc = LocalEmbeddingService(model_name=model_path)
+        vs = VectorStore(dimension=emb_svc.dimension)
+        vs.load(index_path, meta_path)
+        retriever = Retriever(emb_svc, vs)
+        print(f"  [RAG] 检索器就绪（{vs.index.ntotal} 条文档）")
+    except Exception as _e:
+        print(f"  [RAG] init exception, skipping: {_e}")
+        return None
+
+    def rag_retriever(query: str):
+        """由 JudgmentEngine 在形成主题后按需调用"""
+        try:
+            print(f"  [RAG] 2.2 发起查询: {query[:80]}...")
+            docs, query_ms = retriever.retrieve(query, top_k=3)
+            if not docs:
+                print("  [RAG] no documents retrieved")
+                return None
+            print(f"  [RAG] 命中 {len(docs)} 条文档（{query_ms}ms）")
+            similar_cases = []
+            for doc in docs:
+                print(f"    - [{doc.id}] {doc.title}")
+                snippet = " ".join(doc.content[:200].split())
+                similar_cases.append(f"[{doc.title}] {snippet}")
+            return ContextPacket(similar_cases=similar_cases)
+        except Exception as _e:
+            print(f"  [RAG] query exception: {_e}")
+            return None
+
+    return rag_retriever
+
+
+def run_step2_judgment(all_signals, sample_count, rag_retriever=None, api_key=None):
     print(f"\n{'='*60}")
     print("Step 2: 2.2 机会判断（聚合信号池）")
+    if api_key:
+        print("  [2.2] LLM 判断模式已启用")
+    if rag_retriever is not None:
+        print("  [RAG] 检索器已就绪，将在形成判断主题后按需查询")
     print(f"{'='*60}")
 
     if len(all_signals) == 0:
@@ -191,7 +279,7 @@ def run_step2_judgment(all_signals, sample_count):
         "warnings": [],
     }
 
-    engine = JudgmentEngine()
+    engine = JudgmentEngine(rag_retriever=rag_retriever, api_key=api_key)
     req = OpportunityJudgmentRequest(decoded_intelligence=merged_intelligence)
     t0 = time.time()
     result = engine.judge(req)
@@ -210,7 +298,7 @@ def run_step2_judgment(all_signals, sample_count):
     return result
 
 
-def run_step3_action(judgment_result):
+def run_step3_action(judgment_result, api_key=None):
     print(f"\n{'='*60}")
     print("Step 3: 2.3 行动设计")
     print(f"{'='*60}")
@@ -226,7 +314,7 @@ def run_step3_action(judgment_result):
         uncertainty_map={u: "不确定" for u in opp22.uncertainty_map},
     )
 
-    designer = ActionDesigner()
+    designer = ActionDesigner(api_key=api_key)
     req = ActionDesignRequest(request_id=f"real_batch_{datetime.now().strftime('%Y%m%d_%H%M%S')}", opportunity_object=opp23)
     result = designer.design_action(req)
     ad = result.action_decision
@@ -332,13 +420,14 @@ def main():
     samples = load_samples(incoming_files)
     all_signals, decode_results, per_sample_stats = run_step1_decode(samples, api_key)
 
-    judgment_result = run_step2_judgment(all_signals, len(samples))
+    rag_retriever = build_rag_retriever()
+    judgment_result = run_step2_judgment(all_signals, len(samples), rag_retriever, api_key)
     if judgment_result is None:
         moved_count = move_to_processed(samples)
         print(f"\n全部样本无信号，已移动 {moved_count} 个文件到 processed/")
         return
 
-    action_result = run_step3_action(judgment_result)
+    action_result = run_step3_action(judgment_result, api_key=api_key)
     retro_result = run_step4_retro(judgment_result, action_result, decode_results, per_sample_stats)
 
     moved_count = move_to_processed(samples)
@@ -353,6 +442,7 @@ def main():
     print(f"  复盘输出:      findings={len(retro_result.retrospective.critical_findings)}, priorities={len(retro_result.retrospective.phase3_priorities)}")
     print(f"  文件移动:      {moved_count} -> processed/")
     print(f"{'#'*60}")
+    show_token_summary()
 
 
 if __name__ == "__main__":
