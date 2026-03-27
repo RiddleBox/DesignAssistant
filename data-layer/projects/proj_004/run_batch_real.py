@@ -19,6 +19,7 @@ import time
 import shutil
 import importlib.util
 from datetime import datetime
+from datetime import datetime
 
 # token 监控（可选，文件不存在时静默跳过）
 try:
@@ -432,6 +433,23 @@ def main():
 
     moved_count = move_to_processed(samples)
     total_ms = int((time.time() - t_total) * 1000)
+
+    # 生成 Markdown 报告
+    try:
+        from report_writer import generate_report
+        report_path = generate_report(
+            judgment_result=judgment_result,
+            action_result=action_result,
+            retro_result=retro_result,
+            decode_results=decode_results,
+            sample_count=len(samples),
+            signal_count=len(all_signals),
+            total_ms=total_ms,
+            run_timestamp=datetime.now(),
+        )
+        print(f"  报告已生成:    {report_path}")
+    except Exception as e:
+        print(f"  报告生成失败:  {e}")
 
     print(f"\n{'#'*60}")
     print(f"Iteration 1 批量运行完成，总耗时 {total_ms}ms")
