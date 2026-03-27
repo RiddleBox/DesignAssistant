@@ -4,8 +4,25 @@ Phase 2.2 机会判断模块 - Schema 定义
 定义 OpportunityObject、OpportunityJudgmentRequest、OpportunityJudgmentResult 的数据结构
 """
 
+import importlib.util
+import os
 from typing import List, Optional, Dict, Any, Literal
 from pydantic import BaseModel, Field
+
+# 精确导入 2.1 的 DecodedIntelligence（不污染 sys.path）
+def _import_decoded_intelligence():
+    path = os.path.normpath(
+        os.path.join(os.path.dirname(__file__), "..", "phase2.1_implementation", "schemas.py")
+    )
+    try:
+        spec = importlib.util.spec_from_file_location("phase21_schemas", path)
+        mod  = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        return mod.DecodedIntelligence
+    except Exception:
+        return Dict[str, Any]  # fallback
+
+DecodedIntelligence = _import_decoded_intelligence()
 
 
 class OpportunityObject(BaseModel):
@@ -54,10 +71,21 @@ class JudgmentConfig(BaseModel):
 
 
 class OpportunityJudgmentRequest(BaseModel):
-    """机会判断请求 - Phase 2.2 的输入"""
+    """机会判断请求 - Phase 2.2 的输入
 
-    # 必填：来自 2.1 的输入
-    decoded_intelligence: Dict[str, Any] = Field(..., description="来自2.1的解码情报")
+    消费语义（已拍板 2026-03-28）：
+    - 接收多条 DecodedIntelligence，由 2.2 自己决定哪些信号可以组合成一个机会
+    - 每条 DecodedIntelligence 带完整上下文（signals 含打分、source_type、source_id）
+    - 2.1 的打分（intensity/confidence/timeliness）是 2.2 判断信号权重的依据，必须完整传入
+    - 2.4 的 context_packet 是可选增强输入，为机会判断提供历史案例和外部知识支撑
+    """
+
+    # 必填：来自 2.1 的输入（多条，支持跨文章信号组合判断）
+    decoded_intelligences: List[Any] = Field(
+        ...,
+        description="来自2.1的解码情报列表（List[DecodedIntelligence]），"
+                    "含完整信号打分和来源上下文，由2.2决定信号组合策略"
+    )
 
     # 可选：来自 2.4 的增强输入
     context_packet: Optional[ContextPacket] = Field(None, description="来自2.4的证据包")

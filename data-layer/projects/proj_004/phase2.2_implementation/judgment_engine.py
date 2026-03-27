@@ -78,7 +78,7 @@ class JudgmentEngine:
         执行机会判断
 
         Args:
-            request: 机会判断请求
+            request: 机会判断请求（decoded_intelligences: List[DecodedIntelligence]）
 
         Returns:
             OpportunityJudgmentResult: 判断结果
@@ -86,76 +86,232 @@ class JudgmentEngine:
         start_time = time.time()
 
         try:
+            # 从多条 DecodedIntelligence 中提取所有信号（保留来源上下文）
+            enriched_signals = self._extract_enriched_signals(request.decoded_intelligences)
+
             # 边界检查：信号来源检查
-            is_valid, error_msg = self.boundary_validator.check_signal_source(request)
+            is_valid, error_msg = self.boundary_validator.check_signal_source_v2(enriched_signals)
             if not is_valid:
                 return self._create_error_result(
-                    "INVALID_INPUT",
-                    error_msg,
+                    "INVALID_INPUT", error_msg,
                     int((time.time() - start_time) * 1000)
                 )
 
-            # 提取信号
-            signals = request.decoded_intelligence.get("signals", [])
-
-            # 检查信号数量
-            if len(signals) == 0:
+            if len(enriched_signals) == 0:
                 return self._create_insufficient_evidence_result(
-                    signals,
-                    ["没有可用信号"],
+                    [], ["没有可用信号"],
                     int((time.time() - start_time) * 1000)
                 )
 
-            # 执行6步判断流程
-            opportunity = self._execute_judgment_pipeline(request, signals)
+            # 执行判断流程
+            opportunity = self._execute_judgment_pipeline_v2(request, enriched_signals)
 
-            # 边界检查：证据完整性
+            # 边界检查
             is_valid, warnings = self.boundary_validator.check_evidence_completeness(opportunity)
-
-            # 边界检查：输出边界
             _, boundary_warnings = self.boundary_validator.check_output_boundary(opportunity)
             warnings.extend(boundary_warnings)
 
-            # 计算处理时间
             processing_time = int((time.time() - start_time) * 1000)
             opportunity.processing_time_ms = processing_time
 
-            # 计算证据完整度
             evidence_completeness = self.evidence_validator.calculate_evidence_completeness(
-                opportunity.supporting_evidence,
-                opportunity.counter_evidence,
-                opportunity.key_assumptions,
-                opportunity.uncertainty_map
+                opportunity.supporting_evidence, opportunity.counter_evidence,
+                opportunity.key_assumptions, opportunity.uncertainty_map
             )
 
-            # 构建诊断信息
             diagnostics = Diagnostics(
-                signal_count=len(signals),
+                signal_count=len(enriched_signals),
                 evidence_completeness=evidence_completeness,
                 boundary_warnings=warnings
             )
 
-            # 返回成功结果
             return OpportunityJudgmentResult(
-                opportunity=opportunity,
-                status="success",
-                diagnostics=diagnostics
+                opportunity=opportunity, status="success", diagnostics=diagnostics
             )
 
         except Exception as e:
             processing_time = int((time.time() - start_time) * 1000)
-            return self._create_error_result(
-                "INTERNAL_ERROR",
-                str(e),
-                processing_time
+            return self._create_error_result("INTERNAL_ERROR", str(e), processing_time)
+
+    def _extract_enriched_signals(self, decoded_intelligences: list) -> List[Dict[str, Any]]:
+        """
+        从多条 DecodedIntelligence 中提取信号，保留来源上下文。
+        每条信号额外附加：source_type、source_id（供 LLM 判断信号组合时参考）
+        """
+        enriched = []
+        for di in decoded_intelligences:
+            # 兼容 Pydantic model 和 dict
+            if hasattr(di, "model_dump"):
+                di_dict = di.model_dump()
+            elif hasattr(di, "dict"):
+                di_dict = di.dict()
+            else:
+                di_dict = di if isinstance(di, dict) else {}
+
+            source_id   = di_dict.get("source_id", "unknown")
+            source_type = di_dict.get("source_type", "unknown")
+            signals     = di_dict.get("signals", [])
+
+            for sig in signals:
+                if hasattr(sig, "model_dump"):
+                    sig = sig.model_dump()
+                elif hasattr(sig, "dict"):
+                    sig = sig.dict()
+                # 附加来源上下文
+                enriched_sig = dict(sig)
+                enriched_sig["_source_id"]   = source_id
+                enriched_sig["_source_type"] = source_type
+                enriched.append(enriched_sig)
+        return enriched
+
+    def _execute_judgment_pipeline_v2(
+        self,
+        request: OpportunityJudgmentRequest,
+        enriched_signals: List[Dict[str, Any]]
+    ) -> OpportunityObject:
+        """
+        v2 判断流程：直接将带上下文的 enriched_signals 传入 LLM，
+        由 LLM 完成信号组合判断 + 逻辑链推导 + 分级。
+        规则引擎作为 fallback。
+        """
+        # 按需向 2.4 RAG 发起查询
+        context_packet = request.context_packet
+        if context_packet is None and self.rag_retriever is not None:
+            # 用信号标签构造查询
+            labels = [s.get("signal_label", "") for s in enriched_signals[:3]]
+            rag_query = " ".join(filter(None, labels))
+            context_packet = self.rag_retriever(rag_query)
+
+        if self.api_key:
+            try:
+                llm_result = self._llm_judge_v2(enriched_signals, context_packet)
+                return OpportunityObject(
+                    opportunity_id=f"opp_{uuid.uuid4().hex[:12]}",
+                    opportunity_title=llm_result.get("opportunity_title", "未命名机会"),
+                    opportunity_thesis=llm_result.get("opportunity_thesis", ""),
+                    related_signals=enriched_signals,
+                    supporting_evidence=llm_result.get("supporting_evidence", []),
+                    counter_evidence=llm_result.get("counter_evidence", []),
+                    key_assumptions=llm_result.get("key_assumptions", []),
+                    uncertainty_map=llm_result.get("uncertainty_map", []),
+                    priority_level=llm_result.get("priority_level", "watch"),
+                    next_validation_questions=llm_result.get("next_validation_questions", []),
+                    judgment_version=self.judgment_version,
+                    processing_time_ms=0
+                )
+            except Exception as e:
+                print(f"  [2.2 LLM] 调用失败，fallback 到规则引擎: {e}")
+
+        # 规则引擎 fallback（用 enriched_signals 兼容旧逻辑）
+        signals = enriched_signals
+        theme  = self._cluster_signals_and_identify_theme(signals)
+        thesis = self._form_opportunity_thesis(signals, theme)
+        supporting, counter, assumptions = self._organize_evidence(signals, context_packet)
+        uncertainty_map  = self._assess_uncertainty(signals, supporting, counter)
+        priority_level   = self._classify_priority(signals, supporting, counter, uncertainty_map)
+        validation_qs    = self._generate_validation_questions(priority_level, uncertainty_map)
+
+        return OpportunityObject(
+            opportunity_id=f"opp_{uuid.uuid4().hex[:12]}",
+            opportunity_title=theme, opportunity_thesis=thesis,
+            related_signals=signals,
+            supporting_evidence=supporting, counter_evidence=counter,
+            key_assumptions=assumptions, uncertainty_map=uncertainty_map,
+            priority_level=priority_level, next_validation_questions=validation_qs,
+            judgment_version=self.judgment_version, processing_time_ms=0
+        )
+
+    def _llm_judge_v2(
+        self,
+        enriched_signals: List[Dict[str, Any]],
+        context_packet
+    ) -> Dict[str, Any]:
+        """
+        v2 LLM 判断 prompt：
+        - 完整暴露 2.1 打分（intensity/confidence/timeliness）作为信号权重依据
+        - 暴露 source_type（news/report/announcement）帮助 LLM 评估来源可信度
+        - 由 LLM 自己决定哪些信号可以组合，哪些独立存在
+        - 2.4 context_packet 作为外部知识佐证
+        """
+        # 构建信号描述（完整上下文）
+        signal_lines = []
+        for i, s in enumerate(enriched_signals, 1):
+            signal_lines.append(
+                f"{i}. [{s.get('signal_type','?')}] {s.get('signal_label','')}\n"
+                f"   描述：{s.get('description','')}\n"
+                f"   原文：{s.get('evidence_text','')[:120]}\n"
+                f"   打分：intensity={s.get('intensity_score',0)} "
+                f"confidence={s.get('confidence_score',0)} "
+                f"timeliness={s.get('timeliness_score',0)}\n"
+                f"   来源：{s.get('_source_type','unknown')} / {s.get('_source_id','')}"
             )
+
+        context_data = {
+            "similar_cases":    getattr(context_packet, "similar_cases", [])    if context_packet else [],
+            "counter_examples": getattr(context_packet, "counter_examples", []) if context_packet else [],
+            "methodology_hints":getattr(context_packet, "methodology_hints", [])if context_packet else [],
+        }
+
+        prompt = f"""你是 Phase 2.2 机会判断引擎。基于多条情报信号，判断是否存在值得关注的战略机会。
+
+## 职责边界
+- Phase 2.1 已完成噪音过滤，传入的信号已经过筛选
+- 你的任务：把多条信号组合在一起，结合 2.4 的外部知识，判断是否构成可解释的机会
+- 单条信号不等于机会；需要多信号互相印证 + 逻辑链支撑
+- 打分含义：intensity=信号影响力(1-10)，confidence=来源可信度(1-10)，timeliness=时效性(1-10)
+- source_type 含义：announcement=官方公告（可信度高）；news=新闻报道；report=行业报告（趋势性）
+
+## 判断要求
+1. **信号组合**：分析哪些信号可以组合成同一个机会逻辑链，哪些是独立信号
+2. **逻辑链**：opportunity_thesis 必须说清楚"为什么这些信号合在一起构成机会"
+3. **证据对立**：supporting_evidence 和 counter_evidence 都必须存在，不能单边
+4. **假设显式**：key_assumptions 必须明确写出判断成立的前提假设
+5. **不确定性**：uncertainty_map 标注主要不确定因素及其影响程度
+6. **优先级依据**：
+   - watch：信号单一或 confidence 普遍较低（<5）
+   - research：2+ 条互补信号，有初步逻辑链
+   - deep_dive：3+ 条高 intensity 信号（≥7），逻辑链清晰，反证可控
+   - escalate：多维度信号聚合（technical+capital 或 market+capital），时效紧迫
+
+## 输入信号（来自 2.1，含完整打分和来源上下文）
+{chr(10).join(signal_lines)}
+
+## 外部知识（来自 2.4，可选）
+相似案例：{context_data['similar_cases']}
+反例：{context_data['counter_examples']}
+方法论提示：{context_data['methodology_hints']}
+
+## 输出 JSON（只输出合法 JSON，不要任何额外说明）
+{{
+  "opportunity_title": "简短机会标题（10-20字）",
+  "opportunity_thesis": "机会论点：说清楚为什么这些信号组合在一起构成机会（2-4句话）",
+  "supporting_evidence": ["支持证据1（引用具体信号或外部知识）", "..."],
+  "counter_evidence": ["反对证据1（必须存在，若无明显反证则写出潜在风险）", "..."],
+  "key_assumptions": ["假设1：判断成立的前提条件", "..."],
+  "uncertainty_map": ["不确定因素1：影响描述", "..."],
+  "priority_level": "watch|research|deep_dive|escalate",
+  "next_validation_questions": ["下一步验证问题1", "..."]
+}}"""
+
+        result = self._call_llm(prompt)
+
+        # 校验和兜底
+        if result.get("priority_level") not in {"watch", "research", "deep_dive", "escalate"}:
+            result["priority_level"] = "watch"
+        for key in ["supporting_evidence", "counter_evidence", "key_assumptions",
+                    "uncertainty_map", "next_validation_questions"]:
+            if not isinstance(result.get(key), list) or not result[key]:
+                result[key] = ["信息不足"]
+        result.setdefault("opportunity_title", "未命名机会")
+        result.setdefault("opportunity_thesis", "信号组合待进一步分析")
+        return result
 
     def _execute_judgment_pipeline(
         self,
         request: OpportunityJudgmentRequest,
         signals: List[Dict[str, Any]]
     ) -> OpportunityObject:
-        """执行6步判断流程"""
+        """v1 判断流程（保留兼容，新流程走 _execute_judgment_pipeline_v2）"""
 
         # 步骤1：信号聚类与主题识别
         theme = self._cluster_signals_and_identify_theme(signals)
@@ -270,7 +426,7 @@ class JudgmentEngine:
     ) -> str:
         """步骤2：机会论点形成"""
         # MVP实现：基于信号摘要形成论点
-        signal_summaries = [s.get("signal_summary", "") for s in signals if s.get("signal_summary")]
+        signal_summaries = [s.get("description", "") for s in signals if s.get("description")]
 
         if len(signal_summaries) == 1:
             return f"基于{theme}，{signal_summaries[0]}"
@@ -290,7 +446,7 @@ class JudgmentEngine:
         # 从信号中提取支持证据
         for i, signal in enumerate(signals):
             signal_id = signal.get("signal_id", f"signal_{i}")
-            summary = signal.get("signal_summary", "未知信号")
+            summary = signal.get("description", "未知信号")
             supporting.append(f"[{signal_id}] {summary}")
 
         # 从2.4证据包补充证据
@@ -360,9 +516,9 @@ class JudgmentEngine:
 
         # 检测escalate触发条件：高强度+多信号+竞争压力
         has_urgency = any(
-            "竞争" in s.get("signal_summary", "") or
-            "窗口期" in s.get("signal_summary", "") or
-            "抢占" in s.get("signal_summary", "")
+            "竞争" in s.get("description", "") or
+            "窗口期" in s.get("description", "") or
+            "抢占" in s.get("description", "")
             for s in signals
         )
 
@@ -446,7 +602,7 @@ class JudgmentEngine:
             signal_lines.append(
                 f"{i}. [{signal.get('signal_type', 'unknown')}] "
                 f"label={signal.get('signal_label', '')}; "
-                f"summary={signal.get('signal_summary', '')}; "
+                f"summary={signal.get('description', '')}; "
                 f"intensity={signal.get('intensity_score', signal.get('intensity', 0))}"
             )
 

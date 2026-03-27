@@ -12,16 +12,24 @@ class BoundaryValidator:
     """边界检查器"""
 
     @staticmethod
-    def check_signal_source(request: OpportunityJudgmentRequest) -> Tuple[bool, str]:
-        """检查点1：信号来源检查"""
-        decoded_intel = request.decoded_intelligence
+    def check_signal_source_v2(enriched_signals: list) -> Tuple[bool, str]:
+        """检查点1 v2：适配多条 DecodedIntelligence 提取后的 enriched_signals"""
+        if not isinstance(enriched_signals, list):
+            return False, "enriched_signals 必须是列表类型"
+        # 允许空列表（由上层单独处理 insufficient_evidence）
+        return True, ""
 
-        if "signals" not in decoded_intel:
-            return False, "输入缺少signals字段，必须来自2.1的DecodedIntelligence"
-
-        if not isinstance(decoded_intel["signals"], list):
-            return False, "signals字段必须是列表类型"
-
+    @staticmethod
+    def check_signal_source(request) -> Tuple[bool, str]:
+        """检查点1 v1（保留兼容）"""
+        decoded_intel = getattr(request, "decoded_intelligence", None)
+        if decoded_intel is None:
+            decoded_intel = {}
+        if isinstance(decoded_intel, dict):
+            if "signals" not in decoded_intel:
+                return False, "输入缺少signals字段，必须来自2.1的DecodedIntelligence"
+            if not isinstance(decoded_intel["signals"], list):
+                return False, "signals字段必须是列表类型"
         return True, ""
 
     @staticmethod
