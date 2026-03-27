@@ -412,7 +412,6 @@ class JudgmentEngine:
         response = self._llm.call(
             prompt=prompt,
             model=self.model,
-            step="phase2.2_judgment"
         )
 
         if not response or not response.strip():
