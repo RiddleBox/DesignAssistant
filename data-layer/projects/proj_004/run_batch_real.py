@@ -158,7 +158,19 @@ def run_step1_decode(samples, api_key):
         )
 
         print(f"\n  [{p['source_id']}] 解码中... ({item['file_name']})")
-        result = decoder.decode(req)
+        try:
+            result = decoder.decode(req)
+        except Exception as e:
+            print(f"  [{p['source_id']}] ⚠️  解码失败，跳过：{e}")
+            per_sample_stats.append({
+                'source_id': p['source_id'],
+                'file_name': item['file_name'],
+                'signal_count': 0,
+                'processing_time_ms': 0,
+                'is_noise_like': True,
+                'error': str(e),
+            })
+            continue
 
         sig_count = len(result.signals)
         print(f"  [{p['source_id']}] 提取信号 {sig_count} 个，耗时 {result.processing_time_ms}ms")
