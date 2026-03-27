@@ -11,17 +11,33 @@ from models import (
 class ActionDesigner:
     """行动设计器 - LLM 判断模式（规则引擎 fallback）"""
 
-    def __init__(self, api_key: str = None, model: str = "claude-opus-4-6"):
-        self.api_key = api_key or os.environ.get("ANTHROPIC_API_KEY", "")
-        self.model = model
-        self.base_url = os.environ.get("ANTHROPIC_BASE_URL", "https://api.anthropic.com")
+    def __init__(self, api_key: str = None, model: str = None):
+        # 从统一配置加载（优先使用传入参数）
+        cfg = self._load_llm_config("2.3")
+        self.api_key  = api_key or cfg.get("api_key", "") or os.environ.get("ANTHROPIC_API_KEY", "")
+        self.model    = model   or cfg.get("model", "claude-sonnet-4-6")
+        self.base_url = cfg.get("base_url", "https://api.anthropic.com")
         self._llm = self._load_llm_client()
 
-    def _load_llm_client(self):
-        """动态加载项目根目录的 llm_client.py"""
+    def _load_llm_config(self, phase: str) -> dict:
+        """加载统一 LLM 配置（llm_config.py 在 proj_004/ 根目录）"""
         try:
-            root = os.path.normpath(os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", ".."))
-            path = os.path.join(root, "llm_client.py")
+            proj_root = os.path.normpath(os.path.join(os.path.dirname(__file__), "..", ".."))
+            path = os.path.join(proj_root, "llm_config.py")
+            if not os.path.exists(path):
+                return {}
+            spec = importlib.util.spec_from_file_location("llm_config", path)
+            mod = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(mod)
+            return mod.get_llm_config(phase)
+        except Exception:
+            return {}
+
+    def _load_llm_client(self):
+        """加载统一 LLM 客户端（llm_client.py 在 proj_004/ 根目录）"""
+        try:
+            proj_root = os.path.normpath(os.path.join(os.path.dirname(__file__), "..", ".."))
+            path = os.path.join(proj_root, "llm_client.py")
             if not os.path.exists(path):
                 return None
             spec = importlib.util.spec_from_file_location("llm_client", path)
@@ -35,7 +51,7 @@ class ActionDesigner:
         """调用统一 LLM 客户端并解析 JSON 响应"""
         if not self._llm:
             raise RuntimeError("LLM client is not initialized")
-        response = self._llm.call(prompt=prompt, model=self.model, step="phase2.3_action")
+        response = self._llm.call(prompt=prompt, model=self.model)
         if not response or not response.strip():
             raise ValueError("LLM returned empty response")
         text = response.strip()
@@ -74,7 +90,7 @@ class ActionDesigner:
 {opp_context}
 
 重点：放大支持证据，论证为何应该立即推进，提出激进的行动姿态和计划。"""
-        hawk_view = self._llm.call(prompt=hawk_prompt, model=self.model, step="phase2.3_debate_hawk")
+        hawk_view = self._llm.call(prompt=hawk_prompt, model=self.model)
         if not hawk_view:
             raise ValueError("Hawk agent returned empty response")
 
@@ -85,7 +101,7 @@ class ActionDesigner:
 {opp_context}
 
 重点：放大反对证据和不确定性，论证为何应该谨慎，指出激进行动的潜在风险。"""
-        dove_view = self._llm.call(prompt=dove_prompt, model=self.model, step="phase2.3_debate_dove")
+        dove_view = self._llm.call(prompt=dove_prompt, model=self.model)
         if not dove_view:
             raise ValueError("Dove agent returned empty response")
 
@@ -394,3 +410,4 @@ class ActionDesigner:
             questions.append(f"{key}的具体情况如何？")
         
         return questions[:5]  # 最多5个开放问题
+

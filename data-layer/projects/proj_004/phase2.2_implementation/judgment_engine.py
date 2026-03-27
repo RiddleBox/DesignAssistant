@@ -23,38 +23,53 @@ from validators import BoundaryValidator, EvidenceValidator
 class JudgmentEngine:
     """机会判断引擎"""
 
-    def __init__(self, llm_client=None, rag_retriever=None, api_key: str = None, model: str = "claude-opus-4-6"):
+    def __init__(self, llm_client=None, rag_retriever=None, api_key: str = None, model: str = None):
         """
         初始化判断引擎
 
         Args:
             llm_client: 保留兼容，已不使用
             rag_retriever: 可调用对象 (query: str) -> Optional[ContextPacket]，由调用方注入
-            api_key: Anthropic API key，传入后启用 LLM 判断模式
-            model: 使用的模型
+            api_key: Anthropic API key，传入后启用 LLM 判断模式；None 时从 llm_config 读取
+            model: 使用的模型；None 时从 llm_config 读取
         """
         self.llm_client = llm_client
         self.rag_retriever = rag_retriever
-        self.api_key = api_key
-        self.model = model
-        self.base_url = os.environ.get("ANTHROPIC_BASE_URL", "https://api.anthropic.com")
-        self.judgment_version = "v2.0-llm" if api_key else "v1.0-rules"
+        # 从统一配置加载（优先使用传入参数）
+        cfg = self._load_llm_config("2.2")
+        self.api_key  = api_key or cfg.get("api_key", "")
+        self.model    = model   or cfg.get("model", "claude-sonnet-4-6")
+        self.base_url = cfg.get("base_url", "https://api.anthropic.com")
+        self.judgment_version = "v2.0-llm" if self.api_key else "v1.0-rules"
         self.boundary_validator = BoundaryValidator()
         self.evidence_validator = EvidenceValidator()
-        # 统一 LLM 客户端
         self._llm = self._load_llm_client()
 
-    def _load_llm_client(self):
-        """动态加载项目根目录的 llm_client.py"""
+    def _load_llm_config(self, phase: str) -> dict:
+        """加载统一 LLM 配置（llm_config.py 在 proj_004/ 根目录）"""
         try:
-            root = os.path.normpath(os.path.join(os.path.dirname(__file__), "..", "..", "..", ".."))
-            path = os.path.join(root, "llm_client.py")
+            proj_root = os.path.normpath(os.path.join(os.path.dirname(__file__), ".."))
+            path = os.path.join(proj_root, "llm_config.py")
+            if not os.path.exists(path):
+                return {}
+            spec = importlib.util.spec_from_file_location("llm_config", path)
+            mod = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(mod)
+            return mod.get_llm_config(phase)
+        except Exception:
+            return {}
+
+    def _load_llm_client(self):
+        """加载统一 LLM 客户端（llm_client.py 在 proj_004/ 根目录）"""
+        try:
+            proj_root = os.path.normpath(os.path.join(os.path.dirname(__file__), ".."))
+            path = os.path.join(proj_root, "llm_client.py")
             if not os.path.exists(path):
                 return None
             spec = importlib.util.spec_from_file_location("llm_client", path)
             mod = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(mod)
-            return mod.LLMClient(api_key=self.api_key or "", base_url=self.base_url)
+            return mod.LLMClient(api_key=self.api_key, base_url=self.base_url)
         except Exception:
             return None
 
