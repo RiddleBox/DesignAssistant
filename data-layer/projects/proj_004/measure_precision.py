@@ -30,8 +30,9 @@ SAMPLES_ROOT = os.path.join(BASE, "..", "..", "..", "background", "real_intel_sa
 # ── 手动覆盖：这些文件名（不含扩展名前缀匹配）强制视为噪音 ──────────────────
 NOISE_OVERRIDES = {
     "incoming_040_market_crimson_desert_3m_day5",   # 续报，无新格局信号
-    "incoming_028_market_disney_gaming_ambition",   # 泛战略表态
-    "incoming_032_technical_zuckerberg_ai_coceo",   # 与游戏无直接关联
+    "incoming_028_market_disney_gaming_ambition",   # 泛战略表态，无具体事实
+    "incoming_032_technical_zuckerberg_ai_coceo",   # 与游戏行业无直接关联
+    "incoming_029_market_warframe_liveservice_strategy",  # GDC 经验分享，13年已验证模式，非范式转移
 }
 
 # ── 手动覆盖：这些文件名强制视为正例（即使含 noise 字样也有价值）─────────────
