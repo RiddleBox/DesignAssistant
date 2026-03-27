@@ -443,11 +443,14 @@ class JudgmentEngine:
         """使用 LLM 生成步骤3-6的判断结果"""
         signal_lines = []
         for i, signal in enumerate(signals, 1):
+            rationale = signal.get("signal_rationale", "")
+            rationale_part = f"; rationale={rationale}" if rationale else ""
             signal_lines.append(
                 f"{i}. [{signal.get('signal_type', 'unknown')}] "
                 f"label={signal.get('signal_label', '')}; "
                 f"summary={signal.get('signal_summary', '')}; "
                 f"intensity={signal.get('intensity_score', signal.get('intensity', 0))}"
+                f"{rationale_part}"
             )
 
         context_data = {
@@ -457,6 +460,11 @@ class JudgmentEngine:
         }
 
         prompt = f"""你是 Phase 2.2 机会判断引擎。请基于输入信号输出严格 JSON，不要输出任何额外说明。
+
+职责边界（重要）：
+- 信号已由 Phase 2.1 完成解码和范式判断（signal_rationale 是 2.1 的解码结论，直接引用，不要重新质疑）
+- 你的任务是：组装多个信号 + 2.4 的知识证据，串联逻辑链，发现机会。重点是"组装"和"发现"
+- 不要重复判断"这个信号是不是值得抽"，那是 2.1 的工作；你要判断的是"这组信号合在一起是否构成机会"
 
 任务：
 - 组织 supporting_evidence / counter_evidence / key_assumptions
@@ -468,7 +476,7 @@ class JudgmentEngine:
 输入：
 - theme: {theme}
 - thesis: {thesis}
-- signals:
+- signals（每条含 2.1 的解码判据 rationale，可直接用于组装证据链）：
 {chr(10).join(signal_lines)}
 - context_packet: {json.dumps(context_data, ensure_ascii=False)}
 
