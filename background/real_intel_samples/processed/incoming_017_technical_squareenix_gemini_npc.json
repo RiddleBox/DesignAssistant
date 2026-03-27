@@ -1,0 +1,11 @@
+{
+  "source_id": "incoming_017",
+  "source_type": "news",
+  "title": "Square Enix is turning slimes into AI chatbots in Dragon Quest X using Google's Gemini",
+  "content": "Square Enix has announced a partnership with Google to integrate Gemini AI into Dragon Quest X, turning in-game slime characters into AI-powered chatbots capable of holding conversations with players. The feature represents one of the first major deployments of a frontier LLM as an interactive NPC system in a live MMORPG.",
+  "published_at": "2026-03-23T00:00:00Z",
+  "source_name": "Game Developer",
+  "source_url": "https://www.gamedeveloper.com/design/google-s-gemini-will-make-its-way-into-dragon-quest-x-to-power-ai-slime-npcs",
+  "language": "en",
+  "mode": "prompt_first"
+}

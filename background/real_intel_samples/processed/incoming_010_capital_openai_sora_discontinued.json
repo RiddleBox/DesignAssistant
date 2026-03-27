@@ -1,0 +1,11 @@
+{
+  "source_id": "incoming_010",
+  "source_type": "news",
+  "title": "OpenAI discontinues Sora video generation app, Disney pulls out of $1 billion investment deal",
+  "content": "OpenAI has discontinued its Sora video generation app as part of a broader strategic shift away from video generation in favor of productivity applications. Separately, Disney has pulled out of a reported $1 billion investment deal with OpenAI following the move. The shutdown signals a significant pivot in OpenAI's product strategy.",
+  "published_at": "2026-03-24T00:00:00Z",
+  "source_name": "PC Gamer",
+  "source_url": "https://www.pcgamer.com/software/ai/openai-discontinues-sora-video-generation-app-disney-pulls-out-of-usd1-billion-investment-deal/",
+  "language": "en",
+  "mode": "prompt_first"
+}

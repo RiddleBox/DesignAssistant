@@ -1,0 +1,31 @@
+# LLM 配置文件 — DesignAssistant
+# 各阶段可独立覆盖 api_key / base_url / model
+# 未配置的字段自动继承 default
+
+# ── 全局默认 ────────────────────────────────────────────────────────────────
+default:
+  api_key: ""               # 留空则从环境变量 ANTHROPIC_API_KEY 读取
+  base_url: ""              # 留空则从环境变量 ANTHROPIC_BASE_URL 读取，再兜底 https://api.anthropic.com
+  model: "claude-sonnet-4-6"
+  max_tokens: 4096
+  temperature: 0.0
+
+# ── 各阶段独立配置（未填字段继承 default）──────────────────────────────────
+phases:
+  "2.1":                    # 情报解码：追求稳定抽取，用中端模型省成本
+    model: "claude-sonnet-4-6"
+    # api_key: ""           # 不填 → 用 default
+    # base_url: ""          # 不填 → 用 default
+
+  "2.2":                    # 机会判断：需要更强推理，可换高端模型
+    model: "claude-sonnet-4-6"
+    # model: "claude-opus-4-6"  # 如需更强推理，取消注释
+
+  "2.3":                    # 行动设计：同 2.2
+    model: "claude-sonnet-4-6"
+
+  "2.4":                    # RAG 生成：轻量任务，可用低端模型
+    model: "claude-sonnet-4-6"
+
+  "2.5":                    # 整合复盘：目前纯规则，暂不调用 LLM
+    model: "claude-sonnet-4-6"

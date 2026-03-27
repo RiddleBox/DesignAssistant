@@ -1,0 +1,423 @@
+{
+  "prompt_version": "v1.5",
+  "run_at": "2026-03-27T09:11:52.762134Z",
+  "sample_dir": "processed",
+  "total": 25,
+  "tp": 20,
+  "tn": 1,
+  "fp": 1,
+  "fn": 3,
+  "precision": 0.9524,
+  "recall": 0.8696,
+  "f1": 0.9091,
+  "accuracy": 0.84,
+  "details": [
+    {
+      "file": "incoming_004_market_mhwilds_10m_launch.json",
+      "gt_noise": false,
+      "pred_noise": false,
+      "signal_count": 2,
+      "verdict": "TP",
+      "signals": [
+        [
+          "market",
+          "Monster Hunter Wilds 创 Capcom 首月销量历史纪录",
+          8,
+          9
+        ],
+        [
+          "technical",
+          "Monster Hunter Wilds 同步全球多平台发行",
+          7,
+          9
+        ]
+      ]
+    },
+    {
+      "file": "incoming_005_regulatory_eu_dma_apple_games.json",
+      "gt_noise": false,
+      "pred_noise": false,
+      "signal_count": 1,
+      "verdict": "TP",
+      "signals": [
+        [
+          "regulatory",
+          "欧盟 DMA 裁定苹果违规并处 5 亿欧元罚款",
+          9,
+          10
+        ]
+      ]
+    },
+    {
+      "file": "incoming_008_capital_savvy_moonton_acquisition.json",
+      "gt_noise": false,
+      "pred_noise": true,
+      "signal_count": 0,
+      "verdict": "FN",
+      "signals": []
+    },
+    {
+      "file": "incoming_009_capital_behaviour_funpimps_acquisition.json",
+      "gt_noise": false,
+      "pred_noise": false,
+      "signal_count": 1,
+      "verdict": "TP",
+      "signals": [
+        [
+          "capital",
+          "Behaviour Interactive 收购 The Fun Pimps",
+          7,
+          9
+        ]
+      ]
+    },
+    {
+      "file": "incoming_010_capital_openai_sora_discontinued.json",
+      "gt_noise": false,
+      "pred_noise": false,
+      "signal_count": 2,
+      "verdict": "TP",
+      "signals": [
+        [
+          "capital",
+          "Disney 退出与 OpenAI 的 10 亿美元投资协议",
+          7,
+          5
+        ],
+        [
+          "market",
+          "OpenAI 战略放弃视频生成转向生产力应用",
+          7,
+          5
+        ]
+      ]
+    },
+    {
+      "file": "incoming_011_team_nacon_studios_insolvency.json",
+      "gt_noise": false,
+      "pred_noise": false,
+      "signal_count": 2,
+      "verdict": "TP",
+      "signals": [
+        [
+          "capital",
+          "Nacon 旗下三家工作室申请破产",
+          9,
+          9
+        ],
+        [
+          "team",
+          "法国游戏行业数百开发岗位面临风险",
+          8,
+          9
+        ]
+      ]
+    },
+    {
+      "file": "incoming_012_team_sony_dark_outlaw_shutdown.json",
+      "gt_noise": false,
+      "pred_noise": false,
+      "signal_count": 1,
+      "verdict": "TP",
+      "signals": [
+        [
+          "team",
+          "Sony 关闭 Dark Outlaw Games，约 50 人裁员",
+          6,
+          9
+        ]
+      ]
+    },
+    {
+      "file": "incoming_013_team_xbox_leadership_exits.json",
+      "gt_noise": false,
+      "pred_noise": false,
+      "signal_count": 2,
+      "verdict": "TP",
+      "signals": [
+        [
+          "team",
+          "Xbox VP Lori Wright 离职",
+          6,
+          8
+        ],
+        [
+          "team",
+          "Xbox Gaming AI 总经理 Haiyan Zhang 离职",
+          8,
+          8
+        ]
+      ]
+    },
+    {
+      "file": "incoming_014_technical_capcom_genai_policy.json",
+      "gt_noise": false,
+      "pred_noise": false,
+      "signal_count": 2,
+      "verdict": "TP",
+      "signals": [
+        [
+          "technical",
+          "Capcom 正式采用生成式 AI 加速研发管线",
+          6,
+          9
+        ],
+        [
+          "regulatory",
+          "Capcom AI 资产使用遭受外部审查压力",
+          7,
+          7
+        ]
+      ]
+    },
+    {
+      "file": "incoming_015_market_nintendo_switch2_production_cut.json",
+      "gt_noise": false,
+      "pred_noise": false,
+      "signal_count": 1,
+      "verdict": "TP",
+      "signals": [
+        [
+          "market",
+          "Switch 2 北美需求低于预期，任天堂下调产量",
+          7,
+          4
+        ]
+      ]
+    },
+    {
+      "file": "incoming_016_team_uk_industry_jobs_decline.json",
+      "gt_noise": false,
+      "pred_noise": false,
+      "signal_count": 1,
+      "verdict": "TP",
+      "signals": [
+        [
+          "market",
+          "英国游戏行业14年首次就业下滑",
+          7,
+          8
+        ]
+      ]
+    },
+    {
+      "file": "incoming_017_technical_squareenix_gemini_npc.json",
+      "gt_noise": false,
+      "pred_noise": false,
+      "signal_count": 1,
+      "verdict": "TP",
+      "signals": [
+        [
+          "technical",
+          "前沿 LLM 集成至 MMORPG NPC 系统",
+          8,
+          8
+        ]
+      ]
+    },
+    {
+      "file": "incoming_018_market_crimson_desert_launch_sales.json",
+      "gt_noise": false,
+      "pred_noise": false,
+      "signal_count": 1,
+      "verdict": "TP",
+      "signals": [
+        [
+          "market",
+          "韩国工作室单机 RPG 西方市场首日 2M 验证",
+          7,
+          9
+        ]
+      ]
+    },
+    {
+      "file": "incoming_019_technical_crimson_desert_ai_assets.json",
+      "gt_noise": false,
+      "pred_noise": true,
+      "signal_count": 0,
+      "verdict": "FN",
+      "signals": []
+    },
+    {
+      "file": "incoming_020_team_epic_1000_layoffs.json",
+      "gt_noise": false,
+      "pred_noise": false,
+      "signal_count": 2,
+      "verdict": "TP",
+      "signals": [
+        [
+          "team",
+          "Epic Games 裁员逾千人，约占总员工 16%",
+          9,
+          10
+        ],
+        [
+          "market",
+          "Fortnite 多个游戏模式停运",
+          7,
+          10
+        ]
+      ]
+    },
+    {
+      "file": "incoming_021_team_ubisoft_redstorm_closure.json",
+      "gt_noise": false,
+      "pred_noise": false,
+      "signal_count": 1,
+      "verdict": "TP",
+      "signals": [
+        [
+          "team",
+          "Red Storm Entertainment 裁员 105 人并停止独立游戏开发",
+          7,
+          10
+        ]
+      ]
+    },
+    {
+      "file": "incoming_023_market_slaythespire2_performance.json",
+      "gt_noise": false,
+      "pred_noise": false,
+      "signal_count": 1,
+      "verdict": "TP",
+      "signals": [
+        [
+          "market",
+          "deckbuilder 品类历史最高 DAU",
+          8,
+          8
+        ]
+      ]
+    },
+    {
+      "file": "incoming_024_team_sony_bluepoint_darkoutlaw_closures.json",
+      "gt_noise": false,
+      "pred_noise": false,
+      "signal_count": 3,
+      "verdict": "TP",
+      "signals": [
+        [
+          "team",
+          "索尼关闭 Bluepoint Games",
+          8,
+          9
+        ],
+        [
+          "team",
+          "索尼关闭 Dark Outlaw Games",
+          7,
+          9
+        ],
+        [
+          "market",
+          "PlayStation 第一方工作室整合加速",
+          7,
+          8
+        ]
+      ]
+    },
+    {
+      "file": "incoming_025_technical_tencent_genai_animation_gdc.json",
+      "gt_noise": false,
+      "pred_noise": false,
+      "signal_count": 1,
+      "verdict": "TP",
+      "signals": [
+        [
+          "technical",
+          "腾讯展示生成式 AI 角色动画工具",
+          6,
+          7
+        ]
+      ]
+    },
+    {
+      "file": "incoming_026_capital_reforged_headup_acquisition.json",
+      "gt_noise": false,
+      "pred_noise": false,
+      "signal_count": 1,
+      "verdict": "TP",
+      "signals": [
+        [
+          "capital",
+          "Reforged Studios 收购 Headup",
+          7,
+          8
+        ]
+      ]
+    },
+    {
+      "file": "incoming_028_market_disney_gaming_ambition.json",
+      "gt_noise": true,
+      "pred_noise": false,
+      "signal_count": 3,
+      "verdict": "FP",
+      "signals": [
+        [
+          "market",
+          "Disney 高管公开表态游戏市场正经历重大颠覆",
+          5,
+          7
+        ],
+        [
+          "capital",
+          "Disney 宣布游戏业务战略升级为核心收入支柱",
+          7,
+          6
+        ],
+        [
+          "capital",
+          "Disney 与 Epic Games / Fortnite 深度合作持续扩展",
+          7,
+          7
+        ]
+      ]
+    },
+    {
+      "file": "incoming_029_market_warframe_liveservice_strategy.json",
+      "gt_noise": false,
+      "pred_noise": true,
+      "signal_count": 0,
+      "verdict": "FN",
+      "signals": []
+    },
+    {
+      "file": "incoming_030_market_pokemon_champions_monetization.json",
+      "gt_noise": false,
+      "pred_noise": false,
+      "signal_count": 1,
+      "verdict": "TP",
+      "signals": [
+        [
+          "market",
+          "宝可梦 IP 进入 F2P 竞技对战品类",
+          6,
+          8
+        ]
+      ]
+    },
+    {
+      "file": "incoming_031_team_xbox_new_ceo_brand_reset.json",
+      "gt_noise": false,
+      "pred_noise": false,
+      "signal_count": 1,
+      "verdict": "TP",
+      "signals": [
+        [
+          "team",
+          "Xbox 新 CEO 主导品牌战略重置",
+          6,
+          7
+        ]
+      ]
+    },
+    {
+      "file": "incoming_032_technical_zuckerberg_ai_coceo.json",
+      "gt_noise": true,
+      "pred_noise": true,
+      "signal_count": 0,
+      "verdict": "TN",
+      "signals": []
+    }
+  ]
+}
