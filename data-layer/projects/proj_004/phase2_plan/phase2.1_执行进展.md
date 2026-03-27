@@ -1,8 +1,8 @@
 # Phase 2.1 执行进展记录
 
 > **文档类型**：执行进展追踪
-> **最后更新**：2026-03-15
-> **当前状态**：✅ MVP 实现完成，✅ Benchmark 验证完成，⏳ 等待 taxonomy 澄清与后续增强决策
+> **最后更新**：2026-03-27
+> **当前状态**：✅ MVP 实现完成，✅ Benchmark 验证完成，✅ Prompt v1.6 noise boundary 显式化，✅ 两阶段筛选框架落地，⏳ benchmark 对照实验待稳定 API 窗口验证
 
 ---
 
@@ -20,6 +20,9 @@
 | 2026-03-14 | 优化阶段 | 完成 v1.1 轻量优化与验证 | Prompt 策略视角 |
 | 2026-03-14 | 优化阶段 | 完成 v1.2 定向优化与验证 | Prompt 策略视角 |
 | 2026-03-22 | 联调阶段 | 完成 P1-1：2.1→2.2 接口联调（3/3 案例通过，DecodedIntelligence→OpportunityJudgmentRequest 适配器验证） | 实现落地视角 |
+| 2026-03-27 | 增强阶段 | v1.5 benchmark 验证（25条真实样本，Precision=95.2% / Recall=87.0% / F1=90.9%） | 评测验收视角 |
+| 2026-03-27 | 增强阶段 | Prompt v1.6：noise boundary 显式化（technical/team/capital 三类信号判断框架，对齐 market/regulatory） | Prompt 策略视角 |
+| 2026-03-27 | 增强阶段 | 两阶段筛选框架落地（方向四：source_type 规则预筛；方向二：haiku 粗筛架构） | 实现落地视角 |
 
 ---
 
@@ -123,7 +126,30 @@
   * 补充 few-shot 样例 10
 - 边际收益递减，Prompt 优化接近上限
 
-### 2.5 总结阶段（总协调视角）
+**v1.5 真实样本 benchmark**（2026-03-27，25 条真实样本）：
+- Precision: **95.2%**
+- Recall: **87.0%**
+- F1 Score: **90.9%**
+- 说明：使用真实每日订阅样本，非 benchmark_samples.json 中的 30 条标注样本
+
+**Prompt v1.6 noise boundary 显式化**（2026-03-27）：
+- technical/team/capital 三类信号补充显式 ✅/❌ 判断框架
+- 新增信号独立性约束：同一文本通常 1-2 个核心信号，≥3 条需自检
+- 与已有 market/regulatory 框架对齐，五类信号判断规则统一
+
+**两阶段筛选框架**（2026-03-27，decoder.py v1.6）：
+- 方向四（规则预筛）：report 类型含 3+ 个趋势预测关键词且 <500 字 → 0ms 直接跳过 LLM ✅
+- 方向二（haiku 粗筛）：架构完成，screen_model 参数可配置；因 api123.icu 对 haiku 403，待验证
+- 粗筛失败自动放行（容错），不影响精筛结果
+- 并发方案留后期：asyncio + 限速，目标 100条/天可处理
+
+### 2.6 信号来源（待独立）
+
+**当前状态**：信号原始内容来自 knowledge base 仓库的每日订阅处理流程
+
+**后期规划**：独立出来作为 2.1 专属 ingestion 数据管道，与 knowledge base 解耦
+
+**现阶段**：仅记录，不做
 
 ✅ **完整优化历程总结**：
 - 文档：[PHASE2_1_OPTIMIZATION_SUMMARY.md](../proj_004/phase2.1_implementation/docs/PHASE2_1_OPTIMIZATION_SUMMARY.md)
@@ -189,14 +215,15 @@
 
 ### 4.2 进行中
 
-- ⏳ 无（等待下一步指令）
+- ⏳ 无（等待推进 2.2）
 
-### 4.3 待决策
+### 4.3 待决策 / 遗留待办
 
-- ⏳ 是否推进 taxonomy 定义澄清
-- ⏳ 是否引入 Phase 2.4 ContextPacket 增强
-- ⏳ 是否扩大 benchmark 样本规模
-- ⏳ 是否开始与 Phase 2.2 联调
+- ⏳ benchmark 对照实验：v1.6 新规则 vs v1.2 FP 数量对比（需稳定 API 窗口，api123.icu 连续调用限流）
+- ⏳ haiku 粗筛验证：确认 api123.icu 是否支持 haiku，或改为 sonnet+max_tokens=80 作为粗筛
+- ⏳ 并发方案（后期）：asyncio/ThreadPoolExecutor + 限速，目标支持 100 条/天批量处理
+- ⏳ 信号来源独立化（后期）：ingestion 层从 knowledge base 仓库解耦
+- ⏳ DecodedIntelligence 消费语义：按 source_id 分组 vs 打平传入 2.2，待 2.2 推进时确认
 
 ---
 

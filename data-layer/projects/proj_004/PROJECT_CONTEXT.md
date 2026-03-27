@@ -2,8 +2,8 @@
 
 > **文档类型**：项目状态总览 + 开工上下文
 > **最后更新**：2026-03-27
-> **当前阶段**：Phase 2 全部联调完成 + 真实样本批量运行稳定
-> **项目状态**：✅ 主链路联调完成，✅ 真实 LLM API 接入，✅ 报告输出层上线，⚠️ 2.4 RAG 本地模型路径异常（fallback 跳过，不阻塞主链路）
+> **当前阶段**：Phase 2.1 noise boundary 增强完成，Phase 2.3 结构性缺口修复完成，准备推进 2.2
+> **项目状态**：✅ 主链路联调完成，✅ 真实 LLM API 接入，✅ 报告输出层上线，✅ 2.1 两阶段筛选框架落地，✅ 2.3 debate_summary/blocks_stage/resource_rationale 落地，⚠️ 2.4 RAG 本地模型路径异常（fallback 跳过，不阻塞主链路）
 
 ---
 
@@ -45,11 +45,18 @@
 - 输入：非结构化文本（新闻/报告/公告）
 - 输出：DecodedIntelligence（Signal 列表 + 结构化字段）
 - 方法：Prompt-first + 轻量后处理 + Schema 校验
-- 已完成：v1.2 benchmark（准确率达标），30条样本
+- v1.5 benchmark（25条真实样本）：Precision=95.2% / Recall=87.0% / F1=90.9%
 
-**后置增强**：taxonomy 边界澄清、2.4 知识增强、多信号聚合优化
+**2026-03-27 增强**：
+- Prompt v1.6：五类信号判断框架统一（technical/team/capital 补充显式规则）
+- 两阶段筛选：source_type 规则预筛（report 纯趋势 0ms 跳过）+ haiku 粗筛架构（待验证）
+- 信号来源：当前依托 knowledge base 仓库每日订阅，后期独立 ingestion 层（已记录，待做）
 
-**当前状态**：✅ MVP 完成 | ✅ LLM API 已接入 | ✅ P1-1 联调完成
+**后置增强**：taxonomy 边界澄清、2.4 知识增强、并发批处理（100条/天目标）、ingestion 独立化
+
+**遗留待办**：benchmark 对照实验（API 限流中）、haiku 粗筛验证、DecodedIntelligence 消费语义（2.2 推进时定）
+
+**当前状态**：✅ MVP 完成 | ✅ LLM API 已接入 | ✅ P1-1 联调完成 | ✅ v1.6 noise boundary 增强完成
 
 **关键文件**：
 - 执行进展：[phase2.1_执行进展.md](data-layer/projects/proj_004/phase2_plan/phase2.1_执行进展.md)
