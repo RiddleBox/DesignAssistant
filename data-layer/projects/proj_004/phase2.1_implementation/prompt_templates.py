@@ -70,7 +70,6 @@ regulatory 信号注意事项：
       "intensity_score": integer(1-10),
       "confidence_score": integer(1-10),
       "timeliness_score": integer(1-10),
-      "signal_rationale": "string（必填：一句话说明为何这是范式信号而非背景噪音，格式：'这是范式信号因为[变化性质/边界突破点]，而非噪音因为[区别于普通资讯的理由]'）",
       "source_ref": "string",
       "extracted_at": "ISO8601 string"
     }}
@@ -90,7 +89,6 @@ regulatory 信号注意事项：
 2. 每个信号必须有明确的证据原文片段（evidence_text）
 3. 推断链过长或证据模糊时，降低 confidence_score（不是不抽，而是降分）
 4. 不确定时可以抽取，但通过 confidence_score 反映证据强度
-5. signal_rationale 必须填写，且必须明确说明"为什么不是噪音"——这是 2.2 信号组装的判断依据
 """
 
 # Few-shot 样例集（11 个样例）
@@ -110,7 +108,6 @@ FEW_SHOT_EXAMPLES = [
                     "intensity_score": 8,
                     "confidence_score": 10,
                     "timeliness_score": 9,
-                    "signal_rationale": "这是范式信号因为引擎迁移是不可逆的技术路线选择，直接影响团队后续制作能力和技术栈，而非噪音因为它不是功能更新公告或日常运营消息。",
                     "source_ref": "example",
                     "extracted_at": "2026-03-14T00:00:00Z"
                 }

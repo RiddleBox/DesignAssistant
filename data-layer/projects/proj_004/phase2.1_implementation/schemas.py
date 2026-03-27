@@ -36,10 +36,6 @@ class Signal(BaseModel):
     intensity_score: int = Field(..., ge=1, le=10, description="强度评分 1-10")
     confidence_score: int = Field(..., ge=1, le=10, description="可信度评分 1-10")
     timeliness_score: int = Field(..., ge=1, le=10, description="时效性评分 1-10")
-    # 解码推理透明化：说明为什么这条变化是范式信号而不是普通资讯/噪音
-    # 格式："这是范式信号因为[变化性质]，而非噪音因为[区别于背景信息的理由]"
-    # 供 2.2 组装逻辑链时直接引用，不需要重新推理
-    signal_rationale: str = Field(default="", description="解码判据：为何这是范式信号而非噪音（供2.2组装用）")
     source_ref: str = Field(..., description="对应原始来源 ID")
     extracted_at: str = Field(..., description="抽取时间 ISO8601")
     metadata: Optional[Dict[str, Any]] = Field(default=None, description="扩展信息")
