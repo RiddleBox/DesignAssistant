@@ -5,7 +5,8 @@ import os
 from typing import List
 from models import (
     ActionDesignRequest, ActionDecisionObject, ActionDesignResult,
-    PhasedPlanStage, PhaseResources, TopRisk, DecisionPosture
+    PhasedPlanStage, PhaseResources, TopRisk, DecisionPosture,
+    DebateSummary
 )
 
 class ActionDesigner:
@@ -130,18 +131,28 @@ class ActionDesigner:
   }},
   "phased_plan": [
     {{
-      "stage": "string",
+      "stage": "string（阶段名，如'关键假设验证'）",
       "objective": "string",
       "key_assumptions_to_test": ["string"],
       "actions": ["string"],
-      "resources": {{"people": "string", "budget": "string", "time": "string"}},
+      "resources": {{
+        "people": "string",
+        "budget": "string",
+        "time": "string",
+        "resource_rationale": "string（必填：解释为何在此阶段投入这批资源，与key_assumptions_to_test强绑定，格式：投入X是为了验证[假设]，验证通过后才释放下阶段资源）"
+      }},
       "milestones": ["string"],
       "go_no_go_criteria": ["string"],
       "exit_conditions": ["string"]
     }}
   ],
   "top_risks": [
-    {{"risk": "string", "impact_on_plan": "string", "mitigation": "string"}}
+    {{
+      "risk": "string",
+      "impact_on_plan": "string",
+      "mitigation": "string",
+      "blocks_stage": "string（必填：该风险触发时影响哪个阶段的名称，与phased_plan中stage字段对应；若影响全局则填'全局'）"
+    }}
   ],
   "resource_commitment_logic": "string",
   "fallback_path": "string",
@@ -151,9 +162,10 @@ class ActionDesigner:
 要求：
 1. decision_posture 必须是 watch/validate/pilot/escalate 之一。
 2. phased_plan 1-3 个阶段，watch 姿态只需 1 个阶段。
-3. top_risks 2-3 条。
-4. 只输出合法 JSON，不要任何额外说明。
-5. 禁止在 JSON 字符串值内使用中文引号（""「」），只允许使用半角双引号。"""
+3. top_risks 2-3 条，每条必须填写 blocks_stage。
+4. 每个阶段的 resource_rationale 必须明确说明资源与假设验证的绑定关系。
+5. 只输出合法 JSON，不要任何额外说明。
+6. 禁止在 JSON 字符串值内使用中文引号（""「」），只允许使用半角双引号。"""
 
         result = self._call_llm(arbitrator_prompt)
 
@@ -185,6 +197,7 @@ class ActionDesigner:
                             people=s.get("resources", {}).get("people", ""),
                             budget=s.get("resources", {}).get("budget", ""),
                             time=s.get("resources", {}).get("time", ""),
+                            resource_rationale=s.get("resources", {}).get("resource_rationale", ""),
                         ),
                         milestones=s.get("milestones", []),
                         go_no_go_criteria=s.get("go_no_go_criteria", []),
@@ -197,9 +210,17 @@ class ActionDesigner:
                         risk=r.get("risk", ""),
                         impact_on_plan=r.get("impact_on_plan", ""),
                         mitigation=r.get("mitigation", ""),
+                        blocks_stage=r.get("blocks_stage", ""),
                     )
                     for r in llm_result.get("top_risks", [])
                 ]
+                # 解析辩论摘要
+                debate_raw = llm_result.get("debate_summary", {})
+                debate_summary = DebateSummary(
+                    hawk_stance=debate_raw.get("hawk_stance", ""),
+                    dove_stance=debate_raw.get("dove_stance", ""),
+                    resolution=debate_raw.get("resolution", ""),
+                ) if debate_raw else None
                 action_decision = ActionDecisionObject(
                     opportunity_title=opp.opportunity_title,
                     decision_posture=llm_result["decision_posture"],
@@ -209,6 +230,7 @@ class ActionDesigner:
                     resource_commitment_logic=llm_result["resource_commitment_logic"],
                     fallback_path=llm_result["fallback_path"],
                     open_questions=llm_result.get("open_questions", []),
+                    debate_summary=debate_summary,
                 )
                 return ActionDesignResult(
                     request_id=request.request_id,

@@ -136,17 +136,22 @@ def generate_report(
     if why:
         lines.append(f"**选择理由**：{why}\n\n")
 
-    # debate_summary（如果未来 P3-A 做了透传，这里自动展示）
+    # debate_summary — dataclass 或 dict 均兼容
     debate = getattr(act, "debate_summary", None)
-    if debate and isinstance(debate, dict):
-        lines.append("### 辩论摘要\n\n")
-        if debate.get("hawk_stance"):
-            lines.append(f"- 🦅 **鹰派**：{debate['hawk_stance']}\n")
-        if debate.get("dove_stance"):
-            lines.append(f"- 🕊️ **鸽派**：{debate['dove_stance']}\n")
-        if debate.get("resolution"):
-            lines.append(f"- ⚖️ **仲裁**：{debate['resolution']}\n")
-        lines.append("\n")
+    if debate:
+        # 支持 DebateSummary dataclass 和旧版 dict 两种形式
+        hawk  = getattr(debate, "hawk_stance",  None) or (debate.get("hawk_stance")  if isinstance(debate, dict) else None)
+        dove  = getattr(debate, "dove_stance",  None) or (debate.get("dove_stance")  if isinstance(debate, dict) else None)
+        resol = getattr(debate, "resolution",   None) or (debate.get("resolution")   if isinstance(debate, dict) else None)
+        if hawk or dove or resol:
+            lines.append("### 辩论摘要\n\n")
+            if hawk:
+                lines.append(f"- 🦅 **鹰派**：{hawk}\n")
+            if dove:
+                lines.append(f"- 🕊️ **鸽派**：{dove}\n")
+            if resol:
+                lines.append(f"- ⚖️ **仲裁**：{resol}\n")
+            lines.append("\n")
 
     # 分阶段计划
     phased = getattr(act, "phased_plan", []) or []
@@ -174,11 +179,14 @@ def generate_report(
                 lines.append(_list_items(actions))
                 lines.append("\n")
             if resources:
-                people = getattr(resources, "people", "") or resources.get("people", "") if isinstance(resources, dict) else ""
-                budget = getattr(resources, "budget", "") or resources.get("budget", "") if isinstance(resources, dict) else ""
-                time_r = getattr(resources, "time", "") or resources.get("time", "") if isinstance(resources, dict) else ""
+                people    = getattr(resources, "people",    "") or (resources.get("people",    "") if isinstance(resources, dict) else "")
+                budget    = getattr(resources, "budget",    "") or (resources.get("budget",    "") if isinstance(resources, dict) else "")
+                time_r    = getattr(resources, "time",      "") or (resources.get("time",      "") if isinstance(resources, dict) else "")
+                rationale = getattr(resources, "resource_rationale", "") or (resources.get("resource_rationale", "") if isinstance(resources, dict) else "")
                 if any([people, budget, time_r]):
                     lines.append(f"**资源**：人力={people}，预算={budget}，时间={time_r}\n\n")
+                if rationale:
+                    lines.append(f"**资源承诺依据**：{rationale}\n\n")
             if milestones:
                 lines.append("**里程碑**：\n")
                 lines.append(_list_items(milestones))
@@ -198,18 +206,22 @@ def generate_report(
         lines.append("### 主要风险\n\n")
         for r in risks:
             if isinstance(r, dict):
-                risk_text = r.get("risk", "")
-                impact    = r.get("impact_on_plan", "")
-                mitigation = r.get("mitigation", "")
+                risk_text   = r.get("risk", "")
+                impact      = r.get("impact_on_plan", "")
+                mitigation  = r.get("mitigation", "")
+                blocks      = r.get("blocks_stage", "")
             else:
-                risk_text  = getattr(r, "risk", str(r))
-                impact     = getattr(r, "impact_on_plan", "")
-                mitigation = getattr(r, "mitigation", "")
+                risk_text   = getattr(r, "risk", str(r))
+                impact      = getattr(r, "impact_on_plan", "")
+                mitigation  = getattr(r, "mitigation", "")
+                blocks      = getattr(r, "blocks_stage", "")
             lines.append(f"- **{risk_text}**\n")
+            if blocks:
+                lines.append(f"  - 影响阶段：`{blocks}`\n")
             if impact:
-                lines.append(f"  - 影响：{impact}\n")
+                lines.append(f"  - 计划影响：{impact}\n")
             if mitigation:
-                lines.append(f"  - 应对：{mitigation}\n")
+                lines.append(f"  - 应对策略：{mitigation}\n")
         lines.append("\n")
 
     # 资源承诺逻辑

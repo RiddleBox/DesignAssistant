@@ -1,6 +1,6 @@
 """Phase 2.3 核心数据模型"""
 from typing import List, Dict, Optional, Literal
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 # 行动姿态枚举
 DecisionPosture = Literal["watch", "validate", "pilot", "escalate", "hold", "stop"]
@@ -30,6 +30,9 @@ class PhaseResources:
     people: str
     budget: str
     time: str
+    # 资源与假设验证的绑定说明：解释这批资源为什么在这个阶段投入
+    # 格式："投入X人/Y万元，是为了验证[假设A]和[假设B]，验证通过后才释放后续资源"
+    resource_rationale: str = ""
 
 @dataclass
 class PhasedPlanStage:
@@ -49,6 +52,16 @@ class TopRisk:
     risk: str
     impact_on_plan: str
     mitigation: str
+    # 风险触发时影响哪个阶段（对应 PhasedPlanStage.stage 的名称，空字符串表示全局影响）
+    # 作用：让风险从"附录描述"变成"可约束行动结构"的实体
+    blocks_stage: str = ""
+
+@dataclass
+class DebateSummary:
+    """三路辩论摘要（行动设计推理链透明化）"""
+    hawk_stance: str    # 鹰派核心论点
+    dove_stance: str    # 鸽派核心论点
+    resolution: str     # 仲裁理由（为什么最终选择这个 posture）
 
 @dataclass
 class ActionDecisionObject:
@@ -61,6 +74,8 @@ class ActionDecisionObject:
     resource_commitment_logic: str
     fallback_path: str
     open_questions: List[str]
+    # 辩论摘要：推理链透明化，让"为什么选这个 posture"有迹可循
+    debate_summary: Optional[DebateSummary] = None
 
 @dataclass
 class ActionDesignResult:
