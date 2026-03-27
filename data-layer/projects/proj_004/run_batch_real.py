@@ -352,14 +352,14 @@ def run_step4_retro(judgment_result, action_result, decode_results, per_sample_s
             "decision_posture": ad.decision_posture,
         },
         upstream_outputs={
-            "phase_2_1": {
+            "phase2_1": {
                 "source_ids": [r.source_id for r in decode_results],
                 "sample_stats": per_sample_stats,
                 "total_signals": sum(len(r.signals) for r in decode_results),
                 "signals_sample": [r.signals[0].model_dump() for r in decode_results if r.signals],
             },
-            "phase_2_2": opp.model_dump(),
-            "phase_2_3": {
+            "phase2_2": opp.model_dump(),
+            "phase2_3": {
                 "decision_posture": ad.decision_posture,
                 "why_this_posture": ad.why_this_posture,
                 "phases": len(ad.phased_plan),
