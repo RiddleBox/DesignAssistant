@@ -19,23 +19,29 @@ from schemas import (
     SignalType,
     SourceType
 )
-from prompt_templates import build_prompt, PROMPT_VERSION
+from prompt_templates import build_prompt, build_screen_prompt, PROMPT_VERSION
 
 
 class IntelligenceDecoder:
     """情报解码器 - Prompt-first + 轻量后处理策略"""
 
-    def __init__(self, api_key: str, model: str = "claude-opus-4-6"):
+    def __init__(self, api_key: str, model: str = "claude-opus-4-6",
+                 screen_model: str = "claude-haiku-4-5-20251001",
+                 enable_two_stage: bool = True):
         """
         初始化解码器
 
         Args:
             api_key: Anthropic API key
-            model: 使用的模型，默认 Claude Opus 4.6
+            model: 精筛模型，默认 Claude Opus 4.6
+            screen_model: 粗筛模型，默认 Claude Haiku（轻量快速）
+            enable_two_stage: 是否启用两阶段筛选（默认开启）
         """
         self.api_key = api_key
         self.base_url = os.environ.get("ANTHROPIC_BASE_URL", "https://api.anthropic.com")
         self.model = model
+        self.screen_model = screen_model
+        self.enable_two_stage = enable_two_stage
         self.decoder_version = PROMPT_VERSION
         # 保留 client 仅用于非代理场景的兼容性
         if not os.environ.get("ANTHROPIC_BASE_URL"):
@@ -63,6 +69,22 @@ class IntelligenceDecoder:
             # 检查文本长度
             if len(cleaned_text) < 50:
                 warnings.append("原文过短（<50 字），可能影响抽取质量")
+
+            # [1.5] 两阶段筛选：先粗筛，有信号才精筛
+            if self.enable_two_stage:
+                screen_result = self._screen(cleaned_text, request.source_type, warnings)
+                if not screen_result["has_signal"]:
+                    # 粗筛判断无信号，提前返回空结果
+                    processing_time_ms = int((time.time() - start_time) * 1000)
+                    return DecodedIntelligence(
+                        source_id=request.source_id,
+                        source_type=request.source_type,
+                        signals=[],
+                        summary="粗筛判断：无范式信号",
+                        decoder_version=self.decoder_version,
+                        processing_time_ms=processing_time_ms,
+                        warnings=warnings if warnings else None
+                    )
 
             # [2] 构建 Prompt
             prompt = build_prompt(cleaned_text, request.source_id)
@@ -105,6 +127,55 @@ class IntelligenceDecoder:
                 warnings=warnings
             )
 
+    def _screen(self, text: str, source_type, warnings: List[str]) -> dict:
+        """
+        两阶段粗筛：先用规则快速排除，再用 haiku 轻量判断。
+
+        方向四（source_type 规则预筛）：
+          - report 类型：含大量泛趋势关键词且无具体事件名称 → 直接跳过 LLM
+        方向二（haiku 粗筛）：
+          - 规则未排除的内容，用 screen_model 轻量判断有无范式信号
+
+        Returns:
+            {"has_signal": bool, "signal_types": list, "screen_method": str}
+        """
+        # ── 规则层：source_type 预筛 ──────────────────────────────
+        source_type_val = source_type.value if hasattr(source_type, 'value') else str(source_type)
+        if source_type_val == "report":
+            # 泛趋势关键词（无具体事实支撑的预测/分析）
+            noise_patterns = [
+                "will transform", "is expected to", "analysts predict", "forecast",
+                "is projected", "在未来", "预计将", "有望", "将改变",
+                "survey shows", "survey reveals", "according to analysts",
+                "market research", "industry analysts", "by 2026", "by 2027", "by 2030",
+            ]
+            text_lower = text.lower()
+            noise_hits = sum(1 for p in noise_patterns if p.lower() in text_lower)
+
+            # 报告类文本里有 3+ 个泛趋势关键词，且文本较短（<500字，更可能是纯预测）→ 直接跳过
+            if noise_hits >= 3 and len(text) < 500:
+                warnings.append(f"规则预筛：report 类型含 {noise_hits} 个趋势预测关键词，判定为噪音，跳过 LLM")
+                return {"has_signal": False, "signal_types": [], "screen_method": "rule"}
+
+        # ── LLM 粗筛层：haiku 轻量判断 ───────────────────────────
+        try:
+            screen_prompt = build_screen_prompt(text)
+            raw = self._call_llm(screen_prompt, model_override=self.screen_model, max_tokens=80)
+            # 解析 JSON
+            json_match = re.search(r'\{.*?\}', raw, re.DOTALL)
+            if json_match:
+                result = json.loads(json_match.group())
+                has_signal = result.get("has_signal", True)  # 解析失败默认放行
+                signal_types = result.get("signal_types", [])
+                if not has_signal:
+                    warnings.append(f"LLM粗筛（{self.screen_model}）：判定无范式信号，跳过精筛")
+                return {"has_signal": has_signal, "signal_types": signal_types, "screen_method": "llm"}
+        except Exception as e:
+            # 粗筛失败不阻塞：放行进入精筛
+            warnings.append(f"粗筛失败（{e}），放行进入精筛")
+
+        return {"has_signal": True, "signal_types": [], "screen_method": "fallback"}
+
     def _preprocess(self, text: str) -> str:
         """
         文本预处理
@@ -121,17 +192,18 @@ class IntelligenceDecoder:
         text = text.strip()
         return text
 
-    def _call_llm(self, prompt: str, max_retries: int = 3) -> str:
+    def _call_llm(self, prompt: str, max_retries: int = 3,
+                  model_override: str = None, max_tokens: int = 4096) -> str:
         """
         调用 LLM（带重试机制）
 
         Args:
             prompt: 完整 Prompt
             max_retries: 最大重试次数
-
-        Returns:
-            str: LLM 响应
+            model_override: 覆盖模型名（粗筛时传 screen_model）
+            max_tokens: 最大输出 token 数（粗筛时传 80）
         """
+        model = model_override or self.model
         for attempt in range(max_retries):
             try:
                 if self.base_url != "https://api.anthropic.com":
@@ -143,8 +215,8 @@ class IntelligenceDecoder:
                         "content-type": "application/json",
                     }
                     payload = {
-                        "model": self.model,
-                        "max_tokens": 4096,
+                        "model": model,
+                        "max_tokens": max_tokens,
                         "temperature": 0.0,
                         "messages": [{"role": "user", "content": prompt}],
                     }
@@ -158,8 +230,8 @@ class IntelligenceDecoder:
                     return ""
                 else:
                     message = self.client.messages.create(
-                        model=self.model,
-                        max_tokens=4096,
+                        model=model,
+                        max_tokens=max_tokens,
                         temperature=0.0,
                         messages=[{"role": "user", "content": prompt}]
                     )
