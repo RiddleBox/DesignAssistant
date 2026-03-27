@@ -1,9 +1,9 @@
 # PROJECT_CONTEXT.md — 项目一站式开工入口
 
 > **文档类型**：项目状态总览 + 开工上下文
-> **最后更新**：2026-03-27
-> **当前阶段**：Phase 2.1 noise boundary 增强完成，Phase 2.3 结构性缺口修复完成，准备推进 2.2
-> **项目状态**：✅ 主链路联调完成，✅ 真实 LLM API 接入，✅ 报告输出层上线，✅ 2.1 两阶段筛选框架落地，✅ 2.3 debate_summary/blocks_stage/resource_rationale 落地，⚠️ 2.4 RAG 本地模型路径异常（fallback 跳过，不阻塞主链路）
+> **最后更新**：2026-03-28
+> **当前阶段**：2.2 消费语义拍板 + Prompt-first v2 落地，推进中
+> **项目状态**：✅ 主链路联调完成，✅ 真实 LLM API 接入，✅ 报告输出层上线，✅ 2.1 两阶段筛选框架，✅ 2.2 消费语义拍板+Prompt-first v2，✅ 2.3 结构性缺口修复，⚠️ 2.4 RAG 本地模型路径异常（fallback 跳过，不阻塞主链路）
 
 ---
 
@@ -70,14 +70,21 @@
 **本质**：帮助组织更早、更稳、更可解释地识别哪些变化值得被升级为下一步行动。不是评估报告生成器，而是"机会判断层 / 机会升级层"。
 
 **MVP 边界**（已完成）：
-- 输入：DecodedIntelligence（来自 2.1）+ 可选 ContextPacket（来自 2.4）
+- 输入：`List[DecodedIntelligence]`（多条，来自 2.1）+ 可选 ContextPacket（来自 2.4）
 - 输出：OpportunityObject（12字段，含 priority_level: watch/research/deep_dive/escalate）
-- 方法：规则引擎（6步判断流程）+ 4个边界检查点
-- 已完成：7/7 验收案例通过
+- 方法：Prompt-first v2（LLM 自主信号组合+逻辑链推导）+ 规则引擎 fallback
+- 2.1 打分（intensity/confidence/timeliness）完整传入，作为 LLM 信号权重判断依据
 
-**后置增强**：多 Agent 辩论、复杂评分体系、完整评估报告
+**2026-03-28 重构（消费语义拍板）**：
+- 输入从单条改为多条 `decoded_intelligences: List[DecodedIntelligence]`
+- 由 2.2 自主决定哪些信号可以组合成机会（不依赖调用方预分组）
+- Prompt-first v2 落地：完整暴露打分+source_type，LLM 做跨文章信号逻辑链组合
+- uncertainty_map 格式约定：`[类型] 描述：影响说明`（5种类型枚举）
+- 冒烟验证通过：2条跨来源信号（technical+capital）→ 输出逻辑链完整的 OpportunityObject
 
-**当前状态**：✅ MVP 完成 | ✅ 验收通过 | ✅ P1-1/P1-2 联调完成
+**遗留待办**：LLM 完整验证（API 限流中）、验证案例集更新、多信号聚合策略确认
+
+**当前状态**：✅ MVP 完成 | ✅ 消费语义拍板 | ✅ Prompt-first v2 落地 | ⏳ LLM 完整验证
 
 **关键文件**：
 - 执行进展：[phase2.2_执行进展.md](data-layer/projects/proj_004/phase2_plan/phase2.2_执行进展.md)

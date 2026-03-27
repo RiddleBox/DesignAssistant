@@ -1,8 +1,8 @@
 # Phase 2.2 执行进展记录
 
 > **文档类型**：执行进展追踪
-> **最后更新**：2026-03-16
-> **当前状态**：✅ MVP 实现完成，✅ 验收通过，⏳ 等待 2.3 联调
+> **最后更新**：2026-03-28
+> **当前状态**：✅ MVP 实现完成，✅ 验收通过，✅ 消费语义拍板，✅ Prompt-first v2 落地，⏳ LLM 完整验证待稳定 API 窗口
 
 ---
 
@@ -19,6 +19,10 @@
 | 2026-03-16 | 联调阶段 | 修复接口兼容性问题（优先级映射、数据结构转换） | 集成验证视角 |
 | 2026-03-16 | 总结阶段 | 完成联调报告与执行进展更新 | 总协调视角 |
 | 2026-03-22 | 联调阶段 | 完成 P1-1：2.1→2.2 接口联调（3/3 案例通过，接口契约冻结，适配器 .model_dump() 方式确认） | 实现落地视角 |
+| 2026-03-28 | 重构阶段 | 消费语义拍板：`decoded_intelligences: List[DecodedIntelligence]`（从单条改为多条） | 总协调视角 |
+| 2026-03-28 | 重构阶段 | Prompt-first v2 落地：_llm_judge_v2 + _extract_enriched_signals，完整透传2.1打分和source_type | 实现落地视角 |
+| 2026-03-28 | 重构阶段 | uncertainty_map 格式约定：`List[str]`，格式 `[类型] 描述：影响说明` | 方案设计视角 |
+| 2026-03-28 | 验证阶段 | LLM 路径冒烟测试通过（2条信号跨文章组合，输出逻辑链完整的 OpportunityObject） | 评测验收视角 |
 
 ---
 
@@ -128,17 +132,30 @@
 - ✅ 执行进展文档
 - ✅ 与 Phase 2.3 联调（2026-03-16）
 - ✅ 联调测试报告
+- ✅ P1-1 与 2.1 接口联调（2026-03-22）
+- ✅ **消费语义重构（2026-03-28）**
+  - `decoded_intelligences: List[DecodedIntelligence]`（多条输入，2.2 自主决定信号组合）
+  - 2.1 打分完整透传（intensity/confidence/timeliness 作为 LLM 权重依据）
+  - source_type/source_id 随 DecodedIntelligence 传入
+- ✅ **Prompt-first v2（2026-03-28）**
+  - `_extract_enriched_signals()`：提取信号并附加 `_source_type/_source_id`
+  - `_execute_judgment_pipeline_v2()`：主流程走 LLM，规则引擎作 fallback
+  - `_llm_judge_v2()`：新版 prompt，完整信号上下文 + 逻辑链组合要求
+  - 修复规则引擎 `signal_summary` → `description` 字段名 bug
+- ✅ **uncertainty_map 格式约定（2026-03-28）**
+  - 保持 `List[str]`，格式：`[类型] 描述：影响说明`
+  - 类型枚举：source_reliability / evidence_completeness / execution_risk / market_timing / competitive_response
 
 ### 3.2 进行中
 
-- ⏳ 无（等待下一步指令）
+- ⏳ LLM 完整验证（api123.icu 限流中，待稳定 API 窗口跑多组样本）
 
-### 3.3 待决策
+### 3.3 待决策 / 遗留待办
 
-- ⏳ 是否引入 Prompt-first 实现替换规则引擎
-- ⏳ 是否扩展验证案例集规模
-- ⏳ 是否建立 phase2_common 统一 Schema
-- ⏳ 是否开始与 Phase 2.4 集成（可选增强）
+- ⏳ 多信号聚合策略：调用方按"当天全部信号"打包 vs 按主题相关性分组，待 2.2 跑通后决定
+- ⏳ 验证案例集更新：原 7 个案例基于单条输入 + 规则引擎，需要改写为多条输入 + LLM 验证
+- ⏳ Schema 标准化（phase2_common）：等 Prompt-first 跑稳后做，现在做是过早优化
+- ⏳ 2.4 深度集成：结构未稳，暂缓
 
 ---
 
@@ -426,7 +443,48 @@
 
 ---
 
-## 八、文档索引
+## 八、2026-03-28 架构决策记录
+
+### 8.1 消费语义拍板（最重要）
+
+**决策**：`OpportunityJudgmentRequest.decoded_intelligences: List[DecodedIntelligence]`
+
+**背景与推导**：
+- 最初设计为单条 `decoded_intelligence: Dict`，只传信号列表
+- 讨论过"打平为 `List[Signal]`（选项A）"vs"传 `List[DecodedIntelligence]`（选项B）"
+- 关键约束：2.2 需要自己决定哪些信号可以组合成机会（不依赖调用方预分组）
+- 因此 LLM 需要看到每条信号的权重（打分）和来源上下文（source_type）
+- 选项A 信息不足（打平后丢失 source_type 和文章级上下文），选项B 合适但不需要完整结构
+- **最终方案**：传完整 `List[DecodedIntelligence]`，引擎内部用 `_extract_enriched_signals()` 附加 `_source_type/_source_id` 到每条信号
+
+**关键原则**：
+- 2.1 的打分（intensity/confidence/timeliness）必须完整暴露给 2.2，是信号权重判断的依据
+- 2.2 不回卷重做信号识别，但需要信号的来源上下文来判断组合合理性
+
+### 8.2 uncertainty_map 格式
+
+**决策**：保持 `List[str]`，在 prompt 里约定格式 `[类型] 描述：影响说明`
+
+**类型枚举**：
+- `source_reliability`：信号来源可信度问题
+- `evidence_completeness`：证据覆盖不完整
+- `execution_risk`：机会存在但落地风险高
+- `market_timing`：时间窗口不确定
+- `competitive_response`：竞争对手反应不确定
+
+**理由**：2.3 当前只做展示，不做路由；强类型对象增加 LLM 输出复杂度；轻量格式约定足够。
+
+### 8.3 多信号聚合策略（待定）
+
+**问题**：调用方传给 2.2 的 `decoded_intelligences` 应该包含哪些情报？
+
+**当前暂定**：按"当天全部信号"打包一次传入，由 LLM 自主识别可组合的信号子集
+
+**后续决策时机**：2.2 LLM 路径跑稳后，根据实际输出质量决定是否需要预分组
+
+---
+
+## 九、文档索引（更新）
 
 ### 8.1 规划与设计文档
 

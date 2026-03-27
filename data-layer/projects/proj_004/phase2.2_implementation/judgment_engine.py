@@ -288,7 +288,10 @@ class JudgmentEngine:
   "supporting_evidence": ["支持证据1（引用具体信号或外部知识）", "..."],
   "counter_evidence": ["反对证据1（必须存在，若无明显反证则写出潜在风险）", "..."],
   "key_assumptions": ["假设1：判断成立的前提条件", "..."],
-  "uncertainty_map": ["不确定因素1：影响描述", "..."],
+  "uncertainty_map": [
+    "[类型] 描述：影响说明",
+    "类型可选：source_reliability/evidence_completeness/execution_risk/market_timing/competitive_response"
+  ],
   "priority_level": "watch|research|deep_dive|escalate",
   "next_validation_questions": ["下一步验证问题1", "..."]
 }}"""
