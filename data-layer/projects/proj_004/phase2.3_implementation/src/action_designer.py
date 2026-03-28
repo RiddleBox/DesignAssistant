@@ -15,7 +15,9 @@ class ActionDesigner:
     def __init__(self, api_key: str = None, model: str = None):
         # 从统一配置加载（优先使用传入参数）
         cfg = self._load_llm_config("2.3")
+        _raw_api_key = api_key  # 保留原始传入值，用于判断是否强制规则引擎
         self.api_key   = api_key or cfg.get("api_key", "") or os.environ.get("ANTHROPIC_API_KEY", "")
+        self._force_rules = (_raw_api_key == '')  # api_key='' 时强制走规则引擎（测试用）
         self.model     = model   or cfg.get("model", "claude-sonnet-4-6")
         self.base_url  = cfg.get("base_url", "https://api.anthropic.com")
         self.max_tokens = cfg.get("max_tokens", 4096)
@@ -190,7 +192,7 @@ class ActionDesigner:
         """核心方法：从机会对象生成行动决策对象"""
         opp = request.opportunity_object
 
-        if self.api_key:
+        if self.api_key and not self._force_rules:
             try:
                 llm_result = self._llm_design(opp)
                 phased_plan = [
@@ -238,9 +240,14 @@ class ActionDesigner:
                     open_questions=llm_result.get("open_questions", []),
                     debate_summary=debate_summary,
                 )
+                # global_summary：从辩论结果提炼一句话摘要
+                posture_label = llm_result["decision_posture"]
+                why_short = llm_result["why_this_posture"][:60] if llm_result.get("why_this_posture") else ""
+                global_summary = f"[{posture_label}] {opp.opportunity_title}——{why_short}"
                 return ActionDesignResult(
                     request_id=request.request_id,
                     action_decision=action_decision,
+                    global_summary=global_summary,
                     designer_version="v1.0-llm",
                 )
             except Exception as e:
@@ -267,7 +274,9 @@ class ActionDesigner:
 
         return ActionDesignResult(
             request_id=request.request_id,
-            action_decision=action_decision
+            action_decision=action_decision,
+            global_summary=f"[{posture}] {opp.opportunity_title}——{self._explain_posture(opp, posture)[:60]}",
+            designer_version="v1.0-rules",
         )
 
     def _determine_posture(self, opp) -> DecisionPosture:
