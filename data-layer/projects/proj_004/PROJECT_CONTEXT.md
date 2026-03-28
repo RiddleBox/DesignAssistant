@@ -1,7 +1,7 @@
 # PROJECT_CONTEXT.md — 项目一站式开工入口
 
 > **文档类型**：项目状态总览 + 开工上下文
-> **最后更新**：2026-03-28
+> **最后更新**：2026-03-28（intensity 字段名 bug 修复）
 > **当前阶段**：2.2 消费语义拍板 + Prompt-first v2 落地，推进中
 > **项目状态**：✅ 主链路联调完成，✅ 真实 LLM API 接入，✅ 报告输出层上线，✅ 2.1 两阶段筛选框架，✅ 2.2 消费语义拍板+Prompt-first v2，✅ 2.3 结构性缺口修复，⚠️ 2.4 RAG 本地模型路径异常（fallback 跳过，不阻塞主链路）
 
@@ -81,6 +81,7 @@
 - Prompt-first v2 落地：完整暴露打分+source_type，LLM 做跨文章信号逻辑链组合
 - uncertainty_map 格式约定：`[类型] 描述：影响说明`（5种类型枚举）
 - 冒烟验证通过：2条跨来源信号（technical+capital）→ 输出逻辑链完整的 OpportunityObject
+- **Bug 修复（2026-03-28）**：规则引擎 fallback 中 `intensity` 字段名改为 `intensity_score`（兼容写法），修复 priority 分级 avg_intensity 始终为 0 的问题
 
 **遗留待办**：LLM 完整验证（API 限流中）、验证案例集更新、多信号聚合策略确认
 
@@ -363,6 +364,8 @@
 | 2026-03-16 | 全面重写：纳入 2.1~2.5 各模块核心定位、MVP 边界、接口约定、工作流规范 |
 | 2026-03-22 | 更新联调状态：P0+P1-1~P1-4 全部完成，主链路端到端跑通 |
 | 2026-03-27 | 接入真实 LLM API（api123.icu 中转），2.1 v1.5 prompt + Precision 测量体系，2.2/2.3 LLM 判断上线，报告输出层（report_writer.py）上线，2.5 upstream_outputs 字段修正，2.1 per-sample 容错，2.3 多 agent 完善路线写入规划文档 |
+| 2026-03-28（凌晨） | 2.2 消费语义重构：多条输入+Prompt-first v2（_llm_judge_v2），2.1 打分全透传，冒烟验证通过 |
+| 2026-03-28 | 修复 2.2 规则引擎 fallback 中 intensity 字段名 bug（avg_intensity 始终为 0 导致 priority 分级偏低） |
 
 ---
 

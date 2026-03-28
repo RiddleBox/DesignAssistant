@@ -496,7 +496,7 @@ class JudgmentEngine:
             uncertainty.append("signal_reliability: medium - 反对证据较多，需谨慎判断")
 
         # 高强度信号的执行风险
-        avg_intensity = sum(s.get("intensity", 0) for s in signals) / max(len(signals), 1)
+        avg_intensity = sum(s.get("intensity_score", s.get("intensity", 0)) for s in signals) / max(len(signals), 1)
         if avg_intensity >= 8:
             uncertainty.append("execution_risk: medium - 高强度机会需要快速决策，存在执行风险")
 
@@ -515,7 +515,7 @@ class JudgmentEngine:
         uncertainty_level = len([u for u in uncertainty if "high" in u])
 
         # 计算信号强度
-        avg_intensity = sum(s.get("intensity", 0) for s in signals) / max(signal_count, 1)
+        avg_intensity = sum(s.get("intensity_score", s.get("intensity", 0)) for s in signals) / max(signal_count, 1)
 
         # 检测escalate触发条件：高强度+多信号+竞争压力
         has_urgency = any(

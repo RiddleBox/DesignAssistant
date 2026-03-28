@@ -150,6 +150,10 @@
 
 - ⏳ LLM 完整验证（api123.icu 限流中，待稳定 API 窗口跑多组样本）
 
+### 3.4 已修复 Bug（2026-03-28）
+
+- ✅ **规则引擎 intensity 字段名 bug**：`_assess_uncertainty()` 和 `_classify_priority()` 中 `s.get("intensity", 0)` 改为 `s.get("intensity_score", s.get("intensity", 0))`（兼容新旧字段名）。修复前规则引擎 priority 分级和执行风险判断中 avg_intensity 始终为 0，导致分级结果偏低、escalate 永远无法触发。
+
 ### 3.3 待决策 / 遗留待办
 
 - ⏳ 多信号聚合策略：调用方按"当天全部信号"打包 vs 按主题相关性分组，待 2.2 跑通后决定
@@ -333,6 +337,7 @@
 - ✅ 2.3 接口不兼容 → 已通过联调修复（2026-03-16）
 - ✅ 优先级映射不匹配 → 已修改 2.3 姿态判断逻辑
 - ✅ uncertainty_map 格式不一致 → 已实现转换层
+- ✅ **规则引擎 intensity 字段名不一致**（2026-03-28）→ `s.get("intensity", 0)` 改为 `s.get("intensity_score", s.get("intensity", 0))`，修复 priority 分级和执行风险判断中 avg_intensity 始终为 0 的问题
 
 ---
 
