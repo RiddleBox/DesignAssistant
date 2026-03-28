@@ -88,6 +88,99 @@ class ContextPacket(BaseModel):
     domain_constraints: Optional[List[str]] = Field(None, description="领域约束")
 
 
+class ValidateHypothesisRequest(BaseModel):
+    """假设驱动查询请求 - 2.2 主动向 2.4 查证假设的接口
+
+    设计背景（2026-03-28 拍板）：
+    - 2.2 在生成 OpportunityObject 后，对 key_assumptions 中的关键假设需要外部证据支撑
+    - 不同于被动接收 context_packet，这是 2.2 主动发起的"查证"行为
+    - 2.4 根据假设内容召回 case_record（真实案例）/ market_data（数据验证）/ constraint_rule（边界核查）
+
+    消费语义：
+    - caller="phase2.2"：2.4 知道是谁在问，可调整召回策略（优先 case_record + market_data）
+    - hypothesis：待查证的具体假设陈述（e.g. "AI NPC 推理成本已降至可商业化区间"）
+    - evidence_types：期望的证据类型（可不传，2.4 默认优先 case_record + market_data）
+    - opportunity_context：关联的机会对象，帮助 2.4 理解查证背景，提升检索相关性
+    """
+
+    # 必填：假设内容
+    hypothesis: str = Field(
+        ...,
+        description="待查证的假设陈述（具体、可验证的命题，e.g. 「AI NPC 推理成本已具备商业化条件」）"
+    )
+
+    # 必填：调用方标识
+    caller: Literal["phase2.2"] = Field(
+        "phase2.2",
+        description="调用方标识，固定为 phase2.2"
+    )
+
+    # 可选：期望的证据类型（不传则由 2.4 默认召回 case_record + market_data）
+    evidence_types: Optional[List[Literal[
+        "case_record", "market_data", "constraint_rule",
+        "background", "few_shot_example", "glossary"
+    ]]] = Field(
+        None,
+        description="期望的证据类型列表（不传则 2.4 默认优先 case_record + market_data）"
+    )
+
+    # 可选：关联的机会对象上下文（帮助 2.4 理解查证背景）
+    opportunity_context: Optional[Dict[str, Any]] = Field(
+        None,
+        description="关联的机会对象摘要（opportunity_id / opportunity_title / key_assumptions），"
+                    "帮助 2.4 理解查证背景，提升检索相关性"
+    )
+
+    # 可选：召回条数
+    top_k: int = Field(5, description="期望召回的证据条数（默认5）")
+
+
+class HypothesisValidationResult(BaseModel):
+    """假设查证结果 - 2.4 返回给 2.2 的证据包
+
+    字段设计原则：
+    - 直接可用：每条证据包含引用结论（可直接写入 supporting/counter_evidence）
+    - 置信度透明：trust_level 让 2.2 知道证据强度
+    - 可追溯：source_id 可回溯到原始知识文档
+    """
+
+    # 查证的假设（原文回传，方便对齐）
+    hypothesis: str = Field(..., description="被查证的假设原文")
+
+    # 支持证据列表
+    supporting_evidence: List[Dict[str, Any]] = Field(
+        default_factory=list,
+        description="支持假设的证据列表，每条含 source_id/title/excerpt/trust_level/引用结论"
+    )
+
+    # 反对/质疑证据列表
+    counter_evidence: List[Dict[str, Any]] = Field(
+        default_factory=list,
+        description="反对或质疑假设的证据列表，每条含 source_id/title/excerpt/trust_level/引用结论"
+    )
+
+    # 查证状态
+    validation_status: Literal["supported", "refuted", "mixed", "insufficient"] = Field(
+        ...,
+        description="查证状态：supported=证据支持 / refuted=证据反驳 / mixed=证据混合 / insufficient=证据不足"
+    )
+
+    # 可信度评估
+    confidence_score: float = Field(
+        ...,
+        description="查证结论的可信度（0-1），基于证据数量和 trust_level 加权评估"
+    )
+
+    # 查证耗时
+    retrieval_time_ms: int = Field(..., description="2.4 检索耗时（毫秒）")
+
+    # 附加说明
+    notes: List[str] = Field(
+        default_factory=list,
+        description="补充说明，如「case_record 类型无匹配文档」「证据均来自 background 类型，参考性有限」"
+    )
+
+
 class JudgmentConfig(BaseModel):
     """判断配置（预留字段，当前不生效，P2 实现）"""
     min_confidence_threshold: Optional[float] = Field(0.3, description="最小置信度阈值（预留）")
