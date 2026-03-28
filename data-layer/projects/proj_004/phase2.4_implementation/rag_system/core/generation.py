@@ -59,24 +59,36 @@ class GenerationService:
         # 构建Prompt
         prompt = self._build_prompt(query, context_docs)
 
-        # 调用Claude API
+        # 调用 LLM（统一走 LLMClient，支持 api123.icu 中转）
+        import importlib.util, os, sys
+        _proj_root = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..'))
+        _client_path = os.path.join(_proj_root, 'llm_client.py')
+        if os.path.exists(_client_path) and _proj_root not in sys.path:
+            sys.path.insert(0, _proj_root)
+        try:
+            from llm_client import LLMClient as _LC
+            _base = self.base_url or "https://api123.icu"
+            _lc = _LC(api_key=self.api_key, base_url=_base)
+            answer = _lc.call(prompt, model=self.model, max_tokens=4000)
+            if not answer:
+                raise ValueError("LLMClient returned empty response")
+            generation_time = (time.time() - start_time) * 1000
+            return answer, generation_time
+        except Exception as _e:
+            print(f"[WARN] LLMClient failed ({_e}), falling back to anthropic SDK")
+
+        # fallback: anthropic SDK
         try:
             import anthropic
-
-            # 根据是否有base_url创建客户端
             if self.base_url:
                 client = anthropic.Anthropic(api_key=self.api_key, base_url=self.base_url)
             else:
                 client = anthropic.Anthropic(api_key=self.api_key)
-
             response = client.messages.create(
                 model=self.model,
                 max_tokens=4000,
                 temperature=temperature,
-                messages=[{
-                    "role": "user",
-                    "content": prompt
-                }]
+                messages=[{"role": "user", "content": prompt}]
             )
 
             answer = response.content[0].text

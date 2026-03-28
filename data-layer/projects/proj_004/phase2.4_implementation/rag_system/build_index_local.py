@@ -37,7 +37,7 @@ def load_documents(data_dir: str) -> list[Document]:
                 content=data['content'],
                 category=data['category'],
                 tags=data['tags'],
-                metadata=DocumentMetadata(**data['metadata'])
+                metadata=DocumentMetadata.from_dict(data['metadata'])
             )
             documents.append(doc)
 

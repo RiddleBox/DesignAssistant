@@ -24,7 +24,9 @@ class DocumentMetadata:
 
     @classmethod
     def from_dict(cls, data: dict) -> "DocumentMetadata":
-        return cls(**data)
+        # 只取已知字段，忽略多余 key（如 collector_version / origin_file 等）
+        known = {k: data[k] for k in ("source", "confidence", "last_updated") if k in data}
+        return cls(**known)
 
 
 @dataclass

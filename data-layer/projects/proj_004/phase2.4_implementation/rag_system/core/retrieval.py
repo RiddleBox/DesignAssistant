@@ -147,68 +147,42 @@ class EmbeddingService:
 
 
 class LocalEmbeddingService:
-    """本地Embedding服务 - 使用开源模型"""
+    """本地Embedding服务 - 使用 sentence-transformers"""
 
     def __init__(self, model_name: str = "sentence-transformers/all-MiniLM-L6-v2"):
         """
         初始化本地embedding服务
 
         Args:
-            model_name: 模型名称，默认使用all-MiniLM-L6-v2
+            model_name: 模型名称或路径，默认使用 all-MiniLM-L6-v2（轻量，384维）
+                        支持 HuggingFace Hub ID（自动缓存到 ~/.cache/huggingface）
+                        或本地路径（需包含完整权重文件）
         """
         print(f"[INFO] Loading local embedding model: {model_name}")
 
-        # 使用transformers直接加载，更稳定
-        from transformers import AutoTokenizer, AutoModel
-        import torch
+        # 如果传入本地路径但目录不含权重，自动 fallback 到在线模型
+        import os
+        _FALLBACK_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
+        if os.path.isabs(model_name) or model_name.startswith('.'):
+            # 本地路径模式：检查是否有 config.json
+            if not os.path.exists(os.path.join(model_name, "config.json")):
+                print(f"[WARN] 本地模型路径 {model_name} 不含权重，自动切换到在线模型 {_FALLBACK_MODEL}")
+                model_name = _FALLBACK_MODEL
 
-        # sentence-transformers模型需要使用bert作为基础
-        self.tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
-        self.model = AutoModel.from_pretrained(model_name, trust_remote_code=True)
-        self.model.eval()  # 设置为评估模式
+        from sentence_transformers import SentenceTransformer
+        self._st_model = SentenceTransformer(model_name)
         self.model_name = model_name
-        self.device = "cuda" if torch.cuda.is_available() else "cpu"
-        self.model.to(self.device)
-
-        # 获取模型维度
-        self.dimension = self.model.config.hidden_size
-        print(f"[OK] Model loaded successfully, dimension: {self.dimension}, device: {self.device}")
+        self.dimension = self._st_model.get_sentence_embedding_dimension()
+        print(f"[OK] Model loaded successfully, dimension: {self.dimension}")
 
     def _mean_pooling(self, model_output, attention_mask):
-        """Mean pooling - 取token embeddings的平均值"""
-        import torch
-        token_embeddings = model_output[0]
-        input_mask_expanded = attention_mask.unsqueeze(-1).expand(token_embeddings.size()).float()
-        return torch.sum(token_embeddings * input_mask_expanded, 1) / torch.clamp(input_mask_expanded.sum(1), min=1e-9)
+        """兼容旧接口，sentence-transformers 已内部处理"""
+        pass
 
     def embed(self, texts: List[str]) -> np.ndarray:
-        """
-        批量向量化文本
-
-        Returns:
-            numpy array of shape (len(texts), dimension)
-        """
-        try:
-            import torch
-
-            # Tokenize
-            encoded_input = self.tokenizer(texts, padding=True, truncation=True, return_tensors='pt', max_length=512)
-            encoded_input = {k: v.to(self.device) for k, v in encoded_input.items()}
-
-            # 计算embeddings
-            with torch.no_grad():
-                model_output = self.model(**encoded_input)
-
-            # Mean pooling
-            embeddings = self._mean_pooling(model_output, encoded_input['attention_mask'])
-
-            # 归一化
-            embeddings = torch.nn.functional.normalize(embeddings, p=2, dim=1)
-
-            return embeddings.cpu().numpy()
-        except Exception as e:
-            print(f"[ERROR] Embedding failed: {e}")
-            raise
+        """批量向量化"""
+        embeddings = self._st_model.encode(texts, convert_to_numpy=True, show_progress_bar=False)
+        return embeddings
 
     def embed_single(self, text: str) -> np.ndarray:
         """向量化单条文本"""
