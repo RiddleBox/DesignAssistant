@@ -1,0 +1,15 @@
+id: kb_049
+title: "Slay the Spire 2 平衡补丁引发差评轰炸后回滚——早期测试版社区治理案例（2026年）"
+category: market_trend
+content_type: case_record
+tags: ["Slay the Spire 2", "Mega Crit", "差评轰炸", "Review Bomb", "早期测试", "社区治理", "case_record"]
+metadata:
+  source: "GameSpot / Rock Paper Shotgun，2026-03-28"
+  confidence: 0.88
+  last_updated: "2026-03-28"
+content: |
+  【主体】Mega Crit（《Slay the Spire》系列开发商）
+  【动作】《Slay the Spire 2》早期测试版推送"反无限循环"平衡性补丁（anti-infinite balance patch），限制了玩家构建无限循环流派的能力。
+  【结果】补丁上线后引发大规模差评轰炸（Review Bomb），核心玩家强烈反弹。Mega Crit 随后公开道歉并回滚该更新的部分内容。
+  【分析价值】早期测试版阶段玩家反馈机制的负面案例：核心玩家对平衡性干预的容忍度极低，尤其是涉及删除已有玩法空间时。开发商选择回滚而非坚持设计意图，说明社区压力在早期版本阶段可以直接影响设计决策。
+  【引用结论】早期测试版平衡性调整的高风险区域：限制玩家创意空间（而非纠正崩溃性BUG）的平衡补丁，在核心受众中的抵触风险极高；发布前应通过小范围测试验证社区接受度。
