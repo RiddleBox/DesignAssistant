@@ -104,6 +104,9 @@ def adapt_22_to_23(opp22) -> OpportunityObject23:
         key_assumptions=opp22.key_assumptions,
         uncertainty_map=uncertainty_dict,
         priority_level=opp22.priority_level,
+        why_now=opp22.why_now,
+        warnings=opp22.warnings,
+        next_validation_questions=opp22.next_validation_questions,
     )
 
 
@@ -175,25 +178,44 @@ def run_e2e(case_id: str, raw_text: str, source_type, api_key: str):
     # Step 2: 2.2 机会判断
     print("[Step 2] 2.2 机会判断...")
     engine = JudgmentEngine()
-    req22 = OpportunityJudgmentRequest(decoded_intelligence=decoded.model_dump())
+    req22 = OpportunityJudgmentRequest(decoded_intelligences=[decoded])
     result22 = engine.judge(req22)
-    opp22 = result22.opportunity
-    print(f"  状态: {result22.status}, 优先级: {opp22.priority_level}")
-    print(f"  机会: {opp22.opportunity_title}")
+    opportunities22 = result22.opportunities  # List[OpportunityObject]
+    print(f"  状态: {result22.status}, 机会数: {len(opportunities22)}")
+    for opp in opportunities22:
+        print(f"  - [{opp.priority_level}] {opp.opportunity_title}")
 
-    # Step 3: 2.3 行动设计
+    if not opportunities22:
+        print("  WARNING: 未产出机会对象，2.3 将跳过")
+        # 仍继续走 2.5 复盘，用空占位
+        opp22 = type('_Empty', (), {
+            'opportunity_title': '（无机会）', 'opportunity_thesis': '',
+            'supporting_evidence': [], 'counter_evidence': [],
+            'key_assumptions': [], 'uncertainty_map': [],
+            'priority_level': 'watch', 'why_now': None,
+            'warnings': [], 'next_validation_questions': [],
+        })()
+        opportunities22 = [opp22]
+
+    # Step 3: 2.3 行动设计（对每个机会分别设计）
     print("[Step 3] 2.3 行动设计...")
     designer = ActionDesigner()
-    opp23 = adapt_22_to_23(opp22)
-    req23 = ActionDesignRequest(request_id=case_id, opportunity_object=opp23)
-    result23 = designer.design_action(req23)
-    decision = result23.action_decision
-    print(f"  姿态: {decision.decision_posture}, 计划阶段数: {len(decision.phased_plan)}")
+    results23 = []
+    for opp22 in opportunities22:
+        opp23 = adapt_22_to_23(opp22)
+        req23 = ActionDesignRequest(request_id=f"{case_id}_{opp22.priority_level}", opportunity_object=opp23)
+        result23 = designer.design_action(req23)
+        decision = result23.action_decision
+        print(f"  [{opp22.opportunity_title[:30]}] 姿态: {decision.decision_posture}, 阶段数: {len(decision.phased_plan)}")
+        results23.append((opp22, result23))
+
+    # 取第一个机会用于 2.5 复盘（主要机会）
+    opp22_main, result23_main = results23[0]
 
     # Step 4: 2.5 系统复盘
     print("[Step 4] 2.5 系统复盘...")
     analyzer = SystemRetrospectiveAnalyzer()
-    upstream = build_upstream_outputs(decoded, opp22, result23)
+    upstream = build_upstream_outputs(decoded, opp22_main, result23_main)
     workflow_record = {
         "run_id": case_id,
         "start_time": "2026-03-22T00:00:00Z",
@@ -216,11 +238,12 @@ def run_e2e(case_id: str, raw_text: str, source_type, api_key: str):
     print(f"  Phase3 优先级项数: {len(retro.phase3_priorities)}")
 
     # 端到端验收
+    decision_main = result23_main.action_decision
     checks = {
         "2.1 信号抽取完成": result22.status in ("success", "insufficient_evidence"),
-        "2.2 机会对象产出": bool(opp22.opportunity_title),
-        "2.3 行动姿态产出": bool(decision.decision_posture),
-        "2.3 有分阶段计划": len(decision.phased_plan) > 0,
+        "2.2 机会对象产出": len(result22.opportunities) > 0,
+        "2.3 行动姿态产出": bool(decision_main.decision_posture),
+        "2.3 有分阶段计划": len(decision_main.phased_plan) > 0,
         "2.5 OutputChecker 无 FAIL": all(
             c.status != CheckStatus.FAIL
             for c in retro.output_checks

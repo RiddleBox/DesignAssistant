@@ -15,6 +15,10 @@ class OpportunityObject:
     key_assumptions: List[str]
     uncertainty_map: Dict[str, str]
     priority_level: str
+    # 2026-03-28 新增：对齐 2.2 多机会重构后的新增字段（可选，向后兼容）
+    why_now: Optional[str] = None
+    warnings: Optional[List[str]] = None
+    next_validation_questions: Optional[List[str]] = None
 
 @dataclass
 class ActionDesignRequest:
