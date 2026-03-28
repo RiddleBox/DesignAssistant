@@ -255,6 +255,19 @@ def run_e2e(case_id: str, raw_text: str, source_type, api_key: str):
     print(f"\n端到端验收 ({'PASS' if all_pass else 'FAIL'}, 总耗时 {total_ms}ms):")
     for k, v in checks.items():
         print(f"  {'YES' if v else 'NO '} {k}")
+
+    # 生成决策简报
+    try:
+        sys.path.insert(0, os.path.join(BASE, 'phase2.3_implementation', 'src'))
+        from report_generator import generate_brief
+        brief = generate_brief(result23_main, opp22_main)
+        print("\n" + "="*60)
+        print("决策简报")
+        print("="*60)
+        print(brief)
+    except Exception as e:
+        print(f"  [简报生成失败，不影响验收] {e}")
+
     return all_pass
 
 
