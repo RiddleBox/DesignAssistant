@@ -55,7 +55,8 @@ class Document:
     category: str
     tags: List[str] = field(default_factory=list)
     metadata: DocumentMetadata = field(default_factory=DocumentMetadata)
-    score: float = 0.0  # 检索时填充
+    score: float = 0.0  # 检索时返回
+    content_type: Optional[str] = None  # 内容性质标注（见 CONTENT_TYPE_VALUES）；None 表示未标注
 
     def to_dict(self, include_score: bool = False) -> dict:
         """转换为字典（用于API响应）"""

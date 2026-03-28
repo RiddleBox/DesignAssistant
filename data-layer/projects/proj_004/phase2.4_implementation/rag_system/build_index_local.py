@@ -37,7 +37,8 @@ def load_documents(data_dir: str) -> list[Document]:
                 content=data['content'],
                 category=data['category'],
                 tags=data['tags'],
-                metadata=DocumentMetadata.from_dict(data['metadata'])
+                metadata=DocumentMetadata.from_dict(data['metadata']),
+                content_type=data.get('content_type', None)  # 透传标注字段，未标注时为 None
             )
             documents.append(doc)
 
