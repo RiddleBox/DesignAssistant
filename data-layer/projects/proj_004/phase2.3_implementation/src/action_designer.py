@@ -72,7 +72,11 @@ class ActionDesigner:
             raise ValueError(f"Failed to parse LLM JSON: {e}") from e
 
     def _llm_design(self, opp) -> dict:
-        """三轮辩论：鹰派 → 鸽派 → 仲裁，最终输出行动设计"""
+        """多 Agent 辩论（方案C）：
+        第1轮：鹰派 / 鸽派 / 执行者（可行性）
+        第2轮：鸽派反驳鹰派 / 执行者回应可行性挑战
+        第3轮：仲裁者综合全局，输出 JSON
+        """
         uncertainty_text = ""
         if isinstance(opp.uncertainty_map, dict):
             uncertainty_text = "; ".join(f"{k}: {v}" for k, v in opp.uncertainty_map.items())
@@ -89,49 +93,90 @@ class ActionDesigner:
 时机判断（why_now）：{opp.why_now or '（未提供）'}
 2.3前置问题（next_validation_questions）：{json.dumps(opp.next_validation_questions or [], ensure_ascii=False)}"""
 
-        # --- 第一轮：鹰派（激进行动） ---
-        hawk_prompt = f"""你是激进派战略顾问。你倾向于抓住机会、快速行动、接受风险。
-请基于以下机会信息，给出你的行动建议（纯文字，不超过200字）：
+        # ── 第1轮：三方独立陈述 ──────────────────────────────────────────
+        hawk_view = self._llm.call(
+            prompt=f"""你是激进派战略顾问，倾向于抓住机会、快速行动、接受风险。
+基于以下机会，给出你的行动建议（纯文字，不超过150字）：
 
 {opp_context}
 
-重点：放大支持证据，论证为何应该立即推进，提出激进的行动姿态和计划。"""
-        hawk_view = self._llm.call(prompt=hawk_prompt, model=self.model, max_tokens=self.max_tokens)
+重点：放大支持证据，论证为何应立即推进，提出激进的行动姿态。""",
+            model=self.model, max_tokens=500)
         if not hawk_view:
             raise ValueError("Hawk agent returned empty response")
 
-        # --- 第二轮：鸽派（保守谨慎） ---
-        dove_prompt = f"""你是保守派风险顾问。你倾向于审慎验证、降低风险、分阶段承诺。
-请基于以下机会信息，给出你的行动建议（纯文字，不超过200字）：
+        dove_view = self._llm.call(
+            prompt=f"""你是保守派风险顾问，倾向于审慎验证、降低风险、分阶段承诺。
+基于以下机会，给出你的行动建议（纯文字，不超过150字）：
 
 {opp_context}
 
-重点：放大反对证据和不确定性，论证为何应该谨慎，指出激进行动的潜在风险。"""
-        dove_view = self._llm.call(prompt=dove_prompt, model=self.model, max_tokens=self.max_tokens)
+重点：放大反对证据和不确定性，论证为何应谨慎，指出激进行动的潜在风险。""",
+            model=self.model, max_tokens=500)
         if not dove_view:
             raise ValueError("Dove agent returned empty response")
 
-        # --- 第三轮：仲裁者（综合输出 JSON） ---
-        arbitrator_prompt = f"""你是 Phase 2.3 行动设计仲裁者。你听取了两方观点后，做出平衡的最终判断。
+        executor_view = self._llm.call(
+            prompt=f"""你是落地执行专家，只关注"这个方案现实中能不能做"。
+不讨论机会是否值得，专注评估执行可行性：谁来做、需要什么资源、最大卡点在哪里、第一步能否在30天内启动。
+基于以下机会，给出你的可行性评估（纯文字，不超过150字）：
+
+{opp_context}
+
+重点：指出资源、能力、时间的现实约束，评估第一阶段能否真正落地。""",
+            model=self.model, max_tokens=500)
+        if not executor_view:
+            raise ValueError("Executor agent returned empty response")
+
+        # ── 第2轮：针对性反驳 ────────────────────────────────────────────
+        dove_rebuttal = self._llm.call(
+            prompt=f"""你是保守派风险顾问。你刚才看到了激进派的观点，现在针对性反驳（纯文字，不超过100字）：
+
+激进派观点：{hawk_view.strip()}
+
+针对激进派的具体论点，指出其最脆弱的假设或最容易失败的环节。""",
+            model=self.model, max_tokens=300)
+        if not dove_rebuttal:
+            dove_rebuttal = "（无补充反驳）"
+
+        executor_rebuttal = self._llm.call(
+            prompt=f"""你是落地执行专家。你看到了激进派和保守派的观点，现在回应可行性层面最关键的挑战（纯文字，不超过100字）：
+
+激进派观点：{hawk_view.strip()}
+保守派观点：{dove_view.strip()}
+
+只回应：如果要推进，第一步最难跨越的执行障碍是什么，如何降低它。""",
+            model=self.model, max_tokens=300)
+        if not executor_rebuttal:
+            executor_rebuttal = "（无补充回应）"
+
+        # ── 第3轮：仲裁者综合全局，输出 JSON ────────────────────────────
+        arbitrator_prompt = f"""你是 Phase 2.3 行动设计仲裁者。你看完了完整的多方辩论，做出最终判断。
 
 机会背景：
 {opp_context}
 
-激进派观点：
-{hawk_view.strip()}
+═══ 第1轮陈述 ═══
+激进派：{hawk_view.strip()}
+保守派：{dove_view.strip()}
+执行者（可行性）：{executor_view.strip()}
 
-保守派观点：
-{dove_view.strip()}
+═══ 第2轮反驳 ═══
+保守派反驳激进派：{dove_rebuttal.strip()}
+执行者回应可行性挑战：{executor_rebuttal.strip()}
 
-请综合两方观点，输出最终行动设计。只输出合法 JSON，不要任何额外说明。
+请综合三方观点和两轮辩论，输出最终行动设计。只输出合法 JSON，不要任何额外说明。
 
 输出 JSON schema：
 {{
   "decision_posture": "watch|validate|pilot|escalate",
-  "why_this_posture": "string（综合两方观点，100字以内）",
+  "why_this_posture": "string（综合三方观点，100字以内）",
   "debate_summary": {{
-    "hawk_stance": "string（鹰派核心论点，50字以内）",
-    "dove_stance": "string（鸽派核心论点，50字以内）",
+    "hawk_stance": "string（鹰派核心论点，40字以内）",
+    "dove_stance": "string（鸽派核心论点，40字以内）",
+    "executor_stance": "string（执行者核心可行性判断，40字以内）",
+    "dove_rebuttal": "string（鸽派对鹰派的关键反驳，40字以内）",
+    "executor_rebuttal": "string（执行者对可行性挑战的核心回应，40字以内）",
     "resolution": "string（仲裁理由，50字以内）"
   }},
   "phased_plan": [
@@ -169,11 +214,12 @@ class ActionDesigner:
 2. phased_plan 1-2 个阶段（watch 只需1个），严格遵守每个字段的字数上限。
 3. top_risks 2 条，每条必须填写 blocks_stage。
 4. resource_rationale 必须说明资源与假设验证的绑定关系（50字以内）。
-5. **时机判断（why_now）**：若 why_now 字段有内容，必须在 why_this_posture 中体现时机判断，并影响第一阶段节奏。
-6. **前置问题（next_validation_questions）**：若该字段有内容，必须将关键问题映射到 key_assumptions_to_test 或 go_no_go_criteria 中。
-7. 只输出合法 JSON，不要任何额外说明。
-8. 禁止在 JSON 字符串值内使用中文引号（""「」），只允许使用半角双引号。
-9. 总 JSON 输出必须控制在 3000 字以内。"""
+5. **执行者视角**：phased_plan 的 actions 和第一阶段 objective 必须体现执行者指出的可行性约束。
+6. **时机判断（why_now）**：若 why_now 有内容，必须在 why_this_posture 中体现，并影响第一阶段节奏。
+7. **前置问题（next_validation_questions）**：必须映射到 key_assumptions_to_test 或 go_no_go_criteria 中。
+8. 只输出合法 JSON，不要任何额外说明。
+9. 禁止在 JSON 字符串值内使用中文引号（""「」），只允许使用半角双引号。
+10. 总 JSON 输出必须控制在 3000 字以内。"""
 
         result = self._call_llm(arbitrator_prompt)
 
@@ -186,6 +232,15 @@ class ActionDesigner:
         for key in ["phased_plan", "top_risks", "open_questions"]:
             if not isinstance(result.get(key), list) or not result[key]:
                 result[key] = []
+
+        # 把第2轮辩论结果注入 debate_summary
+        ds = result.get("debate_summary", {})
+        if isinstance(ds, dict):
+            ds.setdefault("dove_rebuttal", dove_rebuttal.strip()[:80])
+            ds.setdefault("executor_rebuttal", executor_rebuttal.strip()[:80])
+            ds.setdefault("executor_stance", executor_view.strip()[:80])
+        result["debate_summary"] = ds
+
         return result
 
     def design_action(self, request: ActionDesignRequest) -> ActionDesignResult:
@@ -222,11 +277,14 @@ class ActionDesigner:
                     )
                     for r in llm_result.get("top_risks", [])
                 ]
-                # 解析辩论摘要
+                # 解析辩论摘要（含第2轮反驳字段）
                 debate_raw = llm_result.get("debate_summary", {})
                 debate_summary = DebateSummary(
                     hawk_stance=debate_raw.get("hawk_stance", ""),
                     dove_stance=debate_raw.get("dove_stance", ""),
+                    executor_stance=debate_raw.get("executor_stance", ""),
+                    dove_rebuttal=debate_raw.get("dove_rebuttal", ""),
+                    executor_rebuttal=debate_raw.get("executor_rebuttal", ""),
                     resolution=debate_raw.get("resolution", ""),
                 ) if debate_raw else None
                 action_decision = ActionDecisionObject(

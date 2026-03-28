@@ -62,10 +62,18 @@ class TopRisk:
 
 @dataclass
 class DebateSummary:
-    """三路辩论摘要（行动设计推理链透明化）"""
-    hawk_stance: str    # 鹰派核心论点
-    dove_stance: str    # 鸽派核心论点
-    resolution: str     # 仲裁理由（为什么最终选择这个 posture）
+    """多 Agent 辩论摘要（行动设计推理链透明化）
+
+    第1轮：鹰派陈述 / 鸽派陈述 / 执行者陈述（可行性）
+    第2轮：鸽派反驳鹰派 / 执行者回应可行性挑战
+    第3轮：仲裁者综合全局输出最终判断
+    """
+    hawk_stance: str            # 鹰派核心论点（第1轮）
+    dove_stance: str            # 鸽派核心论点（第1轮）
+    executor_stance: str = ""   # 执行者核心论点（第1轮，聚焦可行性）
+    dove_rebuttal: str = ""     # 鸽派对鹰派的反驳（第2轮）
+    executor_rebuttal: str = "" # 执行者对可行性挑战的回应（第2轮）
+    resolution: str = ""        # 仲裁理由（第3轮）
 
 @dataclass
 class ActionDecisionObject:
