@@ -230,6 +230,123 @@ class Retriever:
             results.append((docs, time_ms))
         return results
 
+    def retrieve_context(self, request) -> "ContextResponse":
+        """
+        分桶召回 —— 证据包级检索，对应 /api/v1/context 接口
+
+        设计要点（来自 PHASE2_4_CONTEXT_PACKET_PROTOCOL.md）：
+        1. 先过滤再检索：按 content_type 筛选候选文档，在候选集内做向量检索
+           （不是全库混排后筛，避免低频类型被高频类型淹没）
+        2. 分桶配额：每种 content_type 独立配额，保证类型多样性
+        3. trust_level 过滤：基于 metadata.confidence 评定
+        4. reason_for_match：MVP 阶段用模板生成，保证稳定性
+
+        Args:
+            request: ContextRequest 对象
+
+        Returns:
+            ContextResponse
+        """
+        import time as _time
+        from .models import ContextPacket, ContextResponse, CONTENT_TYPE_VALUES, TRUST_LEVEL_VALUES
+
+        t0 = _time.time()
+        notes = []
+        all_packets = []
+
+        # 确定需要召回的类型列表
+        needed_types = request.needed_content_types
+        if not needed_types:
+            # 未指定类型：全类型召回，不分桶
+            needed_types = list(CONTENT_TYPE_VALUES)
+
+        # 每桶配额：ceil(top_k / len(needed_types))，至少1
+        import math
+        per_bucket = max(1, math.ceil(request.top_k / len(needed_types)))
+
+        # trust_level → confidence 阈值映射
+        trust_threshold = {"high": 0.8, "medium": 0.5, "low": 0.0}
+        min_conf = trust_threshold.get(request.min_trust_level, 0.0)
+
+        # 向量化 query（只做一次）
+        query_embedding = self.embedding_service.embed_single(request.query)
+
+        for ct in needed_types:
+            # Step 1：按 content_type 过滤候选文档
+            candidates = [
+                doc for doc in self.vector_store.documents.values()
+                if getattr(doc, "content_type", None) == ct
+                and (not request.category_filter or doc.category in request.category_filter)
+                and doc.metadata.confidence >= min_conf
+            ]
+
+            if not candidates:
+                notes.append(f"content_type='{ct}' 无候选文档（知识库未覆盖或未标注）")
+                continue
+
+            # Step 2：在候选集内做向量检索
+            # 构建临时候选 id 集合，从 vector_store 里取对应向量
+            candidate_ids = {doc.id for doc in candidates}
+            scored = []
+            for doc in candidates:
+                idx = self.vector_store.id_to_index.get(doc.id)
+                if idx is None:
+                    continue
+                import numpy as np
+                vec = self.vector_store.index.reconstruct(idx)
+                vec = vec / (np.linalg.norm(vec) + 1e-9)
+                q = query_embedding / (np.linalg.norm(query_embedding) + 1e-9)
+                score = float(np.dot(q, vec))
+                scored.append((doc, score))
+
+            # 按相似度排序，取 per_bucket 条
+            scored.sort(key=lambda x: x[1], reverse=True)
+            top_docs = scored[:per_bucket]
+
+            # Step 3：组装 ContextPacket
+            for doc, score in top_docs:
+                # 生成 excerpt（MVP：取 content 前500字符；后续可升级为段落级定位）
+                excerpt = doc.content[:500] if len(doc.content) > 500 else doc.content
+
+                # 生成 reason_for_match（MVP：模板化，保证稳定性；后续可接 LLM）
+                reason = _build_reason_for_match(request.query, ct, doc.title)
+
+                # 评定 trust_level
+                trust = _calc_trust_level(doc.metadata.confidence, doc.metadata.source)
+
+                packet = ContextPacket(
+                    packet_id=ContextPacket.new_id(),
+                    source_id=doc.id,
+                    source_title=doc.title,
+                    content_type=ct,
+                    excerpt=excerpt,
+                    reason_for_match=reason,
+                    trust_level=trust,
+                    score=round(score, 4),
+                    metadata=doc.metadata,
+                    tags=doc.tags,
+                    category=doc.category,
+                )
+                all_packets.append(packet)
+
+        # 汇总摘要
+        type_hits = {}
+        for p in all_packets:
+            type_hits[p.content_type] = type_hits.get(p.content_type, 0) + 1
+        summary_parts = [f"{ct}×{n}" for ct, n in type_hits.items()]
+        summary = f"命中 {len(all_packets)} 条：{', '.join(summary_parts) if summary_parts else '无'}"
+
+        elapsed_ms = int((_time.time() - t0) * 1000)
+
+        from .models import ContextResponse
+        return ContextResponse(
+            request_id=request.request_id,
+            context_packets=all_packets,
+            retrieval_time_ms=elapsed_ms,
+            retrieval_summary=summary,
+            retrieval_notes=notes,
+        )
+
 
 # 全局检索器实例（单例模式）
 _retriever_instance: Optional[Retriever] = None
@@ -260,3 +377,47 @@ def init_retriever(api_key: str, index_path: str, meta_path: str, provider: str 
 
     _retriever_instance = Retriever(embedding_service, vector_store)
     return _retriever_instance
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 辅助函数
+# ─────────────────────────────────────────────────────────────────────────────
+
+def _build_reason_for_match(query: str, content_type: str, doc_title: str) -> str:
+    """
+    生成 reason_for_match —— MVP 阶段模板化实现，保证稳定性。
+    后续可升级为 LLM 生成，但不在当前阶段做。
+
+    模板策略：说明"为什么这条内容和当前 query 有关"，
+    区分不同 content_type 的消费价值。
+    """
+    type_desc = {
+        "glossary":         "提供术语定义，可帮助消歧和字段判断",
+        "few_shot_example": "提供高质量样例，可作为格式参考和判断依据",
+        "constraint_rule":  "提供判定规则或边界约束，可限定分类范围",
+        "case_record":      "提供真实行业事件（含结果），可用于查证假设或引用论据",
+        "market_data":      "提供可引用的行业数据或基准数字，可支撑或反驳判断",
+        "background":       "提供背景知识，有助于理解上下文，非核心判断依据",
+    }
+    desc = type_desc.get(content_type, "提供相关知识")
+    # 截断 query 到 50 字符避免过长
+    q_brief = query[:50] + "…" if len(query) > 50 else query
+    return f"查询「{q_brief}」与《{doc_title}》语义相关；该文档为 {content_type} 类型，{desc}。"
+
+
+def _calc_trust_level(confidence: float, source: str) -> str:
+    """
+    评定 trust_level —— 基于 metadata.confidence 和来源评定。
+
+    high：confidence >= 0.8（权威来源）
+    medium：confidence 0.5–0.8
+    low：confidence < 0.5 或来源不明
+    """
+    if not source or source.strip() == "":
+        return "low"
+    if confidence >= 0.8:
+        return "high"
+    elif confidence >= 0.5:
+        return "medium"
+    else:
+        return "low"

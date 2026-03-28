@@ -58,7 +58,7 @@
 
 ### 增强A：知识文档扩展至100条（P1）
 
-- **当前**：40条，覆盖 game_design/market_trend/tech_innovation 三类
+- **当前**：43条，覆盖 game_design/market_trend/tech_innovation 三类
 - **方案**：按联调反馈优先补充检索命中率低的类别
 - **触发时机**：联调中发现特定类型查询无相关结果
 
@@ -73,6 +73,33 @@
 - **当前**：3类（game_design/market_trend/tech_innovation）
 - **方案**：按真实查询分布新增 1-2 类
 - **触发时机**：联调中下游模块查询类型明显超出当前分类
+
+### 增强D：ContextPacket 协议实现（P1）✅ 进行中
+
+**协议文档**：`phase2.4_implementation/docs/PHASE2_4_CONTEXT_PACKET_PROTOCOL.md` v1.0（2026-03-28 冻结）
+
+**已完成**：
+- `models.py` 新增 `ContextPacket / ContextRequest / ContextResponse` dataclass
+  - `content_type` 枚举：`glossary / few_shot_example / constraint_rule / case_record / market_data / background`
+  - `trust_level` 枚举：`high / medium / low`（基于 metadata.confidence 和来源评定）
+  - `ContextRequest` 支持 `needed_content_types / caller / category_filter / min_trust_level`
+- `retrieval.py` 新增 `Retriever.retrieve_context()` 方法
+  - **分桶召回**（Bucketed Retrieval）：每种 `content_type` 独立配额，先过滤候选集再在其中做向量检索
+  - 辅助函数：`_build_reason_for_match()`（模板化生成）、`_calc_trust_level()`（评定信任等级）
+  - 冒烟验证：`content_type=None` 的文档正确被过滤，notes 说明命中为空的原因
+- `app.py` 新增 `/api/v1/context` 路由，原接口不变（兼容策略）
+
+**待完成**：
+- [ ] **给 43 条文档补标 `content_type` 字段**（P0，当前全为 None，导致 retrieve_context 返回空）
+  - 标注规则：每条文档只标一个主性质；`case_record` 必须含主体+动作+结果三要素
+  - 重点补充：`case_record` 和 `market_data` 两类（当前严重不足，是 2.2/2.3 接入的前置障碍）
+- [ ] Document dataclass 新增 `content_type` 可选字段（当前从 yaml 加载时字段不存在）
+- [ ] 用真实数据端到端验证 `/api/v1/context` 接口
+
+**intent routing（后续增强）**：
+- 当前：调用方显式传 `needed_content_types`
+- 后续：2.4 根据 `caller` + `query` 语义自动推断 `needed_content_types`，调用方无需手动指定
+- 触发条件：分桶召回稳定后，联调反馈"每次指定类型太繁琐"时引入
 
 ---
 

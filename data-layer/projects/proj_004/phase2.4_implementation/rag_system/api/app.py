@@ -7,7 +7,7 @@ import time
 from typing import List, Optional
 from flask import Flask, request, jsonify
 
-from core.models import RetrieveRequest, RetrieveResponse, GenerateRequest, GenerateResponse, Document
+from core.models import RetrieveRequest, RetrieveResponse, GenerateRequest, GenerateResponse, Document, ContextRequest
 from core.retrieval import get_retriever
 from core.generation import get_generation_service
 
@@ -227,6 +227,81 @@ def list_documents():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+
+@app.route('/api/v1/context', methods=['POST'])
+def context():
+    """
+    证据包级检索 —— ContextPacket 协议 v1.0
+
+    设计说明：
+    - 分桶召回：按 needed_content_types 每种类型独立配额检索，保证类型多样性
+    - 先过滤再检索：在候选集（指定 content_type 的文档）内做向量检索，
+      不是全库混排后筛，避免低频类型被高频类型淹没
+    - 原有 /retrieve /rag 接口行为不变（兼容策略）
+
+    Request Body:
+        {
+            "request_id": "req_001",
+            "caller": "phase2.2",
+            "query": "端侧推理成本是否具备商业化条件",
+            "needed_content_types": ["case_record", "market_data"],  // 可选，空=不限
+            "top_k": 5,               // 可选，默认5，最大10
+            "category_filter": [],    // 可选，空=不限
+            "min_trust_level": "medium"  // 可选，默认 low
+        }
+
+    Response:
+        {
+            "request_id": "req_001",
+            "context_packets": [
+                {
+                    "packet_id": "ctx_a3f2b1",
+                    "source_id": "kb_021",
+                    "source_title": "...",
+                    "content_type": "case_record",
+                    "excerpt": "...",
+                    "reason_for_match": "...",
+                    "trust_level": "high",
+                    "score": 0.84,
+                    "metadata": {...},
+                    "tags": [...],
+                    "category": "market_trend"
+                }
+            ],
+            "retrieval_summary": "命中 3 条：case_record×2, market_data×1",
+            "retrieval_notes": ["market_data 类型当前知识库覆盖不足，仅返回1条"],
+            "retrieval_time_ms": 42,
+            "protocol_version": "v1.0"
+        }
+    """
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({"error": "请求体不能为空"}), 400
+
+        req = ContextRequest(
+            request_id=data.get("request_id", f"req_{int(time.time()*1000)}"),
+            caller=data.get("caller", ""),
+            query=data.get("query", ""),
+            needed_content_types=data.get("needed_content_types", []),
+            top_k=data.get("top_k", 5),
+            category_filter=data.get("category_filter", []),
+            min_trust_level=data.get("min_trust_level", "low"),
+        )
+
+        is_valid, error_msg = req.validate()
+        if not is_valid:
+            return jsonify({"error": error_msg}), 400
+
+        retriever = get_retriever()
+        response = retriever.retrieve_context(req)
+
+        return jsonify(response.to_dict())
+
+    except Exception as e:
+        app.logger.error(f"context 检索失败: {e}")
+        return jsonify({"error": f"context 服务错误: {str(e)}"}), 500
 
 
 # 错误处理
