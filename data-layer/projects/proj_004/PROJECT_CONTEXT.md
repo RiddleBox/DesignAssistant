@@ -144,21 +144,33 @@
 
 ### 2.4 知识库与 RAG（Phase 2.4）
 
-**本质**：为 2.1/2.2/2.3 提供历史经验、行业知识、外部证据的结构化支撑，是整条链路的"证据基础层"。非主链路必要节点，但显著提升各模块输出质量。
+**本质**：为 2.1/2.2/2.3 提供历史经验、行业知识、外部证据的结构化支撑，是整条链路的"证据基础层"。定位为**证据级上下文供应层**，目标是降低下游决策的不确定性，而非问答系统。
 
 **MVP 边界**（已完成骨架）：
-- 知识文档：40条（game_design / market_trend / tech_innovation）
+- 知识文档：43条（game_design / market_trend / tech_innovation）
 - 接口：/retrieve / /generate / /rag（Flask API）
-- 索引：vector_index.faiss + vector_meta.pkl 已构建
-- 已完成：本地闭环联调验证通过
+- 索引：vector_index.faiss + vector_meta.pkl 已构建（all-MiniLM-L6-v2，384维，真实 embedding）
+- 已完成：本地闭环联调验证通过（P1-5/P1-6/P1-7，2026-03-22）
 
-**待完成**：真实 LLM API 接入（当前为模拟服务）、与下游模块联调
+**⚠️ 关键设计拍板（2026-03-28）**：
+- **交付单元升级**：输出从 `Document[]` 升级为 `ContextPacket[]`（含 `content_type / excerpt / reason_for_match / trust_level`）
+- **`content_type` 而非 `use_as`**：2.4 描述内容性质（是什么），怎么用由 2.1/2.2/2.3 各自决定
+- **content_type 枚举**：`glossary / few_shot_example / constraint_rule / case_record / market_data / background`
+- **当前知识库缺口**：`case_record` 和 `market_data` 严重不足，是 2.2/2.3 接入的前置障碍
+- **协议文档**：[PHASE2_4_CONTEXT_PACKET_PROTOCOL.md](data-layer/projects/proj_004/phase2.4_implementation/docs/PHASE2_4_CONTEXT_PACKET_PROTOCOL.md)（v1.0 已冻结）
 
-**后置增强**：混合检索、文档扩展至100条、分类体系扩展
+**待完成**（按优先级）：
+1. 实现 `POST /api/v1/context` 接口（ContextRequest → ContextResponse）
+2. 给 43 条现有文档补标 `content_type` 字段
+3. 补充 `case_record` / `market_data` 类型知识文档
+4. 混合检索（向量 + 元数据过滤）
+5. 2.4 → 2.1/2.2/2.3 增益联合验证（最终验收终点）
 
-**当前状态**：✅ 骨架完成 | ✅ P1-5/P1-6/P1-7 联调完成（2026-03-22） | ⚠️ LLM API 为模拟服务
+**当前状态**：✅ 骨架完成 | ✅ 真实 Embedding 接入（all-MiniLM-L6-v2）| ✅ P1-5/P1-6/P1-7 联调完成 | ✅ ContextPacket 协议冻结（v1.0）| ⚠️ 真实 LLM e2e 待验证（api123.icu 波动）
 
 **关键文件**：
+- 协议规范：[PHASE2_4_CONTEXT_PACKET_PROTOCOL.md](data-layer/projects/proj_004/phase2.4_implementation/docs/PHASE2_4_CONTEXT_PACKET_PROTOCOL.md)
+- 第一性原理：[PHASE2_4_FIRST_PRINCIPLES_AND_DESIGN_GUIDANCE.md](data-layer/projects/proj_004/phase2.4_implementation/docs/PHASE2_4_FIRST_PRINCIPLES_AND_DESIGN_GUIDANCE.md)
 - 进展：[phase2.4_进展与待拍板事项.md](data-layer/projects/proj_004/phase2_plan/phase2.4_进展与待拍板事项.md)
 - 联调计划：[phase2.4_联调与增强计划.md](data-layer/projects/proj_004/phase2_plan/phase2.4_联调与增强计划.md)
 - 实现：[phase2.4_implementation/](data-layer/projects/proj_004/phase2.4_implementation/)
@@ -392,6 +404,7 @@
 | 2026-03-27 | 接入真实 LLM API（api123.icu 中转），2.1 v1.5 prompt + Precision 测量体系，2.2/2.3 LLM 判断上线，报告输出层（report_writer.py）上线，2.5 upstream_outputs 字段修正，2.1 per-sample 容错，2.3 多 agent 完善路线写入规划文档 |
 | 2026-03-28（凌晨） | 2.2 消费语义重构：多条输入+Prompt-first v2（_llm_judge_v2），2.1 打分全透传，冒烟验证通过 |
 | 2026-03-28 | 修复 2.2 规则引擎 fallback 中 intensity 字段名 bug（avg_intensity 始终为 0 导致 priority 分级偏低） |
+| 2026-03-28（晚） | 2.4 ContextPacket 协议 v1.0 冻结：content_type 枚举（glossary/few_shot_example/constraint_rule/case_record/market_data/background）、ContextRequest/ContextResponse 字段定义、三模块消费场景差异确认、兼容策略（新增 /context 接口，原接口不变） |
 
 ---
 
