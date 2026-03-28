@@ -1,0 +1,15 @@
+id: kb_057
+title: "Capcom 宣布用 genAI 加速生产——明确排除资产创作用途（2026年）"
+category: tech_innovation
+content_type: case_record
+tags: ["Capcom", "genAI", "GDC", "AI工具", "生产加速", "资产创作限制", "case_record"]
+metadata:
+  source: "Game Developer，2026-03-26，GDC 2026 现场"
+  confidence: 0.88
+  last_updated: "2026-03-26"
+content: |
+  【主体】Capcom（《生化危机》《怪物猎人》《街头霸王》开发商）
+  【动作】在 GDC 2026 公开宣布将引入生成式 AI 工具加速游戏开发生产流程，同时明确声明：不会将 AI 用于游戏资产（美术、音效等）的创作。
+  【结果】战略方向已定：AI 加速辅助工具（流程加速）可以，AI 生成内容资产（替代创作者）不行。这一表态是大型传统游戏公司对 AI 使用边界最清晰的公开声明之一。
+  【分析价值】大型 AAA 厂商的 AI 使用边界拍板案例：将 AI 定位在"流程工具"而非"创意生产者"，是既要效率收益又要规避艺术家社区反弹的典型两全策略。
+  【引用结论】传统 AAA 厂商的 AI 落地红线已明确：Capcom 模式（加速流程但不替代资产创作）正在成为行业主流姿态，为其他厂商提供了可参考的边界划定样本。

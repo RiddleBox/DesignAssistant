@@ -1,0 +1,15 @@
+id: kb_061
+title: "OpenAI 关停 Sora 视频生成独立应用——战略聚焦调整（2026年）"
+category: tech_innovation
+content_type: case_record
+tags: ["OpenAI", "Sora", "AI视频", "关停", "战略收缩", "case_record"]
+metadata:
+  source: "PC Gamer，2026-03-25"
+  confidence: 0.83
+  last_updated: "2026-03-25"
+content: |
+  【主体】OpenAI
+  【动作】宣布停止 Sora 视频生成独立应用的运营，同期 Disney 也宣布撤出与 OpenAI 的内容合作项目，被报道为"更广泛战略转型的一部分"。
+  【结果】Sora 独立应用关停，OpenAI 将 AI 视频能力整合回核心产品线，不再作为独立 to-C 产品运营；Disney 的撤出说明大型内容方对 AI 视频的商业化意愿仍存在重大不确定性。
+  【分析价值】AI 视频生成独立商业化路径失败的早期信号：即使是 OpenAI 这样的技术领导者，也未能将视频生成工具做成可持续的独立消费品；大型内容方（Disney）的撤出更说明 B 端采购意愿不足。
+  【引用结论】AI 视频生成的独立商业化在 2026 年尚未找到成立路径：Sora 关停 + Disney 撤出是同一时间节点上的双重验证，AI 视频能力更可能以嵌入式工具形态整合进现有产品，而非独立变现。
