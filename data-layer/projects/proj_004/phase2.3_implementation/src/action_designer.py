@@ -82,7 +82,9 @@ class ActionDesigner:
 支持证据：{json.dumps(opp.supporting_evidence, ensure_ascii=False)}
 反对证据：{json.dumps(opp.counter_evidence, ensure_ascii=False)}
 关键假设：{json.dumps(opp.key_assumptions, ensure_ascii=False)}
-不确定性：{uncertainty_text}"""
+不确定性：{uncertainty_text}
+时机判断（why_now）：{opp.why_now or '（未提供）'}
+2.3前置问题（next_validation_questions）：{json.dumps(opp.next_validation_questions or [], ensure_ascii=False)}"""
 
         # --- 第一轮：鹰派（激进行动） ---
         hawk_prompt = f"""你是激进派战略顾问。你倾向于抓住机会、快速行动、接受风险。
@@ -164,8 +166,10 @@ class ActionDesigner:
 2. phased_plan 1-3 个阶段，watch 姿态只需 1 个阶段。
 3. top_risks 2-3 条，每条必须填写 blocks_stage。
 4. 每个阶段的 resource_rationale 必须明确说明资源与假设验证的绑定关系。
-5. 只输出合法 JSON，不要任何额外说明。
-6. 禁止在 JSON 字符串值内使用中文引号（""「」），只允许使用半角双引号。"""
+5. **时机判断（why_now）**：若 why_now 字段有内容，必须在 why_this_posture 中体现时机紧迫性或窗口期判断，并影响 phased_plan 的第一阶段节奏（是否需要快速启动）。
+6. **前置问题（next_validation_questions）**：若该字段有内容，必须将其中的关键问题映射到对应阶段的 key_assumptions_to_test 或 go_no_go_criteria 中，不得忽略。
+7. 只输出合法 JSON，不要任何额外说明。
+8. 禁止在 JSON 字符串值内使用中文引号（""「」），只允许使用半角双引号。"""
 
         result = self._call_llm(arbitrator_prompt)
 
