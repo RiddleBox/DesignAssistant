@@ -1,9 +1,9 @@
 # PROJECT_CONTEXT.md — 项目一站式开工入口
 
 > **文档类型**：项目状态总览 + 开工上下文
-> **最后更新**：2026-03-28（intensity 字段名 bug 修复）
-> **当前阶段**：2.2 消费语义拍板 + Prompt-first v2 落地，推进中
-> **项目状态**：✅ 主链路联调完成，✅ 真实 LLM API 接入，✅ 报告输出层上线，✅ 2.1 两阶段筛选框架，✅ 2.2 消费语义拍板+Prompt-first v2，✅ 2.3 结构性缺口修复，⚠️ 2.4 RAG 本地模型路径异常（fallback 跳过，不阻塞主链路）
+> **最后更新**：2026-03-28（2.2 完善阶段收尾，推进 2.3 联调回归）
+> **当前阶段**：2.2 完善收尾，开始 2.3 联调回归
+> **项目状态**：✅ 主链路联调完成，✅ 真实 LLM API 接入，✅ 报告输出层上线，✅ 2.1 两阶段筛选框架，✅ 2.2 多机会输出重构+字段完善，✅ 2.3 结构性缺口修复，⚠️ 2.4 RAG 本地模型路径异常（fallback 跳过，不阻塞主链路）
 
 ---
 
@@ -87,13 +87,11 @@
 
 | # | 项目 | 优先级 | 状态 | 备注 |
 |---|------|--------|------|------|
-| 1 | LLM 完整验证 | P1 | ⏳ 等待稳定 API 窗口 | api123.icu 限流，7 个案例全部 fallback 到规则引擎，prompt 修改效果待验证 |
-| 2 | 验证案例集更新 | ✅ 完成 | 已重写为游戏行业主题，7 个案例，多条 DI 输入 | — |
-| 3 | 多信号聚合策略确认 | ✅ 已拍板 | **方案 A：当天全部信号打包传入 2.2**，由 2.2 自主决定信号组合；token 压力由 2.1 两阶段筛选兜底 |
-| 4 | EvidenceValidator 证据来源校验 | **P1 必要增强** | first principle 核心需求（假消息升级风险）；当前 LLM/规则引擎输出证据不带来源标记，P1 补齐 |
-| 5 | v1 流程残留清理（judgment_pipeline v1 + validators v1） | P2 | 无新调用方，已被 v2 替代；标记 deprecated，下次整理时移除 |
-| 6 | judgment_config 预留字段实现 | P2 | min_confidence_threshold 等字段有定义无实现，P2 补齐 |
-| 4 | 2.2→2.3 联调回归 | P1 | ⏳ 待做 | next_validation_questions 语义修正后，需确认 2.3 消费逻辑未受影响 |
+| 1 | **LLM 完整验证（7/7 全 LLM 路径）** | P1 | ⏳ 后续完善事项 | api123.icu 持续抖动，已验证 case_001/002/003/004 LLM 路径正确；005/006/007 因 API 随机空响应未完成；等稳定窗口重跑 |
+| 2 | **2.2→2.3 联调回归** | P1 | ⏳ 进行中 | 本轮推进；opportunities 列表输出、next_validation_questions 语义修正后，确认 2.3 消费逻辑未受影响 |
+| 3 | **EvidenceValidator 可信度加权** | P2 | ⏳ 待讨论 | 已实现可追溯性（source_ref 覆盖率占 completeness 20%）；可信度加权挂起——问题：2.1 已打 confidence_score，2.2 再基于 source_type 降权是否双重惩罚？等 2.1 打分机制稳定后讨论 |
+| 4 | v1 流程残留清理 | P2 | ⏳ 待做 | judgment_pipeline_v1 + validators v1 标记 deprecated，下次整理时移除 |
+| 5 | judgment_config 预留字段实现 | P2 | ⏳ 待做 | min_confidence_threshold 等字段有定义无实现 |
 
 **⚠️ 已移出 P1 的项目（附降级理由，避免误判优先级）**：
 
@@ -107,7 +105,7 @@
   与 opportunity_thesis（已是 2-4 句可读论点）定位重叠，差异未被定义。
   **从优先级列表删除**，等有人明确提出"thesis 不够用"再讨论。
 
-**当前状态**：✅ MVP 完成 | ✅ 消费语义拍板 | ✅ Prompt-first v2 落地 | ⏳ LLM 完整验证
+**当前状态**：✅ MVP 完成 | ✅ 消费语义拍板 | ✅ Prompt-first v2 + 多机会输出重构 | ✅ EvidenceValidator 可追溯性 | ⏳ LLM 完整验证（后续完善）| ⏳ 2.3 联调回归（进行中）
 
 **关键文件**：
 - 执行进展：[phase2.2_执行进展.md](data-layer/projects/proj_004/phase2_plan/phase2.2_执行进展.md)
