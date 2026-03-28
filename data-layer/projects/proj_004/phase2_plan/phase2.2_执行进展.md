@@ -165,9 +165,18 @@
 |---|------|--------|------|------|
 | 1 | LLM 完整验证 | P1 | ⏳ 等待稳定 API 窗口 | api123.icu 限流，7 案例全 fallback 到规则引擎；prompt 修改效果（next_validation_questions 语义）待 LLM 恢复后验证 |
 | 2 | 2.2→2.3 联调回归 | P1 | ⏳ 待做 | next_validation_questions 语义已修正（从"信息收集问题"改为"供 2.3 行动决策的前置问题"），需确认 2.3 消费逻辑未受影响 |
-| 3 | 多信号聚合策略确认 | P2 | ⏳ 待 LLM 跑稳后决策 | 当天全部信号打包 vs 按主题相关性分组 |
+| 3 | 多信号聚合策略确认 | ✅ 已拍板 | **方案 A：当天全部信号打包传入 2.2** | 2.2 first principle 要求自主决定信号组合，预分组会前移判断职责；token 压力由 2.1 两阶段筛选兜底（规则预筛+haiku粗筛），有效范式信号每天数量有限；2.2 侧 evidence_text 已截 120 字符可控 |
 | 4 | Schema 标准化（phase2_common） | P2 | ⏳ 待 Prompt-first 跑稳后做 | 现在做是过早优化 |
 | 5 | 2.4 深度集成 | P2 | ⏳ 暂缓 | 结构未稳 |
+
+**⚠️ 工程遗留问题（2026-03-28 对照 first principle 全面梳理后记录）**：
+
+| # | 问题 | 正确定位 | 优先级 | 处置方式 |
+|---|------|---------|--------|---------|
+| 1 | `EvidenceValidator.validate_evidence_format` 未生效 | **信息可靠性保障，first principle 核心需求**（见 PHASE2_2_FIRST_PRINCIPLES §6.1.4：「哪些问题不验证清楚就不应该升级」，假消息升级会造成严重后果）；当前 LLM/规则引擎输出的证据不带 `[来源]` 标记，设计意图未落地 | **P1 必要增强** | 当前暂不强制执行，P1 阶段补齐证据来源标注机制（LLM prompt 要求输出含来源标识的证据格式）|
+| 2 | `_execute_judgment_pipeline` v1 流程残留 | 无新调用方，已被 v2 完整替代，注释「保留兼容」缺乏依据 | P2 | 标记 `@deprecated`，下次代码整理时移除 |
+| 3 | `check_signal_source` v1 / `check_signal_source_v2` 并存 | 跟随 v1 流程遗留 | P2 | 随 v1 流程一起清理 |
+| 4 | `judgment_config.min_confidence_threshold` 有字段无实现 | 预留接口，当前 judgment_engine 未使用 | P2 | schema 注释标注「预留字段，当前不生效，P2 实现」|
 
 **⚠️ 已移出 P1 的项目（附降级理由）**：
 
