@@ -18,8 +18,9 @@ phases:
     # base_url: ""          # 不填 → 用 default
 
   "2.2":                    # 机会判断：需要更强推理，可换高端模型
-    model: "claude-sonnet-4-6"
-    # model: "claude-opus-4-6"  # 如需更强推理，取消注释
+    model: "claude-opus-4-5-20251101"
+    max_tokens: 8192          # 多机会列表输出较长，4096 不够
+    # model: "claude-sonnet-4-6"  # 降回中端模型时取消注释
 
   "2.3":                    # 行动设计：同 2.2
     model: "claude-sonnet-4-6"

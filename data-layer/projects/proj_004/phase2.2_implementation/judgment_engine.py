@@ -38,9 +38,10 @@ class JudgmentEngine:
         # 从统一配置加载（优先使用传入参数）
         # 注意：api_key=None → 从配置读取；api_key='' → 强制规则引擎模式（不读配置）
         cfg = self._load_llm_config("2.2")
-        self.api_key  = cfg.get("api_key", "") if api_key is None else api_key
-        self.model    = model   or cfg.get("model", "claude-sonnet-4-6")
-        self.base_url = cfg.get("base_url", "https://api.anthropic.com")
+        self.api_key   = cfg.get("api_key", "") if api_key is None else api_key
+        self.model     = model or cfg.get("model", "claude-sonnet-4-6")
+        self.base_url  = cfg.get("base_url", "https://api.anthropic.com")
+        self.max_tokens = cfg.get("max_tokens", 4096)
         self.judgment_version = "v2.0-llm" if self.api_key else "v1.0-rules"
         self.boundary_validator = BoundaryValidator()
         self.evidence_validator = EvidenceValidator()
@@ -660,6 +661,7 @@ class JudgmentEngine:
         response = self._llm.call(
             prompt=prompt,
             model=self.model,
+            max_tokens=self.max_tokens,
         )
 
         if not response or not response.strip():

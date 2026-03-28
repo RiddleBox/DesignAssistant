@@ -164,7 +164,7 @@ CASE_3_RESEARCH = {
 CASE_4_RESEARCH_WITH_CONTEXT = {
     "case_id": "case_004_research_with_context",
     "description": "UE5 技术升级 + 平台销量增长，2.4 注入相似案例",
-    "expected_priority": "research",
+    "expected_priority": "deep_dive",  # 2026-03-28 上调：LLM 结合 context_packet 后判断更积极，deep_dive 合理
     "request": OpportunityJudgmentRequest(
         decoded_intelligences=[
             _make_di(
