@@ -57,13 +57,20 @@ class BoundaryValidator:
 
     @staticmethod
     def check_output_boundary(opportunity: OpportunityObject) -> Tuple[bool, List[str]]:
-        """检查点3：输出边界检查 - 确保不越界到2.3"""
+        """检查点3：输出边界检查 - 确保不越界到2.3
+
+        边界说明：
+        - 合法（2.2 范围内）：验证问题、信息收集问题、观察指标、预算窗口判断
+        - 越界（2.3 范围）：资源分配、人员安排、执行计划、立项决策
+        """
         warnings = []
 
-        # 检查next_validation_questions是否越界
+        # 仅在出现明确的行动指令类词汇时才判越界
+        # 注意：「预算窗口」「预算规模」是观察词，不越界；「预算分配」「预算申请」是行动词
+        BOUNDARY_KEYWORDS = ["资源分配", "人员安排", "立项", "启动项目", "分配预算", "申请预算"]
+
         for question in opportunity.next_validation_questions:
-            # 简单检查：如果包含"投入"、"资源"、"预算"等关键词，可能越界
-            if any(keyword in question for keyword in ["投入", "资源分配", "预算", "人员安排"]):
+            if any(keyword in question for keyword in BOUNDARY_KEYWORDS):
                 warnings.append(f"验证问题可能越界到行动方案层: {question}")
 
         is_valid = len(warnings) == 0

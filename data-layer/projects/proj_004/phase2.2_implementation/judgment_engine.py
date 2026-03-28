@@ -293,7 +293,11 @@ class JudgmentEngine:
     "类型可选：source_reliability/evidence_completeness/execution_risk/market_timing/competitive_response"
   ],
   "priority_level": "watch|research|deep_dive|escalate",
-  "next_validation_questions": ["下一步验证问题1", "..."]
+  "next_validation_questions": [
+    "供 2.3 行动设计使用的关键前置问题，例如：「时效窗口还有多久，是否来得及进入？」「核心假设 X 是否成立，2.3 需要先确认才能推进」",
+    "聚焦「2.3 做行动决策前必须回答的问题」，不要写外部信息收集任务，不要写「去查竞争对手研发规模」这类调研工作",
+    "每条问题应直接服务于 go/no-go 判断或行动姿态选择"
+  ]
 }}"""
 
         result = self._call_llm(prompt)
@@ -626,7 +630,7 @@ class JudgmentEngine:
 - 组织 supporting_evidence / counter_evidence / key_assumptions
 - 评估 uncertainty_map
 - 给出 priority_level（仅允许：watch, research, deep_dive, escalate）
-- 给出 next_validation_questions
+- 给出 next_validation_questions（供 2.3 行动设计使用的关键前置问题；聚焦「2.3 做行动决策前必须回答的问题」，如时效窗口、核心假设是否成立、go/no-go 判断依据；不要写外部信息收集任务）
 - 可微调 opportunity_title 和 opportunity_thesis
 
 输入：
@@ -645,7 +649,7 @@ class JudgmentEngine:
   "key_assumptions": ["string"],
   "uncertainty_map": ["string"],
   "priority_level": "watch|research|deep_dive|escalate",
-  "next_validation_questions": ["string"]
+  "next_validation_questions": ["供 2.3 行动决策使用的关键前置问题，如时效窗口/核心假设/go-no-go 依据"]
 }}
 
 要求：
