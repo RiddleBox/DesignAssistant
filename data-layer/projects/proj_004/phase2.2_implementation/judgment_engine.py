@@ -36,8 +36,9 @@ class JudgmentEngine:
         self.llm_client = llm_client
         self.rag_retriever = rag_retriever
         # 从统一配置加载（优先使用传入参数）
+        # 注意：api_key=None → 从配置读取；api_key='' → 强制规则引擎模式（不读配置）
         cfg = self._load_llm_config("2.2")
-        self.api_key  = api_key or cfg.get("api_key", "")
+        self.api_key  = cfg.get("api_key", "") if api_key is None else api_key
         self.model    = model   or cfg.get("model", "claude-sonnet-4-6")
         self.base_url = cfg.get("base_url", "https://api.anthropic.com")
         self.judgment_version = "v2.0-llm" if self.api_key else "v1.0-rules"
