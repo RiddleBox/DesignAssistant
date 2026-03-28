@@ -118,7 +118,8 @@ class JudgmentEngine:
                     all_warnings.extend([f"[{opp.opportunity_title}] {w}" for w in opp_warnings])
                 completeness = self.evidence_validator.calculate_evidence_completeness(
                     opp.supporting_evidence, opp.counter_evidence,
-                    opp.key_assumptions, opp.uncertainty_map
+                    opp.key_assumptions, opp.uncertainty_map,
+                    related_signals=opp.related_signals
                 )
                 total_completeness += completeness
 

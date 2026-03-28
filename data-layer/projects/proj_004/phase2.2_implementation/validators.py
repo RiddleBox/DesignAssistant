@@ -94,29 +94,75 @@ class EvidenceValidator:
         return is_valid, warnings
 
     @staticmethod
+    def check_signal_traceability(related_signals: List[Dict[str, Any]]) -> Tuple[float, List[str]]:
+        """
+        检查信号可追溯性：每条 enriched signal 是否有有效的 source_ref。
+
+        返回：
+            - traceability_score (0.0~1.0)：有 source_ref 的信号占比
+            - warnings：不可追溯信号的警告列表
+        """
+        if not related_signals:
+            return 0.0, ["无关联信号，无法评估可追溯性"]
+
+        warnings = []
+        traceable = 0
+        for sig in related_signals:
+            ref = sig.get("source_ref", "")
+            if ref and ref.strip() and ref != "unknown":
+                traceable += 1
+            else:
+                label = sig.get("signal_label", sig.get("signal_id", "unknown"))
+                warnings.append(f"信号缺少 source_ref，无法追溯来源：{label[:40]}")
+
+        score = traceable / len(related_signals)
+        return score, warnings
+
+    @staticmethod
     def calculate_evidence_completeness(
         supporting: List[str],
         counter: List[str],
         assumptions: List[str],
-        uncertainty: List[str]
+        uncertainty: List[str],
+        related_signals: List[Dict[str, Any]] = None
     ) -> float:
-        """计算证据完整度 (0-1)"""
+        """
+        计算证据完整度 (0.0~1.0)
+
+        评分维度：
+          支持证据存在       15%
+          支持证据 2+ 条     10%（单条只拿基础分）
+          反对证据存在       15%
+          反对证据 2+ 条     10%
+          关键假设           15%
+          不确定性标注       15%
+          信号可追溯性       20%（source_ref 覆盖率）
+        """
         score = 0.0
 
-        # 支持证据 (30%)
+        # 支持证据（25%）
         if supporting:
-            score += 0.3
+            score += 0.15
+            if len(supporting) >= 2:
+                score += 0.10
 
-        # 反对证据 (30%)
+        # 反对证据（25%）
         if counter:
-            score += 0.3
+            score += 0.15
+            if len(counter) >= 2:
+                score += 0.10
 
-        # 关键假设 (20%)
+        # 关键假设（15%）
         if assumptions:
-            score += 0.2
+            score += 0.15
 
-        # 不确定性 (20%)
+        # 不确定性标注（15%）
         if uncertainty:
-            score += 0.2
+            score += 0.15
 
-        return score
+        # 信号可追溯性（20%）
+        if related_signals is not None:
+            traceability, _ = EvidenceValidator.check_signal_traceability(related_signals)
+            score += 0.20 * traceability
+
+        return round(score, 3)
