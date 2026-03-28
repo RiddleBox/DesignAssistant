@@ -83,7 +83,26 @@
 - 冒烟验证通过：2条跨来源信号（technical+capital）→ 输出逻辑链完整的 OpportunityObject
 - **Bug 修复（2026-03-28）**：规则引擎 fallback 中 `intensity` 字段名改为 `intensity_score`（兼容写法），修复 priority 分级 avg_intensity 始终为 0 的问题
 
-**遗留待办**：LLM 完整验证（API 限流中）、验证案例集更新、多信号聚合策略确认
+**遗留待办**：
+
+| # | 项目 | 优先级 | 状态 | 备注 |
+|---|------|--------|------|------|
+| 1 | LLM 完整验证 | P1 | ⏳ 等待稳定 API 窗口 | api123.icu 限流，7 个案例全部 fallback 到规则引擎，prompt 修改效果待验证 |
+| 2 | 验证案例集更新 | ✅ 完成 | 已重写为游戏行业主题，7 个案例，多条 DI 输入 | — |
+| 3 | 多信号聚合策略确认 | P2 | 待 LLM 跑稳后决策 | 当天全部信号打包 vs 按主题预分组 |
+| 4 | 2.2→2.3 联调回归 | P1 | ⏳ 待做 | next_validation_questions 语义修正后，需确认 2.3 消费逻辑未受影响 |
+
+**⚠️ 已移出 P1 的项目（附降级理由，避免误判优先级）**：
+
+- **轻量评分框架**（change_significance / capture_feasibility / timing_window / evidence_strength）：
+  原列为 P1，但从未正式拍板（见 phase2.2_待拍板决策清单.md §6.3 状态=☐ 待拍板）。
+  2.2 的 first principle 是"机会判断层，主产物是结构化对象+priority_level"，评分是辅助表达而非判断骨架（拍板结论 §5.2）。
+  消费方不清晰——2.3 消费 priority_level 做分流，不消费这 4 个维度；人工阅读由 opportunity_thesis 承担。
+  **降为 P2 条件性后置**，触发条件：2.3 明确反馈"priority_level 不足以支撑行动设计，需要辅助维度"时再做。
+
+- **简版自然语言摘要**：
+  与 opportunity_thesis（已是 2-4 句可读论点）定位重叠，差异未被定义。
+  **从优先级列表删除**，等有人明确提出"thesis 不够用"再讨论。
 
 **当前状态**：✅ MVP 完成 | ✅ 消费语义拍板 | ✅ Prompt-first v2 落地 | ⏳ LLM 完整验证
 
