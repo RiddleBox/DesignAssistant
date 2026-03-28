@@ -15,9 +15,10 @@ class ActionDesigner:
     def __init__(self, api_key: str = None, model: str = None):
         # 从统一配置加载（优先使用传入参数）
         cfg = self._load_llm_config("2.3")
-        self.api_key  = api_key or cfg.get("api_key", "") or os.environ.get("ANTHROPIC_API_KEY", "")
-        self.model    = model   or cfg.get("model", "claude-sonnet-4-6")
-        self.base_url = cfg.get("base_url", "https://api.anthropic.com")
+        self.api_key   = api_key or cfg.get("api_key", "") or os.environ.get("ANTHROPIC_API_KEY", "")
+        self.model     = model   or cfg.get("model", "claude-sonnet-4-6")
+        self.base_url  = cfg.get("base_url", "https://api.anthropic.com")
+        self.max_tokens = cfg.get("max_tokens", 4096)
         self._llm = self._load_llm_client()
 
     def _load_llm_config(self, phase: str) -> dict:
@@ -52,7 +53,7 @@ class ActionDesigner:
         """调用统一 LLM 客户端并解析 JSON 响应"""
         if not self._llm:
             raise RuntimeError("LLM client is not initialized")
-        response = self._llm.call(prompt=prompt, model=self.model)
+        response = self._llm.call(prompt=prompt, model=self.model, max_tokens=self.max_tokens)
         if not response or not response.strip():
             raise ValueError("LLM returned empty response")
         text = response.strip()
@@ -93,7 +94,7 @@ class ActionDesigner:
 {opp_context}
 
 重点：放大支持证据，论证为何应该立即推进，提出激进的行动姿态和计划。"""
-        hawk_view = self._llm.call(prompt=hawk_prompt, model=self.model)
+        hawk_view = self._llm.call(prompt=hawk_prompt, model=self.model, max_tokens=self.max_tokens)
         if not hawk_view:
             raise ValueError("Hawk agent returned empty response")
 
@@ -104,7 +105,7 @@ class ActionDesigner:
 {opp_context}
 
 重点：放大反对证据和不确定性，论证为何应该谨慎，指出激进行动的潜在风险。"""
-        dove_view = self._llm.call(prompt=dove_prompt, model=self.model)
+        dove_view = self._llm.call(prompt=dove_prompt, model=self.model, max_tokens=self.max_tokens)
         if not dove_view:
             raise ValueError("Dove agent returned empty response")
 
@@ -133,43 +134,44 @@ class ActionDesigner:
   }},
   "phased_plan": [
     {{
-      "stage": "string（阶段名，如'关键假设验证'）",
-      "objective": "string",
-      "key_assumptions_to_test": ["string"],
-      "actions": ["string"],
+      "stage": "string（阶段名，10字以内）",
+      "objective": "string（30字以内）",
+      "key_assumptions_to_test": ["string（20字以内，1-2条）"],
+      "actions": ["string（20字以内，1-2条）"],
       "resources": {{
-        "people": "string",
-        "budget": "string",
-        "time": "string",
-        "resource_rationale": "string（必填：解释为何在此阶段投入这批资源，与key_assumptions_to_test强绑定，格式：投入X是为了验证[假设]，验证通过后才释放下阶段资源）"
+        "people": "string（10字以内）",
+        "budget": "string（10字以内）",
+        "time": "string（10字以内）",
+        "resource_rationale": "string（50字以内：投入X是为了验证[假设]，通过后才释放下阶段资源）"
       }},
-      "milestones": ["string"],
-      "go_no_go_criteria": ["string"],
-      "exit_conditions": ["string"]
+      "milestones": ["string（20字以内，1条）"],
+      "go_no_go_criteria": ["string（20字以内，1-2条）"],
+      "exit_conditions": ["string（20字以内，1条）"]
     }}
   ],
   "top_risks": [
     {{
-      "risk": "string",
-      "impact_on_plan": "string",
-      "mitigation": "string",
-      "blocks_stage": "string（必填：该风险触发时影响哪个阶段的名称，与phased_plan中stage字段对应；若影响全局则填'全局'）"
+      "risk": "string（20字以内）",
+      "impact_on_plan": "string（20字以内）",
+      "mitigation": "string（20字以内）",
+      "blocks_stage": "string（阶段名或'全局'）"
     }}
   ],
-  "resource_commitment_logic": "string",
-  "fallback_path": "string",
-  "open_questions": ["string"]
+  "resource_commitment_logic": "string（60字以内）",
+  "fallback_path": "string（30字以内）",
+  "open_questions": ["string（20字以内，1-2条）"]
 }}
 
 要求：
 1. decision_posture 必须是 watch/validate/pilot/escalate 之一。
-2. phased_plan 1-3 个阶段，watch 姿态只需 1 个阶段。
-3. top_risks 2-3 条，每条必须填写 blocks_stage。
-4. 每个阶段的 resource_rationale 必须明确说明资源与假设验证的绑定关系。
-5. **时机判断（why_now）**：若 why_now 字段有内容，必须在 why_this_posture 中体现时机紧迫性或窗口期判断，并影响 phased_plan 的第一阶段节奏（是否需要快速启动）。
-6. **前置问题（next_validation_questions）**：若该字段有内容，必须将其中的关键问题映射到对应阶段的 key_assumptions_to_test 或 go_no_go_criteria 中，不得忽略。
+2. phased_plan 1-2 个阶段（watch 只需1个），严格遵守每个字段的字数上限。
+3. top_risks 2 条，每条必须填写 blocks_stage。
+4. resource_rationale 必须说明资源与假设验证的绑定关系（50字以内）。
+5. **时机判断（why_now）**：若 why_now 字段有内容，必须在 why_this_posture 中体现时机判断，并影响第一阶段节奏。
+6. **前置问题（next_validation_questions）**：若该字段有内容，必须将关键问题映射到 key_assumptions_to_test 或 go_no_go_criteria 中。
 7. 只输出合法 JSON，不要任何额外说明。
-8. 禁止在 JSON 字符串值内使用中文引号（""「」），只允许使用半角双引号。"""
+8. 禁止在 JSON 字符串值内使用中文引号（""「」），只允许使用半角双引号。
+9. 总 JSON 输出必须控制在 3000 字以内。"""
 
         result = self._call_llm(arbitrator_prompt)
 
