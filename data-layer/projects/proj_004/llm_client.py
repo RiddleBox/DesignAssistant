@@ -40,7 +40,10 @@ class LLMClient:
         Returns:
             str: 模型输出文本
         """
-        url = self.base_url + "/v1/messages"
+        if self.base_url.endswith("/v1/messages") or self.base_url.endswith("/messages"):
+            url = self.base_url
+        else:
+            url = self.base_url + "/v1/messages"
         headers = {
             "Authorization": f"Bearer {self.api_key}",
             "anthropic-version": "2023-06-01",
