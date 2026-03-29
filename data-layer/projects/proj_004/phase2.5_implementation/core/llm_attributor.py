@@ -248,13 +248,20 @@ class LLMAttributor:
             print(f"[WARN] LLMAttributor: LLM 调用失败，将 fallback 到规则归因。原因：{e}")
             return None
 
-        # 解析 JSON
+        # 解析 JSON：提取第一个 { 到最后一个 } 之间的内容，兼容 LLM 前缀说明文字
         try:
-            # 处理 LLM 可能包裹在 ```json ``` 里的情况
             text = raw.strip()
-            if text.startswith("```"):
-                lines = text.split("\n")
-                text = "\n".join(lines[1:-1]) if lines[-1].strip() == "```" else "\n".join(lines[1:])
+            # 去掉 ```json ``` 包裹
+            if "```" in text:
+                import re
+                m = re.search(r'```(?:json)?\s*([\s\S]*?)```', text)
+                if m:
+                    text = m.group(1).strip()
+            # 兜底：取第一个 { 到最后一个 } 之间的内容
+            start = text.find("{")
+            end = text.rfind("}")
+            if start != -1 and end != -1 and end > start:
+                text = text[start:end+1]
             result = json.loads(text)
             if "critical_findings" not in result or "suspected_root_causes" not in result:
                 raise ValueError("缺少必要字段")

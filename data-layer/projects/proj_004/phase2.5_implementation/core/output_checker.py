@@ -275,13 +275,20 @@ class OutputChecker:
                 prompt=f"请检查以下链路输出的论证自洽性：\n{json.dumps(snippet, ensure_ascii=False, indent=2)}",
                 system=self.SEMANTIC_CHECK_SYSTEM,
                 model="claude-sonnet-4-6",
-                max_tokens=512,
+                max_tokens=800,
                 temperature=0.0,
             )
             text = raw.strip()
-            if text.startswith("```"):
-                lines = text.split("\n")
-                text = "\n".join(lines[1:-1]) if lines[-1].strip() == "```" else "\n".join(lines[1:])
+            # 去掉 ```json ``` 包裹，兼容 LLM 前缀说明文字
+            if "```" in text:
+                import re
+                m = re.search(r'```(?:json)?\s*([\s\S]*?)```', text)
+                if m:
+                    text = m.group(1).strip()
+            start = text.find("{")
+            end = text.rfind("}")
+            if start != -1 and end != -1 and end > start:
+                text = text[start:end+1]
             result = json.loads(text)
 
             status_map = {
