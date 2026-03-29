@@ -327,6 +327,7 @@ class JudgmentEngine:
                 key_assumptions=assumptions,
                 uncertainty_map=uncertainty_map,
                 priority_level=priority_level,
+                why_now=self._infer_why_now(signals, priority_level),
                 next_validation_questions=validation_qs,
                 warnings=["[fallback] LLM 不可用，由规则引擎生成，结果仅供参考"],
                 judgment_version=self.judgment_version,
@@ -698,6 +699,23 @@ class JudgmentEngine:
 
         return questions
 
+    def _infer_why_now(self, signals: List[Dict[str, Any]], priority_level: str) -> str:
+        """
+        规则引擎 fallback 下，基于信号类型和优先级推断 why_now。
+        LLM 模式下此字段由 LLM 直接生成，此处仅作兜底。
+        """
+        signal_types = list({s.get("signal_type", "") for s in signals})
+        type_str = "/".join(t for t in signal_types if t)
+
+        if priority_level == "escalate":
+            return f"[规则引擎] 当前 {type_str} 类信号已达升级门槛，时间窗口紧迫，需立即响应"
+        elif priority_level == "deep_dive":
+            return f"[规则引擎] {type_str} 类信号强度高，有多条交叉验证证据，是深度研究的合适时机"
+        elif priority_level == "research":
+            return f"[规则引擎] {type_str} 类信号出现，存在后续演化可能，当前适合展开初步研究"
+        else:
+            return f"[规则引擎] {type_str} 类信号处于观察阶段，暂无明确时机催化剂，持续跟踪"
+
     def _call_llm(self, prompt: str) -> Dict[str, Any]:
         """调用统一 LLM 客户端并解析 JSON 响应"""
         if not self._llm:
@@ -713,15 +731,21 @@ class JudgmentEngine:
             raise ValueError("LLM returned empty response")
 
         text = response.strip()
-        if text.startswith("```"):
-            lines = text.splitlines()
-            if lines and lines[0].startswith("```"):
-                lines = lines[1:]
-            if lines and lines[-1].strip() == "```":
-                lines = lines[:-1]
-            text = "\n".join(lines).strip()
-            if text.startswith("json"):
-                text = text[4:].strip()
+
+        # 提取 JSON：兼容三种形式
+        #   1. 直接输出 {}
+        #   2. ```json ... ``` 包裹
+        #   3. 前缀说明文字 + ```json ... ```（中转 system prompt 行为）
+        import re as _re
+        if "```" in text:
+            m = _re.search(r'```(?:json)?\s*([\s\S]*?)```', text)
+            if m:
+                text = m.group(1).strip()
+        # 兜底：取第一个 { 到最后一个 }
+        start = text.find("{")
+        end   = text.rfind("}")
+        if start != -1 and end != -1 and end > start:
+            text = text[start:end+1]
 
         try:
             return json.loads(text)

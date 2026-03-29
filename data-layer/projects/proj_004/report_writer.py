@@ -98,7 +98,11 @@ def generate_report(
         lines.append("\n")
 
     # ── 三、机会判断（2.2） ───────────────────────────────────
-    lines.append("## 三、机会判断（Phase 2.2）\n\n")
+    # 判断来源标注：opp.warnings 含 [fallback] 说明规则引擎生成
+    opp_warnings = getattr(opp, "warnings", []) or []
+    is_opp_fallback = any("[fallback]" in str(w) for w in opp_warnings)
+    opp_source_tag = " ⚠️ `规则引擎生成，LLM 未跑通`" if is_opp_fallback else " ✅ `LLM生成`"
+    lines.append(f"## 三、机会判断（Phase 2.2）{opp_source_tag}\n\n")
 
     supporting = getattr(opp, "supporting_evidence", []) or []
     counter = getattr(opp, "counter_evidence", []) or []
@@ -129,7 +133,11 @@ def generate_report(
         lines.append(_list_items(next_q))
 
     # ── 四、行动设计（2.3） ───────────────────────────────────
-    lines.append("\n## 四、行动设计（Phase 2.3）\n\n")
+    # 判断来源标注：debate_summary 存在说明 LLM 跑通，否则是规则引擎
+    debate = getattr(act, "debate_summary", None)
+    is_act_fallback = debate is None
+    act_source_tag = " ⚠️ `规则引擎生成，LLM 未跑通`" if is_act_fallback else " ✅ `LLM生成`"
+    lines.append(f"\n## 四、行动设计（Phase 2.3）{act_source_tag}\n\n")
     lines.append(f"**行动姿态**：`{posture}`\n\n")
 
     why = getattr(act, "why_this_posture", None)
