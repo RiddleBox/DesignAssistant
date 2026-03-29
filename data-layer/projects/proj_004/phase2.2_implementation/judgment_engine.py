@@ -20,6 +20,57 @@ from schemas import (
 from validators import BoundaryValidator, EvidenceValidator
 
 
+def _extract_context_data(context_packet) -> dict:
+    """从 ContextPacket 按 content_type 提取 prompt 可用数据。
+
+    兼容两种输入：
+    - 新路径（packets 字段）：2.4 ContextPacket v1.0 结构化证据包列表，按 content_type 分拣
+    - 旧路径（similar_cases 等旧字段）：直接透传，向后兼容
+
+    content_type 映射规则（来自 ContextPacket v1.0 协议）：
+    - case_record / market_data → similar_cases（支持论点的外部案例与数据）
+    - constraint_rule           → counter_examples（边界约束，作为反向检验依据）
+    - few_shot_example          → methodology_hints（判断方法参考）
+    - glossary / background     → 辅助理解，不直接注入（避免 prompt 噪音）
+    """
+    if context_packet is None:
+        return {"similar_cases": [], "counter_examples": [], "methodology_hints": [], "supporting_data": []}
+
+    packets = getattr(context_packet, "packets", None)
+    if packets:
+        similar_cases = []
+        counter_examples = []
+        methodology_hints = []
+        for p in packets:
+            ct = getattr(p, "content_type", "")
+            trust = getattr(p, "trust_level", "low")
+            title = getattr(p, "source_title", "")
+            excerpt = getattr(p, "excerpt", "")
+            reason = getattr(p, "reason_for_match", "")
+            entry = f"[{trust}][{title}] {excerpt}（命中原因：{reason}）"
+            if ct in ("case_record", "market_data"):
+                similar_cases.append(entry)
+            elif ct == "constraint_rule":
+                counter_examples.append(entry)
+            elif ct == "few_shot_example":
+                methodology_hints.append(entry)
+            # glossary / background 不注入，避免 prompt 噪音
+        return {
+            "similar_cases": similar_cases,
+            "counter_examples": counter_examples,
+            "methodology_hints": methodology_hints,
+            "supporting_data": similar_cases,  # _llm_judge 旧字段兼容
+        }
+
+    # 旧路径：直接读旧字段
+    return {
+        "similar_cases":     getattr(context_packet, "similar_cases", []) or [],
+        "counter_examples":  getattr(context_packet, "counter_examples", []) or [],
+        "methodology_hints": getattr(context_packet, "methodology_hints", []) or [],
+        "supporting_data":   getattr(context_packet, "similar_cases", []) or [],
+    }
+
+
 class JudgmentEngine:
     """机会判断引擎"""
 
@@ -309,11 +360,7 @@ class JudgmentEngine:
                 f"   来源类型：{s.get('_source_type','unknown')} / 来源ID：{s.get('_source_id','')} / 信号来源ref：{s.get('source_ref','')}"
             )
 
-        context_data = {
-            "similar_cases":     getattr(context_packet, "similar_cases", [])     if context_packet else [],
-            "counter_examples":  getattr(context_packet, "counter_examples", [])  if context_packet else [],
-            "methodology_hints": getattr(context_packet, "methodology_hints", []) if context_packet else [],
-        }
+        context_data = _extract_context_data(context_packet)
 
         prompt = f"""你是 Phase 2.2 机会判断引擎。基于多条情报信号，识别所有值得关注的战略机会（可能是多个）。
 
@@ -542,15 +589,13 @@ class JudgmentEngine:
             summary = signal.get("description", "未知信号")
             supporting.append(f"[{signal_id}] {summary}")
 
-        # 从2.4证据包补充证据
+        # 从2.4证据包补充证据（通过 _extract_context_data 统一分拣）
         if context_packet:
-            if context_packet.similar_cases:
-                for case in context_packet.similar_cases:
-                    supporting.append(f"[2.4-similar] {case}")
-
-            if context_packet.counter_examples:
-                for example in context_packet.counter_examples:
-                    counter.append(f"[2.4-counter] {example}")
+            cd = _extract_context_data(context_packet)
+            for case in cd["similar_cases"]:
+                supporting.append(f"[2.4-evidence] {case}")
+            for example in cd["counter_examples"]:
+                counter.append(f"[2.4-constraint] {example}")
 
         # 如果没有反对证据，添加默认项
         if not counter:
@@ -700,11 +745,7 @@ class JudgmentEngine:
                 f"intensity={signal.get('intensity_score', signal.get('intensity', 0))}"
             )
 
-        context_data = {
-            "similar_cases": getattr(context_packet, "similar_cases", []) if context_packet else [],
-            "counter_examples": getattr(context_packet, "counter_examples", []) if context_packet else [],
-            "supporting_data": getattr(context_packet, "supporting_data", []) if context_packet else [],
-        }
+        context_data = _extract_context_data(context_packet)
 
         prompt = f"""你是 Phase 2.2 机会判断引擎。请基于输入信号输出严格 JSON，不要输出任何额外说明。
 

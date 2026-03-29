@@ -250,22 +250,51 @@ def build_rag_retriever():
         return None
 
     def rag_retriever(query: str):
-        """由 JudgmentEngine 在形成主题后按需调用"""
+        """由 JudgmentEngine 在形成主题后按需调用。
+        调用 retrieve_context() 获取结构化 ContextPacket（v1.0 协议），
+        按 content_type 分桶召回，由 judgment_engine._extract_context_data() 消费。
+        """
         try:
             print(f"  [RAG] 2.2 发起查询: {query[:80]}...")
-            docs, query_ms = retriever.retrieve(query, top_k=3)
-            if not docs:
-                print("  [RAG] no documents retrieved")
+            # 构造 ContextRequest（2.2 关心 case_record / market_data / few_shot_example）
+            ContextRequest = _models_mod.ContextRequest
+            req = ContextRequest(
+                query=query,
+                needed_content_types=["case_record", "market_data", "few_shot_example", "constraint_rule"],
+                top_k=6,
+                min_trust_level="low",
+            )
+            ctx_response = retriever.retrieve_context(req)
+            packets = ctx_response.context_packets if ctx_response else []
+            if not packets:
+                print("  [RAG] no context packets retrieved")
                 return None
-            print(f"  [RAG] 命中 {len(docs)} 条文档（{query_ms}ms）")
-            similar_cases = []
-            for doc in docs:
-                print(f"    - [{doc.id}] {doc.title}")
-                snippet = " ".join(doc.content[:200].split())
-                similar_cases.append(f"[{doc.title}] {snippet}")
-            return ContextPacket(similar_cases=similar_cases)
+            print(f"  [RAG] 命中 {len(packets)} 条证据包（{ctx_response.retrieval_time_ms}ms）")
+            for p in packets:
+                print(f"    - [{p.content_type}][{p.trust_level}] {p.source_title}")
+            if ctx_response.notes:
+                for note in ctx_response.notes:
+                    print(f"    [RAG note] {note}")
+            # 将 2.4 ContextPacket 列表封装为 2.2 ContextPacket（packets 字段）
+            m22_ContextPacketItem = m22_schemas.ContextPacketItem
+            items = [
+                m22_ContextPacketItem(
+                    packet_id=p.packet_id,
+                    source_id=p.source_id,
+                    source_title=p.source_title,
+                    content_type=p.content_type,
+                    excerpt=p.excerpt,
+                    reason_for_match=p.reason_for_match,
+                    tags=list(p.tags) if p.tags else [],
+                    trust_level=p.trust_level,
+                    score=float(p.score),
+                )
+                for p in packets
+            ]
+            return ContextPacket(packets=items)
         except Exception as _e:
             print(f"  [RAG] query exception: {_e}")
+            import traceback; traceback.print_exc()
             return None
 
     return rag_retriever

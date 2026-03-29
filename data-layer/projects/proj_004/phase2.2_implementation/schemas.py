@@ -80,12 +80,37 @@ class OpportunityObject(BaseModel):
     processing_time_ms: int = Field(..., description="处理耗时（毫秒）")
 
 
+class ContextPacketItem(BaseModel):
+    """2.4 ContextPacket v1.0 单条证据包（对齐 PHASE2_4_CONTEXT_PACKET_PROTOCOL.md）"""
+    packet_id: str = Field(..., description="证据包唯一ID")
+    source_id: str = Field(..., description="来源文档ID")
+    source_title: str = Field(..., description="来源文档标题")
+    content_type: str = Field(..., description="内容性质枚举：glossary/few_shot_example/constraint_rule/case_record/market_data/background")
+    excerpt: str = Field(..., description="命中片段（≤500字符）")
+    reason_for_match: str = Field(..., description="命中原因")
+    tags: List[str] = Field(default_factory=list, description="标签列表")
+    trust_level: str = Field(..., description="信任等级：high/medium/low")
+    score: float = Field(0.0, description="检索相似度分数")
+
+
 class ContextPacket(BaseModel):
-    """来自 Phase 2.4 的增强输入"""
-    similar_cases: Optional[List[str]] = Field(None, description="相似案例")
-    counter_examples: Optional[List[str]] = Field(None, description="反例")
-    methodology_hints: Optional[List[str]] = Field(None, description="方法论提示")
-    domain_constraints: Optional[List[str]] = Field(None, description="领域约束")
+    """来自 Phase 2.4 的增强输入（v2：对齐 2.4 ContextPacket 协议 v1.0）
+
+    packets 字段存储 2.4 返回的结构化证据包列表，按 content_type 分类消费：
+    - case_record / market_data → supporting_evidence / counter_evidence
+    - few_shot_example         → methodology_hints（判断方法参考）
+    - constraint_rule          → counter_evidence（边界约束，作为反向检验）
+    - glossary / background    → 辅助理解，不直接注入 prompt
+
+    旧字段（similar_cases/counter_examples/methodology_hints）保留用于兼容，
+    新调用路径通过 packets 传入，由 judgment_engine 内部按 content_type 分拣。
+    """
+    packets: Optional[List[ContextPacketItem]] = Field(None, description="2.4 结构化证据包列表（v1.0协议）")
+    # 旧字段保留兼容，新路径不再填充
+    similar_cases: Optional[List[str]] = Field(None, description="[旧] 相似案例（兼容保留）")
+    counter_examples: Optional[List[str]] = Field(None, description="[旧] 反例（兼容保留）")
+    methodology_hints: Optional[List[str]] = Field(None, description="[旧] 方法论提示（兼容保留）")
+    domain_constraints: Optional[List[str]] = Field(None, description="[旧] 领域约束（兼容保留）")
 
 
 class ValidateHypothesisRequest(BaseModel):
