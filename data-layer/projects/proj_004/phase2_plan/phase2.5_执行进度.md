@@ -3,7 +3,7 @@
 > **文档类型**：执行进度跟踪文档
 > **适用模块**：Phase 2.5 整合验证与复盘模块
 > **状态**：执行中
-> **最后更新**：2026-03-24
+> **最后更新**：2026-03-29
 
 ---
 
@@ -18,6 +18,8 @@
 | **设计拍板** | ✅ 已完成 | 5项设计拍板已通过 |
 | **实现阶段** | ✅ 已完成 | MVP 最小闭环已实现并验证通过（2026-03-16） |
 | **验证阶段** | ✅ 已完成 | 示例验证已通过（2026-03-16） |
+| **真实链路接入** | ✅ 已完成 | upstream_outputs 来自真实 2.1→2.2→2.3→2.4 运行（2026-03-29） |
+| **LLM 深层归因** | ✅ 已完成 | llm_attributor.py 跑通，findings=5 全部准确（2026-03-29） |
 
 ---
 
@@ -134,11 +136,42 @@
 - 阶段3优先级：生成2个优先级项（1个system级，1个module级）
 - Schema合法率：100%
 
+### 2.8 真实链路接入与 LLM 深层归因（已完成）
+
+**完成时间**：2026-03-29
+
+**背景**：3月16日的 MVP 使用 `example_data.py` 手写 mock 数据验证，字段与真实输出存在不匹配（如 `priority_level` 枚举值、`uncertainty_map` 结构、信号字段名等）。本轮完成真实链路接入与 LLM 归因能力升级。
+
+**关键产出**：
+- ✅ 真实链路端到端打通：`run_batch_real.py` 中 upstream_outputs 来自真实 2.1→2.2→2.3→2.4 运行
+- ✅ 新增 `llm_attributor.py`（主归因路径），`ProblemAttributor` 降为规则 fallback
+- ✅ `llm_client.py` 切换流式请求，绕过中转代理响应体截断（commit `eaae132`）
+- ✅ JSON 解析兼容 LLM 前缀说明文字（commit `1449a3a`）
+- ✅ prompt 约束从需求侧控制输出格式（commit `9ac51a6`）
+- ✅ 信号字段名对齐真实 `Signal` schema：`description`/`intensity_score`/`confidence_score`
+
+**LLM 归因验证结果（3条真实样本，2026-03-29 15:55）**：
+
+| # | 发现 | 层 | 严重度 | 准确性 |
+|---|------|----|--------|--------|
+| 1 | RAG完全失效，supporting_evidence均为降级fallback伪证据 | context | HIGH | ✅ 准确 |
+| 2 | counter_evidence与DMA主题完全无关，反证逻辑形同虚设 | opportunity | HIGH | ✅ 准确 |
+| 3 | why_now字段为空，机会时效性论证完全缺失 | opportunity | HIGH | ✅ 准确 |
+| 4 | 2.2仅处理1个信号，另外2个信号被完全丢弃 | orchestration | MEDIUM | ✅ 准确 |
+| 5 | exit_conditions_count为0，watch姿态缺乏终止条件设计 | action | MEDIUM | ✅ 准确 |
+
+**结论**：5条发现全部为语义层问题，规则归因层完全无法识别，LLM 深层归因能力已具备实质价值。
+
+**关键工程修复（共4项）**：
+
+| 问题 | 根因 | 修复 | commit |
+|------|------|------|--------|
+| JSON 截断（`Unterminated string`） | api123.icu 中转对非流式响应体有大小限制 | 切换流式请求 + `_collect_stream()` | `eaae132` |
+| JSON 解析失败（`Expecting value`） | LLM 在 JSON 前输出自然语言前缀（中转 system prompt 行为） | 需求侧加"第一个字符必须是`{`"约束 + 防御侧取 `{`~`}` 区间 | `1449a3a` |
+| 输出体积过大仍截断 | prompt 中塞入 RAG 证据全文，LLM 分析导致输出膨胀 | evidence 只传标题/首句(≤80字)，总输出≤1500字 | `568910c` |
+| 信号字段名错位（LLM 拿到空值） | `summary`/`intensity`/`confidence` 与真实 `Signal` schema 不匹配 | 对齐为 `description`/`intensity_score`/`confidence_score` | `568910c` |
+
 ### 2.7 验证阶段（已完成）
-
-**完成时间**：2026-03-16
-
-**验证方式**：
 - 使用示例数据运行完整流程
 - 验证输出 Schema 合法性
 - 验证关键发现可解释性
@@ -434,7 +467,7 @@
 
 ---
 
-**文档状态**：✅ MVP 已完成
-**版本**：v1.0
-**最后更新**：2026-03-16
-**建议下次更新时机**：进入下一阶段时
+**文档状态**：✅ 持续更新中
+**版本**：v2.0
+**最后更新**：2026-03-29
+**建议下次更新时机**：积累更多真实运行记录，或进入 Phase 3 前
