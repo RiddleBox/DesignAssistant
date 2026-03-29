@@ -18,10 +18,13 @@ phases:
     # base_url: ""          # 不填 → 用 default
 
   "2.2":                    # 机会判断：需要更强推理，可换高端模型
-    model: "claude-opus-4-5-20251101"
-    max_tokens: 8192          # 多机会列表输出较长，4096 不够
+    # 【临时降级 2026-03-29】api123.icu 中转代理高负载下 opus 8192tokens 容易超时/空响应
+    # 正式版切换稳定 API 后改回 claude-opus-4-5-20251101 + max_tokens: 8192
+    model: "claude-sonnet-4-6"
+    max_tokens: 4096
     base_url: "https://api123.icu/v1"
-    # model: "claude-sonnet-4-6"  # 降回中端模型时取消注释
+    # model: "claude-opus-4-5-20251101"  # 正式版模型，待稳定 API 后启用
+    # max_tokens: 8192
 
   "2.3":                    # 行动设计：三轮辩论输出较长，需要更大 token 空间
     model: "claude-opus-4-5-20251101"
