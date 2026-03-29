@@ -10,11 +10,14 @@ import glob
 from datetime import datetime
 
 # 路径
-PROJ_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-INCOMING_DIR = os.path.normpath(os.path.join(PROJ_DIR, "..", "..", "background", "real_intel_samples", "incoming"))
-PROCESSED_DIR = os.path.normpath(os.path.join(PROJ_DIR, "..", "..", "background", "real_intel_samples", "processed"))
+# 路径：dashboard/ → proj_004/ → projects/ → data-layer/ → DesignAssistant/
+PROJ_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # proj_004/
+DA_ROOT = os.path.normpath(os.path.join(PROJ_DIR, "..", "..", ".."))    # DesignAssistant/
+
+INCOMING_DIR = os.path.normpath(os.path.join(DA_ROOT, "background", "real_intel_samples", "incoming"))
+PROCESSED_DIR = os.path.normpath(os.path.join(DA_ROOT, "background", "real_intel_samples", "processed"))
 REPORTS_DIR = os.path.join(PROJ_DIR, "reports")
-ENV_PATH = os.path.join(PROJ_DIR, "..", "..", ".env")
+ENV_PATH = os.path.join(PROJ_DIR, ".env")
 
 sys.path.insert(0, PROJ_DIR)
 
@@ -63,7 +66,7 @@ def _render_list(items: list):
 # ── 读取 .env ────────────────────────────────────────────────────
 def load_env_defaults():
     defaults = {"api_key": "", "base_url": "https://api123.icu", "model": "claude-sonnet-4-6"}
-    env_file = os.path.normpath(os.path.join(PROJ_DIR, ".env"))
+    env_file = os.path.join(DA_ROOT, ".env")
     if os.path.exists(env_file):
         for line in open(env_file, encoding="utf-8"):
             line = line.strip()

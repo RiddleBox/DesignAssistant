@@ -19,20 +19,17 @@ import traceback
 from datetime import datetime
 from typing import Generator
 
-# 确保项目路径可访问
-PROJ_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# 路径：dashboard/ → proj_004/ → projects/ → data-layer/ → DesignAssistant/
+PROJ_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # proj_004/
+DA_ROOT = os.path.normpath(os.path.join(PROJ_DIR, "..", "..", ".."))    # DesignAssistant/
+
+INCOMING_DIR = os.path.normpath(os.path.join(DA_ROOT, "background", "real_intel_samples", "incoming"))
+
 sys.path.insert(0, PROJ_DIR)
 sys.path.insert(0, os.path.join(PROJ_DIR, "phase2.1_implementation"))
 sys.path.insert(0, os.path.join(PROJ_DIR, "phase2.2_implementation"))
 sys.path.insert(0, os.path.join(PROJ_DIR, "phase2.3_implementation", "src"))
 sys.path.insert(0, os.path.join(PROJ_DIR, "phase2.5_implementation"))
-
-INCOMING_DIR = os.path.join(
-    os.path.dirname(PROJ_DIR), "..", "background", "real_intel_samples", "incoming"
-)
-INCOMING_DIR = os.path.normpath(
-    os.path.join(PROJ_DIR, "..", "..", "background", "real_intel_samples", "incoming")
-)
 
 
 def _event(type_, step, message, data=None):
