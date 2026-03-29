@@ -2,244 +2,124 @@
 
 > **文档类型**：模块进展文档
 > **适用模块**：`Phase 2.4` 知识库与 RAG 系统
-> **状态**：进行中
-> **最后更新**：2026-03-13
+> **状态**：维护+按需增强阶段
+> **最后更新**：2026-03-29
 
 ---
 
-## 一、当前进度概览
+## 一、当前状态一句话
 
-### 1.1 当前判断
-
-`Phase 2.4` 已经从“纯规划状态”进入“**MVP骨架已落地、等待按新治理流程继续推进**”的阶段。
-
-目前最重要的不是继续无边界地补代码，而是：
-
-1. 把正式边界、契约和待拍板项写入执行轨
-2. 在此基础上继续做数据扩充、索引构建和可运行验证
-3. 形成可交给 `2.1 / 2.2 / 2.3` 的最小对外能力
-
-### 1.2 当前已完成
-
-- 已完成 `phase2.4_目标说明.md`
-- 已完成 `phase2_roles/phase2.4_roles.md`
-- 已完成 [phase2.4_mvp_plan.md](f:/AIProjects/DesignAssistant/data-layer/projects/proj_004/phase2.4_mvp_plan.md)
-- 已创建 `EMP-021 ~ EMP-026` 员工档案并更新花名册
-- 已创建 `phase2.4_implementation/rag_system/` 代码骨架
-- 已实现首版 API：
-  - `/api/v1/health`
-  - `/api/v1/retrieve`
-  - `/api/v1/generate`
-  - `/api/v1/rag`
-  - `/api/v1/documents`
-  - `/api/v1/documents/<doc_id>`
-- 已定义最小数据模型：`Document / DocumentMetadata / RetrieveRequest / GenerateRequest`
-- 已放入 `kb_001 ~ kb_003` 三份样本文档用于结构验证
-- 已补齐本模块执行轨：
-  - [phase2.4_启动与拍板.md](f:/AIProjects/DesignAssistant/data-layer/projects/proj_004/phase2_plan/phase2.4_启动与拍板.md)
-  - 本文档
-
-### 1.3 最新完成（2026-03-13 交接后）
-
-- ✅ 知识库文档已扩展到 `40` 条（用户确认足够 MVP 测试）
-- ✅ 索引构建成功并完成验证（vector_index.faiss + vector_meta.pkl）
-- ✅ 对外接口文档已完成正式版（API_DOCUMENTATION.md）
-- ✅ benchmark 基线已建立并记录（benchmark_report.json）
-- ✅ 系统验证报告已完成（SYSTEM_VALIDATION_REPORT.md）
-- ✅ 本地闭环联调已验证通过
-
-### 1.4 当前未完成
-
-- 用户对部分关键方向尚未完成正式拍板（见第五节 7.2）
-- 真实 API 接入（当前使用模拟服务避免 API 400 错误）
+> Phase 2.4 主体工作已完成，已进入"维护 + 按需增强"状态。后续迭代随下游模块需求驱动，不作为独立大版本推进。
 
 ---
 
-## 二、当前实现现状
+## 二、已完成事项（截至 2026-03-29）
 
-### 2.1 数据层现状
+### 2.1 核心能力
 
-当前文档最小结构已经存在，核心字段为：
+| 项目 | 完成时间 | 说明 |
+|------|----------|------|
+| RAG 系统骨架（API + 检索 + 生成） | 2026-03-13 | `/retrieve` `/generate` `/rag` `/health` `/documents` |
+| 知识库文档 62 条（kb_001~kb_062） | 2026-03-28 | 全部标注 content_type，tags 干净 |
+| 真实 Embedding 接入（MiniLM-L6-v2，384维） | 2026-03-22 | 本地 BERT 路径废弃，MiniLM 为正式方案 |
+| FAISS 向量索引构建 | 2026-03-22 | vector_index_local.faiss + vector_meta_local.pkl |
+| ContextPacket 协议冻结（v1.0） | 2026-03-28 | 见 PHASE2_4_CONTEXT_PACKET_PROTOCOL.md |
+| `retrieve_context()` 分桶召回实现 | 2026-03-28 | 按 content_type 分桶，trust_level 过滤 |
+| P1-5/P1-6/P1-7 联调完成（2.4→2.1/2.2/2.3） | 2026-03-22 | 接口契约验证通过 |
+| 2.2 真实接入 ContextPacket | 2026-03-29 | run_batch_real.py 联调验证，8 条证据包命中，4 种 content_type |
 
-- `id`
-- `title`
-- `content`
-- `category`
-- `tags`
-- `metadata.source`
-- `metadata.confidence`
-- `metadata.last_updated`
+### 2.2 本轮（2026-03-29）完成
 
-当前分类仍采用 MVP 期简化方案：
-
-- `game_design`
-- `market_trend`
-- `tech_innovation`
-
-### 2.2 检索层现状
-
-当前 MVP 实现采用：
-
-- **纯向量检索**
-- `top_k` 默认 `5`
-- 检索接口已支持基础参数校验
-- 返回文档列表、总数、检索耗时
-
-当前尚未进入：
-
-- 混合检索
-- 重排序
-- 类别 / 时间过滤
-- 缓存优化
-
-### 2.3 生成层现状
-
-当前生成链路已经具备基础能力：
-
-- 接收 `query`
-- 接收 `context_ids`
-- 根据上下文文档调用生成服务
-- 返回 `answer / sources / confidence / generation_time_ms`
-
-当前仍处于 MVP 状态：
-
-- 生成输出以自由文本为主
-- 置信度为简化结果，尚未形成严格打分机制
-- 下游期望的正式输出协议尚未冻结
-
-### 2.4 API层现状
-
-当前已形成可说明的最小接口面：
-
-- `POST /api/v1/retrieve`
-- `POST /api/v1/generate`
-- `POST /api/v1/rag`
-- `GET /api/v1/health`
-- `GET /api/v1/documents`
-- `GET /api/v1/documents/<doc_id>`
-
-其中：
-
-- `retrieve / generate` 已有较明确的请求与响应结构
-- `rag` 已可作为一键闭环能力存在，但其最终对外定位仍需结合下游需求确认
+| 项目 | 说明 |
+|------|------|
+| tags 质量修复 | 清除 kb_044~062 中混入的 content_type 枚举值；fix_tags.py 作为质检脚本保留 |
+| 四层文档结构建立 | industry / category / content_type / tags 四层正交，语义无重叠 |
+| industry 字段添加 | 62 条文档全部加 `industry: gaming`，为跨行业扩展预留结构 |
+| MetadataFilter 重构 | ContextRequest 的 `category_filter` + `min_trust_level` 合并为 `MetadataFilter` dataclass |
+| category 边界定义 | market_trend 明确包含"市场数据 + 行业事件"，写入 CATEGORY_VALUES 注释 |
+| INDUSTRY_VALUES / CATEGORY_VALUES 枚举 | 加入 models.py，后续录入有校验依据 |
+| 检索精度增强路线记录 | category_filter / 混合检索 / Scoping / Rerank 触发时机写入 PROJECT_CONTEXT |
 
 ---
 
-## 三、与新工作流的对应关系
+## 三、文档结构规范（当前范本）
 
-### 3.1 当前事实源分工
+```yaml
+id: kb_xxx
+title: "..."
+industry: gaming          # 行业标识；当前唯一值：gaming
+category: market_trend    # 主题域：game_design / market_trend / tech_innovation
+content_type: case_record # 内容性质：见 CONTENT_TYPE_VALUES 枚举
+tags: ["公司名", "产品名", "地区", "技术名词"]  # 细粒度实体标签，不含 content_type/category/industry 值
+metadata:
+  source: "..."
+  confidence: 0.90
+  last_updated: "YYYY-MM-DD"
+content: |
+  ...
+```
 
-- **项目状态与入口**：`PROJECT_CONTEXT.md`
-- **长期背景与规范**：`工程背景手册.md`
-- **模块正式边界与拍板结果**：[phase2.4_启动与拍板.md](f:/AIProjects/DesignAssistant/data-layer/projects/proj_004/phase2_plan/phase2.4_启动与拍板.md)
-- **模块最新进展与新增待定项**：本文档
-- **训练与思考**：训练轨文档，不直接构成正式要求
+**字段边界（必须遵守）**：
+- `content_type`：只用枚举值，**不放进 tags**
+- `category`：只用枚举值，**不放进 tags**
+- `industry`：只用枚举值，**不放进 tags**
+- `tags`：只放实体类标签（公司/产品/地区/玩法类型/技术名词等）
 
-### 3.2 团队下一步推进规则
-
-从现在开始，`2.4` 团队继续工作时必须遵守：
-
-- 不再只通过口头或对话理解正式要求
-- 任何新增方向，先判断是否属于拍板项
-- 若影响范围 / 契约 / 验收 / 优先级，必须写入执行轨再推进
-- 每完成一轮关键工作，优先更新本文档与执行轨，再继续实现
-
----
-
-## 四、当前差距与阻塞
-
-### 4.1 主要差距（已解决）
-
-| 差距 | 之前情况 | 当前状态 |
-|------|----------|----------|
-| **数据规模不足** | 仅 `3` 条样本文档 | ✅ 已扩展到 `40` 条（用户确认足够） |
-| **接口文档未冻结** | 有代码，无正式发布版文档 | ✅ 已完成 API_DOCUMENTATION.md |
-| **评测基线缺失** | 无正式 benchmark 结果 | ✅ 已建立基线（benchmark_report.json） |
-| **系统验证缺失** | 无正式验证记录 | ✅ 已完成验证报告 |
-
-### 4.2 当前剩余事项
-
-1. **部分拍板项待确认**
-   - 下游期望的生成输出形态
-   - 分类体系是否维持3类
-   - 首版 benchmark 由谁验收
-2. **真实 API 接入**
-   - 当前使用模拟服务（避免 API 400 错误）
-   - 待修复智谱 API 调用格式问题后接入
+**录入质检**：新文档录入后运行 `fix_tags.py`，输出"共修复 0 个文件"为合格。
 
 ---
 
-## 五、待拍板事项
+## 四、知识库当前状态
 
-### 5.1 现在必须拍板
+| 维度 | 数值 |
+|------|------|
+| 文档总数 | 62 条 |
+| 向量维度 | 384（MiniLM-L6-v2） |
+| industry 分布 | gaming: 62 |
+| category 分布 | market_trend: 28 / game_design: 19 / tech_innovation: 15 |
+| content_type 分布 | background: 32 / case_record: 16 / market_data: 10 / few_shot_example: 2 / constraint_rule: 2 |
 
-| 决策项 | 说明 | 推荐方案 | 不拍板的风险 | 当前状态 |
-|--------|------|----------|--------------|----------|
-| **MVP知识来源策略** | `100` 条知识是以真实来源整理为主，还是允许更多占位样本 | 真实来源摘要 + 少量样例补齐 | 数据集质量和展示可信度失真 | ✅ **已拍板**（2026-03-13）：真实来源摘要 + 少量样例补齐 |
-| **MVP正式接口边界** | 是否以 `retrieve / generate / rag` 作为对外正式首版接口 | 是 | 下游团队无从判断接入方式 | ✅ **已拍板**（2026-03-13）：冻结三个接口 |
-| **Document最小标准字段** | 是否冻结当前最小字段集作为首版稳定契约 | 是 | 字段持续漂移，后续返工 | ✅ **已拍板**（2026-03-13）：维持当前最小字段 |
-| **Week 1检索路线** | 是否坚持纯向量检索 + 简单生成作为 Week 1 边界 | 是 | 过早膨胀导致 Week 1 无法形成闭环 | ✅ **已拍板**（2026-03-13）：纯向量检索 + 简单生成 |
-
-### 5.2 本周最好拍板
-
-| 决策项 | 说明 | 推荐方案 | 延后风险 | 当前状态 |
-|--------|------|----------|----------|----------|
-| **下游期望输出形态** | 自由文本 / 半结构化 / 固定 JSON | 半结构化 | 下游各自封装，后续难统一 | 待拍板 |
-| **分类体系是否保持3类** | 当前3类是否维持到 MVP 验收 | 保持3类 | 过早扩类拖慢数据准备 | 待拍板 |
-| **benchmark验收责任人** | 由谁主导打分和基线冻结 | `EMP-025` + 用户结合 | 评测结果难形成正式结论 | 待拍板 |
-
-### 5.3 新增事项进入机制
-
-后续若出现以下情况，应新增到本文档，而不是口头继续推进：
-
-- 对外接口字段变化
-- 数据模型新增必填字段
-- 数据来源策略明显变化
-- 下游反馈当前结果不可消费
-- MVP 范围扩大或收缩
+**已知缺口**：`constraint_rule` 和 `few_shot_example` 各 2 条，`background` 占比过高（52%）。对 2.2/2.3 判断质量影响最直接的 `case_record + market_data` 合计 26 条。
 
 ---
 
-## 六、建议的续工顺序
+## 五、待完成事项（按触发时机排序）
 
-### 6.1 由 `EMP-021` 牵头的本轮续工
-
-1. 基于 [phase2.4_启动与拍板.md](f:/AIProjects/DesignAssistant/data-layer/projects/proj_004/phase2_plan/phase2.4_启动与拍板.md) 向用户发起首轮正式拍板
-2. 将拍板结果写回执行轨文档
-3. 同步更新本文档中的“当前状态 / 已拍板项 / 新阻塞”
-
-### 6.2 由 `EMP-022 ~ EMP-026` 并行推进的任务
-
-- **`EMP-022`**：按已拍板的数据来源策略扩展首批 `100` 条知识文档
-- **`EMP-023`**：完成首版索引构建并记录向量化验证结果
-- **`EMP-024`**：完成本地闭环联调，形成最小可运行说明
-- **`EMP-025`**：设计首版 benchmark，输出延迟 / 准确率基线
-- **`EMP-026`**：基于已冻结契约，输出接口文档和调用样例
-
-### 6.3 何时可以视为进入下一状态
-
-当以下条件同时满足时，可将 `2.4` 状态从“骨架已落地”更新为“**MVP闭环已打通**”：
-
-- `100` 条知识文档完成
-- 索引构建成功并有记录
-- 关键接口联调通过
-- benchmark 初版结果完成
-- 执行轨中的“现在必须拍板”项已完成首轮确认
+| 项目 | 触发时机 | 优先级 |
+|------|---------|--------|
+| 知识库内容来源模块 | 知识库扩充工作量超过手动可维护边界 | 后续规划 |
+| 补充 case_record / market_data 文档 | 下游反馈证据包命中质量不足 | 按需 |
+| category_filter 实现 | 知识库扩展至多个垂直行业且下游反馈跨行业噪音 | 结构已预留，未触发不实现 |
+| 混合检索（BM25 + 向量） | 发现专有名词向量召回效果差 | 未触发 |
+| Scoping / Query Routing / Query Transformation | 多模块接入后 query 与知识子集出现系统性错配 | 未触发 |
+| Rerank（可插拔层） | 分桶召回稳定后 top-k 排序成为瓶颈 | 未触发 |
+| 增益联合验证（2.4 → 2.1/2.2/2.3） | 下游模块迭代稳定后 | 最终验收终点 |
 
 ---
 
-## 七、给主控端的同步提醒
+## 六、关键设计拍板记录
 
-主控端下一轮同步时，建议优先更新：
-
-- `PROJECT_CONTEXT.md` 的“立即行动 / 近期计划 / 下次更新”
-- `重要文档索引` 中加入：
-  - `phase2.4_启动与拍板.md`
-  - `phase2.4_进展与待拍板事项.md`
-- 若后续新增 `2.4` 接口正式文档，也应同步纳入项目入口
+| 时间 | 决策 |
+|------|------|
+| 2026-03-28 | ContextPacket v1.0 协议冻结；`content_type` 替代 `use_as`（描述内容性质，不预判用途） |
+| 2026-03-28 | content_type 枚举：glossary / few_shot_example / constraint_rule / case_record / market_data / background |
+| 2026-03-28 | Embedding 方案：MiniLM-L6-v2（384维），本地 BERT 路径废弃 |
+| 2026-03-29 | 四层文档结构（industry / category / content_type / tags）正式确立 |
+| 2026-03-29 | MetadataFilter 替代 category_filter：按维度弹性过滤，不绑定特定层 |
+| 2026-03-29 | category_filter 触发条件：跨行业扩展后，当前不实现 |
+| 2026-03-29 | 知识库内容来源模块：列入后续规划，独立模块，不依赖手动维护 |
 
 ---
 
-## 八、一句话结论
+## 七、关键文件索引
 
-> `Phase 2.4` 现在已经不是“要不要开始”的问题，而是“已经开始了，但必须切换到正式执行轨继续推进”的问题；下一步的关键不是再补泛泛讨论，而是完成首轮拍板、扩充数据、验证闭环、冻结首版对外契约。
+| 文件 | 用途 |
+|------|------|
+| `PHASE2_4_CONTEXT_PACKET_PROTOCOL.md` | ContextPacket v1.0 协议规范（已冻结） |
+| `PHASE2_4_FIRST_PRINCIPLES_AND_DESIGN_GUIDANCE.md` | 第一性原理与设计指导（长期有效） |
+| `PHASE2_4_TO_2_1_CONTEXT_PROTOCOL_DRAFT.md` | ⚠️ 已废弃旧草案，不作为设计依据 |
+| `rag_system/core/models.py` | 数据模型定义（含所有枚举常量） |
+| `rag_system/core/retrieval.py` | 检索核心，含 `retrieve_context()` 分桶召回 |
+| `rag_system/fix_tags.py` | tags 质检脚本 |
+| `rag_system/add_industry_field.py` | 批量添加 industry 字段脚本 |
+| `rag_system/data/documents/` | 62 条知识文档（yaml） |

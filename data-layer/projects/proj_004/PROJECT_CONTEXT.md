@@ -1,9 +1,9 @@
 # PROJECT_CONTEXT.md — 项目一站式开工入口
 
 > **文档类型**：项目状态总览 + 开工上下文
-> **最后更新**：2026-03-28（2.2 完善阶段收尾，推进 2.3 联调回归）
-> **当前阶段**：2.2 完善收尾，开始 2.3 联调回归
-> **项目状态**：✅ 主链路联调完成，✅ 真实 LLM API 接入，✅ 报告输出层上线，✅ 2.1 两阶段筛选框架，✅ 2.2 多机会输出重构+字段完善，✅ 2.3 结构性缺口修复，⚠️ 2.4 RAG 本地模型路径异常（fallback 跳过，不阻塞主链路）
+> **最后更新**：2026-03-29（2.4 四层文档结构 + MetadataFilter 重构，2.4 进入维护+按需增强阶段）
+> **当前阶段**：2.2 完善收尾，开始 2.3 联调回归，2.4 进入维护阶段
+> **项目状态**：✅ 主链路联调完成，✅ 真实 LLM API 接入，✅ 报告输出层上线，✅ 2.1 两阶段筛选框架，✅ 2.2 多机会输出重构+字段完善，✅ 2.3 结构性缺口修复，✅ 2.4 四层文档结构+MetadataFilter 重构+ContextPacket 联调完成
 
 ---
 
@@ -146,45 +146,33 @@
 
 **本质**：为 2.1/2.2/2.3 提供历史经验、行业知识、外部证据的结构化支撑，是整条链路的"证据基础层"。定位为**证据级上下文供应层**，目标是降低下游决策的不确定性，而非问答系统。
 
-**MVP 边界**（已完成骨架）：
-- 知识文档：43条（game_design / market_trend / tech_innovation）
-- 接口：/retrieve / /generate / /rag（Flask API）
-- 索引：vector_index.faiss + vector_meta.pkl 已构建（all-MiniLM-L6-v2，384维，真实 embedding）
-- 已完成：本地闭环联调验证通过（P1-5/P1-6/P1-7，2026-03-22）
+**当前状态**：✅ 主体完成，已进入维护+按需增强阶段
 
-**⚠️ 关键设计拍板（2026-03-28）**：
-- **交付单元升级**：输出从 `Document[]` 升级为 `ContextPacket[]`（含 `content_type / excerpt / reason_for_match / trust_level`）
-- **`content_type` 而非 `use_as`**：2.4 描述内容性质（是什么），怎么用由 2.1/2.2/2.3 各自决定
-- **content_type 枚举**：`glossary / few_shot_example / constraint_rule / case_record / market_data / background`
-- **当前知识库缺口**：`case_record` 和 `market_data` 严重不足，是 2.2/2.3 接入的前置障碍
-- **协议文档**：[PHASE2_4_CONTEXT_PACKET_PROTOCOL.md](data-layer/projects/proj_004/phase2.4_implementation/docs/PHASE2_4_CONTEXT_PACKET_PROTOCOL.md)（v1.0 已冻结）
+**已完成**：
+- 知识文档 62 条（全部标注 content_type，tags 已清理，industry 字段已添加）
+- 真实 Embedding 接入（MiniLM-L6-v2，384维，FAISS 索引）
+- ContextPacket v1.0 协议冻结，`retrieve_context()` 分桶召回已跑通
+- 2.2 真实接入验证（8条证据包，4种 content_type 分桶命中）
+- 四层文档结构确立（industry / category / content_type / tags 正交）
+- MetadataFilter 重构（弹性多维过滤，替代旧 category_filter）
+- 检索精度增强路线确定（按触发时机排序，见进展文档）
 
-**待完成**（按优先级）：
-1. ~~实现 `POST /api/v1/context` 接口（ContextRequest → ContextResponse）~~ ✅ 完成（2026-03-29，`retrieve_context()` 已联调）
-2. ~~给 43 条现有文档补标 `content_type` 字段~~ ✅ 完成（62 条文档全部已标注）
-3. **知识库内容来源模块**（新增，2026-03-29 拍板）：需要独立的可信内容搜索模块，专门负责发现和录入知识库条目，不依赖手动维护；触发时机：知识库扩充工作量超过手动可维护边界时
-4. 补充 `case_record` / `market_data` 类型知识文档（当前 case_record=16, market_data=10, constraint_rule=2, few_shot_example=2，background 占比过高=32）
-5. 检索精度增强（见下方独立说明，2026-03-29 讨论）
-6. 2.4 → 2.1/2.2/2.3 增益联合验证（最终验收终点）
+**关键设计拍板**：
+- `content_type` 替代 `use_as`（2026-03-28）：描述内容性质，不预判用途
+- 四层结构（2026-03-29）：industry=行业隔离 / category=主题域 / content_type=内容性质 / tags=细粒度实体
+- MetadataFilter（2026-03-29）：industry + category + min_trust_level 三维弹性过滤
+- category_filter 触发条件（2026-03-29）：跨行业扩展后才实现，当前 content_type 分桶已覆盖
 
-**检索精度增强路线**（2026-03-29 讨论，按触发时机排序）：
-
-| 技术 | 触发时机 | 前置条件 | 备注 |
-|------|---------|---------|------|
-| **category_filter**（2026-03-29 拍板加入计划） | 同一 `content_type` 开始跨多个领域，且下游反馈召回了不相关领域的案例 | 知识库规模扩大至包含多个垂直领域；`tags` 质量问题先修复（当前 content_type 值混入 tags） | 字段已在 `ContextRequest` 中预留，届时只需在 `retrieve_context()` 加一层候选过滤；当前 content_type 分桶已间接覆盖该需求，规模未到触发点前不实现 |
-| **混合检索（BM25 + 向量）** | 发现专有名词（公司名/产品名）向量召回效果差 | 向量检索主路径稳定 | — |
-| **Scoping / Query Routing / Query Transformation** | 多模块接入后，query 与知识子集出现系统性错配 | 2.1/2.2/2.3 均已接入 2.4 | 入口层技术，由 `caller` + query 语义驱动 |
-| **重排序（Rerank）** | 分桶召回稳定后，top-k 排序质量成为瓶颈 | 分桶召回已稳定运行一段时间，有下游增益数据作为基线 | 定位为 `retrieve_context()` 内部可插拔层，不改外部接口 |
-
-> **设计原则**：以上均为增益型增强，不是前置阻塞。先保证"稳定召回"，再追求"精准排序"。tags 质量问题（当前 content_type 值混入 tags）需在 category_filter 实现前修复，否则 tags 也不适合作为过滤维度。
-
-**当前状态**：✅ 骨架完成 | ✅ 真实 Embedding 接入（all-MiniLM-L6-v2）| ✅ P1-5/P1-6/P1-7 联调完成 | ✅ ContextPacket 协议冻结（v1.0）| ⚠️ 真实 LLM e2e 待验证（api123.icu 波动）
+**后续待完成**（按触发时机，详见进展文档）：
+1. 知识库内容来源模块（独立模块，手动维护边界被突破时）
+2. 补充 case_record / market_data 文档（下游反馈证据质量不足时）
+3. 检索精度增强（category_filter / 混合检索 / Scoping / Rerank，各有独立触发条件）
+4. 增益联合验证（2.4 → 2.1/2.2/2.3，最终验收终点）
 
 **关键文件**：
-- 协议规范：[PHASE2_4_CONTEXT_PACKET_PROTOCOL.md](data-layer/projects/proj_004/phase2.4_implementation/docs/PHASE2_4_CONTEXT_PACKET_PROTOCOL.md)
+- 协议规范：[PHASE2_4_CONTEXT_PACKET_PROTOCOL.md](data-layer/projects/proj_004/phase2.4_implementation/docs/PHASE2_4_CONTEXT_PACKET_PROTOCOL.md)（v1.0 已冻结）
 - 第一性原理：[PHASE2_4_FIRST_PRINCIPLES_AND_DESIGN_GUIDANCE.md](data-layer/projects/proj_004/phase2.4_implementation/docs/PHASE2_4_FIRST_PRINCIPLES_AND_DESIGN_GUIDANCE.md)
-- 进展：[phase2.4_进展与待拍板事项.md](data-layer/projects/proj_004/phase2_plan/phase2.4_进展与待拍板事项.md)
-- 联调计划：[phase2.4_联调与增强计划.md](data-layer/projects/proj_004/phase2_plan/phase2.4_联调与增强计划.md)
+- 进展（详细）：[phase2.4_进展与待拍板事项.md](data-layer/projects/proj_004/phase2_plan/phase2.4_进展与待拍板事项.md)
 - 实现：[phase2.4_implementation/](data-layer/projects/proj_004/phase2.4_implementation/)
 
 ---
