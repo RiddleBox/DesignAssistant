@@ -169,6 +169,9 @@ if run_btn:
                 st.session_state.run_result["step_23"] = data
             elif step == "2.5":
                 st.session_state.run_result["step_25"] = data
+                # 2.5 查的 RAG 证据回填到 2.4 展示区（2.2 阶段不单独查 RAG）
+                if data.get("rag_packets"):
+                    st.session_state.run_result["step_24_packets"] = data["rag_packets"]
 
         elif etype == "error":
             st.session_state.run_result["errors"].append({"step": step, "message": msg, "detail": data.get("traceback", "")})

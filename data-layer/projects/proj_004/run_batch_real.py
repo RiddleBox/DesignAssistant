@@ -466,7 +466,7 @@ def run_step4_retro(judgment_result, action_result, decode_results, per_sample_s
             phase2_4_payload = {
                 "context_packets": [p.model_dump() if hasattr(p, "model_dump") else p for p in (ctx_resp.packets or [])],
                 "retrieval_notes": ctx_resp.retrieval_notes if hasattr(ctx_resp, "retrieval_notes") else "",
-                "packets_count": len(ctx_resp.packets or []),
+                "packets_count": len(ctx_resp.context_packets or []),
             }
         except Exception as e:
             phase2_4_payload = {"retrieval_notes": f"RAG fallback: {e}", "packets_count": 0}

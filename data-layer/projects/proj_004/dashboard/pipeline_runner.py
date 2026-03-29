@@ -82,14 +82,26 @@ def run_pipeline(api_key: str, base_url: str, model: str) -> Generator[dict, Non
         all_signals, decode_results, per_sample_stats = run_step1_decode(samples, api_key)
 
         # 组装展示数据
+        # decode_results 是 IntelligenceDecodeResult 对象列表（非 dict）
+        dr_map = {r.source_id: r for r in decode_results}
         samples_data = []
         for stat in per_sample_stats:
             sid = stat.get("source_id", "?")
-            sigs = stat.get("signals", stat.get("signal_count", 0))
-            sig_count = len(sigs) if isinstance(sigs, list) else sigs
-            # 找对应 decode_result
-            dr = next((d for d in decode_results if d.get("source_id") == sid), {})
-            signals_detail = dr.get("signals", [])
+            sig_count = stat.get("signal_count", 0)
+            dr = dr_map.get(sid)
+            # 把 Signal 对象序列化为 dict，取常用展示字段
+            signals_detail = []
+            if dr and dr.signals:
+                for s in dr.signals:
+                    signals_detail.append({
+                        "signal_type": s.signal_type.value if hasattr(s.signal_type, "value") else str(s.signal_type),
+                        "signal_label": s.signal_label,
+                        "description": s.description,
+                        "intensity_score": s.intensity_score,
+                        "confidence_score": s.confidence_score,
+                        "evidence_text": s.evidence_text,
+                        "timeliness_score": s.timeliness_score,
+                    })
             samples_data.append({
                 "source_id": sid,
                 "file_name": stat.get("file_name", sid),
@@ -144,11 +156,12 @@ def run_pipeline(api_key: str, base_url: str, model: str) -> Generator[dict, Non
         opp = judgment_result.opportunities[0] if judgment_result.opportunities else None
         opp_data = {}
         if opp:
-            llm_used = not bool(getattr(opp, "warnings", None) and
-                                any("[fallback]" in str(w) for w in (getattr(opp, "warnings", []) or [])))
+            # 判断是否走了 LLM 路径（有 warnings 且含 [fallback] 表示 fallback）
+            fallback_flags = [str(w) for w in (getattr(opp, "warnings", []) or []) if "[fallback]" in str(w)]
+            llm_used = len(fallback_flags) == 0
             opp_data = {
-                "title": getattr(opp, "opportunity_title", "") or getattr(opp, "title", ""),
-                "thesis": getattr(opp, "opportunity_thesis", "") or getattr(opp, "thesis", ""),
+                "title": getattr(opp, "opportunity_title", ""),
+                "thesis": getattr(opp, "opportunity_thesis", ""),   # 实际字段名 opportunity_thesis
                 "priority_level": str(getattr(opp, "priority_level", "")),
                 "llm_used": llm_used,
                 "supporting_evidence": _serialize_list(getattr(opp, "supporting_evidence", [])),
@@ -160,10 +173,9 @@ def run_pipeline(api_key: str, base_url: str, model: str) -> Generator[dict, Non
                 "warnings": [str(w) for w in (getattr(opp, "warnings", []) or [])],
             }
 
-        # RAG 证据包（从 judgment_result 取）
+        # 2.4 证据包：2.2 阶段不单独存 rag_context，
+        # RAG 在 step4 才查。此处占位，dashboard 展示时从 step4 结果回填。
         rag_packets = []
-        if hasattr(judgment_result, "rag_context") and judgment_result.rag_context:
-            rag_packets = _serialize_rag_packets(judgment_result.rag_context)
 
         yield _event("step_done", "2.2", f"2.2 完成：{opp_data.get('title','')}，耗时 {elapsed2}ms", {
             "opportunity": opp_data,
@@ -188,7 +200,7 @@ def run_pipeline(api_key: str, base_url: str, model: str) -> Generator[dict, Non
             llm_used = debate is not None
             act_data = {
                 "posture": str(getattr(act, "decision_posture", "")),
-                "why": getattr(act, "posture_rationale", ""),
+                "why": getattr(act, "why_this_posture", ""),      # 实际字段名 why_this_posture
                 "llm_used": llm_used,
                 "debate_summary": _serialize_debate(debate),
                 "phases": _serialize_list(getattr(act, "phased_plan", [])),
@@ -223,9 +235,16 @@ def run_pipeline(api_key: str, base_url: str, model: str) -> Generator[dict, Non
             "phase3_priorities": _serialize_list(getattr(retro, "phase3_priorities", [])),
         }
 
+        # 把 step4 内部查到的 RAG 证据包也透传出来（供 dashboard 2.4 区块展示）
+        rag_packets_from_retro = []
+        if hasattr(retro_result, "upstream_outputs"):
+            p24 = (retro_result.upstream_outputs or {}).get("phase2_4", {})
+            rag_packets_from_retro = p24.get("context_packets", [])
+
         yield _event("step_done", "2.5", f"2.5 完成：findings={len(retro_data['critical_findings'])}，耗时 {elapsed5}ms", {
             "retrospective": retro_data,
             "elapsed_ms": elapsed5,
+            "rag_packets": rag_packets_from_retro,   # 供 dashboard 回填到 2.4 展示区
         })
     except Exception as e:
         yield _event("error", "2.5", f"2.5 失败：{e}", {"traceback": traceback.format_exc()})
@@ -277,10 +296,15 @@ def _serialize_list(items) -> list:
 def _serialize_findings(findings) -> list:
     result = []
     for f in findings:
+        # severity / layer 是枚举对象，需要 .value 取字符串
+        sev = getattr(f, "severity", None)
+        sev_str = sev.value if hasattr(sev, "value") else str(sev)
+        layer = getattr(f, "layer", None)
+        layer_str = layer.value if hasattr(layer, "value") else str(layer)
         result.append({
             "summary": getattr(f, "summary", str(f)),
-            "severity": str(getattr(f, "severity", "")),
-            "layer": str(getattr(f, "layer", "")),
+            "severity": sev_str,
+            "layer": layer_str,
             "evidence": getattr(f, "evidence", ""),
             "impact": getattr(f, "impact", ""),
         })
@@ -299,7 +323,7 @@ def _serialize_debate(debate) -> dict:
 
 
 def _serialize_rag_packets(rag_context) -> list:
-    """从 ContextResponse 或 packets 列表提取展示数据"""
+    """从 ContextResponse 提取展示数据。字段名：context_packets（非 packets）"""
     packets = []
     if hasattr(rag_context, "context_packets"):
         raw = rag_context.context_packets
@@ -315,7 +339,7 @@ def _serialize_rag_packets(rag_context) -> list:
             "content_type": getattr(p, "content_type", ""),
             "excerpt": getattr(p, "excerpt", ""),
             "reason_for_match": getattr(p, "reason_for_match", ""),
-            "trust_level": getattr(p, "trust_level", ""),
-            "score": getattr(p, "score", 0.0),
+            "trust_level": str(getattr(p, "trust_level", "")),
+            "score": float(getattr(p, "score", 0.0)),
         })
     return packets
