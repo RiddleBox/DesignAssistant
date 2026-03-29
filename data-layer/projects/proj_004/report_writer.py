@@ -246,34 +246,88 @@ def generate_report(
     # ── 五、复盘摘要（2.5） ───────────────────────────────────
     lines.append("## 五、复盘摘要（Phase 2.5）\n\n")
 
-    findings = getattr(retro, "critical_findings", []) or []
-    priorities = getattr(retro, "phase3_priorities", []) or []
-    root_causes = getattr(retro, "root_causes", []) or []
-    summary = getattr(retro, "workflow_summary", None)
+    output_checks   = getattr(retro, "output_checks", []) or []
+    findings        = getattr(retro, "critical_findings", []) or []
+    root_causes     = getattr(retro, "suspected_root_causes", []) or []
+    priorities      = getattr(retro, "phase3_priorities", []) or []
+    summary         = getattr(retro, "workflow_summary", None)
 
     if summary:
         lines.append(f"**工作流摘要**：{summary}\n\n")
 
-    if findings:
-        lines.append("**关键发现**：\n")
-        for f in findings:
-            text = f.get("summary", str(f)) if isinstance(f, dict) else getattr(f, "summary", str(f))
-            lines.append(f"  - {text}\n")
+    # ── 5.1 输出质量检查结果（规则层 + LLM 语义层） ──────────
+    if output_checks:
+        lines.append("### 输出质量检查\n\n")
+        for ck in output_checks:
+            if isinstance(ck, dict):
+                ctype   = ck.get("check_type", "")
+                status  = ck.get("status", "")
+                details = ck.get("details", "")
+            else:
+                ctype   = str(getattr(ck, "check_type",  "")).replace("CheckType.", "")
+                status  = str(getattr(ck, "status",       "")).replace("CheckStatus.", "")
+                details = getattr(ck, "details", "")
+            icon = {"pass": "✅", "warning": "⚠️", "fail": "❌"}.get(status.lower(), "—")
+            lines.append(f"  - {icon} **{ctype}**：{details}\n")
         lines.append("\n")
 
+    # ── 5.2 关键发现（LLM 语义归因层）── 只展示真正的 findings ─
+    # 过滤掉来自 OutputChecker 的规则检测描述（以 "[规则检测]" 开头）
+    real_findings = []
+    for f in findings:
+        text = f.get("summary", str(f)) if isinstance(f, dict) else getattr(f, "summary", str(f))
+        if text.startswith("[规则检测]"):
+            continue
+        real_findings.append(f)
+
+    if real_findings:
+        lines.append("### 关键发现\n\n")
+        for f in real_findings:
+            if isinstance(f, dict):
+                text     = f.get("summary", "")
+                severity = f.get("severity", "")
+                layer    = f.get("layer", "")
+            else:
+                text     = getattr(f, "summary", str(f))
+                severity = str(getattr(f, "severity", "")).replace("SeverityLevel.", "")
+                layer    = str(getattr(f, "layer",    "")).replace("AttributionLayer.", "")
+            sev_icon = {"high": "🔴", "medium": "🟡", "low": "⚪"}.get(severity.lower(), "—")
+            tag = f" `[{layer}]`" if layer else ""
+            lines.append(f"  - {sev_icon}{tag} {text}\n")
+        lines.append("\n")
+
+    # ── 5.3 初步归因 ─────────────────────────────────────────
     if root_causes:
-        lines.append("**根因分析**：\n")
+        lines.append("### 初步归因\n\n")
         for rc in root_causes:
-            text = rc.get("description", str(rc)) if isinstance(rc, dict) else getattr(rc, "description", str(rc))
-            lines.append(f"  - {text}\n")
+            if isinstance(rc, dict):
+                text       = rc.get("suspected_root_cause", rc.get("description", str(rc)))
+                confidence = rc.get("confidence", "")
+                reasoning  = rc.get("reasoning", "")
+            else:
+                text       = getattr(rc, "suspected_root_cause", getattr(rc, "description", str(rc)))
+                confidence = str(getattr(rc, "confidence", "")).replace("ConfidenceLevel.", "")
+                reasoning  = getattr(rc, "reasoning", "")
+            conf_tag = f" `[{confidence}]`" if confidence else ""
+            lines.append(f"  - {text}{conf_tag}\n")
+            if reasoning:
+                lines.append(f"    > {reasoning}\n")
         lines.append("\n")
 
+    # ── 5.4 Phase 3 优先项 ────────────────────────────────────
     if priorities:
-        lines.append("**Phase 3 优先项**：\n")
+        lines.append("### Phase 3 优先项\n\n")
         for p in priorities:
-            text = p.get("title", str(p)) if isinstance(p, dict) else getattr(p, "title", str(p))
-            reason = p.get("reason", "") if isinstance(p, dict) else getattr(p, "reason", "")
-            lines.append(f"  - **{text}**")
+            if isinstance(p, dict):
+                text   = p.get("title", str(p))
+                reason = p.get("reason", "")
+                scope  = p.get("scope", "")
+            else:
+                text   = getattr(p, "title",  str(p))
+                reason = getattr(p, "reason", "")
+                scope  = str(getattr(p, "scope", "")).replace("PriorityScope.", "")
+            scope_tag = f" `[{scope}]`" if scope else ""
+            lines.append(f"  - **{text}**{scope_tag}")
             if reason:
                 lines.append(f"：{reason}")
             lines.append("\n")
