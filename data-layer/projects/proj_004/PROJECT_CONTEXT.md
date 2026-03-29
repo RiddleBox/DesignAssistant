@@ -1,7 +1,7 @@
 # PROJECT_CONTEXT.md — 项目一站式开工入口
 
 > **文档类型**：项目状态总览 + 开工上下文
-> **最后更新**：2026-03-29（2.5 LLM 深层归因真实链路跑通，findings=5 全部准确，可直接消费为 Phase 3 入场依据）
+> **最后更新**：2026-03-29（工程收尾：processing_time_ms 修复、MetadataFilter 重构确认完成、索引重建、background 覆盖缺口记录）
 > **当前阶段**：2.5 真实链路跑通，Phase 3 入场条件评估中
 > **项目状态**：✅ 主链路联调完成，✅ 真实 LLM API 接入，✅ 报告输出层上线，✅ 2.1 两阶段筛选框架，✅ 2.2 多机会输出重构+字段完善，✅ 2.3 结构性缺口修复，✅ 2.4 四层文档结构+MetadataFilter 重构+ContextPacket 联调完成，✅ 2.5 LLM 深层归因跑通（findings=5，全部准确）
 
@@ -154,8 +154,14 @@
 - ContextPacket v1.0 协议冻结，`retrieve_context()` 分桶召回已跑通
 - 2.2 真实接入验证（8条证据包，4种 content_type 分桶命中）
 - 四层文档结构确立（industry / category / content_type / tags 正交）
-- MetadataFilter 重构（弹性多维过滤，替代旧 category_filter）
+- MetadataFilter 重构完成（`models.py` + `retrieval.py` 三维过滤：industry / category / min_trust_level）
+- 向量索引重建完成（`vector_meta_local.pkl` 中 Document 对象含 industry/content_type/category 字段）
 - 检索精度增强路线确定（按触发时机排序，见进展文档）
+
+**已知问题（待评估）**：
+- 62 条文档中 32 条 `content_type=background`，2.2 的 `needed_content_types` 不请求 `background`
+- 实际参与检索的文档只有 30 条，RAG 有效覆盖率偏低（30/62）
+- 评估方向：部分 background 文档（如《日本手游市场特征》）实际有判断价值，建议在 Phase 3 知识库扩展时统一评估重分类
 
 **关键设计拍板**：
 - `content_type` 替代 `use_as`（2026-03-28）：描述内容性质，不预判用途
@@ -411,7 +417,12 @@
 | 2026-03-28（凌晨） | 2.2 消费语义重构：多条输入+Prompt-first v2（_llm_judge_v2），2.1 打分全透传，冒烟验证通过 |
 | 2026-03-28 | 修复 2.2 规则引擎 fallback 中 intensity 字段名 bug（avg_intensity 始终为 0 导致 priority 分级偏低） |
 | 2026-03-28（晚） | 2.4 ContextPacket 协议 v1.0 冻结：content_type 枚举（glossary/few_shot_example/constraint_rule/case_record/market_data/background）、ContextRequest/ContextResponse 字段定义、三模块消费场景差异确认、兼容策略（新增 /context 接口，原接口不变） |
-| 2026-03-29 | 2.4 四层文档结构确立（industry/category/content_type/tags 正交），MetadataFilter 重构，2.5 LLM 深层归因跑通（llm_attributor.py 新增，findings=5 全部准确），关键工程修复：流式请求绕过中转截断、JSON 兼容前缀解析、prompt 体积压缩、信号字段名对齐。Phase 3 入场条件第 4 条正式通过。 |
+| 2026-03-29 | 接入真实 LLM API（api123.icu 中转），2.1 v1.5 prompt + Precision 测量体系，2.2/2.3 LLM 判断上线，报告输出层（report_writer.py）上线，2.5 upstream_outputs 字段修正，2.1 per-sample 容错，2.3 多 agent 完善路线写入规划文档 |
+| 2026-03-28（凌晨） | 2.2 消费语义重构：多条输入+Prompt-first v2（_llm_judge_v2），2.1 打分全透传，冒烟验证通过 |
+| 2026-03-28 | 修复 2.2 规则引擎 fallback 中 intensity 字段名 bug（avg_intensity 始终为 0 导致 priority 分级偏低） |
+| 2026-03-28（晚） | 2.4 ContextPacket 协议 v1.0 冻结：content_type 枚举（glossary/few_shot_example/constraint_rule/case_record/market_data/background）、ContextRequest/ContextResponse 字段定义、三模块消费场景差异确认、兼容策略（新增 /context 接口，原接口不变） |
+| 2026-03-29（上午） | 2.4 四层文档结构确立（industry/category/content_type/tags 正交），MetadataFilter 重构，2.5 LLM 深层归因跑通（llm_attributor.py 新增，findings=5 全部准确），关键工程修复：流式请求绕过中转截断、JSON 兼容前缀解析、prompt 体积压缩、信号字段名对齐。Phase 3 入场条件第 4 条正式通过。 |
+| 2026-03-29（下午） | 工程收尾：`processing_time_ms` 接入真实耗时（commit `f42ecdc`）；MetadataFilter 重构完整确认（models.py+retrieval.py 三维过滤均已实现，向量索引重建，vector_meta 含 industry/content_type 字段）；incoming/ 历史 tracked 文件清理；发现 background content_type 覆盖缺口（32/62 文档不被 2.2 请求，记录为 Phase 3 待评估项）。 |
 
 ---
 

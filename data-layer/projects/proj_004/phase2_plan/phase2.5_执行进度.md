@@ -279,6 +279,8 @@
 | Windows 控制台编码问题 | 替换 Unicode 符号为 ASCII | 2026-03-16 |
 | M1-M6 多文档批量运行验证 | run_samples_m1_6.py 跑通完整链路（11信号→deep_dive→pilot），2.5 复盘识别到 2.2 主题聚类语义化问题 | 2026-03-24 |
 | 2.2 opportunity_title 枚举值直出 | 更新 `_cluster_signals_and_identify_theme()`：加入 `type_labels` 映射 + 最强信号标签，输出语义化中文标题 | 2026-03-24 |
+| `processing_time_ms=0`（workflow_run_record 耗时始终为0） | `run_step4_retro` 新增 `t_start` 参数，从 `t_total` 传入实际起始时间；新增 `_collect_run_errors()` 从 opp.warnings/act.debate_summary 自动收集 2.2/2.3 fallback 信息（commit `f42ecdc`） | 2026-03-29 |
+| 2.5 报告结构 findings/归因/优先项混排 | report_writer.py 重构：独立四块（输出检查/关键发现/根因归因/Phase3优先项），`suspected_root_causes` 字段名修正，`why_now` 字段补全规则引擎 fallback 逻辑 | 2026-03-29 |
 
 ---
 
