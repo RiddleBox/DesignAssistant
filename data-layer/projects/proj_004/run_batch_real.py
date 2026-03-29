@@ -436,6 +436,11 @@ def main():
     samples = load_samples(incoming_files)
     all_signals, decode_results, per_sample_stats = run_step1_decode(samples, api_key)
 
+    # api123.icu 限流缓解：2.1 批量调用完后等待，避免 2.2/2.3 撞上限流窗口
+    cooldown = 15 * len(samples)
+    print(f"\n[冷却] 等待 {cooldown}s 让中转代理限流窗口重置...")
+    time.sleep(cooldown)
+
     rag_retriever = build_rag_retriever()
     judgment_result = run_step2_judgment(all_signals, len(samples), rag_retriever, api_key)
     if judgment_result is None:
