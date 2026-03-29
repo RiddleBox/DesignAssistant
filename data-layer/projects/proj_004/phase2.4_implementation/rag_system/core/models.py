@@ -44,10 +44,12 @@ class Document:
         id: 文档唯一ID（如 "kb_001"）
         title: 文档标题
         content: 文档内容（最多2000字符）
-        category: 分类（game_design/market_trend/tech_innovation）
-        tags: 标签列表
+        industry: 行业标识（见 INDUSTRY_VALUES），用于跨行业扩展后的隔离过滤；当前默认 "gaming"
+        category: 主题域（见 CATEGORY_VALUES），行业内的粗粒度分类
+        tags: 细粒度主题标签（实体/产品名/地区/技术名词等，不含 content_type/category/industry 值）
         metadata: 元数据
         score: 相似度分数（检索时返回）
+        content_type: 内容性质标注（见 CONTENT_TYPE_VALUES）；None 表示未标注
     """
     id: str
     title: str
@@ -57,6 +59,7 @@ class Document:
     metadata: DocumentMetadata = field(default_factory=DocumentMetadata)
     score: float = 0.0  # 检索时返回
     content_type: Optional[str] = None  # 内容性质标注（见 CONTENT_TYPE_VALUES）；None 表示未标注
+    industry: str = "gaming"            # 行业标识（见 INDUSTRY_VALUES）；默认 gaming
 
     def to_dict(self, include_score: bool = False) -> dict:
         """转换为字典（用于API响应）"""
@@ -64,6 +67,7 @@ class Document:
             "id": self.id,
             "title": self.title,
             "content": self.content,
+            "industry": self.industry,
             "category": self.category,
             "tags": self.tags,
             "metadata": self.metadata.to_dict()
@@ -80,6 +84,7 @@ class Document:
             id=data["id"],
             title=data["title"],
             content=data["content"],
+            industry=data.get("industry", "gaming"),
             category=data["category"],
             tags=data.get("tags", []),
             metadata=metadata,
@@ -188,6 +193,19 @@ TRUST_LEVEL_VALUES = {"high", "medium", "low"}
 # caller 合法枚举值
 CALLER_VALUES = {"phase2.1", "phase2.2", "phase2.3"}
 
+# industry 合法枚举值（行业标识，用于跨行业扩展后的隔离过滤）
+INDUSTRY_VALUES = {
+    "gaming",       # 游戏行业（当前唯一行业）
+    # 未来扩展示例："film", "ecommerce", "music" 等
+}
+
+# category 合法枚举值及边界定义（gaming 行业内的主题域）
+CATEGORY_VALUES = {
+    "game_design",      # 游戏设计：玩法机制、经济系统、关卡/叙事设计、用户体验等
+    "market_trend",     # 市场与行业动态：市场数据、行业趋势、公司/产品层面的具体事件（含并购/发布/关服等）
+    "tech_innovation",  # 技术创新：引擎技术、AI工具、云游戏、渲染/物理等技术能力
+}
+
 
 @dataclass
 class ContextPacket:
@@ -234,6 +252,30 @@ class ContextPacket:
 
 
 @dataclass
+class MetadataFilter:
+    """
+    元数据过滤器 —— 在向量检索前对候选文档集做元数据层面的范围限定。
+
+    各字段独立生效，空列表 = 不限该维度。
+    设计原则：过滤的是"候选集范围"，不改变 query 语义，也不替代 content_type 分桶。
+
+    字段说明：
+        industry:        按行业隔离（见 INDUSTRY_VALUES）；扩展多行业后使用，当前默认不限
+        category:        按主题域过滤（见 CATEGORY_VALUES）；行业内进一步缩小范围
+        min_trust_level: 按最低信任等级过滤；"low"=不过滤（默认）
+
+    典型用法：
+        - 只用游戏行业文档：industry=["gaming"]
+        - 只看市场相关主题：category=["market_trend"]
+        - 只要高可信文档：  min_trust_level="high"
+        - 不过滤（默认）：  MetadataFilter()（所有字段空/默认）
+    """
+    industry: List[str] = field(default_factory=list)       # 空=不限行业
+    category: List[str] = field(default_factory=list)       # 空=不限主题域
+    min_trust_level: str = "low"                            # low=不过滤
+
+
+@dataclass
 class ContextRequest:
     """
     证据包请求 —— 调用方向 2.4 发起的上下文请求
@@ -242,14 +284,18 @@ class ContextRequest:
     - 2.1（信号抽取）：needed_content_types=["glossary","few_shot_example","constraint_rule"]
     - 2.2（机会判断）：needed_content_types=["case_record","market_data","few_shot_example"]
     - 2.3（外部观察者）：needed_content_types=["case_record","market_data"]
+
+    metadata_filter 说明：
+    - 当前单行业阶段，industry 通常不设（默认不限）
+    - 多行业扩展后，可用 metadata_filter.industry=["gaming"] 隔离行业噪音
+    - category 过滤适合在同一行业内进一步缩小主题范围时使用
     """
     request_id: str                         # 请求唯一ID，用于链路追踪
     caller: str                             # 调用方：phase2.1 / phase2.2 / phase2.3
     query: str                              # 核心查询文本
     needed_content_types: List[str] = field(default_factory=list)   # 期望内容类型（空=不限）
     top_k: int = 5                          # 期望返回包数量上限（最大10）
-    category_filter: List[str] = field(default_factory=list)        # 主题分类过滤（空=不限）
-    min_trust_level: str = "low"            # 最低信任等级（low=不过滤）
+    metadata_filter: MetadataFilter = field(default_factory=MetadataFilter)  # 元数据过滤器
 
     def validate(self) -> tuple[bool, Optional[str]]:
         if not self.query or len(self.query.strip()) == 0:
@@ -263,7 +309,7 @@ class ContextRequest:
         for ct in self.needed_content_types:
             if ct not in CONTENT_TYPE_VALUES:
                 return False, f"content_type '{ct}' 非法，合法值：{CONTENT_TYPE_VALUES}"
-        if self.min_trust_level not in TRUST_LEVEL_VALUES:
+        if self.metadata_filter.min_trust_level not in TRUST_LEVEL_VALUES:
             return False, f"min_trust_level 非法，必须是 {TRUST_LEVEL_VALUES} 之一"
         return True, None
 

@@ -268,26 +268,32 @@ class Retriever:
         # 确定需要召回的类型列表
         needed_types = request.needed_content_types
         if not needed_types:
-            # 未指定类型：全类型召回，不分桶
             needed_types = list(CONTENT_TYPE_VALUES)
 
-        # 每桶配额：ceil(top_k / len(needed_types))，至少1
+        # 每桶配额
         import math
         per_bucket = max(1, math.ceil(request.top_k / len(needed_types)))
 
+        # metadata_filter 解包
+        mf = getattr(request, 'metadata_filter', None)
+        industry_filter = getattr(mf, 'industry', []) if mf else []
+        category_filter = getattr(mf, 'category', []) if mf else []
+        min_trust_level = getattr(mf, 'min_trust_level', 'low') if mf else 'low'
+
         # trust_level → confidence 阈值映射
         trust_threshold = {"high": 0.8, "medium": 0.5, "low": 0.0}
-        min_conf = trust_threshold.get(request.min_trust_level, 0.0)
+        min_conf = trust_threshold.get(min_trust_level, 0.0)
 
         # 向量化 query（只做一次）
         query_embedding = self.embedding_service.embed_single(request.query)
 
         for ct in needed_types:
-            # Step 1：按 content_type 过滤候选文档
+            # Step 1：按 content_type + metadata_filter 过滤候选文档
             candidates = [
                 doc for doc in self.vector_store.documents.values()
                 if getattr(doc, "content_type", None) == ct
-                and (not request.category_filter or doc.category in request.category_filter)
+                and (not industry_filter or getattr(doc, 'industry', 'gaming') in industry_filter)
+                and (not category_filter or doc.category in category_filter)
                 and doc.metadata.confidence >= min_conf
             ]
 
