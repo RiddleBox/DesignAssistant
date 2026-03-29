@@ -293,12 +293,12 @@ def run_step2_judgment(all_signals, sample_count, rag_retriever=None, api_key=No
     }
 
     engine = JudgmentEngine(rag_retriever=rag_retriever, api_key=api_key)
-    req = OpportunityJudgmentRequest(decoded_intelligence=merged_intelligence)
+    req = OpportunityJudgmentRequest(decoded_intelligences=[merged_intelligence])
     t0 = time.time()
     result = engine.judge(req)
     elapsed = int((time.time() - t0) * 1000)
 
-    opp = result.opportunity
+    opp = result.opportunities[0]
     print(f"  status:          {result.status}")
     print(f"  priority_level:  {opp.priority_level}")
     print(f"  opportunity:     {opp.opportunity_title}")
@@ -316,7 +316,7 @@ def run_step3_action(judgment_result, api_key=None):
     print("Step 3: 2.3 行动设计")
     print(f"{'='*60}")
 
-    opp22 = judgment_result.opportunity
+    opp22 = judgment_result.opportunities[0]
     opp23 = OppObj23(
         opportunity_title=opp22.opportunity_title,
         opportunity_thesis=opp22.opportunity_thesis,
@@ -347,7 +347,7 @@ def run_step4_retro(judgment_result, action_result, decode_results, per_sample_s
     print("Step 4: 2.5 整合复盘")
     print(f"{'='*60}")
 
-    opp = judgment_result.opportunity
+    opp = judgment_result.opportunities[0]
     ad = action_result.action_decision
 
     req = SystemRetrospectiveRequest(
@@ -470,7 +470,7 @@ def main():
     print(f"Iteration 1 批量运行完成，总耗时 {total_ms}ms")
     print(f"  样本数:        {len(samples)}")
     print(f"  信号池:        {len(all_signals)}")
-    print(f"  机会判断:      {judgment_result.opportunity.priority_level} / {judgment_result.opportunity.opportunity_title}")
+    print(f"  机会判断:      {judgment_result.opportunities[0].priority_level} / {judgment_result.opportunities[0].opportunity_title}")
     print(f"  行动姿态:      {action_result.action_decision.decision_posture}")
     print(f"  复盘输出:      findings={len(retro_result.retrospective.critical_findings)}, priorities={len(retro_result.retrospective.phase3_priorities)}")
     print(f"  文件移动:      {moved_count} -> processed/")

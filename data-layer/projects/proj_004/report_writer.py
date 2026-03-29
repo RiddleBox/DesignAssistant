@@ -51,7 +51,7 @@ def generate_report(
     ts_str = ts.strftime("%Y-%m-%d %H:%M")
     ts_file = ts.strftime("%Y-%m-%d_%H%M")
 
-    opp = judgment_result.opportunity
+    opp = judgment_result.opportunities[0]
     act = action_result.action_decision
     retro = retro_result.retrospective
 
