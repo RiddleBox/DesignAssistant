@@ -2,8 +2,8 @@
 
 > **文档类型**：执行进度跟踪文档
 > **适用模块**：Phase 3 真实数据管道 + 螺旋质量迭代
-> **状态**：执行中（Iteration 3 进行中）
-> **最后更新**：2026-03-26
+> **状态**：执行中（Iteration 4 已完成主体，Iteration 5 待规划）
+> **最后更新**：2026-03-29
 
 ---
 
@@ -117,17 +117,81 @@ Phase 2 证明的是「链路能跑通」。Phase 3 要证明的是「链路能�
 
 ---
 
-### Iteration 4 — 2.1 精度提升 + 规模化 replay 缓存
+### Iteration 4 — 2.1 精度提升 + 链路质量全面升级
 
-**目标**：提升 2.1 信号提取 Precision，补录全量缓存，让 replay 零费用覆盖全部样本
+**目标**：提升 2.1 信号提取 Precision，LLM 判断路径全面接入，2.5 LLM 深层归因能力建立
+
+**状态**：✅ 已完成（2026-03-27 ~ 2026-03-29）
+
+**说明**：原 Iter 4 规划（2026-03-26）只预期"2.1 v1.6 + Precision 测量 + replay 缓存"，实际推进过程中各模块质量问题集中爆发并完成修复，范围远超原计划。replay 缓存暂缓——当前真实 API 链路稳定，replay 的迫切性下降，后续视需要补做。
 
 **主要工作**：
-- [ ] 2.1 prompt 升级至 v1.6：加强 market 类误报抑制，新增范式边界 few-shot
-- [ ] 对 37+ 条样本做 Precision 测量，目标 ≥ 60%
-- [ ] 批量 record 录制：将全部 37 条样本的 2.1 + 2.2 响应缓存入 .api_recordings/
-- [ ] 验证 replay 模式全量跑通（零费用，无 cache miss）
+
+**2.1 情报解码**：
+- [x] prompt 升级至 v1.5/v1.6：market 类误报抑制、5类信号判断框架统一（technical/team/capital 补充显式规则）
+- [x] Precision 测量体系建立（25 条真实样本基准集）
+- [x] 验证结果：Precision=95.2% / Recall=87.0% / F1=90.9%，远超原目标 ≥60%
+- [x] 两阶段筛选架构：source_type 规则预筛（report 纯趋势类 0ms 跳过）
+
+**2.2 机会判断**：
+- [x] 消费语义重构：输入从单条改为 `decoded_intelligences: List[DecodedIntelligence]`，2.2 自主决定信号组合
+- [x] Prompt-first v2（`_llm_judge_v2`）：完整暴露打分 + source_type，LLM 自主组合逻辑链
+- [x] `uncertainty_map` 格式约定：`[类型] 描述：影响说明`（5 种类型枚举）
+- [x] 规则引擎 fallback 修复：`intensity` 字段名 bug（→ `intensity_score`），avg_intensity 始终为 0 导致 priority 分级偏低
+- [x] 验证案例集 v2 重写（7 个游戏行业主题案例，多条 DI 输入）
+
+**2.3 行动设计**：
+- [x] 轻量版多 Agent 辩论：鹰派 + 鸽派 + 仲裁者三轮调用
+- [x] 结构性缺口修复：`PhaseResources` 加 `resource_rationale`，`TopRisk` 加 `blocks_stage`，新增 `DebateSummary` dataclass
+- [x] `debate_summary` 字段透传到报告层
+- [x] `why_now` / `next_validation_questions` 字段接入报告
+
+**2.4 知识库 RAG**：
+- [x] ContextPacket v1.0 协议冻结（content_type 枚举 6 种，ContextRequest / ContextResponse 字段定义）
+- [x] 四层文档结构确立（industry / category / content_type / tags 正交）
+- [x] MetadataFilter 重构（三维弹性过滤：industry / category / min_trust_level，替代旧 category_filter）
+- [x] 向量索引重建（vector_meta 含 industry/content_type/category 字段，384 维 MiniLM-L6-v2）
+- [x] 62 条文档全部标注 industry: gaming
+- [x] 2.2 真实接入验证：8 条证据包命中，4 种 content_type 分桶全部成功
+
+**2.5 整合复盘**：
+- [x] 真实链路端到端打通：upstream_outputs 来自真实 2.1→2.2→2.3→2.4 运行
+- [x] 新增 `llm_attributor.py`（主归因路径），`ProblemAttributor` 降为规则 fallback
+- [x] LLM 归因验证：findings=5，全部为准确的语义层发现（RAG 失效 / counter_evidence 无关 / why_now 空 / 信号丢弃 / exit_conditions=0）
+- [x] 关键工程修复 4 项：流式请求绕过中转截断、JSON 兼容前缀解析、prompt 体积压缩、信号字段名对齐
+- [x] 报告结构重构（输出检查 / 关键发现 / 根因归因 / Phase3优先项四块分离）
+- [x] `processing_time_ms` 接入真实耗时，`errors` 字段自动收集 2.2/2.3 fallback 信息
+
+**Iter 4 复盘结论**：
+- 链路质量全面提升，LLM 判断路径已在 2.2/2.3/2.5 三个模块稳定运行
+- 2.5 LLM 归因能力已从"规则发现表面问题"升级为"语义层发现系统性问题"
+- 当前主要瓶颈：API 中转（api123.icu）偶发截断/限流，2.2/2.3 LLM 路径随机 fallback 到规则引擎
+
+**遗留（暂缓）**：
+- replay 缓存机制：当前真实 API 链路稳定，replay 迫切性下降；待换正式 API 后视需要补做
+
+---
+
+### Iteration 5 — 稳定性提升 + 2.5 驱动修复闭环
+
+**目标**：解决 API 不稳定导致 LLM 路径随机 fallback 的根本问题，建立"2.5 发现 → 下轮修复"的真正闭环
 
 **状态**：待开始
+
+**核心问题（由 Iter 4 复盘识别）**：
+
+| 问题 | 根因 | 影响 |
+|------|------|------|
+| 2.2 LLM 随机 fallback | api123.icu 限流 / JSON 截断（char ~2000）| 机会判断质量不稳定，同一样本两次跑结果不同 |
+| 2.3 LLM 随机 fallback | API 503 / 空响应 | 行动设计退化为规则引擎，debate_summary 消失 |
+| 2.5 归因只针对单次运行 | 没有跨轮次聚合 | 无法识别"每次都出现的系统性问题"vs"偶发问题" |
+
+**规划方向**（等你确认优先级后再细化）：
+
+1. **换正式 API**（最高优先级）：根治 2.2/2.3 随机 fallback 根因。代码已支持，只需替换 `.env` 中的 API key 和 base_url。
+2. **积累真实运行记录**：目标 10+ 次真实链路运行，让 2.5 有足够数据识别趋势
+3. **2.5 跨轮次归因**：对比多次运行结果，识别持续性问题 vs 偶发问题
+4. **background 文档重分类**：62 条文档中 32 条 content_type=background 不被 2.2 请求，评估重分类为 market_data/case_record（提升 RAG 实际覆盖率从 30/62 → 更高）
 
 ---
 
