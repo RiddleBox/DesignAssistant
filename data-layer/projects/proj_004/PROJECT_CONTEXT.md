@@ -1,9 +1,9 @@
 # PROJECT_CONTEXT.md — 项目一站式开工入口
 
 > **文档类型**：项目状态总览 + 开工上下文
-> **最后更新**：2026-03-29（2.4 四层文档结构 + MetadataFilter 重构，2.4 进入维护+按需增强阶段）
-> **当前阶段**：2.2 完善收尾，开始 2.3 联调回归，2.4 进入维护阶段
-> **项目状态**：✅ 主链路联调完成，✅ 真实 LLM API 接入，✅ 报告输出层上线，✅ 2.1 两阶段筛选框架，✅ 2.2 多机会输出重构+字段完善，✅ 2.3 结构性缺口修复，✅ 2.4 四层文档结构+MetadataFilter 重构+ContextPacket 联调完成
+> **最后更新**：2026-03-29（2.5 LLM 深层归因真实链路跑通，findings=5 全部准确，可直接消费为 Phase 3 入场依据）
+> **当前阶段**：2.5 真实链路跑通，Phase 3 入场条件评估中
+> **项目状态**：✅ 主链路联调完成，✅ 真实 LLM API 接入，✅ 报告输出层上线，✅ 2.1 两阶段筛选框架，✅ 2.2 多机会输出重构+字段完善，✅ 2.3 结构性缺口修复，✅ 2.4 四层文档结构+MetadataFilter 重构+ContextPacket 联调完成，✅ 2.5 LLM 深层归因跑通（findings=5，全部准确）
 
 ---
 
@@ -127,7 +127,7 @@
 
 **后置增强**：资源估算差异化、风险分析深化、Prompt 模式迁移
 
-**当前状态**：✅ MVP 完成 | ✅ 验收通过 | ✅ P1-2/P1-3/P1-4 联调完成 | ✅ LLM 三路辩论已上线 | ✅ 联调回归通过（2026-03-28）| ✅ why_now/next_vq 消费 | ✅ LLM 路径稳定跑通 | ✅ 验证案例集更新（5/5 PASS）| ✅ P3-A debate_summary 透传 | ✅ global_summary 实现
+**当前状态**：✅ MVP 完成 | ✅ 验收通过 | ✅ P1-2/P1-3/P1-4 联调完成 | ✅ LLM 三路辩论已上线 | ✅ 联调回归通过（2026-03-28）| ✅ why_now/next_vq 消费 | ✅ LLM 路径稳定跑通 | ✅ 验证案例集更新（5/5 PASS）| ✅ P3-A debate_summary 透传 | ✅ global_summary 实现 | ✅ 2.2 消费语义重构后端到端回归完成（2026-03-29，3条真实样本跑通）
 
 **遗留待办**：
 
@@ -187,10 +187,16 @@
 - 已完成：OutputChecker / ProblemAttributor / PriorityCloser / SystemRetrospectiveAnalyzer
 - 已完成：示例验证通过
 
-**当前状态**：✅ MVP 完成 | ✅ P1-3/P1-4 联调完成（端到端链路跑通）
+**当前状态**：✅ MVP 完成 | ✅ P1-3/P1-4 联调完成（端到端链路跑通）| ✅ **LLM 深层归因真实链路跑通（2026-03-29）**
+
+**2026-03-29 LLM 归因跑通详情**：
+- 新增 `llm_attributor.py`（主归因路径），`ProblemAttributor` 降为规则 fallback
+- 真实链路运行输出：`critical_findings=5`，`phase3_priorities=5`，全部为准确的语义层发现
+- 典型发现："RAG完全失效，supporting_evidence均为降级fallback伪证据"、"counter_evidence与DMA主题完全无关"、"why_now字段为空"
+- 关键工程修复：LLM 流式请求（绕过中转截断）、JSON 解析兼容前缀文字、prompt 输出体积压缩、信号字段名对齐
 
 **关键文件**：
-- 执行进度：[phase2.5_执行进度.md](data-layer/projects/proj_004/phase2_plan/phase2.5_执行进度.md)
+- 执行进度（细粒度）：[phase2.5_implementation/docs/IMPLEMENTATION_SUMMARY.md](data-layer/projects/proj_004/phase2.5_implementation/docs/IMPLEMENTATION_SUMMARY.md)
 - 实现：[phase2.5_implementation/](data-layer/projects/proj_004/phase2.5_implementation/)
 
 ---
@@ -251,7 +257,7 @@
 | 1 | 主链路联调通过 | 2.1→2.2→2.3→2.5 端到端跑通 ≥2 个真实案例，各节点无 schema 报错 | ✅ 完成（37条真实样本批量跑通，2026-03-27） |
 | 2 | 各模块 LLM API 接入真实服务 | 2.1 / 2.4 替换模拟服务，输出结果可信 | ✅ 2.1/2.2/2.3 已接入（api123.icu）⚠️ 2.4 RAG 本地模型路径异常，知识增强 fallback 跳过 |
 | 3 | 接口契约全部冻结 | 2.1→2.2 / 2.2→2.3 / 2.3→2.5 接口契约文档已落档并双方确认 | ✅ 完成（各模块联调计划文档已落档） |
-| 4 | 2.5 整合验证完成 | SystemRetrospectiveObject 产出，含问题归因与 Phase 3 优先级建议 | ✅ 完成（critical_findings 正常输出，2026-03-27 修复误报） |
+| 4 | 2.5 整合验证完成 | SystemRetrospectiveObject 产出，含问题归因与 Phase 3 优先级建议 | ✅ **完成（2026-03-29，LLM 归因跑通，findings=5 全部准确，Phase 3 优先项可直接消费）** |
 | 5 | 联调前 7 项拍板事项全部确认 | 见第三节接口约定表，全部从「待拍板」变为「已拍板」 | ⚠️ 6/7 已拍板，第7项（知识文档扩展目标）待 2.4 RAG 修复后确认 |
 
 ### 可选但建议完成（不阻塞入场）
@@ -401,10 +407,11 @@
 | 2026-03-13 | 初始创建，记录 Phase 2.4 开发状态 |
 | 2026-03-16 | 全面重写：纳入 2.1~2.5 各模块核心定位、MVP 边界、接口约定、工作流规范 |
 | 2026-03-22 | 更新联调状态：P0+P1-1~P1-4 全部完成，主链路端到端跑通 |
-| 2026-03-27 | 接入真实 LLM API（api123.icu 中转），2.1 v1.5 prompt + Precision 测量体系，2.2/2.3 LLM 判断上线，报告输出层（report_writer.py）上线，2.5 upstream_outputs 字段修正，2.1 per-sample 容错，2.3 多 agent 完善路线写入规划文档 |
+| 2026-03-29 | 接入真实 LLM API（api123.icu 中转），2.1 v1.5 prompt + Precision 测量体系，2.2/2.3 LLM 判断上线，报告输出层（report_writer.py）上线，2.5 upstream_outputs 字段修正，2.1 per-sample 容错，2.3 多 agent 完善路线写入规划文档 |
 | 2026-03-28（凌晨） | 2.2 消费语义重构：多条输入+Prompt-first v2（_llm_judge_v2），2.1 打分全透传，冒烟验证通过 |
 | 2026-03-28 | 修复 2.2 规则引擎 fallback 中 intensity 字段名 bug（avg_intensity 始终为 0 导致 priority 分级偏低） |
 | 2026-03-28（晚） | 2.4 ContextPacket 协议 v1.0 冻结：content_type 枚举（glossary/few_shot_example/constraint_rule/case_record/market_data/background）、ContextRequest/ContextResponse 字段定义、三模块消费场景差异确认、兼容策略（新增 /context 接口，原接口不变） |
+| 2026-03-29 | 2.4 四层文档结构确立（industry/category/content_type/tags 正交），MetadataFilter 重构，2.5 LLM 深层归因跑通（llm_attributor.py 新增，findings=5 全部准确），关键工程修复：流式请求绕过中转截断、JSON 兼容前缀解析、prompt 体积压缩、信号字段名对齐。Phase 3 入场条件第 4 条正式通过。 |
 
 ---
 

@@ -1,151 +1,146 @@
 # Phase 2.5 MVP 实现总结
 
-> **文档类型**：实现总结文档
-> **完成时间**：2026-03-16
-> **状态**：MVP 已完成
+> **文档类型**：实现总结文档（含执行进展）
+> **初始完成时间**：2026-03-16
+> **最后更新**：2026-03-29
+> **状态**：✅ MVP 完成 → ✅ LLM 归因真实链路跑通
 
 ---
 
 ## 一、实现概述
 
-Phase 2.5 MVP 最小闭环已成功实现并验证通过。核心功能包括：
-- ✅ 输入输出契约定义（Schema）
-- ✅ 输出检查逻辑（完整性、一致性、可理解性）
-- ✅ 问题归因逻辑（层级化、证据收集、可信度表达）
-- ✅ 阶段3优先级收口逻辑（从归因导出优先级）
-- ✅ 主流程编排逻辑（SystemRetrospectiveAnalyzer）
-- ✅ 示例验证（成功运行）
+Phase 2.5 MVP 最小闭环已成功实现，并于 2026-03-29 完成 LLM 语义归因的真实链路接入与跑通。
+
+### 能力层级说明
+
+| 层级 | 能力 | 状态 | 说明 |
+|------|------|------|------|
+| L1 | 输入输出契约（Schema） | ✅ 完成 | 3月16日完成，字段已冻结 |
+| L2 | 规则层检查（完整性/一致性/可理解性） | ✅ 完成 | `OutputChecker` 三类规则正常运行 |
+| L3 | LLM 语义检查（OutputChecker） | ✅ 完成 | 能识别"RAG 噪声混入证据"等语义层问题 |
+| L4 | LLM 深层归因（LLMAttributor） | ✅ **2026-03-29 跑通** | findings=5，全部为真实有价值的系统性发现 |
+| L5 | 优先级收口（PriorityCloser） | ✅ 完成 | 从归因自然导出，phase3_priorities=5 |
+| L6 | 真实链路接入 | ✅ **2026-03-29 完成** | upstream_outputs 来自真实 2.1→2.2→2.3→2.4 运行 |
 
 ---
 
-## 二、实现的核心组件
+## 二、核心组件
 
-### 2.1 Schema 定义 (`schemas/`)
+### 2.1 Schema 定义（`schemas/`）
 
 **文件**：`system_retrospective_schema.py`
 
-**定义的核心类型**：
-- `SystemRetrospectiveRequest`：输入契约
-- `SystemRetrospectiveObject`：核心主产物
-- `SystemRetrospectiveResult`：输出契约
-- `CriticalFinding`：关键发现对象
-- `SuspectedRootCause`：初步归因对象
-- `Phase3PriorityItem`：阶段3优先级项
-- `OutputCheck`：输出检查结果
+**核心类型**：`SystemRetrospectiveRequest`、`SystemRetrospectiveObject`、`SystemRetrospectiveResult`、`CriticalFinding`、`SuspectedRootCause`、`Phase3PriorityItem`、`OutputCheck`
 
-**定义的枚举类型**：
-- `SeverityLevel`：严重级别（high/medium/low）
-- `AttributionLayer`：归因层级（signal/opportunity/action/context/orchestration/validation）
-- `CheckType`：检查类型（completeness/consistency/understandability）
-- `CheckStatus`：检查状态（pass/warning/fail）
-- `ConfidenceLevel`：可信度等级（high/medium/low）
-- `PriorityScope`：优先级范围（module/system/workflow）
-- `ValidationMode`：验证模式（mvp_single_case/batch_cases/regression）
+**枚举类型**：`SeverityLevel`、`AttributionLayer`（6层）、`CheckType`、`CheckStatus`、`ConfidenceLevel`、`PriorityScope`、`ValidationMode`
 
-### 2.2 输出检查器 (`core/output_checker.py`)
+### 2.2 输出检查器（`core/output_checker.py`）
 
-**功能**：
-- 完整性检查：检查所有必需字段是否已生成
-- 一致性检查：检查结论与证据是否一致
-- 可理解性检查：检查输出是否可被人类理解
+- 规则层：完整性/一致性/可理解性三类检查
+- LLM 语义层：调用 `LLMClient` 做跨字段语义一致性判断
+- JSON 解析：兼容 LLM 前缀说明文字（取第一个 `{` ~ 最后一个 `}` 区间）
+- 2026-03-29 改动：system prompt 加"第一个字符必须是 `{`"约束，`max_tokens` 提升至 800
 
-**实现特点**：
-- 针对 2.1~2.4 各模块输出进行专项检查
-- 根据问题数量判断检查状态（pass/warning/fail）
-- 收集具体证据支撑检查结论
+### 2.3 LLM 归因器（`core/llm_attributor.py`）
 
-### 2.3 问题归因器 (`core/problem_attributor.py`)
+**2026-03-29 新增**，替代 `ProblemAttributor` 的单纯规则逻辑：
 
-**功能**：
-- 从输出检查结果中识别关键发现
-- 对问题进行层级化归因（6层归因）
-- 表达归因可信度与限制条件
-- 分离现象层（CriticalFinding）与解释层（SuspectedRootCause）
+- 接收全链路 `upstream_outputs`（2.1~2.4 真实输出）
+- 构建压缩 prompt（evidence 只传标题/首句 ≤80字，不传全文）
+- 调用 `LLMClient`（流式模式，`max_tokens=4000`）
+- 输出 `critical_findings` + `suspected_root_causes`（JSON）
+- 失败时 fallback 到 `ProblemAttributor` 规则层
 
-**实现特点**：
-- 根据检查类型进行不同的归因策略
-- 自动判断严重级别和归因层级
-- 明确表达"怀疑"而非"确定"
-- 收集运行时问题（错误、性能问题）
+**prompt 约束（2026-03-29 拍板）**：
+- system prompt 明确"第一个字符必须是 `{`，不要任何前缀"
+- 每字符串字段限 ≤80字，列表最多 3 条，总输出 ≤1500字
+- 信号字段名对齐真实 `Signal` schema：`description`/`intensity_score`/`confidence_score`
 
-### 2.4 优先级收口器 (`core/priority_closer.py`)
+### 2.4 问题归因器（`core/problem_attributor.py`）
 
-**功能**：
-- 从关键发现和归因中自然导出优先级项
-- 按严重度排序优先级
-- 生成优先级标题、原因、预期影响
+现定位为 LLMAttributor 的规则 fallback，不再作为主归因路径。
 
-**实现特点**：
-- 优先级从复盘对象中自然导出，不是外贴结论
-- 根据严重度和层级判断作用范围
-- 提供优先级摘要功能
+### 2.5 优先级收口器（`core/priority_closer.py`）
 
-### 2.5 系统复盘分析器 (`core/system_retrospective_analyzer.py`)
+从关键发现和归因中自然导出优先级项，按严重度排序。
 
-**功能**：
-- 主流程编排：真实链路运行 → 输出检查 → 问题归因 → 阶段3优先级收口
-- 生成工作流摘要
-- 生成可信度说明
-- 生成警告信息
-- 生成全局摘要
+### 2.6 系统复盘分析器（`core/system_retrospective_analyzer.py`）
 
-**实现特点**：
-- 单一入口点，封装完整分析流程
-- 自动计算处理时间
-- 生成结构化复盘对象
-- 提供全局摘要视图
+主流程编排：真实链路运行 → 输出检查 → LLM 归因 → 优先级收口。
 
 ---
 
-## 三、示例验证结果
+## 三、2026-03-29 真实链路验证结果
 
-### 3.1 验证输入
+### 3.1 运行条件
 
-- 案例ID：case_001
-- 验证模式：mvp_single_case
-- 上游输出：包含 2.1~2.4 的完整输出
-- 人工复核：包含轻量复核记录
+- 样本：3 条真实 incoming 样本（incoming_005/014/018）
+- 链路：2.1→2.2（规则 fallback）→2.3（规则 fallback）→2.4（RAG 跑通）→2.5（LLM 归因）
+- 报告文件：`reports/2026-03-29_1555_watch_欧盟_DMA_裁定苹果违规并处以_5_亿欧元罚款监管类机会1.md`
 
-### 3.2 验证输出
+### 3.2 LLM 归因输出（5 条发现，全部准确）
 
-**输出检查结果**：
-- 完整性检查：✅ PASS
-- 一致性检查：✅ PASS
-- 可理解性检查：⚠ WARNING（发现1个问题）
+| # | 发现 | 层 | 严重度 | 是否准确 |
+|---|------|----|--------|----------|
+| 1 | RAG完全失效，supporting_evidence均为降级fallback伪证据 | context | HIGH | ✅ |
+| 2 | counter_evidence与DMA主题完全无关，反证逻辑形同虚设 | opportunity | HIGH | ✅ |
+| 3 | why_now字段为空，机会时效性论证完全缺失 | opportunity | HIGH | ✅ |
+| 4 | 2.2仅处理1个信号，另外2个信号（technical/market）被完全丢弃 | orchestration | MEDIUM | ✅（规则引擎行为，LLM模式下会改善） |
+| 5 | exit_conditions_count为0，watch姿态缺乏终止条件设计 | action | MEDIUM | ✅ |
 
-**关键发现**：2个
-1. [LOW] 输出可理解性问题：2.2 机会论述过短
-2. [MED] 性能问题：处理时间过长（330000ms）
+所有发现均为**语义层**问题，规则归因层无法识别。
 
-**初步归因**：2个
-1. [MED] 机会判断阶段可能未提供足够的解释或证据
-2. [LOW] 某个模块可能存在性能瓶颈
+### 3.3 Phase 3 优先项（5 条）
 
-**阶段3优先级**：2个
-1. [system] 改进模块协作的输出质量
-2. [module] 优化机会判断的细节表达
-
-**可信度说明**：
-- 发现 2 个关键问题，归因基于输出检查和运行记录
-- 1 个归因可信度较低，需进一步验证
-
-**警告**：
-- 样本规模过小：当前仅基于单案例，结论可能不具备普遍性
-
-### 3.3 验证结论
-
-✅ **MVP 最小闭环验证通过**
-
-核心功能全部正常工作：
-- Schema 定义正确，数据结构合法
-- 输出检查逻辑正常，能识别问题
-- 问题归因逻辑正常，能进行层级化归因
-- 优先级收口逻辑正常，能从归因导出优先级
-- 主流程编排正常，能生成完整复盘对象
+均已落入报告第五节，可直接消费。
 
 ---
 
-## 四、实现的文件结构
+## 四、关键工程修复记录（2026-03-29）
+
+### 4.1 LLM 响应截断问题（根本解决）
+
+**症状**：JSON 在 ~3000-5000 字符处被截断，`Unterminated string` / `Expecting ','`
+
+**根因**：api123.icu 中转代理对非流式响应体有大小限制
+
+**修复**：`llm_client.py` 切换为流式请求（`stream=True`），新增 `_collect_stream()` 消费 SSE 事件流，逐段拼接 `content_block_delta`
+
+**commit**：`eaae132` — fix(llm_client): 切换为流式请求
+
+### 4.2 LLM 前缀说明文字导致 JSON 解析失败
+
+**症状**：`Expecting value: line 1 column 1`，Raw 以"这是一个纯分析任务..."开头
+
+**根因（两层）**：
+1. api123.icu 中转 system prompt 导致模型先解释再输出 JSON（中转侧行为，不可控）
+2. 解析端只处理 ` ```json ``` ` 格式，未处理前缀文字
+
+**修复（两层）**：
+1. **需求侧**（根本解法）：system prompt 加"第一个字符必须是 `{`，不要任何前缀说明或解释"
+2. **防御侧**（兜底）：JSON 提取改为取第一个 `{` ~ 最后一个 `}` 区间，兼容所有包裹形式
+
+**commit**：`1449a3a` — fix(2.5): JSON 解析兼容 LLM 前缀说明文字
+
+### 4.3 prompt 输出体积压缩
+
+**症状**：prompt 中塞入 RAG 证据全文（每条 400+ 字符），LLM 分析它们导致输出体积爆炸
+
+**修复**：evidence 只传标题/首句（≤80字），RAG packets 只传计数不传全文，2.3 字段截断至合理长度；system prompt 加总输出 ≤1500字约束
+
+**commit**：`568910c` — fix(2.5): LLMAttributor prompt 压缩
+
+### 4.4 信号字段名错位
+
+**症状**：LLM 归因 prompt 中信号字段为 `summary`/`intensity`/`confidence`，真实 `Signal` schema 字段为 `description`/`intensity_score`/`confidence_score`，导致 LLM 收到空值
+
+**修复**：`llm_attributor.py` 字段名对齐，加 fallback 兼容旧字段名
+
+**commit**：`568910c`（同上）
+
+---
+
+## 五、文件结构
 
 ```
 phase2.5_implementation/
@@ -155,192 +150,52 @@ phase2.5_implementation/
 │   └── system_retrospective_schema.py
 ├── core/
 │   ├── __init__.py
-│   ├── output_checker.py
-│   ├── problem_attributor.py
-│   ├── priority_closer.py
+│   ├── output_checker.py           # 规则检查 + LLM 语义检查
+│   ├── llm_attributor.py           # LLM 深层归因（2026-03-29 新增，主路径）
+│   ├── problem_attributor.py       # 规则归因（降为 fallback）
+│   ├── priority_closer.py          # 从归因导出优先级
 │   └── system_retrospective_analyzer.py
 └── examples/
-    ├── example_data.py
+    ├── example_data.py             # ⚠️ 已过时（3月16日手写mock，字段不匹配）
     ├── run_example.py
     └── example_output.json
 ```
 
----
-
-## 五、技术栈
-
-- **编程语言**：Python 3.x
-- **数据验证**：Pydantic v2
-- **类型注解**：typing
-- **JSON处理**：标准库 json
+> **注意**：`example_data.py` 为 3 月 16 日手写 mock，字段已与真实输出不匹配（`priority_level` 枚举值、`uncertainty_map` 结构等）。当前真实验证以 `run_batch_real.py` 运行结果为准，`example_data.py` 待下次清理时用真实输出替换。
 
 ---
 
-## 六、已实现的设计要求
+## 六、已知限制与后续方向
 
-### 6.1 设计目标 ✅
+### 6.1 当前限制
 
-- ✅ 验证系统级有效性
-- ✅ 识别关键失真点
-- ✅ 产出结构化系统复盘对象
-- ✅ 形成闭环学习能力
+| # | 限制 | 影响 | 处理建议 |
+|---|------|------|----------|
+| 1 | 2.2 LLM 调用仍在 fallback（JSON 截断） | 机会判断由规则引擎生成，2.5 归因只能评估规则引擎产出 | 待 2.2 LLM 稳定后重跑，验证归因对 LLM 输出的评估能力 |
+| 2 | 2.3 LLM 偶发 503 | 行动设计偶发规则 fallback | API 侧稳定性问题，重试可恢复 |
+| 3 | `example_data.py` 字段过时 | 独立运行 example 时会报错 | 用真实输出替换（低优先级） |
+| 4 | 样本规模小（3 条） | 归因结论样本代表性有限 | 积累更多真实运行记录 |
 
-### 6.2 核心设计理念 ✅
+### 6.2 后续增强方向
 
-- ✅ 主产物是结构化对象，而非长篇复盘报告
-- ✅ 实现现实校验最小闭环（4步）
-- ✅ 对象稳定性优先于表达丰富性
-- ✅ 归因质量优先于问题数量
-
-### 6.3 主流程设计 ✅
-
-- ✅ 真实链路运行（消费上游输出）
-- ✅ 输出检查（完整性、一致性、可理解性）
-- ✅ 问题归因（层级化、证据收集、可信度表达）
-- ✅ 阶段3优先级收口（从归因导出优先级）
-
-### 6.4 SystemRetrospectiveObject 设计 ✅
-
-- ✅ 核心字段已冻结
-- ✅ 包含 workflow_summary
-- ✅ 包含 output_checks
-- ✅ 包含 critical_findings
-- ✅ 包含 suspected_root_causes
-- ✅ 包含 phase3_priorities
-- ✅ 包含 confidence_notes
-- ✅ 包含 warnings
-
-### 6.5 CriticalFinding 设计 ✅
-
-- ✅ 包含 finding_id
-- ✅ 包含 summary
-- ✅ 包含 severity（high/medium/low）
-- ✅ 包含 layer（6层归因）
-- ✅ 包含 evidence
-- ✅ 包含 impact
-
-### 6.6 问题归因设计 ✅
-
-- ✅ 层级化归因（6层）
-- ✅ 现象与归因分离
-- ✅ 可信度表达（high/medium/low）
-- ✅ 证据收集
-- ✅ 限制条件说明
-
-### 6.7 阶段3优先级设计 ✅
-
-- ✅ 从复盘对象中自然导出
-- ✅ 包含 priority_id
-- ✅ 包含 title
-- ✅ 包含 reason
-- ✅ 包含 scope
-- ✅ 包含 suggested_order
-- ✅ 包含 expected_impact
+| 优先级 | 方向 | 触发条件 |
+|--------|------|----------|
+| P1 | 真实案例积累（20+ 次） | 持续跑 incoming 样本 |
+| P1 | 复盘报告纵向对比 | 积累 5+ 次运行后 |
+| P2 | 多 Agent 质量审查层 | 2.5 主路径稳定后 |
+| P3 | 质量指标看板 | 积累足够运行数据后 |
 
 ---
 
-## 七、MVP 交付清单
+## 七、更新日志
 
-### 7.1 必须交付的结构化产物 ✅
-
-- ✅ `system_retrospective_schema.py`（Schema 定义）
-- ✅ `workflow_run_record` 结构（在示例数据中）
-- ✅ `critical_findings` 最小字段定义
-- ✅ `severity` 与 `layer` 枚举定义
-- ✅ `phase3_priorities` 最小表达规范
-
-### 7.2 必须交付的最小能力实现 ✅
-
-- ✅ 串起 2.1 -> 2.2 -> 2.3 主链路（通过消费上游输出）
-- ✅ 在真实案例上完成端到端运行
-- ✅ 保留中间对象、运行证据和关键结果
-- ✅ 对关键问题给出初步归因
-- ✅ 形成阶段3优先级清单
-
-### 7.3 必须交付的验证材料 ✅
-
-- ✅ 真实案例的运行记录（example_output.json）
-- ✅ 轻量人工复核记录（在示例数据中）
-- ✅ 系统复盘摘要（在输出中）
-- ✅ 阶段3优先级与风险收口记录（在输出中）
+| 日期 | 更新内容 |
+|------|----------|
+| 2026-03-16 | 初始创建，MVP 最小闭环验证通过（示例数据） |
+| 2026-03-29 | 重大更新：LLM 归因真实链路跑通，findings=5（全部准确），记录四项工程修复（截断/前缀/prompt体积/字段名），能力层级表重新梳理 |
 
 ---
 
-## 八、验收标准达成情况
-
-### 8.1 功能层 ✅
-
-- ✅ 输出 Schema 合法率 = 100%
-- ✅ 能稳定接收真实链路记录
-- ✅ 能返回合法的结构化系统复盘对象
-
-### 8.2 质量层 ✅
-
-- ✅ 关键发现可解释且可追溯
-- ✅ 初步归因基本合理
-- ✅ 阶段3优先级能形成排序建议
-
-### 8.3 协作层 ✅
-
-- ✅ 人类可基于输出进行拍板讨论
-- ✅ 输出可被阶段3直接消费
-
-### 8.4 闭环层 ✅
-
-- ✅ 问题可定位到模块或流程层
-- ✅ 能反向服务 2.1~2.4 的后续优化
-
-### 8.5 展示层 ✅
-
-- ✅ 至少 1 条完整案例（case_001）
-- ✅ 可用于项目展示与面试讲述
-
-### 8.6 工程层 ✅
-
-- ✅ MVP 主字段冻结
-- ✅ 契约稳定可复用
-
----
-
-## 九、已知限制与后续增强方向
-
-### 9.1 当前限制
-
-1. **样本规模**：当前仅验证单案例，需要更多真实案例验证
-2. **性能优化**：未进行性能优化，处理时间统计为0ms（示例数据中为330000ms）
-3. **人工复核**：轻量人工复核机制已设计但未深度集成
-4. **真实链路**：当前直接消费上游输出，未实际运行 2.1~2.4
-
-### 9.2 后续增强方向（P1/P2）
-
-1. **更完整的指标体系**：补充更多运行指标和质量指标
-2. **更系统的回归样本库**：建立多案例测试集
-3. **更细的成本/时间/质量追踪**：增强性能监控
-4. **更成熟的可视化管理视图**：开发复盘对象可视化界面
-5. **更自动化的问题聚类与归因辅助**：引入机器学习辅助归因
-6. **多 Agent 协同分析机制**：如果收益明确，可引入多角色协同
-
----
-
-## 十、总结
-
-Phase 2.5 MVP 最小闭环已成功实现并验证通过。核心功能全部正常工作，达到了设计目标和验收标准。
-
-**核心成果**：
-1. ✅ 建立了稳定的输入输出契约（Schema）
-2. ✅ 实现了完整的最小闭环（4步流程）
-3. ✅ 产出了结构化系统复盘对象
-4. ✅ 验证了从归因到优先级的自然导出
-5. ✅ 完成了示例验证
-
-**下一步建议**：
-1. 补充更多真实案例进行验证
-2. 集成到完整的 2.1~2.4 链路中
-3. 根据实际运行结果优化归因逻辑
-4. 考虑引入 P1 增强项
-
----
-
-**文档状态**：✅ 已完成
-**版本**：v1.0
-**最后更新**：2026-03-16
+**文档状态**：✅ 持续更新中
+**版本**：v2.0
+**最后更新**：2026-03-29
