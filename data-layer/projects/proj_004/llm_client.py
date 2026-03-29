@@ -3,6 +3,8 @@ llm_client.py — 统一 LLM 调用客户端
 
 支持 Anthropic 原生 API 和中转代理（ANTHROPIC_BASE_URL）。
 2.2 / 2.3 动态加载本文件，通过 LLMClient 发起调用。
+
+注意：默认使用流式请求（stream=True），规避中转代理对非流式响应体的大小限制。
 """
 
 import json
@@ -29,6 +31,8 @@ class LLMClient:
         """
         调用 LLM，返回文本响应。
 
+        使用流式请求（stream=True）规避中转代理对非流式响应体的大小截断。
+
         Args:
             prompt:      用户消息内容
             model:       模型名称
@@ -52,22 +56,45 @@ class LLMClient:
             "max_tokens":  max_tokens,
             "temperature": temperature,
             "messages":    messages,
+            "stream":      True,
         }
         if system:
             payload["system"] = system
 
         for attempt in range(max_retries):
             try:
-                resp = requests.post(url, headers=headers, json=payload, timeout=(30, 180))
+                resp = requests.post(url, headers=headers, json=payload, timeout=(30, 180), stream=True)
                 resp.raise_for_status()
-                data = resp.json()
-                # 提取文本（跳过 thinking 块）
-                for block in data.get("content", []):
-                    if block.get("type") == "text":
-                        return block["text"]
-                return ""
+                return self._collect_stream(resp)
             except Exception as e:
                 if attempt < max_retries - 1:
                     time.sleep(2 ** attempt)
                 else:
                     raise e
+
+    def _collect_stream(self, resp) -> str:
+        """
+        消费 SSE 流，拼接所有 content_block_delta 的 text，返回完整文本。
+        """
+        text_parts = []
+        for raw_line in resp.iter_lines():
+            if not raw_line:
+                continue
+            line = raw_line.decode("utf-8") if isinstance(raw_line, bytes) else raw_line
+            if not line.startswith("data:"):
+                continue
+            data_str = line[len("data:"):].strip()
+            if data_str == "[DONE]":
+                break
+            try:
+                event = json.loads(data_str)
+            except Exception:
+                continue
+            etype = event.get("type", "")
+            if etype == "content_block_delta":
+                delta = event.get("delta", {})
+                if delta.get("type") == "text_delta":
+                    text_parts.append(delta.get("text", ""))
+            elif etype == "message_stop":
+                break
+        return "".join(text_parts)
