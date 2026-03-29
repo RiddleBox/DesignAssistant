@@ -55,26 +55,32 @@ SYSTEM_PROMPT = """\
 3. 为每条归因标注可信度（high_confidence/medium_confidence/low_confidence）并说明理由
 4. 如果整体质量良好，直接输出空数组，不要为了输出而制造问题
 
-输出格式（严格 JSON，不要有任何注释或额外文字）：
+【输出要求——严格遵守】
+- 直接输出 JSON，第一个字符必须是 {，最后一个字符必须是 }
+- 不要输出任何前缀说明、解释、注释或 markdown 代码块
+- 每个字符串字段限制在 80 字以内，列表最多 3 条
+- 总输出不超过 1500 字
+
+输出格式：
 {
   "critical_findings": [
     {
       "finding_id": "finding_001",
-      "summary": "一句话说清问题现象",
+      "summary": "一句话（≤40字）",
       "severity": "high|medium|low",
       "layer": "signal|opportunity|action|context|orchestration|validation",
-      "evidence": ["引用具体字段值或内容片段作为证据，至少1条"],
-      "impact": "这个问题对整体质量/下游决策的影响"
+      "evidence": ["证据1（≤60字）"],
+      "impact": "影响说明（≤60字）"
     }
   ],
   "suspected_root_causes": [
     {
       "cause_id": "cause_001",
-      "suspected_root_cause": "初步归因说明（用'可能是...'而不是'一定是...'）",
+      "suspected_root_cause": "初步归因（≤60字，用'可能是...'）",
       "confidence": "high_confidence|medium_confidence|low_confidence",
-      "reasoning": "为什么这样判断，引用了哪些证据",
-      "evidence": ["支撑归因的具体证据"],
-      "limitations": ["这个归因有什么局限性或不确定性"],
+      "reasoning": "推理说明（≤80字）",
+      "evidence": ["证据（≤60字）"],
+      "limitations": ["局限性（≤40字）"],
       "related_findings": ["finding_001"]
     }
   ]

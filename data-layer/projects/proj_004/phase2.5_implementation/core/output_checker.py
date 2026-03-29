@@ -58,11 +58,16 @@ class OutputChecker:
 2. 2.2 → 2.3 的跳转是否合理（priority_level 与 decision_posture 在语义上是否一致）
 3. 整体输出质量是否满足"可供组织决策参考"的基本标准
 
+【输出要求——严格遵守】
+- 直接输出 JSON，第一个字符必须是 {，最后一个字符必须是 }
+- 不要输出任何前缀说明、解释或 markdown 代码块
+- details 字段限制在 60 字以内
+
 输出格式（严格 JSON）：
 {
   "status": "pass|warning|fail",
-  "details": "一句话说明检查结论",
-  "evidence": ["具体证据1", "具体证据2"]
+  "details": "一句话结论（≤60字）",
+  "evidence": ["证据1（≤50字）", "证据2（≤50字）"]
 }
 """
 
