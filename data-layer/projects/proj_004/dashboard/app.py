@@ -63,9 +63,27 @@ def _render_list(items: list):
         else:
             st.markdown(f"- {str(item)[:200]}")
 
+import yaml as _yaml
+
+# ── 读取 llm_config.yaml ─────────────────────────────────────────
+LLM_CONFIG_PATH = os.path.join(PROJ_DIR, "llm_config.yaml")
+
+def load_llm_config() -> dict:
+    if os.path.exists(LLM_CONFIG_PATH):
+        with open(LLM_CONFIG_PATH, encoding="utf-8") as f:
+            return _yaml.safe_load(f) or {}
+    return {}
+
+def save_llm_config(cfg: dict):
+    with open(LLM_CONFIG_PATH, "w", encoding="utf-8") as f:
+        _yaml.dump(cfg, f, allow_unicode=True, default_flow_style=False, sort_keys=False)
+
+def get_phase_model(cfg: dict, phase: str) -> str:
+    return cfg.get("phases", {}).get(phase, {}).get("model") or cfg.get("default", {}).get("model", "claude-sonnet-4-6")
+
 # ── 读取 .env ────────────────────────────────────────────────────
 def load_env_defaults():
-    defaults = {"api_key": "", "base_url": "https://api123.icu", "model": "claude-sonnet-4-6"}
+    defaults = {"api_key": "", "base_url": "https://api123.icu"}
     env_file = os.path.join(DA_ROOT, ".env")
     if os.path.exists(env_file):
         for line in open(env_file, encoding="utf-8"):
@@ -80,19 +98,43 @@ def load_env_defaults():
 st.title("🔬 DesignAssistant 链路观察面板")
 
 defaults = load_env_defaults()
+llm_cfg = load_llm_config()
 
 with st.container(border=True):
-    col1, col2, col3, col4 = st.columns([3, 2, 2, 1])
+    st.caption("**全局配置**")
+    col1, col2 = st.columns([3, 3])
     with col1:
-        api_key = st.text_input("API Key", value=defaults["api_key"], type="password", label_visibility="collapsed",
+        api_key = st.text_input("API Key", value=defaults["api_key"], type="password",
                                  placeholder="ANTHROPIC_API_KEY")
     with col2:
-        base_url = st.text_input("Base URL", value=defaults["base_url"], label_visibility="collapsed")
-    with col3:
-        model = st.text_input("模型", value=defaults["model"], label_visibility="collapsed")
-    with col4:
+        base_url = st.text_input("Base URL", value=defaults["base_url"])
+
+    st.caption("**各模块模型配置**（修改后点「保存配置」写入 llm_config.yaml）")
+    mc1, mc2, mc3, mc4 = st.columns(4)
+    with mc1:
+        m21 = st.text_input("2.1 情报解码", value=get_phase_model(llm_cfg, "2.1"), key="m21")
+    with mc2:
+        m22 = st.text_input("2.2 机会判断", value=get_phase_model(llm_cfg, "2.2"), key="m22")
+    with mc3:
+        m23 = st.text_input("2.3 行动设计", value=get_phase_model(llm_cfg, "2.3"), key="m23")
+    with mc4:
+        m25 = st.text_input("2.5 复盘归因", value=get_phase_model(llm_cfg, "2.5"), key="m25")
+
+    save_col, stat_col = st.columns([1, 4])
+    with save_col:
+        if st.button("💾 保存配置", use_container_width=True):
+            # 只更新 model 字段，其余字段（base_url/max_tokens 等）保持原值
+            for phase, new_model in [("2.1", m21), ("2.2", m22), ("2.3", m23), ("2.5", m25)]:
+                if "phases" not in llm_cfg:
+                    llm_cfg["phases"] = {}
+                if phase not in llm_cfg["phases"]:
+                    llm_cfg["phases"][phase] = {}
+                llm_cfg["phases"][phase]["model"] = new_model
+            save_llm_config(llm_cfg)
+            st.success("已保存到 llm_config.yaml")
+    with stat_col:
         incoming_count = len(glob.glob(os.path.join(INCOMING_DIR, "*.json")))
-        st.metric("incoming/ 样本", incoming_count)
+        st.metric("incoming/ 样本数", incoming_count, label_visibility="visible")
 
 # ── incoming 样本预览 ────────────────────────────────────────────
 with st.expander(f"📁 incoming/ 目录（{incoming_count} 个文件）", expanded=incoming_count > 0):
@@ -135,18 +177,10 @@ if run_btn:
     # 进度占位符
     progress_bar = st.progress(0, text="初始化…")
     log_area = st.empty()
-    step_containers = {
-        "2.1": st.empty(),
-        "2.2": st.empty(),
-        "2.3": st.empty(),
-        "2.4": st.empty(),
-        "2.5": st.empty(),
-    }
 
     STEP_WEIGHTS = {"2.1": 0.2, "2.2": 0.4, "2.3": 0.6, "2.4": 0.5, "2.5": 0.85}
-    completed_steps = set()
 
-    for event in run_pipeline(api_key, base_url, model):
+    for event in run_pipeline(api_key, base_url):
         etype = event["type"]
         step = event.get("step")
         msg = event.get("message", "")

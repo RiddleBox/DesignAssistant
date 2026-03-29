@@ -36,10 +36,10 @@ def _event(type_, step, message, data=None):
     return {"type": type_, "step": step, "message": message, "data": data or {}}
 
 
-def run_pipeline(api_key: str, base_url: str, model: str) -> Generator[dict, None, None]:
+def run_pipeline(api_key: str, base_url: str) -> Generator[dict, None, None]:
     """
     主 generator：按顺序执行各 step，每步完成后 yield 事件。
-    调用方用 for event in run_pipeline(...): 消费。
+    模型配置从 llm_config.yaml 按 phase 读取，不再接受单一 model 参数。
     """
     # ── 设置环境变量（各模块从 os.environ 读取）
     os.environ["ANTHROPIC_API_KEY"] = api_key
