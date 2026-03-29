@@ -1,14 +1,22 @@
 """
 Phase 2.5 Problem Attributor
 
-实现问题归因逻辑：层级化归因、证据收集、可信度表达。
+问题归因器：把链路运行暴露的问题组织为可解释、可追踪、层级化的归因结构。
+
+归因策略（两层）：
+1. LLM 语义归因（主路径）：由 LLMAttributor 分析完整链路输出，识别语义层失真点
+2. 规则归因（fallback）：LLM 不可用或失败时，基于字段存在性 + 枚举比对做基础归因
+
+设计原则：
+- 归因必须有证据：每条 SuspectedRootCause 必须引用具体字段值
+- 不确定性显式表达：不能把"怀疑"写成"确定"
+- 不重做上游职责：只定位问题所在层级，不在 2.5 内修复
 """
 
-from typing import List, Dict, Any, Tuple
+from typing import List, Dict, Any, Tuple, Optional
 import sys
 from pathlib import Path
 
-# 添加父目录到路径以支持导入
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from schemas import (
@@ -18,294 +26,263 @@ from schemas import (
     SeverityLevel,
     AttributionLayer,
     ConfidenceLevel,
-    CheckStatus
+    CheckStatus,
 )
+from core.llm_attributor import LLMAttributor
 
 
 class ProblemAttributor:
     """
     问题归因器
 
-    负责把系统运行中暴露的问题组织成可解释、可追踪、可回写的层级化归因结构。
+    主路径：LLM 语义归因
+    Fallback：规则归因（字段检查 + 枚举比对）
     """
 
     def __init__(self):
         self.finding_counter = 0
         self.cause_counter = 0
+        self.llm_attributor = LLMAttributor()
 
     def attribute_problems(
         self,
         output_checks: List[OutputCheck],
         workflow_run_record: Dict[str, Any],
-        upstream_outputs: Dict[str, Any]
+        upstream_outputs: Dict[str, Any],
     ) -> Tuple[List[CriticalFinding], List[SuspectedRootCause]]:
         """
-        执行问题归因
+        执行问题归因。
 
         Args:
-            output_checks: 输出检查结果
-            workflow_run_record: 真实链路运行记录
-            upstream_outputs: 上游输出
+            output_checks: OutputChecker 的规则检查结果（作为 LLM 的补充上下文）
+            workflow_run_record: 链路运行记录
+            upstream_outputs: 上游模块输出字典
 
         Returns:
             (关键发现列表, 初步归因列表)
         """
-        critical_findings = []
-        suspected_root_causes = []
+        # 把规则检查结果转为摘要字符串，注入 LLM 上下文
+        checks_summary = [
+            f"[{c.check_type.value}] {c.status.value}: {c.details}"
+            for c in output_checks
+            if c.status != CheckStatus.PASS
+        ]
 
-        # 从输出检查中识别关键发现
-        for check in output_checks:
-            if check.status in [CheckStatus.WARNING, CheckStatus.FAIL]:
-                findings, causes = self._analyze_check_failure(check, workflow_run_record, upstream_outputs)
-                critical_findings.extend(findings)
-                suspected_root_causes.extend(causes)
+        # ── 主路径：LLM 语义归因
+        if self.llm_attributor.available:
+            llm_result = self.llm_attributor.attribute(
+                upstream_outputs=upstream_outputs,
+                output_checks_summary=checks_summary,
+                workflow_run_record=workflow_run_record,
+            )
+            if llm_result is not None:
+                findings, causes = self._parse_llm_result(llm_result)
+                # 补充运行时错误（规则检测，不依赖语义）
+                rt_findings, rt_causes = self._detect_runtime_errors(workflow_run_record)
+                return findings + rt_findings, causes + rt_causes
 
-        # 从运行记录中识别额外问题
-        additional_findings, additional_causes = self._analyze_runtime_issues(
-            workflow_run_record,
-            upstream_outputs
-        )
-        critical_findings.extend(additional_findings)
-        suspected_root_causes.extend(additional_causes)
+        # ── Fallback：规则归因
+        print("[INFO] ProblemAttributor: 使用规则 fallback 归因")
+        return self._rule_based_attribution(output_checks, workflow_run_record, upstream_outputs)
 
-        return critical_findings, suspected_root_causes
+    # ─────────────────────────────────────────
+    # LLM 结果解析
+    # ─────────────────────────────────────────
 
-    def _analyze_check_failure(
+    def _parse_llm_result(
         self,
-        check: OutputCheck,
-        workflow_run_record: Dict[str, Any],
-        upstream_outputs: Dict[str, Any]
+        llm_result: Dict[str, Any],
     ) -> Tuple[List[CriticalFinding], List[SuspectedRootCause]]:
-        """
-        分析检查失败，产生关键发现与初步归因
-        """
+        """把 LLM 返回的 dict 列表转换为 pydantic 对象"""
         findings = []
         causes = []
 
-        # 根据检查类型进行不同的归因
-        if check.check_type.value == "completeness":
-            finding, cause = self._attribute_completeness_issue(check, upstream_outputs)
-            if finding:
-                findings.append(finding)
-            if cause:
-                causes.append(cause)
+        severity_map = {
+            "high": SeverityLevel.HIGH,
+            "medium": SeverityLevel.MEDIUM,
+            "low": SeverityLevel.LOW,
+        }
+        layer_map = {
+            "signal": AttributionLayer.SIGNAL,
+            "opportunity": AttributionLayer.OPPORTUNITY,
+            "action": AttributionLayer.ACTION,
+            "context": AttributionLayer.CONTEXT,
+            "orchestration": AttributionLayer.ORCHESTRATION,
+            "validation": AttributionLayer.VALIDATION,
+        }
+        confidence_map = {
+            "high_confidence": ConfidenceLevel.HIGH_CONFIDENCE,
+            "medium_confidence": ConfidenceLevel.MEDIUM_CONFIDENCE,
+            "low_confidence": ConfidenceLevel.LOW_CONFIDENCE,
+        }
 
-        elif check.check_type.value == "consistency":
-            finding, cause = self._attribute_consistency_issue(check, upstream_outputs)
-            if finding:
-                findings.append(finding)
-            if cause:
-                causes.append(cause)
+        for f in llm_result.get("critical_findings", []):
+            try:
+                self.finding_counter += 1
+                findings.append(CriticalFinding(
+                    finding_id=f.get("finding_id", f"finding_{self.finding_counter:03d}"),
+                    summary=f.get("summary", "（LLM 归因未提供摘要）"),
+                    severity=severity_map.get(f.get("severity", "medium"), SeverityLevel.MEDIUM),
+                    layer=layer_map.get(f.get("layer", "orchestration"), AttributionLayer.ORCHESTRATION),
+                    evidence=f.get("evidence", []) or ["（LLM 归因未提供证据）"],
+                    impact=f.get("impact", ""),
+                ))
+            except Exception as e:
+                print(f"[WARN] finding 解析失败（跳过）：{e}")
 
-        elif check.check_type.value == "understandability":
-            finding, cause = self._attribute_understandability_issue(check, upstream_outputs)
-            if finding:
-                findings.append(finding)
-            if cause:
-                causes.append(cause)
+        for c in llm_result.get("suspected_root_causes", []):
+            try:
+                self.cause_counter += 1
+                causes.append(SuspectedRootCause(
+                    cause_id=c.get("cause_id", f"cause_{self.cause_counter:03d}"),
+                    suspected_root_cause=c.get("suspected_root_cause", ""),
+                    confidence=confidence_map.get(
+                        c.get("confidence", "medium_confidence"),
+                        ConfidenceLevel.MEDIUM_CONFIDENCE,
+                    ),
+                    reasoning=c.get("reasoning", ""),
+                    evidence=c.get("evidence", []),
+                    limitations=c.get("limitations", []),
+                    related_findings=c.get("related_findings", []),
+                ))
+            except Exception as e:
+                print(f"[WARN] cause 解析失败（跳过）：{e}")
 
         return findings, causes
 
-    def _attribute_completeness_issue(
-        self,
-        check: OutputCheck,
-        upstream_outputs: Dict[str, Any]
-    ) -> Tuple[CriticalFinding, SuspectedRootCause]:
-        """
-        归因完整性问题
-        """
-        self.finding_counter += 1
-        self.cause_counter += 1
+    # ─────────────────────────────────────────
+    # 运行时错误检测（规则，不依赖语义）
+    # ─────────────────────────────────────────
 
-        # 判断严重级别
-        severity = SeverityLevel.HIGH if check.status == CheckStatus.FAIL else SeverityLevel.MEDIUM
-
-        # 判断归因层级
-        if "phase2_1" in check.details:
-            layer = AttributionLayer.SIGNAL
-            suspected_cause = "信号提取阶段可能遗漏了关键信息"
-            confidence = ConfidenceLevel.MEDIUM_CONFIDENCE
-        elif "phase2_2" in check.details:
-            layer = AttributionLayer.OPPORTUNITY
-            suspected_cause = "机会判断阶段可能未完整生成必需字段"
-            confidence = ConfidenceLevel.MEDIUM_CONFIDENCE
-        elif "phase2_3" in check.details:
-            layer = AttributionLayer.ACTION
-            suspected_cause = "行动设计阶段可能未完整生成必需字段"
-            confidence = ConfidenceLevel.MEDIUM_CONFIDENCE
-        else:
-            layer = AttributionLayer.ORCHESTRATION
-            suspected_cause = "模块协作或接口传递可能导致信息丢失"
-            confidence = ConfidenceLevel.LOW_CONFIDENCE
-
-        finding = CriticalFinding(
-            finding_id=f"finding_{self.finding_counter:03d}",
-            summary=f"输出完整性问题：{check.details}",
-            severity=severity,
-            layer=layer,
-            evidence=check.evidence,
-            impact="缺失的字段可能导致后续判断或行动设计无法正常进行"
-        )
-
-        cause = SuspectedRootCause(
-            cause_id=f"cause_{self.cause_counter:03d}",
-            suspected_root_cause=suspected_cause,
-            confidence=confidence,
-            reasoning=f"基于输出检查发现：{check.details}",
-            evidence=check.evidence,
-            limitations=["未获取原始输入材料，无法对比验证"],
-            related_findings=[finding.finding_id]
-        )
-
-        return finding, cause
-
-    def _attribute_consistency_issue(
-        self,
-        check: OutputCheck,
-        upstream_outputs: Dict[str, Any]
-    ) -> Tuple[CriticalFinding, SuspectedRootCause]:
-        """
-        归因一致性问题
-        """
-        self.finding_counter += 1
-        self.cause_counter += 1
-
-        severity = SeverityLevel.MEDIUM if check.status == CheckStatus.WARNING else SeverityLevel.HIGH
-
-        # 一致性问题通常涉及多个模块
-        layer = AttributionLayer.ORCHESTRATION
-
-        finding = CriticalFinding(
-            finding_id=f"finding_{self.finding_counter:03d}",
-            summary=f"输出一致性问题：{check.details}",
-            severity=severity,
-            layer=layer,
-            evidence=check.evidence,
-            impact="不一致的输出可能导致决策混乱或执行偏差"
-        )
-
-        cause = SuspectedRootCause(
-            cause_id=f"cause_{self.cause_counter:03d}",
-            suspected_root_cause="模块间协作逻辑可能存在不一致，或上下游模块对同一概念的理解存在偏差",
-            confidence=ConfidenceLevel.MEDIUM_CONFIDENCE,
-            reasoning=f"基于一致性检查发现：{check.details}",
-            evidence=check.evidence,
-            limitations=["需要进一步检查模块间接口定义与协作协议"],
-            related_findings=[finding.finding_id]
-        )
-
-        return finding, cause
-
-    def _attribute_understandability_issue(
-        self,
-        check: OutputCheck,
-        upstream_outputs: Dict[str, Any]
-    ) -> Tuple[CriticalFinding, SuspectedRootCause]:
-        """
-        归因可理解性问题
-        """
-        self.finding_counter += 1
-        self.cause_counter += 1
-
-        severity = SeverityLevel.LOW if check.status == CheckStatus.WARNING else SeverityLevel.MEDIUM
-
-        # 判断归因层级
-        if "2.2" in check.details:
-            layer = AttributionLayer.OPPORTUNITY
-            suspected_cause = "机会判断阶段可能未提供足够的解释或证据"
-        elif "2.3" in check.details:
-            layer = AttributionLayer.ACTION
-            suspected_cause = "行动设计阶段可能未提供足够的计划细节或决策依据"
-        else:
-            layer = AttributionLayer.VALIDATION
-            suspected_cause = "输出格式或表达方式可能不够清晰"
-
-        finding = CriticalFinding(
-            finding_id=f"finding_{self.finding_counter:03d}",
-            summary=f"输出可理解性问题：{check.details}",
-            severity=severity,
-            layer=layer,
-            evidence=check.evidence,
-            impact="不够清晰的输出可能导致人工复核困难或决策延迟"
-        )
-
-        cause = SuspectedRootCause(
-            cause_id=f"cause_{self.cause_counter:03d}",
-            suspected_root_cause=suspected_cause,
-            confidence=ConfidenceLevel.MEDIUM_CONFIDENCE,
-            reasoning=f"基于可理解性检查发现：{check.details}",
-            evidence=check.evidence,
-            limitations=["可理解性判断具有主观性，需要人工复核确认"],
-            related_findings=[finding.finding_id]
-        )
-
-        return finding, cause
-
-    def _analyze_runtime_issues(
+    def _detect_runtime_errors(
         self,
         workflow_run_record: Dict[str, Any],
-        upstream_outputs: Dict[str, Any]
     ) -> Tuple[List[CriticalFinding], List[SuspectedRootCause]]:
-        """
-        分析运行时问题（如错误、异常、性能问题）
-        """
+        """检测运行时错误和性能异常，不依赖 LLM"""
         findings = []
         causes = []
 
-        # 检查是否有运行错误
         errors = workflow_run_record.get("errors", [])
         if errors:
             self.finding_counter += 1
             self.cause_counter += 1
-
-            finding = CriticalFinding(
-                finding_id=f"finding_{self.finding_counter:03d}",
-                summary=f"运行时错误：发现 {len(errors)} 个错误",
+            fid = f"finding_{self.finding_counter:03d}"
+            findings.append(CriticalFinding(
+                finding_id=fid,
+                summary=f"运行时错误：{len(errors)} 个模块执行异常",
                 severity=SeverityLevel.HIGH,
                 layer=AttributionLayer.ORCHESTRATION,
-                evidence=[str(error) for error in errors[:3]],  # 只取前3个错误作为证据
-                impact="运行时错误可能导致系统无法正常完成任务"
-            )
-
-            cause = SuspectedRootCause(
+                evidence=[str(e) for e in errors[:3]],
+                impact="运行时错误可能导致部分模块输出缺失或不可信",
+            ))
+            causes.append(SuspectedRootCause(
                 cause_id=f"cause_{self.cause_counter:03d}",
-                suspected_root_cause="模块执行过程中可能存在异常处理不当或输入验证不足",
+                suspected_root_cause="模块执行过程中出现异常，可能是输入格式不符或接口调用失败",
                 confidence=ConfidenceLevel.HIGH_CONFIDENCE,
-                reasoning=f"直接观察到 {len(errors)} 个运行时错误",
-                evidence=[str(error) for error in errors[:3]],
+                reasoning=f"直接观察到 {len(errors)} 个运行时错误记录",
+                evidence=[str(e) for e in errors[:3]],
                 limitations=[],
-                related_findings=[finding.finding_id]
-            )
+                related_findings=[fid],
+            ))
 
-            findings.append(finding)
-            causes.append(cause)
-
-        # 检查是否有性能问题
         processing_time = workflow_run_record.get("processing_time_ms", 0)
-        if processing_time > 60000:  # 超过60秒
+        if processing_time > 120_000:  # 超过 2 分钟
             self.finding_counter += 1
             self.cause_counter += 1
-
-            finding = CriticalFinding(
-                finding_id=f"finding_{self.finding_counter:03d}",
-                summary=f"性能问题：处理时间过长（{processing_time}ms）",
+            fid = f"finding_{self.finding_counter:03d}"
+            findings.append(CriticalFinding(
+                finding_id=fid,
+                summary=f"耗时异常：总处理时间 {processing_time // 1000}s，超过预期阈值",
                 severity=SeverityLevel.MEDIUM,
                 layer=AttributionLayer.ORCHESTRATION,
                 evidence=[f"processing_time_ms={processing_time}"],
-                impact="处理时间过长可能影响系统响应速度和用户体验"
-            )
-
-            cause = SuspectedRootCause(
+                impact="耗时过长可能影响实时性，也可能暗示某模块存在重试或阻塞",
+            ))
+            causes.append(SuspectedRootCause(
                 cause_id=f"cause_{self.cause_counter:03d}",
-                suspected_root_cause="某个模块可能存在性能瓶颈，或模块间调用次数过多",
+                suspected_root_cause="可能某模块存在 LLM 调用重试或网络延迟，需查看各模块耗时分布",
                 confidence=ConfidenceLevel.LOW_CONFIDENCE,
-                reasoning=f"观察到处理时间为 {processing_time}ms，超过预期阈值",
+                reasoning=f"总耗时 {processing_time}ms 超过 120s 阈值，但无模块级耗时数据",
                 evidence=[f"processing_time_ms={processing_time}"],
-                limitations=["需要更详细的性能分析才能确定具体瓶颈"],
-                related_findings=[finding.finding_id]
-            )
-
-            findings.append(finding)
-            causes.append(cause)
+                limitations=["缺少各模块级耗时数据，无法定位具体瓶颈"],
+                related_findings=[fid],
+            ))
 
         return findings, causes
+
+    # ─────────────────────────────────────────
+    # 规则归因（fallback）
+    # ─────────────────────────────────────────
+
+    def _rule_based_attribution(
+        self,
+        output_checks: List[OutputCheck],
+        workflow_run_record: Dict[str, Any],
+        upstream_outputs: Dict[str, Any],
+    ) -> Tuple[List[CriticalFinding], List[SuspectedRootCause]]:
+        """规则归因：LLM 不可用时的 fallback"""
+        findings = []
+        causes = []
+
+        for check in output_checks:
+            if check.status in [CheckStatus.WARNING, CheckStatus.FAIL]:
+                f, c = self._rule_attribute_check(check, upstream_outputs)
+                if f:
+                    findings.append(f)
+                if c:
+                    causes.append(c)
+
+        rt_f, rt_c = self._detect_runtime_errors(workflow_run_record)
+        findings.extend(rt_f)
+        causes.extend(rt_c)
+
+        return findings, causes
+
+    def _rule_attribute_check(
+        self,
+        check: OutputCheck,
+        upstream_outputs: Dict[str, Any],
+    ) -> Tuple[Optional[CriticalFinding], Optional[SuspectedRootCause]]:
+        """单条规则归因"""
+        self.finding_counter += 1
+        self.cause_counter += 1
+        fid = f"finding_{self.finding_counter:03d}"
+
+        severity = SeverityLevel.HIGH if check.status == CheckStatus.FAIL else SeverityLevel.MEDIUM
+
+        # 归因层级：根据 details 中的关键词猜测
+        details = check.details.lower()
+        if "2.1" in details or "signal" in details:
+            layer = AttributionLayer.SIGNAL
+            cause_text = "信号提取阶段可能遗漏关键信息或字段缺失"
+        elif "2.2" in details or "opportunit" in details:
+            layer = AttributionLayer.OPPORTUNITY
+            cause_text = "机会判断阶段可能未完整生成必需字段"
+        elif "2.3" in details or "action" in details or "posture" in details:
+            layer = AttributionLayer.ACTION
+            cause_text = "行动设计阶段可能未完整生成必需字段"
+        elif "2.4" in details or "rag" in details or "retriev" in details:
+            layer = AttributionLayer.CONTEXT
+            cause_text = "知识检索可能未生效（fallback 跳过）"
+        else:
+            layer = AttributionLayer.ORCHESTRATION
+            cause_text = "模块协作或接口传递可能导致信息丢失"
+
+        finding = CriticalFinding(
+            finding_id=fid,
+            summary=f"[规则检测] {check.check_type.value} 问题：{check.details}",
+            severity=severity,
+            layer=layer,
+            evidence=check.evidence or ["（规则检测无直接证据）"],
+            impact="缺失字段可能导致下游判断或行动设计无法正常进行",
+        )
+        cause = SuspectedRootCause(
+            cause_id=f"cause_{self.cause_counter:03d}",
+            suspected_root_cause=cause_text,
+            confidence=ConfidenceLevel.LOW_CONFIDENCE,
+            reasoning=f"基于规则检查推断：{check.details}（注：LLM 归因不可用，结论可信度较低）",
+            evidence=check.evidence or [],
+            limitations=["规则归因仅基于字段存在性，无语义理解能力；建议 LLM 归因可用后重跑"],
+            related_findings=[fid],
+        )
+        return finding, cause

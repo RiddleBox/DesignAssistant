@@ -374,13 +374,77 @@ def run_step3_action(judgment_result, api_key=None):
     return result
 
 
-def run_step4_retro(judgment_result, action_result, decode_results, per_sample_stats):
+def run_step4_retro(judgment_result, action_result, decode_results, per_sample_stats, rag_retriever=None):
     print(f"\n{'='*60}")
-    print("Step 4: 2.5 整合复盘")
+    print("Step 4: 2.5 整合复盘（LLM 语义归因）")
     print(f"{'='*60}")
 
     opp = judgment_result.opportunities[0]
     ad = action_result.action_decision
+
+    # ── phase2_1：完整信号列表（decoded_intelligences 字段名对齐）
+    all_signals_dump = []
+    for r in decode_results:
+        for s in r.signals:
+            all_signals_dump.append(s.model_dump())
+
+    phase2_1_payload = {
+        "source_ids": [r.source_id for r in decode_results],
+        "sample_stats": per_sample_stats,
+        "total_signals": len(all_signals_dump),
+        "decoded_intelligences": all_signals_dump,          # LLMAttributor 期望的字段名
+        "signals": all_signals_dump,                        # 兼容旧代码
+        "signals_sample": [r.signals[0].model_dump() for r in decode_results if r.signals],
+    }
+
+    # ── phase2_2：完整机会对象（直接 model_dump，保留所有字段）
+    phase2_2_payload = opp.model_dump()
+
+    # ── phase2_3：完整行动对象
+    phase2_3_payload = {
+        "decision_posture": ad.decision_posture,
+        "posture_rationale": ad.why_this_posture or "",
+        "why_this_posture": ad.why_this_posture or "",
+        "phased_plan": [s.model_dump() for s in ad.phased_plan] if ad.phased_plan else [],
+        "go_no_go_criteria": {
+            "go_conditions": [
+                c for s in (ad.phased_plan or [])
+                for c in (s.go_no_go_criteria or [])
+            ]
+        },
+        "exit_conditions": ad.exit_conditions if hasattr(ad, "exit_conditions") else [],
+        "resource_commitment": ad.resource_commitment_logic or "",
+        "resource_commitment_logic": ad.resource_commitment_logic or "",
+        "top_risks": [r.model_dump() if hasattr(r, "model_dump") else r for r in (ad.top_risks or [])],
+    }
+
+    # ── phase2_4：RAG 检索结果（如有）
+    phase2_4_payload = {}
+    if rag_retriever is not None:
+        try:
+            import importlib, sys as _sys
+            _rag_path = os.path.join(os.path.dirname(__file__), "phase2.4_implementation", "rag_system", "core")
+            if _rag_path not in _sys.path:
+                _sys.path.insert(0, _rag_path)
+            _models = importlib.import_module("models")
+            ContextRequest = _models.ContextRequest
+            ctx_req = ContextRequest(
+                request_id="retro_ctx",
+                caller="phase2.5",
+                query=opp.opportunity_title or "",
+                needed_content_types=[],
+                top_k=5,
+            )
+            ctx_resp = rag_retriever.retrieve_context(ctx_req)
+            phase2_4_payload = {
+                "context_packets": [p.model_dump() if hasattr(p, "model_dump") else p for p in (ctx_resp.packets or [])],
+                "retrieval_notes": ctx_resp.retrieval_notes if hasattr(ctx_resp, "retrieval_notes") else "",
+                "packets_count": len(ctx_resp.packets or []),
+            }
+        except Exception as e:
+            phase2_4_payload = {"retrieval_notes": f"RAG fallback: {e}", "packets_count": 0}
+    else:
+        phase2_4_payload = {"retrieval_notes": "RAG retriever 未传入，跳过", "packets_count": 0}
 
     req = SystemRetrospectiveRequest(
         request_id=f"real_batch_retro_{datetime.now().strftime('%Y%m%d_%H%M%S')}",
@@ -390,28 +454,15 @@ def run_step4_retro(judgment_result, action_result, decode_results, per_sample_s
             "case_description": "真实样本批量运行（incoming -> 2.1 -> 2.2 -> 2.3）",
             "modules_executed": ["2.1", "2.2", "2.3"],
             "sample_count": len(per_sample_stats),
-            "signal_count": sum(len(r.signals) for r in decode_results),
-            "noise_like_count": sum(1 for s in per_sample_stats if s['signal_count'] == 0),
-            "opportunity_title": opp.opportunity_title,
-            "decision_posture": ad.decision_posture,
+            "signal_count": len(all_signals_dump),
+            "noise_like_count": sum(1 for s in per_sample_stats if s.get('signal_count', 0) == 0),
+            "errors": [],
         },
         upstream_outputs={
-            "phase2_1": {
-                "source_ids": [r.source_id for r in decode_results],
-                "sample_stats": per_sample_stats,
-                "total_signals": sum(len(r.signals) for r in decode_results),
-                "signals": [s.model_dump() for r in decode_results for s in r.signals],
-                "signals_sample": [r.signals[0].model_dump() for r in decode_results if r.signals],
-            },
-            "phase2_2": opp.model_dump(),
-            "phase2_3": {
-                "decision_posture": ad.decision_posture,
-                "why_this_posture": ad.why_this_posture,
-                "phased_plan": [s.stage for s in ad.phased_plan] if ad.phased_plan else [],
-                "go_no_go_criteria": [c for s in ad.phased_plan for c in (s.go_no_go_criteria or [])] if ad.phased_plan else [],
-                "phases": len(ad.phased_plan),
-                "resource_commitment_logic": ad.resource_commitment_logic,
-            },
+            "phase2_1": phase2_1_payload,
+            "phase2_2": phase2_2_payload,
+            "phase2_3": phase2_3_payload,
+            "phase2_4": phase2_4_payload,
         },
     )
 
@@ -421,6 +472,8 @@ def run_step4_retro(judgment_result, action_result, decode_results, per_sample_s
 
     print(f"  workflow_summary:   {retro.workflow_summary[:100]}...")
     print(f"  critical_findings:  {len(retro.critical_findings)} 条")
+    for f in retro.critical_findings[:3]:
+        print(f"    [{f.severity.value.upper()}][{f.layer.value}] {f.summary[:80]}")
     print(f"  root_causes:        {len(retro.suspected_root_causes)} 条")
     print(f"  phase3_priorities:  {len(retro.phase3_priorities)} 条")
 
@@ -481,7 +534,7 @@ def main():
         return
 
     action_result = run_step3_action(judgment_result, api_key=api_key)
-    retro_result = run_step4_retro(judgment_result, action_result, decode_results, per_sample_stats)
+    retro_result = run_step4_retro(judgment_result, action_result, decode_results, per_sample_stats, rag_retriever=rag_retriever)
 
     moved_count = move_to_processed(samples)
     total_ms = int((time.time() - t_total) * 1000)
