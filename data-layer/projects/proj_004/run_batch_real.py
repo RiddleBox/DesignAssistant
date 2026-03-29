@@ -264,7 +264,6 @@ def build_rag_retriever():
                 query=query,
                 needed_content_types=["case_record", "market_data", "few_shot_example", "constraint_rule"],
                 top_k=6,
-                min_trust_level="low",
             )
             ctx_response = retriever.retrieve_context(req)
             packets = ctx_response.context_packets if ctx_response else []
@@ -374,7 +373,24 @@ def run_step3_action(judgment_result, api_key=None):
     return result
 
 
-def run_step4_retro(judgment_result, action_result, decode_results, per_sample_stats, rag_retriever=None):
+def _collect_run_errors(judgment_result, action_result) -> list:
+    """收集 2.2/2.3 fallback 信息作为 workflow 错误记录"""
+    errors = []
+    if judgment_result:
+        opp = judgment_result.opportunities[0] if judgment_result.opportunities else None
+        if opp:
+            warnings = getattr(opp, "warnings", []) or []
+            for w in warnings:
+                if "[fallback]" in str(w):
+                    errors.append({"module": "2.2", "type": "llm_fallback", "detail": str(w)})
+    if action_result:
+        act = getattr(action_result, "action_decision", None)
+        if act and getattr(act, "debate_summary", None) is None:
+            errors.append({"module": "2.3", "type": "llm_fallback", "detail": "[fallback] 2.3 LLM 未跑通，由规则引擎生成"})
+    return errors
+
+
+def run_step4_retro(judgment_result, action_result, decode_results, per_sample_stats, rag_retriever=None, t_start=None):
     print(f"\n{'='*60}")
     print("Step 4: 2.5 整合复盘（LLM 语义归因）")
     print(f"{'='*60}")
@@ -401,11 +417,22 @@ def run_step4_retro(judgment_result, action_result, decode_results, per_sample_s
     phase2_2_payload = opp.model_dump()
 
     # ── phase2_3：完整行动对象
+    import dataclasses as _dc
+    def _to_dict(obj):
+        """dataclass / pydantic / dict 统一转 dict"""
+        if hasattr(obj, "model_dump"):
+            return obj.model_dump()
+        if _dc.is_dataclass(obj) and not isinstance(obj, type):
+            return _dc.asdict(obj)
+        if isinstance(obj, dict):
+            return obj
+        return str(obj)
+
     phase2_3_payload = {
         "decision_posture": ad.decision_posture,
         "posture_rationale": ad.why_this_posture or "",
         "why_this_posture": ad.why_this_posture or "",
-        "phased_plan": [s.model_dump() for s in ad.phased_plan] if ad.phased_plan else [],
+        "phased_plan": [_to_dict(s) for s in ad.phased_plan] if ad.phased_plan else [],
         "go_no_go_criteria": {
             "go_conditions": [
                 c for s in (ad.phased_plan or [])
@@ -415,7 +442,7 @@ def run_step4_retro(judgment_result, action_result, decode_results, per_sample_s
         "exit_conditions": ad.exit_conditions if hasattr(ad, "exit_conditions") else [],
         "resource_commitment": ad.resource_commitment_logic or "",
         "resource_commitment_logic": ad.resource_commitment_logic or "",
-        "top_risks": [r.model_dump() if hasattr(r, "model_dump") else r for r in (ad.top_risks or [])],
+        "top_risks": [_to_dict(r) for r in (ad.top_risks or [])],
     }
 
     # ── phase2_4：RAG 检索结果（如有）
@@ -456,7 +483,8 @@ def run_step4_retro(judgment_result, action_result, decode_results, per_sample_s
             "sample_count": len(per_sample_stats),
             "signal_count": len(all_signals_dump),
             "noise_like_count": sum(1 for s in per_sample_stats if s.get('signal_count', 0) == 0),
-            "errors": [],
+            "processing_time_ms": int((time.time() - t_start) * 1000) if t_start else 0,
+            "errors": _collect_run_errors(judgment_result, action_result),
         },
         upstream_outputs={
             "phase2_1": phase2_1_payload,
@@ -534,7 +562,7 @@ def main():
         return
 
     action_result = run_step3_action(judgment_result, api_key=api_key)
-    retro_result = run_step4_retro(judgment_result, action_result, decode_results, per_sample_stats, rag_retriever=rag_retriever)
+    retro_result = run_step4_retro(judgment_result, action_result, decode_results, per_sample_stats, rag_retriever=rag_retriever, t_start=t_total)
 
     moved_count = move_to_processed(samples)
     total_ms = int((time.time() - t_total) * 1000)
