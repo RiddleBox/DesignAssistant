@@ -160,11 +160,20 @@
 - **协议文档**：[PHASE2_4_CONTEXT_PACKET_PROTOCOL.md](data-layer/projects/proj_004/phase2.4_implementation/docs/PHASE2_4_CONTEXT_PACKET_PROTOCOL.md)（v1.0 已冻结）
 
 **待完成**（按优先级）：
-1. 实现 `POST /api/v1/context` 接口（ContextRequest → ContextResponse）
-2. 给 43 条现有文档补标 `content_type` 字段
-3. 补充 `case_record` / `market_data` 类型知识文档
-4. 混合检索（向量 + 元数据过滤）
-5. 2.4 → 2.1/2.2/2.3 增益联合验证（最终验收终点）
+1. ~~实现 `POST /api/v1/context` 接口（ContextRequest → ContextResponse）~~ ✅ 完成（2026-03-29，`retrieve_context()` 已联调）
+2. ~~给 43 条现有文档补标 `content_type` 字段~~ ✅ 完成（62 条文档全部已标注）
+3. **知识库内容来源模块**（新增，2026-03-29 拍板）：需要独立的可信内容搜索模块，专门负责发现和录入知识库条目，不依赖手动维护；触发时机：知识库扩充工作量超过手动可维护边界时
+4. 补充 `case_record` / `market_data` 类型知识文档（当前 case_record=16, market_data=10, constraint_rule=2, few_shot_example=2，background 占比过高=32）
+5. 检索精度增强（见下方独立说明，2026-03-29 讨论）
+6. 2.4 → 2.1/2.2/2.3 增益联合验证（最终验收终点）
+
+**检索精度增强路线**（2026-03-29 讨论，按触发时机排序）：
+- **category_filter + 元数据过滤**（近期可做）：减少跨领域噪音命中，2.2 只拉游戏行业相关 case
+- **混合检索（向量 + 关键词 BM25）**：专有名词（公司名/产品名）召回更准；触发时机：发现向量检索对专有名词效果差
+- **Scoping / Query Routing / Query Transformation**：入口层技术，按 caller + query 语义自动路由到合适的知识子集；触发时机：多模块接入后发现 query 与知识库错配
+- **重排序（Rerank）**：可能对应独立模块；触发时机：分桶召回稳定后发现 top-k 排序质量不足
+
+> **设计原则**：以上均为增益型增强，不是前置阻塞；先保证"稳定召回"，再追求"精准排序"。
 
 **当前状态**：✅ 骨架完成 | ✅ 真实 Embedding 接入（all-MiniLM-L6-v2）| ✅ P1-5/P1-6/P1-7 联调完成 | ✅ ContextPacket 协议冻结（v1.0）| ⚠️ 真实 LLM e2e 待验证（api123.icu 波动）
 
