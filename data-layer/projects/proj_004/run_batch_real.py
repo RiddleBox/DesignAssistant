@@ -259,6 +259,8 @@ def build_rag_retriever():
             # 构造 ContextRequest（2.2 关心 case_record / market_data / few_shot_example）
             ContextRequest = _models_mod.ContextRequest
             req = ContextRequest(
+                request_id=f"run_batch_{__import__('uuid').uuid4().hex[:8]}",
+                caller="phase2.2",
                 query=query,
                 needed_content_types=["case_record", "market_data", "few_shot_example", "constraint_rule"],
                 top_k=6,

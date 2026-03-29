@@ -248,7 +248,18 @@ class Retriever:
             ContextResponse
         """
         import time as _time
-        from .models import ContextPacket, ContextResponse, CONTENT_TYPE_VALUES, TRUST_LEVEL_VALUES
+        import sys as _sys
+        # 兼容两种加载方式：
+        # 1. 正常包导入：from .models import ...
+        # 2. load_module 动态加载（run_batch_real.py）：relative import 无法解析，改从 sys.modules 取
+        _m = _sys.modules.get('rag_core.models') or _sys.modules.get('core.models')
+        if _m:
+            ContextPacket = _m.ContextPacket
+            ContextResponse = _m.ContextResponse
+            CONTENT_TYPE_VALUES = _m.CONTENT_TYPE_VALUES
+            TRUST_LEVEL_VALUES = _m.TRUST_LEVEL_VALUES
+        else:
+            from .models import ContextPacket, ContextResponse, CONTENT_TYPE_VALUES, TRUST_LEVEL_VALUES
 
         t0 = _time.time()
         notes = []
