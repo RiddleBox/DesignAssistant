@@ -274,8 +274,8 @@ def build_rag_retriever():
             print(f"  [RAG] 命中 {len(packets)} 条证据包（{ctx_response.retrieval_time_ms}ms）")
             for p in packets:
                 print(f"    - [{p.content_type}][{p.trust_level}] {p.source_title}")
-            if ctx_response.notes:
-                for note in ctx_response.notes:
+            if ctx_response.retrieval_notes:
+                for note in ctx_response.retrieval_notes:
                     print(f"    [RAG note] {note}")
             # 将 2.4 ContextPacket 列表封装为 2.2 ContextPacket（packets 字段）
             m22_ContextPacketItem = m22_schemas.ContextPacketItem

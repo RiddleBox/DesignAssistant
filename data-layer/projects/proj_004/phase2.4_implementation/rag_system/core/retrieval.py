@@ -349,7 +349,6 @@ class Retriever:
 
         elapsed_ms = int((_time.time() - t0) * 1000)
 
-        from .models import ContextResponse
         return ContextResponse(
             request_id=request.request_id,
             context_packets=all_packets,
