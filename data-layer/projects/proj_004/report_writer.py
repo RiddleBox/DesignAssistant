@@ -132,6 +132,11 @@ def generate_report(
         lines.append("\n### 下一步验证问题\n\n")
         lines.append(_list_items(next_q))
 
+    why_now = getattr(opp, "why_now", None)
+    if why_now:
+        lines.append("\n### 为什么是现在\n\n")
+        lines.append(f"  {why_now}\n")
+
     # ── 四、行动设计（2.3） ───────────────────────────────────
     # 判断来源标注：debate_summary 存在说明 LLM 跑通，否则是规则引擎
     debate = getattr(act, "debate_summary", None)
