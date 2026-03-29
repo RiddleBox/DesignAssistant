@@ -95,44 +95,57 @@ def _build_user_prompt(
     p23 = upstream_outputs.get("phase2_3", {})
     p24 = upstream_outputs.get("phase2_4", {})
 
-    # 2.1：只取信号摘要
+    # 2.1：只取信号摘要（字段名对齐真实 Signal schema）
     signals_summary = []
     for sig in (p21.get("decoded_intelligences") or p21.get("signals") or []):
         if isinstance(sig, dict):
             signals_summary.append({
                 "signal_type": sig.get("signal_type") or sig.get("type"),
-                "summary": (sig.get("summary") or sig.get("content") or "")[:150],
-                "intensity": sig.get("intensity"),
-                "confidence": sig.get("confidence"),
+                "description": (
+                    sig.get("description") or sig.get("signal_label")
+                    or sig.get("summary") or sig.get("content") or ""
+                )[:150],
+                "intensity_score": sig.get("intensity_score") or sig.get("intensity"),
+                "confidence_score": sig.get("confidence_score") or sig.get("confidence"),
             })
 
-    # 2.2：取完整机会对象（关键字段）
+    # 2.2：取关键字段，evidence 只保留标题/首句，不传全文
+    def _trim_evidence(items, max_items=4, max_chars=80):
+        result = []
+        for it in (items or [])[:max_items]:
+            if isinstance(it, str):
+                result.append(it[:max_chars])
+            elif isinstance(it, dict):
+                text = it.get("title") or it.get("summary") or it.get("content") or str(it)
+                result.append(str(text)[:max_chars])
+        return result
+
     opp_summary = {
         "opportunity_title": p22.get("opportunity_title"),
         "opportunity_thesis": (p22.get("opportunity_thesis") or "")[:300],
         "priority_level": p22.get("priority_level"),
-        "supporting_evidence": (p22.get("supporting_evidence") or [])[:5],
-        "counter_evidence": (p22.get("counter_evidence") or [])[:3],
+        "supporting_evidence_titles": _trim_evidence(p22.get("supporting_evidence"), 5, 80),
+        "counter_evidence_titles": _trim_evidence(p22.get("counter_evidence"), 3, 80),
         "key_assumptions": (p22.get("key_assumptions") or [])[:3],
-        "uncertainty_factors": (p22.get("uncertainty_factors") or p22.get("uncertainty_map") or ""),
-        "why_now": p22.get("why_now"),
+        "uncertainty_factors": str(p22.get("uncertainty_factors") or p22.get("uncertainty_map") or "")[:200],
+        "why_now": (p22.get("why_now") or "")[:150],
         "next_validation_question": p22.get("next_validation_question"),
     }
 
     # 2.3：取行动姿态和计划摘要
     action_summary = {
         "decision_posture": p23.get("decision_posture"),
-        "posture_rationale": (p23.get("posture_rationale") or "")[:200],
+        "posture_rationale": (p23.get("posture_rationale") or p23.get("why_this_posture") or "")[:200],
         "phase_count": len(p23.get("phased_plan") or []),
         "go_conditions_count": len((p23.get("go_no_go_criteria") or {}).get("go_conditions") or []),
         "exit_conditions_count": len(p23.get("exit_conditions") or []),
-        "resource_commitment": p23.get("resource_commitment"),
+        "resource_commitment": (p23.get("resource_commitment") or "")[:100],
     }
 
-    # 2.4：取证据包摘要
+    # 2.4：只取摘要，不传全文
     rag_summary = {
         "packets_count": len(p24.get("context_packets") or p24.get("retrieval_results") or []),
-        "retrieval_notes": (p24.get("retrieval_notes") or p24.get("source_trace") or ""),
+        "retrieval_notes": (p24.get("retrieval_notes") or p24.get("source_trace") or "")[:100],
     }
 
     # 规则检查结果（来自 OutputChecker）
@@ -228,7 +241,7 @@ class LLMAttributor:
                 prompt=user_prompt,
                 system=SYSTEM_PROMPT,
                 model="claude-sonnet-4-6",
-                max_tokens=2048,
+                max_tokens=4000,
                 temperature=0.0,
             )
         except Exception as e:
