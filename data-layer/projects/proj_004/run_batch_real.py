@@ -232,7 +232,8 @@ def build_rag_retriever():
     rag_data_dir = os.path.join(RAG_SYSTEM_DIR, "data")
     index_path = os.path.join(rag_data_dir, "vector_index_local.faiss")
     meta_path = os.path.join(rag_data_dir, "vector_meta_local.pkl")
-    model_path = os.path.join(RAG_SYSTEM_DIR, "models", "bert-base-uncased")
+    # index 为 384 维，使用 MiniLM（bert-base-uncased 路径不存在且维度不匹配）
+    model_path = "sentence-transformers/all-MiniLM-L6-v2"
 
     if not os.path.exists(index_path):
         print("  [RAG] index file not found, skipping")
