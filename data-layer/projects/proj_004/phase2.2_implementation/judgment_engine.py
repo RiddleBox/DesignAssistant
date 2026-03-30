@@ -142,6 +142,22 @@ class JudgmentEngine:
             # 从多条 DecodedIntelligence 中提取所有信号（保留来源上下文）
             enriched_signals = self._extract_enriched_signals(request.decoded_intelligences)
 
+            # 信号隔离注入点（Signal Store 编排使用）
+            # ----------------------------------------------------------------
+            # judge_with_signal_store() 在构造子 request 时会设置
+            # request._override_signals，用于将"筛选后的信号组"（如批内组合组、
+            # 历史匹配组合）直接注入，替代从 decoded_intelligences 中重新提取。
+            #
+            # 设计意图：_execute_judgment_pipeline_v2 只消费 enriched_signals 列表，
+            # 不关心来源，因此注入后整条 Step C 链路自然隔离到指定信号组上，
+            # 避免多来源批次下 Step C 把无关信号一起纳入判断。
+            #
+            # 回退：删除或注释这 3 行，judge() 恢复原有从 DI 提取信号的行为。
+            # 相关文档：phase2_plan/phase2.2_signal_store_设计方案_v2.md §3.3
+            # ----------------------------------------------------------------
+            if hasattr(request, "_override_signals") and request._override_signals:
+                enriched_signals = request._override_signals
+
             # 边界检查：信号来源检查
             is_valid, error_msg = self.boundary_validator.check_signal_source_v2(enriched_signals)
             if not is_valid:
