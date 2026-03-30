@@ -15,9 +15,34 @@ import requests
 class LLMClient:
     """轻量 LLM 客户端，支持 Anthropic API 和 Bearer token 中转"""
 
-    def __init__(self, api_key: str, base_url: str = "https://api.anthropic.com"):
+    # 各 provider 的默认 base_url
+    _DEFAULT_BASE_URLS = {
+        "anthropic": "https://api.anthropic.com",
+        "openai":    "https://api.openai.com/v1",
+        "gemini":    "https://generativelanguage.googleapis.com/v1beta/openai",
+        "custom":    "",
+    }
+
+    def __init__(self, api_key: str, base_url: str = "", provider: str = "anthropic"):
         self.api_key  = api_key
-        self.base_url = base_url.rstrip("/")
+        self.provider = provider
+        # base_url 优先用传入值，否则用 provider 默认值
+        if base_url:
+            self.base_url = base_url.rstrip("/")
+        else:
+            self.base_url = self._DEFAULT_BASE_URLS.get(provider, "https://api.anthropic.com")
+
+    def _build_headers(self) -> dict:
+        """根据 provider 构建请求 headers"""
+        base = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {self.api_key}",
+        }
+        if self.provider == "anthropic":
+            # Anthropic 原生 / 中转代理额外加版本 header
+            base["anthropic-version"] = "2023-06-01"
+        # openai / gemini / custom：仅 Bearer，不加额外 header
+        return base
 
     def call(
         self,
@@ -45,11 +70,7 @@ class LLMClient:
             str: 模型输出文本
         """
         url = self.base_url + "/messages"
-        headers = {
-            "Authorization": f"Bearer {self.api_key}",
-            "anthropic-version": "2023-06-01",
-            "content-type": "application/json",
-        }
+        headers = self._build_headers()
         messages = [{"role": "user", "content": prompt}]
         payload = {
             "model":       model,

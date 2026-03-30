@@ -40,10 +40,16 @@ def run_pipeline(api_key: str, base_url: str) -> Generator[dict, None, None]:
     """
     主 generator：按顺序执行各 step，每步完成后 yield 事件。
     模型配置从 llm_config.yaml 按 phase 读取，不再接受单一 model 参数。
+
+    api_key / base_url 参数作为全局兜底（来自 dashboard 全局配置区），
+    优先级低于 llm_config.yaml 中各 phase 的独立配置。
     """
-    # ── 设置环境变量（各模块从 os.environ 读取）
-    os.environ["ANTHROPIC_API_KEY"] = api_key
-    os.environ["ANTHROPIC_BASE_URL"] = base_url.rstrip("/")
+    # ── 设置全局兜底环境变量（各模块从 os.environ 读取）
+    # 只在环境变量未设置时写入，避免覆盖 yaml phase 级配置
+    if api_key:
+        os.environ["ANTHROPIC_API_KEY"] = api_key
+    if base_url:
+        os.environ["ANTHROPIC_BASE_URL"] = base_url.rstrip("/")
 
     t_total = time.time()
 

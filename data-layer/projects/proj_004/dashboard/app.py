@@ -78,12 +78,30 @@ def save_llm_config(cfg: dict):
     with open(LLM_CONFIG_PATH, "w", encoding="utf-8") as f:
         _yaml.dump(cfg, f, allow_unicode=True, default_flow_style=False, sort_keys=False)
 
-def get_phase_model(cfg: dict, phase: str) -> str:
-    return cfg.get("phases", {}).get(phase, {}).get("model") or cfg.get("default", {}).get("model", "claude-sonnet-4-6")
+def get_phase_cfg(cfg: dict, phase: str) -> dict:
+    """获取某个 phase 的完整配置（已合并 default）"""
+    default = cfg.get("default", {})
+    phase_raw = cfg.get("phases", {}).get(phase, {})
+    return {
+        "provider":   phase_raw.get("provider")   or default.get("provider", "anthropic"),
+        "model":      phase_raw.get("model")      or default.get("model", "claude-sonnet-4-6"),
+        "api_key":    phase_raw.get("api_key")    or default.get("api_key", ""),
+        "base_url":   phase_raw.get("base_url")   or default.get("base_url", ""),
+        "max_tokens": phase_raw.get("max_tokens") or default.get("max_tokens", 4096),
+    }
+
+# Provider 对应的默认 base_url（供 UI 自动填充）
+PROVIDER_DEFAULT_URLS = {
+    "anthropic": "https://api.anthropic.com",
+    "openai":    "https://api.openai.com/v1",
+    "gemini":    "https://generativelanguage.googleapis.com/v1beta/openai",
+    "custom":    "",
+}
+PROVIDERS = ["anthropic", "openai", "gemini", "custom"]
 
 # ── 读取 .env ────────────────────────────────────────────────────
 def load_env_defaults():
-    defaults = {"api_key": "", "base_url": "https://api123.icu"}
+    defaults = {"api_key": "", "base_url": ""}
     env_file = os.path.join(DA_ROOT, ".env")
     if os.path.exists(env_file):
         for line in open(env_file, encoding="utf-8"):
@@ -101,35 +119,80 @@ defaults = load_env_defaults()
 llm_cfg = load_llm_config()
 
 with st.container(border=True):
-    st.caption("**全局配置**")
-    col1, col2 = st.columns([3, 3])
-    with col1:
-        api_key = st.text_input("API Key", value=defaults["api_key"], type="password",
-                                 placeholder="ANTHROPIC_API_KEY")
-    with col2:
-        base_url = st.text_input("Base URL", value=defaults["base_url"])
+    st.caption("**全局默认配置**（各 Phase 未单独填写时使用）")
+    gcol1, gcol2, gcol3 = st.columns([2, 3, 2])
+    with gcol1:
+        g_provider = st.selectbox("Provider", PROVIDERS,
+                                   index=PROVIDERS.index(llm_cfg.get("default", {}).get("provider", "anthropic")),
+                                   key="g_provider")
+    with gcol2:
+        g_api_key = st.text_input("API Key", value=defaults["api_key"] or llm_cfg.get("default", {}).get("api_key", ""),
+                                   type="password", placeholder="ANTHROPIC_API_KEY", key="g_api_key")
+    with gcol3:
+        g_base_url = st.text_input("Base URL（留空用 Provider 默认）",
+                                    value=llm_cfg.get("default", {}).get("base_url", "") or defaults["base_url"],
+                                    placeholder=PROVIDER_DEFAULT_URLS.get(g_provider, ""),
+                                    key="g_base_url")
 
-    st.caption("**各模块模型配置**（修改后点「保存配置」写入 llm_config.yaml）")
-    mc1, mc2, mc3, mc4 = st.columns(4)
-    with mc1:
-        m21 = st.text_input("2.1 情报解码", value=get_phase_model(llm_cfg, "2.1"), key="m21")
-    with mc2:
-        m22 = st.text_input("2.2 机会判断", value=get_phase_model(llm_cfg, "2.2"), key="m22")
-    with mc3:
-        m23 = st.text_input("2.3 行动设计", value=get_phase_model(llm_cfg, "2.3"), key="m23")
-    with mc4:
-        m25 = st.text_input("2.5 复盘归因", value=get_phase_model(llm_cfg, "2.5"), key="m25")
+    st.divider()
+    st.caption("**各 Phase 独立配置**（覆盖全局默认；留空字段自动继承）")
+
+    # 每个 phase 一行：provider / model / api_key / base_url
+    PHASE_LABELS = {
+        "2.1": "2.1 情报解码",
+        "2.2": "2.2 机会判断",
+        "2.3": "2.3 行动设计",
+        "2.5": "2.5 复盘归因",
+    }
+    phase_inputs = {}   # phase -> {provider, model, api_key, base_url}
+
+    for phase, label in PHASE_LABELS.items():
+        pcfg = get_phase_cfg(llm_cfg, phase)
+        with st.expander(f"⚙️ {label}", expanded=False):
+            pc1, pc2, pc3, pc4 = st.columns([1.5, 2.5, 2.5, 2.5])
+            with pc1:
+                prov = st.selectbox("Provider", PROVIDERS,
+                                    index=PROVIDERS.index(pcfg["provider"]) if pcfg["provider"] in PROVIDERS else 0,
+                                    key=f"prov_{phase}")
+            with pc2:
+                mdl = st.text_input("Model", value=pcfg["model"], key=f"model_{phase}")
+            with pc3:
+                key = st.text_input("API Key（留空继承全局）", value=pcfg["api_key"],
+                                    type="password", key=f"key_{phase}")
+            with pc4:
+                url = st.text_input("Base URL（留空继承全局）", value=pcfg["base_url"],
+                                    placeholder=PROVIDER_DEFAULT_URLS.get(prov, ""),
+                                    key=f"url_{phase}")
+            phase_inputs[phase] = {"provider": prov, "model": mdl, "api_key": key, "base_url": url}
 
     save_col, stat_col = st.columns([1, 4])
     with save_col:
         if st.button("💾 保存配置", use_container_width=True):
-            # 只更新 model 字段，其余字段（base_url/max_tokens 等）保持原值
-            for phase, new_model in [("2.1", m21), ("2.2", m22), ("2.3", m23), ("2.5", m25)]:
-                if "phases" not in llm_cfg:
-                    llm_cfg["phases"] = {}
+            # 更新 default
+            if "default" not in llm_cfg:
+                llm_cfg["default"] = {}
+            llm_cfg["default"]["provider"] = g_provider
+            llm_cfg["default"]["api_key"]  = g_api_key
+            llm_cfg["default"]["base_url"] = g_base_url
+
+            # 更新各 phase
+            if "phases" not in llm_cfg:
+                llm_cfg["phases"] = {}
+            for phase, vals in phase_inputs.items():
                 if phase not in llm_cfg["phases"]:
                     llm_cfg["phases"][phase] = {}
-                llm_cfg["phases"][phase]["model"] = new_model
+                llm_cfg["phases"][phase]["provider"] = vals["provider"]
+                llm_cfg["phases"][phase]["model"]    = vals["model"]
+                # 只写非空字段，空值不覆盖（继承 default）
+                if vals["api_key"]:
+                    llm_cfg["phases"][phase]["api_key"] = vals["api_key"]
+                elif "api_key" in llm_cfg["phases"][phase]:
+                    del llm_cfg["phases"][phase]["api_key"]
+                if vals["base_url"]:
+                    llm_cfg["phases"][phase]["base_url"] = vals["base_url"]
+                elif "base_url" in llm_cfg["phases"][phase]:
+                    del llm_cfg["phases"][phase]["base_url"]
+
             save_llm_config(llm_cfg)
             st.success("已保存到 llm_config.yaml")
     with stat_col:
@@ -162,6 +225,10 @@ if "running" not in st.session_state:
 
 # ── 运行逻辑 ────────────────────────────────────────────────────
 if run_btn:
+    # 取全局配置区的值作为兜底
+    _run_api_key  = g_api_key
+    _run_base_url = g_base_url or PROVIDER_DEFAULT_URLS.get(g_provider, "")
+
     st.session_state.running = True
     st.session_state.run_result = {
         "started_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
@@ -180,7 +247,7 @@ if run_btn:
 
     STEP_WEIGHTS = {"2.1": 0.2, "2.2": 0.4, "2.3": 0.6, "2.4": 0.5, "2.5": 0.85}
 
-    for event in run_pipeline(api_key, base_url):
+    for event in run_pipeline(_run_api_key, _run_base_url):
         etype = event["type"]
         step = event.get("step")
         msg = event.get("message", "")

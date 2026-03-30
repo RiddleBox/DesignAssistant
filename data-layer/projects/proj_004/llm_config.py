@@ -66,7 +66,7 @@ def get_llm_config(phase: str = None) -> dict:
         phase: "2.1" / "2.2" / "2.3" / "2.4" / "2.5"，None 时只用 default
 
     Returns:
-        dict with keys: api_key, base_url, model, max_tokens, temperature
+        dict with keys: provider, api_key, base_url, model, max_tokens, temperature
     """
     _load_env()
     raw = _load_yaml_config()
@@ -74,6 +74,7 @@ def get_llm_config(phase: str = None) -> dict:
     # 1. 全局 default
     default = raw.get("default", {})
     cfg = {
+        "provider":    default.get("provider", "anthropic"),
         "api_key":     default.get("api_key", ""),
         "base_url":    default.get("base_url", ""),
         "model":       default.get("model", "claude-sonnet-4-6"),
@@ -112,7 +113,11 @@ def make_llm_client(phase: str = None):
     spec = importlib.util.spec_from_file_location("llm_client", client_path)
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
-    return mod.LLMClient(api_key=cfg["api_key"], base_url=cfg["base_url"])
+    return mod.LLMClient(
+        api_key=cfg["api_key"],
+        base_url=cfg["base_url"],
+        provider=cfg.get("provider", "anthropic"),
+    )
 
 
 def print_config_summary():
