@@ -106,14 +106,12 @@ def _llm_cluster_and_annotate(
     signals_summary = _build_signals_summary(signals)
     prompt = _build_step_a_prompt(signals_summary)
 
-    response = client.chat(
+    raw = client.call(
+        prompt=prompt,
         model=model,
-        messages=[{"role": "user", "content": prompt}],
         max_tokens=2048,
         temperature=0.2,
     )
-
-    raw = response.get("content", "") if isinstance(response, dict) else str(response)
     return _parse_step_a_response(raw, signals)
 
 

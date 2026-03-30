@@ -167,13 +167,12 @@ def _l4_llm_confirm(
     返回候选组合列表（每组是一个 List[SignalEntry]），无组合返回 []。
     """
     prompt = _build_l4_prompt(current, candidates)
-    response = client.chat(
+    raw = client.call(
+        prompt=prompt,
         model=model,
-        messages=[{"role": "user", "content": prompt}],
         max_tokens=1024,
         temperature=0.1,
     )
-    raw = response.get("content", "") if isinstance(response, dict) else str(response)
     return _parse_l4_response(raw, candidates)
 
 

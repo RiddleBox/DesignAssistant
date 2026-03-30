@@ -1,8 +1,8 @@
 # Phase 2.2 执行进展记录
 
 > **文档类型**：执行进展追踪
-> **最后更新**：2026-03-30
-> **当前状态**：✅ MVP 实现完成，✅ 验收通过，✅ 消费语义拍板，✅ Prompt-first v2 落地，✅ 验证案例集 v2 重写，✅ BoundaryValidator 误判修复，✅ next_validation_questions 语义修正，⏳ LLM 完整验证待稳定 API 窗口，📝 **Signal Store 迭代方案设计完成（v2，待实现）**
+> **最后更新**：2026-03-31
+> **当前状态**：✅ MVP 实现完成，✅ 验收通过，✅ 消费语义拍板，✅ Prompt-first v2 落地，✅ 验证案例集 v2 重写，✅ BoundaryValidator 误判修复，✅ next_validation_questions 语义修正，⏳ LLM 完整验证待稳定 API 窗口，✅ **Signal Store MVP 实现完成并切换（2026-03-31）**
 
 ---
 
@@ -31,6 +31,31 @@
 | 2026-03-28 | 规划阶段 | 轻量评分框架 & 自然语言摘要降级，附降级理由，避免后续误判优先级 | 总协调视角 |
 | 2026-03-30 | 设计阶段 | **Signal Store 迭代方案设计完成（v2）**：三步流程（Step A批内聚类+Step B分层漏斗+Step C现有逻辑）、信号角色枚举（7种）、存储设计（复用2.4基础设施）、已成机会知识沉淀（写回RAG），来源：与 DeepSeek/Gemini 多轮讨论后综合优化 | 方案设计视角 |
 | 2026-03-30 | 规划阶段 | Signal Store MVP 范围确定（L1+L2 漏斗，暂缓 L3 embedding 精排和 negative_validator），迭代路线分 MVP/v1.1/v2.0 三阶段 | 总协调视角 |
+| 2026-03-31 | 实现阶段 | **Signal Store MVP 全部文件实现完成**：signal_store.py / step_a_cluster.py / step_b_retrieval.py / golden_pattern.py / judgment_engine.py(+judge_with_signal_store) | 实现落地视角 |
+| 2026-03-31 | 验证阶段 | 冒烟测试通过（4/4）：SignalStore读写、Step A规则fallback、Step B空store、judge_with_signal_store主流程 | 评测验收视角 |
+| 2026-03-31 | 切换阶段 | run_batch_real.py 切换为 judge_with_signal_store()，保留自动 fallback 到 judge()；**变更与回退见下方说明** | 实现落地视角 |
+
+---
+
+### ⚠️ judge_with_signal_store 变更说明与回退方法
+
+**变更位置**：`run_batch_real.py`，2.2 判断调用处（约第 326 行）
+
+**变更内容**：
+- 原来：`result = engine.judge(req)`
+- 现在：优先调用 `engine.judge_with_signal_store(req, signal_store=_signal_store)`，失败时自动 fallback 到 `engine.judge(req)`
+
+**回退方法**（如需恢复原有行为）：
+```python
+# 将 run_batch_real.py 中的 try/except 块注释掉，改为：
+result = engine.judge(req)
+```
+
+**设计文档**：`phase2_plan/phase2.2_signal_store_设计方案_v2.md` §3.3
+
+**影响范围**：仅影响 2.2 内部调用链，2.1→2.2 输入接口和 2.2→2.3 输出接口均不变。
+
+**当 judge_with_signal_store 产出 status=pending_signals 时**：当批次无机会，信号已写入 Signal Store 等待积累，2.3 不会被调用（和原来 insufficient_evidence 一样），主链路正常。
 
 ---
 
