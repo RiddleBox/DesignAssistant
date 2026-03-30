@@ -330,8 +330,8 @@ L2 过滤和 L3 精排时使用 effective_intensity 而非 original_intensity。
 
 触发条件：Signal Store 积累 > 200 条，或出现明显的跨批次机会漏判
 
-- Top-down 假设驱动：专家预设战略假设，Signal Store 充当"假设进度条"
-- 预计算组合索引：写入时异步预计算所有可能组合，查询变为 O(1)
+- Top-down 假设驱动：专家预设战略假设，Signal Store 充当"假设进度条"（详见第七章）
+- 预计算组合索引：写入时异步预计算所有可能组合，查询变为 O(1)（详见第八章）
 - 信号观察报告：每周/每月汇总哪些信号 pending 最久、哪些缺口最频繁
 
 ---
@@ -345,6 +345,300 @@ L2 过滤和 L3 精排时使用 effective_intensity 而非 original_intensity。
 | 3 | Signal Store 与 2.4 RAG 的检索隔离如何实现？ | 独立 pkl 文件 + 独立检索接口，互不调用 | ✅ 方案确定 |
 | 4 | `judge_with_signal_store()` 与现有 `judge()` 并存多久？ | MVP 阶段并存，验证稳定后 `judge()` 降为 legacy | ⏳ 待定 |
 | 5 | 已成机会写入 RAG 的质量门槛（priority_level 阈值）？ | 仅 deep_dive/escalate 级别 | ⏳ 待拍板 |
+
+---
+
+*文档维护：每次实现阶段完成后更新"执行进展"，不修改本设计文档。如设计有重大变更，创建 v3 版本文档。*
+
+---
+
+## 七、黄金模板（Golden Pattern）设计方案
+
+> **对应迭代阶段**：MVP 即实现（已成机会写回 RAG 是 MVP 范围内）
+> **确定性**：高，设计无悬念
+
+### 7.1 定义与价值
+
+黄金模板是从**真实成功机会**中自动提炼的信号组合模式，写入 2.4 RAG 知识库。其价值在于：
+
+- Step C 在判断时，RAG 检索会命中历史上相似的成功模式，提升置信度
+- 随系统运行自动积累，不需要人工预设，冷启动后自然增长
+- 闭合"判断 → 沉淀 → 再判断"的学习循环
+
+**与"预设模板"的区别**：黄金模板是后验的（从成功案例中提炼），预设模板是先验的（人工设计空壳等信号填充）。两者不互斥，黄金模板是现在做的，预设模板是假设驱动（第九章）里的一部分。
+
+### 7.2 触发条件
+
+Step C 输出 OpportunityObject 且满足以下条件时自动触发写入：
+- `priority_level` 为 `deep_dive` 或 `escalate`（watch/research 级别质量不足，不写入）
+- `supporting_evidence` 非空（有实际证据支撑，非纯推断）
+
+### 7.3 生成逻辑
+
+```python
+def create_golden_pattern(opportunity: OpportunityObject, source_signals: List[SignalStoreEntry]):
+    """
+    从成功机会自动生成黄金模板，写入 2.4 RAG 知识库。
+    每个 OpportunityObject 最多生成一条黄金模板。
+    """
+    signal_combo_summary = _summarize_signal_combination(source_signals)
+    # 格式："{signal_type1}（{role1}）+ {signal_type2}（{role2}）+ ..."
+
+    content = f"""
+    机会论点：{opportunity.opportunity_thesis}
+
+    信号组合模式：{signal_combo_summary}
+    信号数量：{len(source_signals)} 条
+    信号强度范围：{min_intensity} ~ {max_intensity}
+    时间跨度：{time_span_days} 天内
+
+    成立条件摘要：{opportunity.key_assumptions 前3条}
+
+    验证问题（供后续对照）：{opportunity.next_validation_questions 前2条}
+    """
+
+    doc = Document(
+        doc_id=f"golden_{opportunity.opportunity_id}",
+        title=f"[黄金模板] {opportunity.opportunity_title}",
+        content=content,
+        content_type="case_record",  # 复用现有枚举，不新增类型
+        tags=[
+            "golden_pattern",
+            f"combo:{'+'.join(signal_types)}",          # 如 "regulatory+market+capital"
+            f"domain:{primary_domain}",
+            f"priority:{opportunity.priority_level}",
+            f"batch:{today_date}",
+        ],
+        trust_level="high",   # 已验证机会，信任度高
+        industry=primary_industry,
+    )
+    rag_knowledge_store.add(doc)
+```
+
+### 7.4 检索时的使用方式
+
+Step C 调用 2.4 RAG 时，`needed_content_types` 已包含 `case_record`，黄金模板会自然被检索到，**不需要额外的检索逻辑**。
+
+RAG 会在命中时返回：
+```
+ContextPacketItem(
+    content_type="case_record",
+    source_title="[黄金模板] 监管压力型移动端入场机会",
+    excerpt="机会论点：... 信号组合模式：regulatory(catalyst) + market(competitive_gap)...",
+    reason_for_match="当前信号组合与历史成功模式高度相似",
+)
+```
+
+LLM 在 Step C 的 prompt 中看到这条证据，会自然地用它来加强机会判断的论点。
+
+### 7.5 质量保障
+
+**防止低质量模板污染 RAG**：
+- 只写 deep_dive/escalate，过滤掉探索性机会
+- 每条黄金模板唯一对应一个 OpportunityObject，不重复写入
+- 同一信号组合类型（combo tag 完全相同）最多保留5条最新模板，防止单一模式过度占据检索结果
+
+**冷启动期**：Signal Store MVP 刚上线时黄金模板库为空，Step C 退化为现有行为（无历史模式参考），这是正常的，系统会随使用自然积累。
+
+---
+
+## 八、预计算组合索引设计方案
+
+> **对应迭代阶段**：v2.0（触发条件：Signal Store 积累 > 200 条）
+> **确定性**：高，设计无悬念；实现时机待条件触发
+
+### 8.1 问题背景
+
+当前 Step B 的分层漏斗（L1+L2+L3+L4）在信号量 < 200 条时足够高效，但随着 Signal Store 持续积累：
+
+- L1 候选池（需要我这种角色的历史信号）可能增长到数百条
+- L2 规则过滤仍然是 O(n)，n 随积累线性增长
+- 整体检索时间从"可忽略"变为"显著延迟"
+
+预计算组合索引的目标：**把"查询时计算"变成"写入时计算"**，查询退化为 O(1) 主键查询。
+
+### 8.2 数据结构
+
+```python
+# 组合候选索引表（独立存储，signal_combo_index.json 或 SQLite）
+class CombinationCandidate:
+    combo_id: str           # f"combo_{signal_id_a}_{signal_id_b}"
+    signal_ids: List[str]   # 参与组合的信号 ID（2-4条）
+    domain_overlap: List[str]  # 共同的 domain 标签
+    role_coverage: List[str]   # 此组合覆盖的角色类型
+    estimated_completeness: float  # 0.0-1.0，组合能覆盖多完整的机会论点
+    time_span_days: int     # 最早到最晚信号的时间跨度
+    created_at: str         # 索引创建时间
+    status: str             # active / consumed / expired
+
+# 倒排索引：signal_id → List[combo_id]
+SignalToComboIndex: Dict[str, List[str]]
+```
+
+### 8.3 写入时的异步预计算
+
+```
+信号 X 写入 Signal Store 时（非阻塞，异步 Job）：
+
+1. 取信号 X 的角色列表（role tags）
+2. 查询 Signal Store：找出 needs 中包含 X 角色 + domain 重叠的 pending 信号
+   （即现在的 L1+L2 过滤逻辑，在写入时跑一次，结果持久化）
+3. 对每个匹配到的历史信号 Y：
+   a. 估算组合完整度：(X的角色 + Y的角色) 覆盖了哪些机会论点维度？
+   b. 生成 CombinationCandidate 记录
+   c. 写入组合候选索引
+4. 更新倒排索引：signal_X_id → [combo_id_1, combo_id_2, ...]
+```
+
+### 8.4 查询时的使用
+
+Step B 完全替换为：
+```python
+def step_b_with_precomputed_index(signal: SignalStoreEntry) -> List[CombinationCandidate]:
+    # O(1) 主键查询
+    combo_ids = signal_to_combo_index.get(signal.signal_id, [])
+    candidates = [combo_index[cid] for cid in combo_ids if combo_index[cid].status == "active"]
+    # 按 estimated_completeness 降序，取 Top-5
+    return sorted(candidates, key=lambda c: c.estimated_completeness, reverse=True)[:5]
+```
+
+**L4 LLM 确认保留**：预计算只做规则层面的组合筛选，最终"逻辑链是否成立"仍由 L4 LLM 判断，不省略。
+
+### 8.5 存储选型
+
+| 选项 | 适用场景 | 说明 |
+|------|---------|------|
+| JSON 文件 | 组合数 < 5000 | 与 Signal Store pkl 风格一致，无额外依赖 |
+| SQLite | 组合数 5000-50000 | 支持 SQL 查询，迁移成本低 |
+| PostgreSQL | 组合数 > 50000 | 超出当前规模预期，暂不考虑 |
+
+**当前选型**：JSON 文件（与现有 pkl 存储风格一致，迁移到 SQLite 时只需替换读写层）
+
+### 8.6 索引维护
+
+**信号过期时**：将该信号参与的所有 CombinationCandidate 标记为 expired，从倒排索引中移除。
+
+**信号成功转化为机会时**：将参与的 CombinationCandidate 标记为 consumed，避免被重复消费。
+
+**索引重建**：Signal Store 结构变更时（如角色枚举扩展），提供 `rebuild_combo_index.py` 脚本全量重建，预计运行时间 < 5 分钟（数百条信号规模）。
+
+---
+
+## 九、假设驱动（Top-down）设计方案
+
+> **对应迭代阶段**：v2.0（触发条件：有明确的长周期战略假设需要追踪）
+> **确定性**：中；核心待拍板点：假设来源（人工 vs 自动生成）
+
+### 9.1 定位与价值
+
+当前方案（Bottom-up）的局限：
+- 跨度超过 90 天的战略机会，每批次信号量太少，积累速度慢，难以自然拼出
+- 系统不知道"我在找什么"，只是被动等信号凑齐
+
+假设驱动是 Bottom-up 的**并行补充路径**，不替代：
+- Bottom-up：信号积累 → 系统自发现机会
+- Top-down：预设战略假设 → 信号填充假设的证据维度 → 达到阈值触发判断
+
+两条路径共享 Signal Store，互不干扰。
+
+### 9.2 核心数据结构
+
+```python
+class StrategicHypothesis:
+    hypothesis_id: str          # hyp_001
+    title: str                  # "移动端平台分发格局重构机会"
+    description: str            # 假设的详细描述
+    required_dimensions: List[HypothesisDimension]  # 成立所需的证据维度
+    trigger_threshold: float    # 完成度达到此值时触发 Step C（默认 0.7）
+    domain: List[str]           # 关联领域
+    created_by: str             # "human" 或 "agent"（待拍板）
+    created_at: str
+    status: str                 # active / triggered / archived
+    current_progress: float     # 当前完成度（0.0-1.0）
+
+class HypothesisDimension:
+    dimension_id: str           # dim_001
+    label: str                  # "主要平台受到外部压制"
+    required_roles: List[str]   # 填充此维度需要哪些信号角色：["catalyst"]
+    required_signal_types: List[str]  # ["regulatory", "market"]
+    weight: float               # 此维度在整体完成度中的权重（各维度之和=1.0）
+    filled_by: Optional[str]    # 填充此维度的信号 ID（filled 后写入）
+    status: str                 # empty / filled
+```
+
+### 9.3 进度条机制
+
+```
+每次新信号写入 Signal Store 时，额外执行：
+
+1. 遍历所有 active 假设（数量通常 < 20，遍历成本可接受）
+2. 对每个假设，检查新信号是否能填充任意未填充的维度：
+   - 条件：信号 role ∩ dimension.required_roles 非空
+           AND 信号 signal_type ∈ dimension.required_signal_types
+           AND 信号 domain ∩ hypothesis.domain 非空
+3. 满足条件 → 将维度标记为 filled，记录填充信号 ID
+4. 重新计算假设完成度：
+   current_progress = sum(dim.weight for dim in dims if dim.status == "filled")
+5. current_progress >= trigger_threshold → 触发 Step C，传入所有 filled_by 信号
+
+```
+
+**为什么遍历假设而不是检索**：假设数量通常 < 20（战略假设不会无限膨胀），全量遍历成本远低于任何检索开销，且逻辑最简单。
+
+### 9.4 假设完成度展示（进度条）
+
+```
+假设：移动端平台分发格局重构机会（完成度 60%）
+
+  ✅ 维度1：主要平台受到外部压制（权重 25%）
+     └── 填充信号：EU DMA 罚苹果5亿欧元（2026-01-15）
+
+  ✅ 维度2：开发者行为变化（权重 25%）
+     └── 填充信号：Epic 旗下独立工作室迁出 App Store（2026-02-20）
+
+  ✅ 维度3：替代渠道出现（权重 10%）
+     └── 填充信号：安卓侧载政策松动传言（2026-03-10）
+
+  ⬜ 维度4：头部内容迁移（权重 25%）—— 尚无信号
+  ⬜ 维度5：资本进入替代方向（权重 15%）—— 尚无信号
+
+  触发阈值：70% → 还差：维度4 或 维度5 任意一个填充即可触发
+```
+
+### 9.5 ⚠️ 核心待拍板点：假设来源
+
+这是整个方案最大的不确定性，影响系统复杂度和使用体验。
+
+**选项A：纯人工维护**
+- 实现：一个 `hypotheses.yaml` 配置文件，人工编写和维护
+- 优点：简单，假设质量有保障
+- 缺点：需要人定期更新，冷启动需要时间，可能跟不上市场变化
+- 适合：战略方向相对稳定，团队有专人负责战略假设维护
+
+**选项B：LLM 自动生成假设**
+- 实现：每批次处理完成后，LLM 基于当前 Signal Store 中的 pending 信号，尝试推导"这批信号在等什么才能成为机会"，自动生成新假设
+- 优点：不依赖人工，能发现意料之外的假设方向
+- 缺点：假设质量不可控，可能产生大量低价值假设；需要假设去重和质量过滤
+- 适合：信号来源多样、战略方向不固定的场景
+
+**选项C：混合（推荐，待拍板）**
+- 人工预设核心战略假设（3-5个，稳定方向）
+- LLM 基于 pending 信号生成"候选假设"，需要人工审核后激活
+- 审核界面在 dashboard 上，不阻塞主流程
+
+**⏳ 待拍板**：选 A、B 还是 C？以及假设的维度设计是否由人工定义，还是 LLM 自动分解？
+
+### 9.6 与 Bottom-up 路径的关系
+
+| 维度 | Bottom-up（现有 + Signal Store） | Top-down（假设驱动） |
+|------|--------------------------------|-------------------|
+| 发现方式 | 信号积累 → 自发现 | 假设预设 → 信号填充 |
+| 适合机会类型 | 短中期（<90天可见的信号积累） | 长周期（需要追踪多个月的战略转折） |
+| 对假设的依赖 | 无 | 有（需要预设假设） |
+| 意外发现能力 | 强（不预设方向） | 弱（只找预设方向的证据） |
+| 当前状态 | MVP 实现目标 | v2.0 规划 |
+
+两条路径都共享 Signal Store 的数据，Top-down 路径不新增存储，只新增假设管理逻辑和进度计算逻辑。
 
 ---
 
