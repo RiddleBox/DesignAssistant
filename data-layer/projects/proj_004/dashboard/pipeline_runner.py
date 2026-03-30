@@ -87,6 +87,11 @@ def run_pipeline(api_key: str, base_url: str) -> Generator[dict, None, None]:
         # 组装展示数据
         # decode_results 是 IntelligenceDecodeResult 对象列表（非 dict）
         dr_map = {r.source_id: r for r in decode_results}
+        # 原始样本 payload 映射（source_id → payload dict）
+        raw_payload_map = {
+            s["payload"].get("source_id", s["file_name"]): s["payload"]
+            for s in samples
+        }
         samples_data = []
         for stat in per_sample_stats:
             sid = stat.get("source_id", "?")
@@ -105,12 +110,20 @@ def run_pipeline(api_key: str, base_url: str) -> Generator[dict, None, None]:
                         "evidence_text": s.evidence_text,
                         "timeliness_score": s.timeliness_score,
                     })
+            # 原始样本字段（用于 dashboard 原文展示）
+            raw = raw_payload_map.get(sid, {})
             samples_data.append({
                 "source_id": sid,
                 "file_name": stat.get("file_name", sid),
                 "signal_count": sig_count,
                 "signals": signals_detail,
                 "is_noise": sig_count == 0,
+                # 原文字段
+                "raw_title":       raw.get("title", ""),
+                "raw_content":     raw.get("content", ""),
+                "raw_source_url":  raw.get("source_url", ""),
+                "raw_source_name": raw.get("source_name", ""),
+                "raw_published_at":raw.get("published_at", ""),
             })
 
         elapsed = int((time.time() - t1) * 1000)

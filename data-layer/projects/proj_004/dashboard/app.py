@@ -317,21 +317,45 @@ else:
             for s in d21.get("samples", []):
                 is_noise = s.get("is_noise", False)
                 tag = "🔇 噪音" if is_noise else f"✅ {s.get('signal_count',0)} 个信号"
-                with st.expander(f"{'🔇' if is_noise else '📄'} {s['source_id']}  —  {tag}", expanded=not is_noise):
-                    if is_noise:
-                        st.caption("未提取到有效信号（噪音样本）")
-                    else:
-                        for sig in s.get("signals", []):
-                            sig_type = sig.get("signal_type", "?")
-                            sig_label = sig.get("signal_label", sig.get("description", "")[:60])
-                            intensity = sig.get("intensity_score", sig.get("intensity", "?"))
-                            confidence = sig.get("confidence_score", sig.get("confidence", "?"))
-                            st.markdown(f"**[{sig_type}]** {sig_label}")
-                            ci, co = st.columns(2)
-                            ci.caption(f"强度: {intensity}")
-                            co.caption(f"置信: {confidence}")
-                            if sig.get("evidence_text"):
-                                st.caption(f"原文片段：{sig['evidence_text'][:200]}…")
+                raw_title = s.get("raw_title") or s["source_id"]
+                with st.expander(f"{'🔇' if is_noise else '📄'} {s['source_id']}  —  {tag}  |  {raw_title[:60]}", expanded=not is_noise):
+                    tab_labels = ["原文", "解码信号"] if not is_noise else ["原文"]
+                    tabs = st.tabs(tab_labels)
+
+                    # ── 原文 tab（噪音/信号均显示）
+                    with tabs[0]:
+                        if s.get("raw_title"):
+                            st.markdown(f"**{s['raw_title']}**")
+                        meta_parts = []
+                        if s.get("raw_source_name"):
+                            meta_parts.append(s["raw_source_name"])
+                        if s.get("raw_published_at"):
+                            meta_parts.append(s["raw_published_at"][:10])
+                        if meta_parts:
+                            st.caption("  ·  ".join(meta_parts))
+                        if s.get("raw_source_url"):
+                            st.markdown(f"🔗 [查看原始来源]({s['raw_source_url']})")
+                        if s.get("raw_content"):
+                            st.markdown(s["raw_content"])
+                        else:
+                            st.caption("（原文内容为空）")
+                        if is_noise:
+                            st.info("该样本未提取到有效信号（噪音）")
+
+                    # ── 解码信号 tab（仅非噪音）
+                    if not is_noise:
+                        with tabs[1]:
+                            for sig in s.get("signals", []):
+                                sig_type = sig.get("signal_type", "?")
+                                sig_label = sig.get("signal_label", sig.get("description", "")[:60])
+                                intensity = sig.get("intensity_score", sig.get("intensity", "?"))
+                                confidence = sig.get("confidence_score", sig.get("confidence", "?"))
+                                st.markdown(f"**[{sig_type}]** {sig_label}")
+                                ci, co = st.columns(2)
+                                ci.caption(f"强度: {intensity}")
+                                co.caption(f"置信: {confidence}")
+                                if sig.get("evidence_text"):
+                                    st.caption(f"原文片段：{sig['evidence_text'][:200]}…")
 
     # ── 2.2 ─────────────────────────────────────────────────────
     d22 = result.get("step_22")
