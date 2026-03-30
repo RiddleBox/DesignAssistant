@@ -1,0 +1,11 @@
+{
+  "source_id": "incoming_025",
+  "source_type": "news",
+  "title": "Tencent's generative AI animation tools shown at GDC are technically impressive but offer little for game fun",
+  "content": "Tencent showcased its generative AI animation tools at GDC 2026, demonstrating technically impressive capabilities for procedural character animation and motion synthesis. However, industry observers noted that while the tools reduce production labor, they do not appear to improve gameplay feel or player experience. The demonstration highlighted a growing tension between AI-driven production efficiency and the creative craft that makes games engaging.",
+  "published_at": "2026-03-24T00:00:00Z",
+  "source_name": "Game Developer",
+  "source_url": "https://www.gamedeveloper.com/art/tencent-s-genai-animation-tools-don-t-seem-to-make-games-more-fun",
+  "language": "en",
+  "mode": "prompt_first"
+}

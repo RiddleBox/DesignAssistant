@@ -1,0 +1,11 @@
+{
+  "source_id": "incoming_005",
+  "source_type": "news",
+  "title": "European Commission fines Apple €500 million for breaching Digital Markets Act anti-steering rules",
+  "content": "On April 23, 2025, the European Commission found Apple in breach of the Digital Markets Act (DMA), specifically its anti-steering obligation that prevents developers from directing users to better deals outside the App Store. Apple was fined €500 million ($570 million). The Commission found that Apple's App Store rules did not allow developers to freely steer consumers to alternative offers. Apple was given 60 days to comply or face further fines of up to 5% of average daily worldwide turnover.",
+  "published_at": "2025-04-23T00:00:00Z",
+  "source_name": "European Commission",
+  "source_url": "https://ec.europa.eu/commission/presscorner/api/files/document/print/en/ip_25_1085/IP_25_1085_EN.pdf",
+  "language": "en",
+  "mode": "prompt_first"
+}
