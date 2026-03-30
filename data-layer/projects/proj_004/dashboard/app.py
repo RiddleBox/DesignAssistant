@@ -237,6 +237,7 @@ if run_btn:
         "report_path": None, "total_ms": None,
         "logs": [], "errors": [],
     }
+    completed_steps = set()
 
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     from pipeline_runner import run_pipeline
