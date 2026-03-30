@@ -862,3 +862,218 @@ class JudgmentEngine:
             status="insufficient_evidence",
             diagnostics=diagnostics
         )
+
+    # ══════════════════════════════════════════════════════════
+    # Signal Store 编排入口（新增，不改动现有 judge() 方法）
+    # ══════════════════════════════════════════════════════════
+
+    def judge_with_signal_store(
+        self,
+        request: "OpportunityJudgmentRequest",
+        signal_store=None,
+        rag_store_add_fn=None,
+    ) -> "OpportunityJudgmentResult":
+        """
+        带 Signal Store 的机会判断入口。
+
+        流程：
+          Step A → 批内聚类 + 角色标注
+          Step B → 历史信号检索（分层漏斗）
+          Step C → 完整机会判断（复用现有 judge()）
+
+        现有 judge() 方法完全保留，本方法是独立的新入口。
+        2.1→2.2 输入接口、2.2→2.3 输出接口均不变。
+
+        Args:
+            request: 标准 OpportunityJudgmentRequest
+            signal_store: SignalStore 实例；None 时自动初始化
+            rag_store_add_fn: 可选，黄金模板写入函数；None 时自动尝试加载
+
+        Returns:
+            OpportunityJudgmentResult（schema 与 judge() 完全一致）
+        """
+        import time as _time
+        from datetime import date
+
+        start_time = _time.time()
+
+        # 延迟导入，避免循环依赖
+        try:
+            from signal_store import SignalStore, build_signal_entry
+            from step_a_cluster import run_step_a
+            from step_b_retrieval import run_step_b
+            from golden_pattern import maybe_write_golden_pattern
+        except ImportError as e:
+            # Signal Store 模块未安装时，退化为原有 judge()
+            print(f"[judge_with_signal_store] 模块导入失败，退化为 judge(): {e}")
+            return self.judge(request)
+
+        # 初始化 Signal Store
+        if signal_store is None:
+            signal_store = SignalStore()
+
+        # 归档过期信号（每次调用时顺带执行，成本极低）
+        archived = signal_store.archive_expired()
+        if archived:
+            print(f"[Signal Store] 归档过期信号 {archived} 条")
+
+        today = date.today().isoformat()
+
+        # ── Step A：批内聚类 + 角色标注 ─────────────────────
+        enriched_signals = self._extract_enriched_signals(request.decoded_intelligences)
+
+        if not enriched_signals:
+            return self._create_insufficient_evidence_result(
+                [], ["没有可用信号"],
+                int((_time.time() - start_time) * 1000)
+            )
+
+        step_a_result = run_step_a(
+            enriched_signals=enriched_signals,
+            llm_client=self._llm,
+            model=self.model,
+            api_key=self.api_key,
+            base_url=self.base_url,
+        )
+
+        if step_a_result.fallback_used:
+            print("[Step A] 使用规则 fallback（LLM 未响应）")
+
+        # ── Step C（批内直接组合）────────────────────────────
+        all_opportunities = []
+        source_signal_map = {}  # opportunity_id → List[SignalEntry]
+
+        for group in step_a_result.signal_groups:
+            # 将信号组注入 request，调用现有判断逻辑
+            group_request = self._build_group_request(request, group)
+            result = self.judge(group_request)
+            all_opportunities.extend(result.opportunities or [])
+            # 记录信号来源（用于黄金模板）
+            for opp in (result.opportunities or []):
+                source_signal_map[opp.opportunity_id] = group
+
+        # ── Step B + Step C（孤立信号 → 历史检索）────────────
+        signals_to_store = []   # 最终需要写入 Signal Store 的孤立信号
+
+        for iso_signal in step_a_result.isolated_signals:
+            step_b_result = run_step_b(
+                isolated_signal=iso_signal,
+                signal_store=signal_store,
+                llm_client=self._llm,
+                model=self.model,
+            )
+
+            if step_b_result.matched:
+                # 找到历史伙伴，构建组合请求进 Step C
+                for candidate_group in step_b_result.candidate_groups:
+                    combined_signals = [iso_signal] + [
+                        self._signal_entry_to_dict(e) for e in candidate_group
+                    ]
+                    group_request = self._build_group_request(request, combined_signals)
+                    result = self.judge(group_request)
+                    new_opps = result.opportunities or []
+                    all_opportunities.extend(new_opps)
+
+                    # 标记历史信号状态
+                    for opp in new_opps:
+                        source_signal_map[opp.opportunity_id] = candidate_group
+                        for entry in candidate_group:
+                            signal_store.update_status(
+                                entry.signal_id, "matched", opp.opportunity_id
+                            )
+            else:
+                # 没有找到伙伴，当前信号写入 Signal Store
+                signals_to_store.append(iso_signal)
+
+        # ── 写入孤立信号到 Signal Store ───────────────────────
+        if signals_to_store:
+            entries = []
+            for s in signals_to_store:
+                ann = s.get("_role_annotation", {})
+                entry = build_signal_entry(
+                    signal=s,
+                    roles=ann.get("roles", ["catalyst"]),
+                    needs=ann.get("needs", []),
+                    domains=ann.get("domains", ["gaming"]),
+                    waiting_for_text=ann.get("waiting_for_text", ""),
+                    batch_date=today,
+                )
+                entries.append(entry)
+            signal_store.add_batch(entries)
+            print(f"[Signal Store] 写入 {len(entries)} 条待组合信号")
+
+        # ── 黄金模板写回（已成机会 → 2.4 RAG）───────────────
+        for opp in all_opportunities:
+            src_entries = source_signal_map.get(opp.opportunity_id, [])
+            if src_entries:
+                maybe_write_golden_pattern(
+                    opportunity=opp,
+                    source_signal_entries=src_entries,
+                    rag_store_add_fn=rag_store_add_fn,
+                )
+
+        # ── 构建最终结果 ─────────────────────────────────────
+        processing_time = int((_time.time() - start_time) * 1000)
+        if all_opportunities:
+            from schemas import Diagnostics
+            diagnostics = Diagnostics(
+                signal_count=len(enriched_signals),
+                opportunity_count=len(all_opportunities),
+                evidence_completeness=1.0,
+                boundary_warnings=[],
+            )
+            return OpportunityJudgmentResult(
+                opportunities=all_opportunities,
+                status="success",
+                diagnostics=diagnostics,
+            )
+        else:
+            # 当批次无机会产出（信号已写入 Signal Store 等待积累）
+            from schemas import Diagnostics
+            diagnostics = Diagnostics(
+                signal_count=len(enriched_signals),
+                opportunity_count=0,
+                evidence_completeness=0.0,
+                boundary_warnings=[
+                    f"当批次 {len(signals_to_store)} 条信号已写入 Signal Store，等待后续批次补全"
+                ],
+            )
+            return OpportunityJudgmentResult(
+                opportunities=[],
+                status="pending_signals",   # 新增状态：区别于 insufficient_evidence
+                diagnostics=diagnostics,
+            )
+
+    def _build_group_request(self, original_request, signals: list):
+        """基于原始 request 和指定信号列表，构建子 request（复用 rag_retriever 等配置）"""
+        from schemas import OpportunityJudgmentRequest
+        # 将 dict 格式信号包装回 DecodedIntelligence-like 对象
+        # 直接传 enriched_signals 格式（_execute_judgment_pipeline_v2 已支持）
+        new_req = OpportunityJudgmentRequest(
+            decoded_intelligences=original_request.decoded_intelligences,
+            context_packet=original_request.context_packet,
+        )
+        # 临时注入：用信号直接覆盖，让 pipeline 只看这组信号
+        new_req._override_signals = signals
+        return new_req
+
+    def _signal_entry_to_dict(self, entry) -> dict:
+        """将 SignalEntry 转换为 enriched_signal dict 格式"""
+        return {
+            "signal_id":       entry.signal_id,
+            "signal_label":    entry.signal_label,
+            "signal_type":     entry.signal_type,
+            "description":     entry.description,
+            "evidence_text":   entry.evidence_text,
+            "intensity_score": entry.intensity_score,
+            "confidence_score": entry.confidence_score,
+            "timeliness_score": entry.timeliness_score,
+            "source_id":       entry.source_id,
+            "_from_signal_store": True,   # 标记来源
+            "_role_annotation": {
+                "roles":   entry.roles,
+                "needs":   entry.needs,
+                "domains": entry.domains,
+                "waiting_for_text": entry.waiting_for_text,
+            },
+        }
