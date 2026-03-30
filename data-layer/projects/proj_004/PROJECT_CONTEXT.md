@@ -105,7 +105,7 @@
   与 opportunity_thesis（已是 2-4 句可读论点）定位重叠，差异未被定义。
   **从优先级列表删除**，等有人明确提出"thesis 不够用"再讨论。
 
-**当前状态**：✅ MVP 完成 | ✅ 消费语义拍板 | ✅ Prompt-first v2 + 多机会输出重构 | ✅ EvidenceValidator 可追溯性 | ⏳ LLM 完整验证（后续完善）| ⏳ 2.3 联调回归（进行中）
+**当前状态**：✅ MVP 完成 | ✅ 消费语义拍板 | ✅ Prompt-first v2 + 多机会输出重构 | ✅ EvidenceValidator 可追溯性 | ⏳ LLM 完整验证（后续完善）| ⏳ 2.3 联调回归（进行中）| 📝 **Signal Store 迭代方案设计完成（v2，待实现）**
 
 **关键文件**：
 - 执行进展：[phase2.2_执行进展.md](data-layer/projects/proj_004/phase2_plan/phase2.2_执行进展.md)
@@ -353,6 +353,7 @@
 | P1 | **简版自然语言摘要** | 结构化对象基础上派生可读摘要，服务于人工验证与协作沟通 |
 | P2 | **多 Agent 辩论增强（P3-A）** | `debate_summary` 透传（hawk/dove/arbitrator），已有代码骨架，~30 分钟；详见 phase2.3_联调与增强计划.md P3-A 节 |
 | P2 | **历史案例对比** | 接入 2.4 知识库的相似案例，支持"为什么这次选 deep_dive 而不是 research"的可追溯解释 |
+| P2 | **Signal Store 跨批次信号积累**（v2 迭代） | 信号不成机会时暂存，跨批次组合尝试（Step A批内聚类+Step B分层漏斗）；已成机会的信号沉淀为 case_record 写回 2.4 RAG；纯 2.2 内部改造，不改变任何对外接口。详见：[phase2.2_signal_store_设计方案_v2.md](phase2.2_signal_store_设计方案_v2.md) |
 | P3 | **完整可配置评分体系** | 维度权重配置、评分版本管理、评分校准与案例回放；建立在轻量评分验证之后 |
 | P3 | **姿态变更追踪** | 同一机会在不同时间点重新评估时记录姿态变化轨迹 |
 
@@ -422,7 +423,7 @@
 | 2026-03-28 | 修复 2.2 规则引擎 fallback 中 intensity 字段名 bug（avg_intensity 始终为 0 导致 priority 分级偏低） |
 | 2026-03-28（晚） | 2.4 ContextPacket 协议 v1.0 冻结：content_type 枚举（glossary/few_shot_example/constraint_rule/case_record/market_data/background）、ContextRequest/ContextResponse 字段定义、三模块消费场景差异确认、兼容策略（新增 /context 接口，原接口不变） |
 | 2026-03-29（上午） | 2.4 四层文档结构确立（industry/category/content_type/tags 正交），MetadataFilter 重构，2.5 LLM 深层归因跑通（llm_attributor.py 新增，findings=5 全部准确），关键工程修复：流式请求绕过中转截断、JSON 兼容前缀解析、prompt 体积压缩、信号字段名对齐。Phase 3 入场条件第 4 条正式通过。 |
-| 2026-03-29（下午） | 工程收尾：`processing_time_ms` 接入真实耗时（commit `f42ecdc`）；MetadataFilter 重构完整确认（models.py+retrieval.py 三维过滤均已实现，向量索引重建，vector_meta 含 industry/content_type 字段）；incoming/ 历史 tracked 文件清理；发现 background content_type 覆盖缺口（32/62 文档不被 2.2 请求，记录为 Phase 3 待评估项）。 |
+| 2026-03-30 | 2.2 Signal Store 迭代方案设计完成（v2）：三步流程（Step A/B/C）、7种信号角色、分层漏斗检索（L1-L4）、已成机会知识沉淀闭环；纯2.2内部改造，所有对外接口不变。多 provider LLM 配置改造（provider字段+各phase独立key/url），dashboard配置区扩展为per-phase卡片。2.1展示区增加原文tab（标题/来源/正文/链接）。 |
 
 ---
 

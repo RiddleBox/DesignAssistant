@@ -1,8 +1,8 @@
 # Phase 2.2 执行进展记录
 
 > **文档类型**：执行进展追踪
-> **最后更新**：2026-03-28
-> **当前状态**：✅ MVP 实现完成，✅ 验收通过，✅ 消费语义拍板，✅ Prompt-first v2 落地，✅ 验证案例集 v2 重写，✅ BoundaryValidator 误判修复，✅ next_validation_questions 语义修正，⏳ LLM 完整验证待稳定 API 窗口
+> **最后更新**：2026-03-30
+> **当前状态**：✅ MVP 实现完成，✅ 验收通过，✅ 消费语义拍板，✅ Prompt-first v2 落地，✅ 验证案例集 v2 重写，✅ BoundaryValidator 误判修复，✅ next_validation_questions 语义修正，⏳ LLM 完整验证待稳定 API 窗口，📝 **Signal Store 迭代方案设计完成（v2，待实现）**
 
 ---
 
@@ -29,6 +29,8 @@
 | 2026-03-28 | 完善阶段 | 全面对照设计文档梳理缺口：多机会输出重构（opportunities列表）、新增 why_now/warnings/source_ref、规则引擎按信号类型分组fallback、JudgmentEngine api_key=''强制规则引擎修复 | commit c488171 / a2bc983 |
 | 2026-03-28 | 设计阶段 | next_validation_questions 语义修正（从「信息收集」改为「供 2.3 行动决策的前置问题」）commit ba2100f | 方案设计视角 |
 | 2026-03-28 | 规划阶段 | 轻量评分框架 & 自然语言摘要降级，附降级理由，避免后续误判优先级 | 总协调视角 |
+| 2026-03-30 | 设计阶段 | **Signal Store 迭代方案设计完成（v2）**：三步流程（Step A批内聚类+Step B分层漏斗+Step C现有逻辑）、信号角色枚举（7种）、存储设计（复用2.4基础设施）、已成机会知识沉淀（写回RAG），来源：与 DeepSeek/Gemini 多轮讨论后综合优化 | 方案设计视角 |
+| 2026-03-30 | 规划阶段 | Signal Store MVP 范围确定（L1+L2 漏斗，暂缓 L3 embedding 精排和 negative_validator），迭代路线分 MVP/v1.1/v2.0 三阶段 | 总协调视角 |
 
 ---
 
