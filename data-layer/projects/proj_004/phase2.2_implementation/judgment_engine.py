@@ -937,6 +937,7 @@ class JudgmentEngine:
             _sb_mod  = _load_sibling("step_b_retrieval")
             _gp_mod  = _load_sibling("golden_pattern")
             SignalStore        = _ss_mod.SignalStore
+            OpportunityStore   = _ss_mod.OpportunityStore
             build_signal_entry = _ss_mod.build_signal_entry
             run_step_a         = _sa_mod.run_step_a
             run_step_b         = _sb_mod.run_step_b
@@ -1057,8 +1058,22 @@ class JudgmentEngine:
             print(f"[Signal Store] 写入 {len(entries)} 条待组合信号")
 
         # ── 黄金模板写回（已成机会 → 2.4 RAG）───────────────
+        # ── 机会 ID 持久化（跨批次复用 opportunity_id）────────
+        opp_store = OpportunityStore()
         for opp in all_opportunities:
             src_entries = source_signal_map.get(opp.opportunity_id, [])
+
+            # 机会 ID 持久化：基于 source_id 重叠判断是否复用历史 ID
+            source_ids = {e.source_id for e in src_entries if hasattr(e, "source_id")}
+            sig_ids = [e.signal_id for e in src_entries if hasattr(e, "signal_id")]
+            resolved_id = opp_store.resolve_opportunity_id(opp, source_ids, sig_ids)
+            if resolved_id != opp.opportunity_id:
+                print(f"[Opportunity Store] 复用历史 ID: {resolved_id} (原 {opp.opportunity_id})")
+                opp.opportunity_id = resolved_id
+            else:
+                print(f"[Opportunity Store] 新建机会: {resolved_id}")
+
+            # 黄金模板写回
             if src_entries:
                 maybe_write_golden_pattern(
                     opportunity=opp,

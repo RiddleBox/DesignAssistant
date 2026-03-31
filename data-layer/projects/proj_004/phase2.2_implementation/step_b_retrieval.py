@@ -124,10 +124,16 @@ def _l2_filter(
     current_sid = _get_signal_id(current)
     current_time = datetime.now(timezone.utc)
 
+    current_signal_type = current.get("signal_type", "")
+
     results = []
     for e in candidates:
-        # domain 重叠（至少1个共同 domain）
-        if not current_domains.intersection(set(e.domains)):
+        # domain 重叠 OR signal_type 互补（跨域信号关联，v1.1）
+        # domain 有交集 → 通过；signal_type 不同 → 通过（互补类型可能组合）
+        # 两者都不满足才过滤（同类型同领域的重复信号）
+        domain_overlap = bool(current_domains.intersection(set(e.domains)))
+        type_complement = bool(current_signal_type) and current_signal_type != e.signal_type
+        if not domain_overlap and not type_complement:
             continue
 
         # 时间窗口（写入时间差 ≤ L2_TIME_WINDOW_DAYS）
