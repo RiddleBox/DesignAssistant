@@ -607,3 +607,33 @@ model: "claude-opus-4-5-20251101"
 max_tokens: 8192
 ```
 
+
+---
+
+## 十一、Signal Store v1.1 实现记录（2026-03-31）
+
+| 日期 | 功能 | commit | 说明 |
+|------|------|--------|------|
+| 2026-03-31 | 跨域信号关联 | 4b8fe13 | L2 domain 硬过滤改为宽松策略（domain 重叠 OR type 互补） |
+| 2026-03-31 | 机会 ID 持久化 | 4b8fe13 | OpportunityStore，基于 source_id 集合重叠复用 opportunity_id |
+| 2026-03-31 | import 路径全面修复 | 5dc54da | 修复 pkl 反序列化/Diagnostics 路径歧义/schema 枚举三处问题 |
+| 2026-03-31 | iso_signal matched 标记 | 11c9526 | 组合成功的孤立信号写入 Store 并打 matched，黄金模板完整 |
+
+### v1.1 功能说明
+
+**跨域信号关联**：
+- 旧逻辑：L2 要求 domain 必须有交集，ai + gaming 等跨域组合直接被过滤
+- 新逻辑：domain 有交集 OR signal_type 不同（互补类型）均可通过，两个条件都不满足才过滤
+- 设计文档：signal_store_v1.1_设计方案.md §一
+
+**机会 ID 持久化**：
+- 识别方式：基于 related_signals 的 source_id 集合重叠（选项 B，2026-03-31 拍板）
+- 存储：opportunity_store.pkl，与 signal_store.pkl 同目录
+- 复用逻辑：source_id 有 ≥1 个重叠 → 复用历史 ID，追加 follow_up_signals
+- 设计文档：signal_store_v1.1_设计方案.md §二
+
+### 待完成（API 稳定后）
+
+- [ ] 跨批次匹配验证：Step B L1→L2→L4 真实触发（需 API 稳定）
+- [ ] negative_validator 角色（Signal Store 积累 ~20 条后）
+- [ ] effective_intensity 衰减 dashboard 展示
