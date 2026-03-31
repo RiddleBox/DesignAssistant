@@ -658,19 +658,34 @@ class JudgmentEngine:
             # 保留历史记录，供后续跨批次 Step B 检索时感知状态
             if result.opportunities:
                 contributed_entries = []
-                for s in group:
-                    ann = s.get("_role_annotation", {}) if isinstance(s, dict) else {}
-                    entry = build_signal_entry(
-                        signal=s if isinstance(s, dict) else self._signal_entry_to_dict(s),
-                        roles=ann.get("roles", ["catalyst"]),
-                        needs=ann.get("needs", []),
-                        domains=ann.get("domains", ["gaming"]),
-                        waiting_for_text=ann.get("waiting_for_text", ""),
-                        batch_date=today,
-                    )
-                    entry.status = "contributed"
-                    entry.matched_opportunity_id = result.opportunities[0].opportunity_id
-                    contributed_entries.append(entry)
+                # 按机会精确绑定：每条信号绑到它实际参与的 opp
+                # 方法：用 opp.related_signals 里的 source_ref 反查 group 里的信号
+                # fallback：若 related_signals 为空或无法对应，绑到第一个 opp（旧行为）
+                for opp in result.opportunities:
+                    # 提取该机会实际关联的 source_ref 集合
+                    related_source_refs = set()
+                    for rs in (opp.related_signals or []):
+                        ref = rs.get("source_ref") or rs.get("source_id", "")
+                        if ref:
+                            related_source_refs.add(ref)
+
+                    for s in group:
+                        s_source = s.get("source_id", "") if isinstance(s, dict) else ""
+                        # 若该机会有 related_signals 且信号来源不在其中，跳过（由其他 opp 绑定）
+                        if related_source_refs and s_source and s_source not in related_source_refs:
+                            continue
+                        ann = s.get("_role_annotation", {}) if isinstance(s, dict) else {}
+                        entry = build_signal_entry(
+                            signal=s if isinstance(s, dict) else self._signal_entry_to_dict(s),
+                            roles=ann.get("roles", ["catalyst"]),
+                            needs=ann.get("needs", []),
+                            domains=ann.get("domains", ["gaming"]),
+                            waiting_for_text=ann.get("waiting_for_text", ""),
+                            batch_date=today,
+                        )
+                        entry.status = "contributed"
+                        entry.matched_opportunity_id = opp.opportunity_id
+                        contributed_entries.append(entry)
                 if contributed_entries:
                     signal_store.add_batch(contributed_entries)
                     print(f"[Signal Store] 写入 {len(contributed_entries)} 条已贡献信号（contributed）")
@@ -704,20 +719,26 @@ class JudgmentEngine:
 
                     # 标记历史信号状态
                     for opp in new_opps:
-                        # iso_signal 本身也写入 Signal Store 并标记 matched
-                        # 使得：统计准确 + 黄金模板 source_signal_entries 完整
-                        ann = iso_signal.get("_role_annotation", {})
-                        iso_entry = build_signal_entry(
-                            signal=iso_signal,
-                            roles=ann.get("roles", ["catalyst"]),
-                            needs=ann.get("needs", []),
-                            domains=ann.get("domains", ["gaming"]),
-                            waiting_for_text=ann.get("waiting_for_text", ""),
-                            batch_date=today,
-                        )
-                        iso_entry.status = "matched"
-                        iso_entry.matched_opportunity_id = opp.opportunity_id
-                        signal_store.add(iso_entry)
+                        # iso_signal 写入 Signal Store 并标记 matched
+                        # 若该信号已在本批 Step C 中以 contributed 写入，则跳过（不覆盖贡献记录）
+                        iso_sig_id = f"sig_{iso_signal.get('signal_id') or iso_signal.get('id') or ''}_{iso_signal.get('signal_type','')}"
+                        existing = signal_store.get(iso_sig_id)
+                        if existing and existing.status == "contributed":
+                            # 已有贡献记录，不重复写 matched，避免状态污染
+                            iso_entry = existing
+                        else:
+                            ann = iso_signal.get("_role_annotation", {})
+                            iso_entry = build_signal_entry(
+                                signal=iso_signal,
+                                roles=ann.get("roles", ["catalyst"]),
+                                needs=ann.get("needs", []),
+                                domains=ann.get("domains", ["gaming"]),
+                                waiting_for_text=ann.get("waiting_for_text", ""),
+                                batch_date=today,
+                            )
+                            iso_entry.status = "matched"
+                            iso_entry.matched_opportunity_id = opp.opportunity_id
+                            signal_store.add(iso_entry)
 
                         # source_signal_map 包含 iso_entry + 历史伙伴，黄金模板完整
                         source_signal_map[opp.opportunity_id] = [iso_entry] + list(candidate_group)
