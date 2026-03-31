@@ -330,17 +330,26 @@ def run_step2_judgment(all_signals, sample_count, rag_retriever=None, api_key=No
     # 回退方法：将 try 块整体注释掉，改为 result = engine.judge(req)
     # 文档参考：phase2_plan/phase2.2_signal_store_设计方案_v2.md §3.3
     try:
-        import importlib.util as _ilu, os as _os
-        _ss_path = _os.path.join(_os.path.dirname(__file__), "phase2.2_implementation", "signal_store.py")
-        _ss_spec = _ilu.spec_from_file_location("signal_store", _ss_path)
-        _ss_mod = _ilu.module_from_spec(_ss_spec)
-        _ss_spec.loader.exec_module(_ss_mod)
-        _signal_store = _ss_mod.SignalStore()
+        import sys as _sys, os as _os
+        _impl_dir = _os.path.join(_os.path.dirname(__file__), "phase2.2_implementation")
+        if _impl_dir not in _sys.path:
+            _sys.path.insert(0, _impl_dir)
+        from signal_store import SignalStore as _SignalStore
+        _signal_store = _SignalStore()
         result = engine.judge_with_signal_store(req, signal_store=_signal_store)
     except Exception as _e:
         print(f"  [warn] judge_with_signal_store 失败，退化为 judge(): {_e}")
         result = engine.judge(req)
     elapsed = int((time.time() - t0) * 1000)
+
+    # pending_signals：全为孤立信号，已写入 Signal Store，无机会产出
+    if not result.opportunities:
+        status = getattr(result, 'status', 'unknown')
+        sig_count = result.diagnostics.signal_count if result.diagnostics else len(all_signals)
+        print(f"  status:          {status}")
+        print(f"  signal_count:    {sig_count} 条信号已写入 Signal Store，等待后续批次补全")
+        print(f"  耗时:            {elapsed}ms")
+        return result
 
     opp = result.opportunities[0]
     print(f"  status:          {result.status}")

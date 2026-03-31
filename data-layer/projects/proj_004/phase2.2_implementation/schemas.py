@@ -267,7 +267,7 @@ class OpportunityJudgmentResult(BaseModel):
     )
 
     # 判断状态
-    status: Literal["success", "insufficient_evidence", "error"] = Field(
+    status: Literal["success", "insufficient_evidence", "error", "pending_signals"] = Field(
         ..., description="判断状态：success=正常输出；insufficient_evidence=信号不足；error=系统错误"
     )
 

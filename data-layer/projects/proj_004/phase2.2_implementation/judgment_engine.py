@@ -1069,7 +1069,6 @@ class JudgmentEngine:
         # ── 构建最终结果 ─────────────────────────────────────
         processing_time = int((_time.time() - start_time) * 1000)
         if all_opportunities:
-            from schemas import Diagnostics
             diagnostics = Diagnostics(
                 signal_count=len(enriched_signals),
                 opportunity_count=len(all_opportunities),
@@ -1083,7 +1082,6 @@ class JudgmentEngine:
             )
         else:
             # 当批次无机会产出（信号已写入 Signal Store 等待积累）
-            from schemas import Diagnostics
             diagnostics = Diagnostics(
                 signal_count=len(enriched_signals),
                 opportunity_count=0,
@@ -1124,7 +1122,6 @@ class JudgmentEngine:
 
     def _build_group_request(self, original_request, signals: list):
         """基于原始 request 和指定信号列表，构建子 request（复用 rag_retriever 等配置）"""
-        from schemas import OpportunityJudgmentRequest
         # 将 dict 格式信号包装回 DecodedIntelligence-like 对象
         # 直接传 enriched_signals 格式（_execute_judgment_pipeline_v2 已支持）
         new_req = OpportunityJudgmentRequest(
