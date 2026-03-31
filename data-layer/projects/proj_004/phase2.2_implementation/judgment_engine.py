@@ -909,19 +909,41 @@ class JudgmentEngine:
             OpportunityJudgmentResult（schema 与 judge() 完全一致）
         """
         import time as _time
+        import importlib.util as _ilu
+        import sys as _sys
         from datetime import date
 
         start_time = _time.time()
 
-        # 延迟导入，避免循环依赖
+        # 延迟导入：用 importlib 按绝对路径加载，解决从 run_batch_real.py
+        # 调用时 phase2.2_implementation 不在 sys.path 的问题
+        _impl_dir = os.path.dirname(os.path.abspath(__file__))
+
+        def _load_sibling(name: str):
+            """加载同目录下的兄弟模块，已加载则复用"""
+            cache_key = f"_phase22_{name}"
+            if cache_key in _sys.modules:
+                return _sys.modules[cache_key]
+            path = os.path.join(_impl_dir, f"{name}.py")
+            spec = _ilu.spec_from_file_location(cache_key, path)
+            mod = _ilu.module_from_spec(spec)
+            _sys.modules[cache_key] = mod   # 先注册，防止循环 import
+            spec.loader.exec_module(mod)
+            return mod
+
         try:
-            from signal_store import SignalStore, build_signal_entry
-            from step_a_cluster import run_step_a
-            from step_b_retrieval import run_step_b
-            from golden_pattern import maybe_write_golden_pattern
-        except ImportError as e:
-            # Signal Store 模块未安装时，退化为原有 judge()
-            print(f"[judge_with_signal_store] 模块导入失败，退化为 judge(): {e}")
+            _ss_mod  = _load_sibling("signal_store")
+            _sa_mod  = _load_sibling("step_a_cluster")
+            _sb_mod  = _load_sibling("step_b_retrieval")
+            _gp_mod  = _load_sibling("golden_pattern")
+            SignalStore        = _ss_mod.SignalStore
+            build_signal_entry = _ss_mod.build_signal_entry
+            run_step_a         = _sa_mod.run_step_a
+            run_step_b         = _sb_mod.run_step_b
+            maybe_write_golden_pattern = _gp_mod.maybe_write_golden_pattern
+        except Exception as e:
+            # 任意模块加载失败时，退化为原有 judge()
+            print(f"[judge_with_signal_store] 模块加载失败，退化为 judge(): {e}")
             return self.judge(request)
 
         # 初始化 Signal Store
@@ -1060,6 +1082,30 @@ class JudgmentEngine:
                 diagnostics=diagnostics,
             )
 
+    @staticmethod
+    def _dedup_signals_by_source(signals: list) -> list:
+        """
+        按 source_id 去重：同一来源只保留 intensity_score 最高的信号。
+
+        规则：同一信号在同一机会中只计为一条证据，防止同一来源的多篇报道
+        在 supporting_evidence 中被重复计数（证据虚胖）。
+        跨机会复用同一信号是允许的，去重只在单次 Step C 组合内生效。
+        """
+        seen: dict = {}
+        for s in signals:
+            sid = s.get("source_id") or s.get("_source_id", "")
+            if not sid:
+                # 无 source_id 的信号直接保留（无法判断是否重复）
+                seen[id(s)] = s
+                continue
+            if sid not in seen:
+                seen[sid] = s
+            else:
+                # 保留强度更高的那条
+                if s.get("intensity_score", 0) > seen[sid].get("intensity_score", 0):
+                    seen[sid] = s
+        return list(seen.values())
+
     def _build_group_request(self, original_request, signals: list):
         """基于原始 request 和指定信号列表，构建子 request（复用 rag_retriever 等配置）"""
         from schemas import OpportunityJudgmentRequest
@@ -1070,7 +1116,8 @@ class JudgmentEngine:
             context_packet=original_request.context_packet,
         )
         # 临时注入：用信号直接覆盖，让 pipeline 只看这组信号
-        new_req._override_signals = signals
+        # 写入前按 source_id 去重，防止同一来源在同一机会中被重复计数
+        new_req._override_signals = self._dedup_signals_by_source(signals)
         return new_req
 
     def _signal_entry_to_dict(self, entry) -> dict:

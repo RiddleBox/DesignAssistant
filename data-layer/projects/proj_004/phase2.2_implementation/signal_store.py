@@ -190,16 +190,20 @@ class SignalStore:
         self,
         role: str,
         exclude_ids: List[str] = None,
-        status: str = "pending",
     ) -> List[SignalEntry]:
         """
         L1 粗筛：找出 needs 中包含指定角色的信号。
         即"我需要一个 {role} 角色的信号来配对"。
+
+        同时返回 pending 和 matched 状态的信号：
+        - pending：尚未参与任何机会
+        - matched：已参与过某机会，但同一信号可跨机会复用
+        去重逻辑在 Step C 组合时按 source_id 处理，此处不过滤。
         """
         exclude = set(exclude_ids or [])
         results = []
         for entry in self._store.values():
-            if entry.status != status:
+            if entry.status not in ("pending", "matched"):
                 continue
             if entry.signal_id in exclude:
                 continue

@@ -574,6 +574,17 @@ def main():
         print(f"\n全部样本无信号，已移动 {moved_count} 个文件到 processed/")
         return
 
+    if not judgment_result.opportunities:
+        # pending_signals：信号存在但全为孤立信号，已写入 Signal Store 等待后续批次补全
+        status = getattr(judgment_result, 'status', 'unknown')
+        sig_count = judgment_result.diagnostics.signal_count if judgment_result.diagnostics else len(all_signals)
+        print(f"\n[本批次] 状态: {status}")
+        print(f"  {sig_count} 条信号已写入 Signal Store，等待后续批次补全组合条件")
+        print(f"  跳过 2.3 行动设计 / 2.5 复盘")
+        moved_count = move_to_processed(samples)
+        print(f"  样本已移动: {moved_count} 个 -> processed/")
+        return
+
     action_result = run_step3_action(judgment_result, api_key=api_key)
     retro_result = run_step4_retro(judgment_result, action_result, decode_results, per_sample_stats, rag_retriever=rag_retriever, t_start=t_total)
 
