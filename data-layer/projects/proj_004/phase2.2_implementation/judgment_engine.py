@@ -1014,7 +1014,23 @@ class JudgmentEngine:
 
                     # 标记历史信号状态
                     for opp in new_opps:
-                        source_signal_map[opp.opportunity_id] = candidate_group
+                        # iso_signal 本身也写入 Signal Store 并标记 matched
+                        # 使得：统计准确 + 黄金模板 source_signal_entries 完整
+                        ann = iso_signal.get("_role_annotation", {})
+                        iso_entry = build_signal_entry(
+                            signal=iso_signal,
+                            roles=ann.get("roles", ["catalyst"]),
+                            needs=ann.get("needs", []),
+                            domains=ann.get("domains", ["gaming"]),
+                            waiting_for_text=ann.get("waiting_for_text", ""),
+                            batch_date=today,
+                        )
+                        iso_entry.status = "matched"
+                        iso_entry.matched_opportunity_id = opp.opportunity_id
+                        signal_store.add(iso_entry)
+
+                        # source_signal_map 包含 iso_entry + 历史伙伴，黄金模板完整
+                        source_signal_map[opp.opportunity_id] = [iso_entry] + list(candidate_group)
                         for entry in candidate_group:
                             signal_store.update_status(
                                 entry.signal_id, "matched", opp.opportunity_id
