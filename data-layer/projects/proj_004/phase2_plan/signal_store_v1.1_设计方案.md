@@ -112,5 +112,13 @@ type_complement = current.signal_type != e.signal_type
 
 | 功能 | 状态 | commit |
 |------|------|--------|
-| 跨域信号关联（L2 宽松策略） | 待实现 | — |
-| 机会 ID 持久化（OpportunityStore） | 待实现 | — |
+| 跨域信号关联（L2 宽松策略） | ✅ 已实现 | `4b8fe13` |
+| 机会 ID 持久化（OpportunityStore） | ✅ 已实现 | `4b8fe13` |
+| Step B 跨批次匹配端到端验证 | ✅ 已验证 | `77debaf`（batch3）|
+| `_call_llm_and_parse` 误删修复 | ✅ 已修复 | `77debaf` |
+
+**batch3 验证结论（2026-03-31）**：
+- 孤立信号 `欧洲游戏困境资产收购基金首关` 进入 Step B，L1 命中 Nacon pending 信号（needs=timing_signal）
+- Nacon 信号状态从 `pending` → `matched`，matched_opportunity_id=`opp_4e645932ccbd`
+- LLM 判断正常产出，priority=`research`，action=`validate`
+- Signal Store：9 条记录，7 contributed + 2 matched
