@@ -19,21 +19,18 @@ default:
 #   custom    → 不附加任何额外 header，base_url 自行控制
 phases:
   "2.1":                    # 情报解码：追求稳定抽取，用中端模型省成本
-    provider: "anthropic"
-    model: "claude-sonnet-4-6"
-    # api_key: ""           # 不填 → 用 default
-    # base_url: ""          # 不填 → 用 default
+    provider: "openai"
+    model: "deepseek-chat"
+    base_url: "https://api.deepseek.com/v1"
+    api_key: "sk-d94b9e1ccc9b4d558317bf01668305c8"
+    max_tokens: 4096
 
   "2.2":                    # 机会判断：需要更强推理，可换高端模型
-    # 【临时降级 2026-03-29】api123.icu 中转代理高负载下 opus 8192tokens 容易超时/空响应
-    # 正式版切换稳定 API 后改回 claude-opus-4-5-20251101 + max_tokens: 8192
-    provider: "anthropic"
-    model: "claude-sonnet-4-6"
+    provider: "openai"
+    model: "deepseek-chat"
+    base_url: "https://api.deepseek.com/v1"
+    api_key: "sk-d94b9e1ccc9b4d558317bf01668305c8"
     max_tokens: 4096
-    base_url: "https://api123.icu/v1"
-    # api_key: ""           # 可单独配不同 key
-    # model: "claude-opus-4-5-20251101"  # 正式版模型，待稳定 API 后启用
-    # max_tokens: 8192
 
   "2.3":                    # 行动设计：三轮辩论输出较长，需要更大 token 空间
     provider: "anthropic"

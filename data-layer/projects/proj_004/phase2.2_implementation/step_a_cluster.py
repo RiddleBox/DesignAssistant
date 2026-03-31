@@ -62,17 +62,18 @@ class StepAResult:
 def run_step_a(
     enriched_signals: List[dict],
     llm_client=None,
-    model: str = "claude-haiku-4-5",
-    api_key: str = None,
-    base_url: str = None,
+    model: str = "deepseek-chat",
 ) -> StepAResult:
     """
     执行 Step A：批内聚类 + 角色标注。
 
+    LLM 客户端必须由调用方（judgment_engine）统一创建并传入，
+    不在此处自行构造，确保所有 LLM 调用追溯到 llm_config.yaml 的统一配置。
+
     Args:
         enriched_signals: _extract_enriched_signals 输出的信号列表
-        llm_client: 可选，传入复用 JudgmentEngine 的 LLM 客户端
-        model / api_key / base_url: LLM 参数，llm_client 不传时使用
+        llm_client: 由 JudgmentEngine 从 llm_config.yaml 创建的 LLMClient 实例
+        model: 模型名称（由调用方从配置传入）
 
     Returns:
         StepAResult
@@ -81,12 +82,11 @@ def run_step_a(
         return StepAResult([], [], {})
 
     # 尝试 LLM 标注
-    try:
-        client = llm_client or _load_llm_client(api_key, base_url)
-        if client:
-            return _llm_cluster_and_annotate(enriched_signals, client, model)
-    except Exception as e:
-        print(f"[Step A] LLM 调用失败，使用规则 fallback: {e}")
+    if llm_client:
+        try:
+            return _llm_cluster_and_annotate(enriched_signals, llm_client, model)
+        except Exception as e:
+            print(f"[Step A] LLM 调用失败，使用规则 fallback: {e}")
 
     # Fallback：规则推断
     return _rule_fallback(enriched_signals)
@@ -299,15 +299,5 @@ def _get_signal_id(signal: dict) -> str:
     return signal.get("signal_id") or signal.get("id") or str(id(signal))
 
 
-def _load_llm_client(api_key: str, base_url: str):
-    try:
-        proj_root = os.path.normpath(os.path.join(os.path.dirname(__file__), ".."))
-        path = os.path.join(proj_root, "llm_client.py")
-        if not os.path.exists(path):
-            return None
-        spec = importlib.util.spec_from_file_location("llm_client", path)
-        mod = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(mod)
-        return mod.LLMClient(api_key=api_key or "", base_url=base_url or "")
-    except Exception:
-        return None
+# _load_llm_client 已移除：LLM 客户端统一由 judgment_engine 从 llm_config.yaml 创建后传入
+# step_a_cluster 不自行构造任何 LLM 客户端，确保所有调用追溯到统一配置

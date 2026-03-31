@@ -304,8 +304,9 @@ def build_rag_retriever():
 def run_step2_judgment(all_signals, sample_count, rag_retriever=None, api_key=None):
     print(f"\n{'='*60}")
     print("Step 2: 2.2 机会判断（聚合信号池）")
-    if api_key:
-        print("  [2.2] LLM 判断模式已启用")
+    # 2.2 的 api_key / provider / base_url 从 llm_config.yaml 读取，不依赖传入的 api_key
+    # 传入的 api_key 是 Anthropic key（给 2.1 用的），2.2 可能配置了不同 provider
+    print("  [2.2] LLM 判断模式已启用（配置见 llm_config.yaml phase 2.2）")
     if rag_retriever is not None:
         print("  [RAG] 检索器已就绪，将在形成判断主题后按需查询")
     print(f"{'='*60}")
@@ -323,7 +324,8 @@ def run_step2_judgment(all_signals, sample_count, rag_retriever=None, api_key=No
         "warnings": [],
     }
 
-    engine = JudgmentEngine(rag_retriever=rag_retriever, api_key=api_key)
+    # api_key=None → JudgmentEngine 从 llm_config.yaml 读取 2.2 的 key/provider/base_url
+    engine = JudgmentEngine(rag_retriever=rag_retriever, api_key=None)
     req = OpportunityJudgmentRequest(decoded_intelligences=[merged_intelligence])
     t0 = time.time()
     # Signal Store 编排入口（judge_with_signal_store 替代 judge）

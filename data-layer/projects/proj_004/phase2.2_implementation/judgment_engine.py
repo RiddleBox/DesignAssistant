@@ -86,17 +86,34 @@ class JudgmentEngine:
         """
         self.llm_client = llm_client
         self.rag_retriever = rag_retriever
-        # 从统一配置加载（优先使用传入参数）
-        # 注意：api_key=None → 从配置读取；api_key='' → 强制规则引擎模式（不读配置）
-        cfg = self._load_llm_config("2.2")
-        self.api_key   = cfg.get("api_key", "") if api_key is None else api_key
-        self.model     = model or cfg.get("model", "claude-sonnet-4-6")
-        self.base_url  = cfg.get("base_url", "https://api.anthropic.com")
-        self.max_tokens = cfg.get("max_tokens", 4096)
+
+        # 所有 LLM 配置统一从 llm_config.yaml 读取，不在代码里硬编码任何默认值
+        # api_key='' 是特殊值，强制规则引擎模式（不读配置）
+        if api_key == "":
+            # 强制规则引擎
+            self._llm = None
+            self.api_key = ""
+            self.model = model or "claude-sonnet-4-6"
+            self.base_url = ""
+            self.provider = "anthropic"
+            self.max_tokens = 4096
+        else:
+            # 正常路径：从 llm_config.yaml 读取 phase 2.2 的完整配置
+            self._llm = llm_client or self._load_llm_client()
+            if self._llm:
+                self.api_key   = self._llm.api_key
+                self.base_url  = self._llm.base_url
+                self.provider  = self._llm.provider
+            else:
+                self.api_key, self.base_url, self.provider = "", "", "anthropic"
+            # model/max_tokens 仍从 cfg 读（_llm 里不存这两个字段）
+            cfg = self._load_llm_config("2.2")
+            self.model     = model or cfg.get("model", "claude-sonnet-4-6")
+            self.max_tokens = cfg.get("max_tokens", 4096)
+
         self.judgment_version = "v2.0-llm" if self.api_key else "v1.0-rules"
         self.boundary_validator = BoundaryValidator()
         self.evidence_validator = EvidenceValidator()
-        self._llm = self._load_llm_client()
 
     def _load_llm_config(self, phase: str) -> dict:
         """加载统一 LLM 配置（llm_config.py 在 proj_004/ 根目录）"""
@@ -113,16 +130,16 @@ class JudgmentEngine:
             return {}
 
     def _load_llm_client(self):
-        """加载统一 LLM 客户端（llm_client.py 在 proj_004/ 根目录）"""
+        """通过 llm_config.make_llm_client 创建 LLM 客户端，确保统一走 llm_config.yaml 配置"""
         try:
             proj_root = os.path.normpath(os.path.join(os.path.dirname(__file__), ".."))
-            path = os.path.join(proj_root, "llm_client.py")
+            path = os.path.join(proj_root, "llm_config.py")
             if not os.path.exists(path):
                 return None
-            spec = importlib.util.spec_from_file_location("llm_client", path)
+            spec = importlib.util.spec_from_file_location("llm_config", path)
             mod = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(mod)
-            return mod.LLMClient(api_key=self.api_key, base_url=self.base_url)
+            return mod.make_llm_client("2.2")
         except Exception:
             return None
 
@@ -948,8 +965,18 @@ class JudgmentEngine:
             return self.judge(request)
 
         # 初始化 Signal Store
+        # 优先用外部传入的 signal_store（由 run_batch_real.py 用 sys.path 方式创建，
+        # 确保 pkl 序列化的类名为 signal_store.SignalEntry，而非动态模块名）
         if signal_store is None:
             signal_store = SignalStore()
+
+        # build_signal_entry 从传入的 signal_store 实例所在模块取，保持类名一致
+        import inspect as _inspect
+        _ss_real_mod = _inspect.getmodule(type(signal_store))
+        if _ss_real_mod and hasattr(_ss_real_mod, "build_signal_entry"):
+            build_signal_entry = _ss_real_mod.build_signal_entry
+        if _ss_real_mod and hasattr(_ss_real_mod, "OpportunityStore"):
+            OpportunityStore = _ss_real_mod.OpportunityStore
 
         # 归档过期信号（每次调用时顺带执行，成本极低）
         archived = signal_store.archive_expired()
@@ -971,8 +998,6 @@ class JudgmentEngine:
             enriched_signals=enriched_signals,
             llm_client=self._llm,
             model=self.model,
-            api_key=self.api_key,
-            base_url=self.base_url,
         )
 
         if step_a_result.fallback_used:

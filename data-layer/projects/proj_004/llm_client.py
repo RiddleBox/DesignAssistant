@@ -44,6 +44,10 @@ class LLMClient:
         # openai / gemini / custom：仅 Bearer，不加额外 header
         return base
 
+    def _is_openai_compat(self) -> bool:
+        """openai / gemini / deepseek 等 OpenAI 兼容格式"""
+        return self.provider in ("openai", "gemini", "custom")
+
     def call(
         self,
         prompt: str,
@@ -56,7 +60,8 @@ class LLMClient:
         """
         调用 LLM，返回文本响应。
 
-        使用流式请求（stream=True）规避中转代理对非流式响应体的大小截断。
+        - anthropic provider：POST /messages，system 在顶层，SSE 用 content_block_delta
+        - openai/gemini/custom provider：POST /chat/completions，system 在 messages[0]，SSE 用 choices[0].delta.content
 
         Args:
             prompt:      用户消息内容
@@ -69,34 +74,52 @@ class LLMClient:
         Returns:
             str: 模型输出文本
         """
-        url = self.base_url + "/messages"
         headers = self._build_headers()
-        messages = [{"role": "user", "content": prompt}]
-        payload = {
-            "model":       model,
-            "max_tokens":  max_tokens,
-            "temperature": temperature,
-            "messages":    messages,
-            "stream":      True,
-        }
-        if system:
-            payload["system"] = system
+
+        if self._is_openai_compat():
+            # ── OpenAI 兼容格式（DeepSeek / Gemini / 自定义中转）──────────
+            url = self.base_url + "/chat/completions"
+            messages = []
+            if system:
+                messages.append({"role": "system", "content": system})
+            messages.append({"role": "user", "content": prompt})
+            payload = {
+                "model":       model,
+                "max_tokens":  max_tokens,
+                "temperature": temperature,
+                "messages":    messages,
+                "stream":      True,
+            }
+        else:
+            # ── Anthropic 原生 / 中转代理格式 ────────────────────────────
+            url = self.base_url + "/messages"
+            messages = [{"role": "user", "content": prompt}]
+            payload = {
+                "model":       model,
+                "max_tokens":  max_tokens,
+                "temperature": temperature,
+                "messages":    messages,
+                "stream":      True,
+            }
+            if system:
+                payload["system"] = system
 
         for attempt in range(max_retries):
             try:
                 resp = requests.post(url, headers=headers, json=payload, timeout=(30, 180), stream=True)
                 resp.raise_for_status()
-                return self._collect_stream(resp)
+                if self._is_openai_compat():
+                    return self._collect_stream_openai(resp)
+                else:
+                    return self._collect_stream_anthropic(resp)
             except Exception as e:
                 if attempt < max_retries - 1:
                     time.sleep(2 ** attempt)
                 else:
                     raise e
 
-    def _collect_stream(self, resp) -> str:
-        """
-        消费 SSE 流，拼接所有 content_block_delta 的 text，返回完整文本。
-        """
+    def _collect_stream_anthropic(self, resp) -> str:
+        """消费 Anthropic SSE 流：content_block_delta / text_delta"""
         text_parts = []
         for raw_line in resp.iter_lines():
             if not raw_line:
@@ -119,3 +142,31 @@ class LLMClient:
             elif etype == "message_stop":
                 break
         return "".join(text_parts)
+
+    def _collect_stream_openai(self, resp) -> str:
+        """消费 OpenAI 兼容 SSE 流：choices[0].delta.content"""
+        text_parts = []
+        for raw_line in resp.iter_lines():
+            if not raw_line:
+                continue
+            line = raw_line.decode("utf-8") if isinstance(raw_line, bytes) else raw_line
+            if not line.startswith("data:"):
+                continue
+            data_str = line[len("data:"):].strip()
+            if data_str == "[DONE]":
+                break
+            try:
+                event = json.loads(data_str)
+            except Exception:
+                continue
+            choices = event.get("choices", [])
+            if choices:
+                delta = choices[0].get("delta", {})
+                content = delta.get("content")
+                if content:
+                    text_parts.append(content)
+        return "".join(text_parts)
+
+    # 向后兼容别名
+    def _collect_stream(self, resp) -> str:
+        return self._collect_stream_anthropic(resp)
