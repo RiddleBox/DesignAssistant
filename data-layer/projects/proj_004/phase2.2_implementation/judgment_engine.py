@@ -670,9 +670,21 @@ class JudgmentEngine:
                             related_source_refs.add(ref)
 
                     for s in group:
-                        s_source = s.get("source_id", "") if isinstance(s, dict) else ""
-                        # 若该机会有 related_signals 且信号来源不在其中，跳过（由其他 opp 绑定）
-                        if related_source_refs and s_source and s_source not in related_source_refs:
+                        # enriched_signal 里来源存在 _source_id，source_id 可能为空
+                        s_source = (
+                            s.get("source_id") or s.get("_source_id", "")
+                        ) if isinstance(s, dict) else ""
+                        # opp.related_signals 里 source_ref 格式为 "incoming_031:sig_001"
+                        # s_source 格式为 "incoming_031"，做前缀匹配
+                        def _matches(s_src, ref_set):
+                            if not s_src or not ref_set:
+                                return True  # 无法判断时放行
+                            for ref in ref_set:
+                                if ref == s_src or ref.startswith(s_src + ":"):
+                                    return True
+                            return False
+                        # 若该机会有 related_signals 且信号来源不匹配，跳过（由其他 opp 绑定）
+                        if related_source_refs and not _matches(s_source, related_source_refs):
                             continue
                         ann = s.get("_role_annotation", {}) if isinstance(s, dict) else {}
                         entry = build_signal_entry(

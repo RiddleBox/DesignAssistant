@@ -315,7 +315,11 @@ def build_signal_entry(
 
     return SignalEntry(
         signal_id=signal_id,
-        source_id=signal.get("source_id", ""),
+        source_id=(
+            signal.get("source_id")
+            or signal.get("_source_id")
+            or signal.get("source_ref", "").split(":")[0]
+        ),
         signal_label=signal.get("signal_label", signal.get("label", "")),
         signal_type=signal_type_str,
         description=signal.get("description", ""),
