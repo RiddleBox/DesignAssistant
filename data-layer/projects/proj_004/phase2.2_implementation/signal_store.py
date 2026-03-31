@@ -301,13 +301,23 @@ def build_signal_entry(
     """
     # 生成唯一 signal_id（如原始信号无 ID）
     raw_id = signal.get("signal_id") or signal.get("id") or str(uuid.uuid4())[:8]
-    signal_id = f"sig_{raw_id}_{signal.get('signal_type', 'unknown')}"
+
+    # signal_type 可能是 2.1 解码器产出的枚举值（如 SignalType.REGULATORY），
+    # 转为纯字符串（取 .value 或 str() 后截取最后一段），确保 pkl 可移植
+    _raw_type = signal.get("signal_type", "market")
+    if hasattr(_raw_type, "value"):
+        signal_type_str = str(_raw_type.value)
+    else:
+        # 枚举 repr 形如 "SignalType.regulatory"，取最后一段
+        signal_type_str = str(_raw_type).split(".")[-1].lower()
+
+    signal_id = f"sig_{raw_id}_{signal_type_str}"
 
     return SignalEntry(
         signal_id=signal_id,
         source_id=signal.get("source_id", ""),
         signal_label=signal.get("signal_label", signal.get("label", "")),
-        signal_type=signal.get("signal_type", "market"),
+        signal_type=signal_type_str,
         description=signal.get("description", ""),
         evidence_text=signal.get("evidence_text", ""),
         intensity_score=int(signal.get("intensity_score", signal.get("intensity", 5))),

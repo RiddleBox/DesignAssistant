@@ -74,23 +74,23 @@ def _extract_context_data(context_packet) -> dict:
 class JudgmentEngine:
     """机会判断引擎"""
 
-    def __init__(self, llm_client=None, rag_retriever=None, api_key: str = None, model: str = None):
+    def __init__(self, rag_retriever=None, api_key: str = None, model: str = None):
         """
         初始化判断引擎
 
         Args:
-            llm_client: 保留兼容，已不使用
             rag_retriever: 可调用对象 (query: str) -> Optional[ContextPacket]，由调用方注入
-            api_key: Anthropic API key，传入后启用 LLM 判断模式；None 时从 llm_config 读取
-            model: 使用的模型；None 时从 llm_config 读取
+            api_key: 特殊控制参数：
+                       None → 从 llm_config.yaml 读取 phase 2.2 配置（正常模式）
+                       ""   → 强制规则引擎模式，不发起任何 LLM 调用
+            model:   覆盖 llm_config.yaml 的模型名；None 时以配置为准
         """
-        self.llm_client = llm_client
         self.rag_retriever = rag_retriever
 
         # 所有 LLM 配置统一从 llm_config.yaml 读取，不在代码里硬编码任何默认值
         # api_key='' 是特殊值，强制规则引擎模式（不读配置）
         if api_key == "":
-            # 强制规则引擎
+            # 强制规则引擎模式
             self._llm = None
             self.api_key = ""
             self.model = model or "claude-sonnet-4-6"
@@ -98,15 +98,15 @@ class JudgmentEngine:
             self.provider = "anthropic"
             self.max_tokens = 4096
         else:
-            # 正常路径：从 llm_config.yaml 读取 phase 2.2 的完整配置
-            self._llm = llm_client or self._load_llm_client()
+            # 正常模式：所有 LLM 配置统一从 llm_config.yaml 读取
+            self._llm = self._build_llm_client()
             if self._llm:
                 self.api_key   = self._llm.api_key
                 self.base_url  = self._llm.base_url
                 self.provider  = self._llm.provider
             else:
                 self.api_key, self.base_url, self.provider = "", "", "anthropic"
-            # model/max_tokens 仍从 cfg 读（_llm 里不存这两个字段）
+            # model / max_tokens 从配置读（LLMClient 不存这两个字段）
             cfg = self._load_llm_config("2.2")
             self.model     = model or cfg.get("model", "claude-sonnet-4-6")
             self.max_tokens = cfg.get("max_tokens", 4096)
@@ -116,27 +116,27 @@ class JudgmentEngine:
         self.evidence_validator = EvidenceValidator()
 
     def _load_llm_config(self, phase: str) -> dict:
-        """加载统一 LLM 配置（llm_config.py 在 proj_004/ 根目录）"""
+        """从 llm_config.py 加载指定阶段的 LLM 配置字典"""
         try:
             proj_root = os.path.normpath(os.path.join(os.path.dirname(__file__), ".."))
-            path = os.path.join(proj_root, "llm_config.py")
-            if not os.path.exists(path):
-                return {}
-            spec = importlib.util.spec_from_file_location("llm_config", path)
+            spec = importlib.util.spec_from_file_location(
+                "llm_config", os.path.join(proj_root, "llm_config.py"))
             mod = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(mod)
             return mod.get_llm_config(phase)
         except Exception:
             return {}
 
-    def _load_llm_client(self):
-        """通过 llm_config.make_llm_client 创建 LLM 客户端，确保统一走 llm_config.yaml 配置"""
+    def _build_llm_client(self):
+        """通过 llm_config.make_llm_client("2.2") 创建 LLM 客户端。
+
+        所有连接参数（provider/api_key/base_url）均来自 llm_config.yaml，
+        此处不硬编码任何默认值，也不重复解析配置文件。
+        """
         try:
             proj_root = os.path.normpath(os.path.join(os.path.dirname(__file__), ".."))
-            path = os.path.join(proj_root, "llm_config.py")
-            if not os.path.exists(path):
-                return None
-            spec = importlib.util.spec_from_file_location("llm_config", path)
+            spec = importlib.util.spec_from_file_location(
+                "llm_config", os.path.join(proj_root, "llm_config.py"))
             mod = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(mod)
             return mod.make_llm_client("2.2")
@@ -907,76 +907,56 @@ class JudgmentEngine:
         rag_store_add_fn=None,
     ) -> "OpportunityJudgmentResult":
         """
-        带 Signal Store 的机会判断入口。
+        带 Signal Store 的机会判断入口（Signal Store 编排主函数）。
 
         流程：
-          Step A → 批内聚类 + 角色标注
-          Step B → 历史信号检索（分层漏斗）
-          Step C → 完整机会判断（复用现有 judge()）
+          Step A → 批内聚类 + 角色标注（LLM 标注 roles/needs/domains）
+          Step B → 孤立信号历史检索（分层漏斗匹配历史伙伴）
+          Step C → 完整机会判断（复用现有 judge()，隔离信号组）
 
-        现有 judge() 方法完全保留，本方法是独立的新入口。
-        2.1→2.2 输入接口、2.2→2.3 输出接口均不变。
+        调用约束：
+          - signal_store 必须由调用方（run_batch_real.py）用 sys.path.insert 方式
+            创建后传入，确保 pickle 序列化的类名为 signal_store.SignalEntry，
+            而非 importlib 动态模块名（会导致反序列化失败）
+          - 兄弟模块（step_a/step_b/golden_pattern）通过标准 import 加载，
+            依赖调用方在启动时已将 phase2.2_implementation 加入 sys.path
+
+        与 judge() 的关系：
+          - judge() 完全保留，本方法是独立的新入口
+          - 2.1→2.2 输入接口、2.2→2.3 输出接口 schema 完全兼容
 
         Args:
-            request: 标准 OpportunityJudgmentRequest
-            signal_store: SignalStore 实例；None 时自动初始化
-            rag_store_add_fn: 可选，黄金模板写入函数；None 时自动尝试加载
+            request:         标准 OpportunityJudgmentRequest
+            signal_store:    SignalStore 实例，必须由调用方传入
+            rag_store_add_fn: 可选，黄金模板写入函数（None 时由 golden_pattern 模块自动处理）
 
         Returns:
             OpportunityJudgmentResult（schema 与 judge() 完全一致）
         """
         import time as _time
-        import importlib.util as _ilu
-        import sys as _sys
         from datetime import date
 
         start_time = _time.time()
 
-        # 延迟导入：用 importlib 按绝对路径加载，解决从 run_batch_real.py
-        # 调用时 phase2.2_implementation 不在 sys.path 的问题
-        _impl_dir = os.path.dirname(os.path.abspath(__file__))
-
-        def _load_sibling(name: str):
-            """加载同目录下的兄弟模块，已加载则复用"""
-            cache_key = f"_phase22_{name}"
-            if cache_key in _sys.modules:
-                return _sys.modules[cache_key]
-            path = os.path.join(_impl_dir, f"{name}.py")
-            spec = _ilu.spec_from_file_location(cache_key, path)
-            mod = _ilu.module_from_spec(spec)
-            _sys.modules[cache_key] = mod   # 先注册，防止循环 import
-            spec.loader.exec_module(mod)
-            return mod
-
-        try:
-            _ss_mod  = _load_sibling("signal_store")
-            _sa_mod  = _load_sibling("step_a_cluster")
-            _sb_mod  = _load_sibling("step_b_retrieval")
-            _gp_mod  = _load_sibling("golden_pattern")
-            SignalStore        = _ss_mod.SignalStore
-            OpportunityStore   = _ss_mod.OpportunityStore
-            build_signal_entry = _ss_mod.build_signal_entry
-            run_step_a         = _sa_mod.run_step_a
-            run_step_b         = _sb_mod.run_step_b
-            maybe_write_golden_pattern = _gp_mod.maybe_write_golden_pattern
-        except Exception as e:
-            # 任意模块加载失败时，退化为原有 judge()
-            print(f"[judge_with_signal_store] 模块加载失败，退化为 judge(): {e}")
-            return self.judge(request)
-
-        # 初始化 Signal Store
-        # 优先用外部传入的 signal_store（由 run_batch_real.py 用 sys.path 方式创建，
-        # 确保 pkl 序列化的类名为 signal_store.SignalEntry，而非动态模块名）
+        # signal_store 必须由外部传入，不在内部创建
+        # 原因：内部用 importlib 动态加载的类与外部 sys.path import 的类不同，
+        # pickle 序列化/反序列化时会因模块名不匹配而失败
         if signal_store is None:
-            signal_store = SignalStore()
+            raise ValueError(
+                "signal_store 必须由调用方通过 sys.path.insert 方式创建后传入，"
+                "请勿在 judge_with_signal_store 内部自动创建"
+            )
 
-        # build_signal_entry 从传入的 signal_store 实例所在模块取，保持类名一致
-        import inspect as _inspect
-        _ss_real_mod = _inspect.getmodule(type(signal_store))
-        if _ss_real_mod and hasattr(_ss_real_mod, "build_signal_entry"):
-            build_signal_entry = _ss_real_mod.build_signal_entry
-        if _ss_real_mod and hasattr(_ss_real_mod, "OpportunityStore"):
-            OpportunityStore = _ss_real_mod.OpportunityStore
+        # 兄弟模块通过标准 import 加载（依赖调用方已将 phase2.2_implementation 加入 sys.path）
+        # 与外部创建的 signal_store 使用同一模块，类名一致，pickle 安全
+        try:
+            from signal_store import build_signal_entry, OpportunityStore
+            from step_a_cluster import run_step_a
+            from step_b_retrieval import run_step_b
+            from golden_pattern import maybe_write_golden_pattern
+        except ImportError as e:
+            print(f"[judge_with_signal_store] 模块导入失败，退化为 judge(): {e}")
+            return self.judge(request)
 
         # 归档过期信号（每次调用时顺带执行，成本极低）
         archived = signal_store.archive_expired()
@@ -1015,6 +995,27 @@ class JudgmentEngine:
             # 记录信号来源（用于黄金模板）
             for opp in (result.opportunities or []):
                 source_signal_map[opp.opportunity_id] = group
+
+            # 成功产出机会的信号以 contributed 状态写入 Signal Store
+            # 保留历史记录，供后续跨批次 Step B 检索时感知状态
+            if result.opportunities:
+                contributed_entries = []
+                for s in group:
+                    ann = s.get("_role_annotation", {}) if isinstance(s, dict) else {}
+                    entry = build_signal_entry(
+                        signal=s if isinstance(s, dict) else self._signal_entry_to_dict(s),
+                        roles=ann.get("roles", ["catalyst"]),
+                        needs=ann.get("needs", []),
+                        domains=ann.get("domains", ["gaming"]),
+                        waiting_for_text=ann.get("waiting_for_text", ""),
+                        batch_date=today,
+                    )
+                    entry.status = "contributed"
+                    entry.matched_opportunity_id = result.opportunities[0].opportunity_id
+                    contributed_entries.append(entry)
+                if contributed_entries:
+                    signal_store.add_batch(contributed_entries)
+                    print(f"[Signal Store] 写入 {len(contributed_entries)} 条已贡献信号（contributed）")
 
         # ── Step B + Step C（孤立信号 → 历史检索）────────────
         signals_to_store = []   # 最终需要写入 Signal Store 的孤立信号
