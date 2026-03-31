@@ -7,6 +7,7 @@ Phase 2.2 机会判断模块 - 核心判断引擎
 import importlib.util
 import json
 import os
+import re
 import time
 import uuid
 from typing import Dict, Any, List, Tuple, Optional
@@ -142,6 +143,46 @@ class JudgmentEngine:
             return mod.make_llm_client("2.2")
         except Exception:
             return None
+
+    def _call_llm_and_parse(self, prompt: str) -> Dict[str, Any]:
+        """
+        调用统一 LLM 客户端并解析 JSON 响应。
+
+        原 _call_llm 方法在删除死代码时被误删，此处恢复。
+        供 _llm_judge_v2 调用。
+        """
+        if not self._llm:
+            raise RuntimeError("LLM client is not initialized")
+
+        response = self._llm.call(
+            prompt=prompt,
+            model=self.model,
+            max_tokens=self.max_tokens,
+        )
+
+        if not response or not response.strip():
+            raise ValueError("LLM returned empty response")
+
+        text = response.strip()
+
+        # 提取 JSON：兼容三种形式
+        #   1. 直接输出 {}
+        #   2. ```json ... ``` 包裹
+        #   3. 前缀说明文字 + ```json ... ```（中转 system prompt 行为）
+        if "```" in text:
+            m = re.search(r'```(?:json)?\s*([\s\S]*?)```', text)
+            if m:
+                text = m.group(1).strip()
+        # 兜底：取第一个 { 到最后一个 }
+        start = text.find("{")
+        end   = text.rfind("}")
+        if start != -1 and end != -1 and end > start:
+            text = text[start:end+1]
+
+        try:
+            return json.loads(text)
+        except json.JSONDecodeError as e:
+            raise ValueError(f"Failed to parse LLM JSON response: {e}") from e
 
     def judge(self, request: OpportunityJudgmentRequest) -> OpportunityJudgmentResult:
         """
@@ -453,7 +494,7 @@ class JudgmentEngine:
   ]
 }}"""
 
-        raw = self._call_llm(prompt)
+        raw = self._call_llm_and_parse(prompt)
 
         # 解析 opportunities 列表
         opps = raw.get("opportunities", [])
@@ -598,6 +639,7 @@ class JudgmentEngine:
 
         if step_a_result.fallback_used:
             print("[Step A] 使用规则 fallback（LLM 未响应）")
+        print(f"[Step A] 分组结果: {len(step_a_result.signal_groups)} 组批内信号 / {len(step_a_result.isolated_signals)} 条孤立信号")
 
         # ── Step C（批内直接组合）────────────────────────────
         all_opportunities = []
@@ -637,6 +679,8 @@ class JudgmentEngine:
         signals_to_store = []   # 最终需要写入 Signal Store 的孤立信号
 
         for iso_signal in step_a_result.isolated_signals:
+            iso_label = iso_signal.get("signal_label", iso_signal.get("_signal_id", "unknown"))
+            print(f"[Step B] 孤立信号进入检索: {iso_label}")
             step_b_result = run_step_b(
                 isolated_signal=iso_signal,
                 signal_store=signal_store,
@@ -645,6 +689,9 @@ class JudgmentEngine:
             )
 
             if step_b_result.matched:
+                total_candidates = sum(len(g) for g in step_b_result.candidate_groups)
+                fallback_tag = "（fallback）" if step_b_result.fallback_used else ""
+                print(f"[Step B] ✅ 命中历史伙伴{fallback_tag}: {total_candidates} 条候选 → 进入 Step C")
                 # 找到历史伙伴，构建组合请求进 Step C
                 for candidate_group in step_b_result.candidate_groups:
                     combined_signals = [iso_signal] + [
@@ -680,6 +727,7 @@ class JudgmentEngine:
                             )
             else:
                 # 没有找到伙伴，当前信号写入 Signal Store
+                print(f"[Step B] ❌ 无历史伙伴: {iso_label} → 写入 Signal Store 等待后续批次")
                 signals_to_store.append(iso_signal)
 
         # ── 写入孤立信号到 Signal Store ───────────────────────
