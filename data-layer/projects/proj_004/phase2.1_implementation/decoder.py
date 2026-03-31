@@ -10,7 +10,8 @@ import os
 from datetime import datetime
 from typing import List, Dict, Any
 import requests as _requests
-from anthropic import Anthropic
+# anthropic SDK 为可选依赖：只在走官方端点（无 ANTHROPIC_BASE_URL）时才需要。
+# 不在顶层 import，避免云桌面等未安装 anthropic 包的环境启动即崩溃。
 
 from schemas import (
     IntelligenceDecodeRequest,
@@ -43,9 +44,19 @@ class IntelligenceDecoder:
         self.screen_model = screen_model
         self.enable_two_stage = enable_two_stage
         self.decoder_version = PROMPT_VERSION
-        # 保留 client 仅用于非代理场景的兼容性
+        # Anthropic SDK client：只在走官方端点时初始化，避免在未安装 anthropic
+        # 包的环境（如云桌面 + 中转 API）启动时崩溃。
         if not os.environ.get("ANTHROPIC_BASE_URL"):
-            self.client = Anthropic(api_key=api_key)
+            try:
+                from anthropic import Anthropic as _Anthropic
+                self.client = _Anthropic(api_key=api_key)
+            except ImportError:
+                raise ImportError(
+                    "未设置 ANTHROPIC_BASE_URL 且 anthropic 包未安装。\n"
+                    "请二选一：\n"
+                    "  1) 安装 anthropic 包：pip install anthropic\n"
+                    "  2) 设置 ANTHROPIC_BASE_URL 使用中转/兼容 API"
+                )
         else:
             self.client = None
 
@@ -229,6 +240,7 @@ class IntelligenceDecoder:
                             return block["text"]
                     return ""
                 else:
+                    # 官方 Anthropic 端点：使用 SDK（self.client 在 __init__ 中初始化）
                     message = self.client.messages.create(
                         model=model,
                         max_tokens=max_tokens,
