@@ -699,7 +699,7 @@ class JudgmentEngine:
         ):
             # 有逻辑场景，或有高强度信号 → 发起 Step C 全量判断
             scenario_request = self._build_scenario_request(
-                request=request,
+                original_request=request,
                 all_signals=enriched_signals,
                 logical_scenarios=step_a_result.logical_scenarios,
             )
