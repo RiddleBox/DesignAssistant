@@ -2,7 +2,7 @@
 
 > **文档类型**：2.2 内部迭代设计方案
 > **创建日期**：2026-04-01
-> **状态**：📝 设计完成，待实现
+> **状态**：✅ 主干已实现，✅ 理想化样本评测已收口（`auto / llm` 8/8），⏳ 指标基线沉淀与真实样本扩展中
 > **范围**：纯 2.2 内部改造（step_a_cluster.py + judgment_engine.py），不改变任何对外接口
 > **关联文档**：`phase2.2_signal_store_设计方案_v2.md`（本方案是其 Step A 部分的增强迭代）
 
@@ -84,19 +84,23 @@ class StepAResult:
 **中等批次（16-50 条）的 Step C 调用变化**：
 
 ```python
-# 当前：每个 group 单独调用，硬隔离
+# 旧行为：每个 group 单独调用，硬隔离
 for group in step_a_result.signal_groups:
     result = self.judge(self._build_group_request(request, group))
 
-# 目标：全量信号 + 场景建议注入 prompt，Step C 自主判断
-for scenario in step_a_result.logical_scenarios:
-    scenario_request = self._build_scenario_request(
-        request=request,
-        all_signals=enriched_signals,   # 全量信号
-        scenario=scenario,              # 软建议（仅供参考）
-    )
-    result = self.judge(scenario_request)
+# 当前实现：全量信号只调用一次，logical_scenarios 作为软建议注入
+scenario_request = self._build_scenario_request(
+    original_request=request,
+    all_signals=enriched_signals,
+    logical_scenarios=step_a_result.logical_scenarios,
+)
+result = self.judge(scenario_request)
 ```
+
+**当前拍板结论**：
+- `Step C` **一次调用看到全量信号**
+- `logical_scenarios` 只是 prompt 级建议，不是硬隔离子集
+- 这样既保留了跨 scenario 发现机会的能力，也避免了把全量信号重复传给多个 `Step C` 调用带来的 token / 时延放大
 
 **Step C 的 prompt 增加场景建议前缀**（由 `_build_scenario_request` 注入）：
 
@@ -182,7 +186,7 @@ for iso_signal in step_a_result.isolated_signals:
 | 批次规模 | 策略 | 实现状态 |
 |----------|------|----------|
 | ≤ 15 条 | 跳过 Step A，全量直送 Step C | ✅ 已实现（commit `7193ef6`） |
-| 16-50 条 | Step A 输出 logical_scenarios（软建议），Step C 接收全量信号 + 场景建议 | 📋 本方案目标 |
+| 16-50 条 | Step A 输出 logical_scenarios（软建议），Step C 接收全量信号 + 场景建议 | ✅ 主干已实现，理想化样本 `auto / llm` 已确认 8/8 通过 |
 | 50+ 条 | 待定：logical_scenarios 基础上 + 假说驱动（依赖 Step 3 结构化字段） | 🔮 未来规划 |
 
 ---
@@ -215,11 +219,18 @@ for iso_signal in step_a_result.isolated_signals:
 
 ---
 
-### 阶段 3：单元测试更新
+### 阶段 3：评测与收口
 
-**任务**：
-1. 更新 `unit_tests_phase22.py` 中涉及 `signal_groups` 的断言
-2. 新增测试：Step A fallback 时 `logical_scenarios` 为空、孤立信号完整
+**当前结论**：
+1. 已使用 `run_step_a_idealized_eval.py` 完成理想化样本评测闭环：`rules` baseline 为 8/8 PASS，`auto` 模式运行于 `runtime_mode=llm`
+2. `auto / llm` 首轮全量结果为 7/8，随后针对 4 个失败 case 完成 prompt 收口与解析兜底修复，并逐个复跑确认全部 PASS；当前 8 个理想化样本已确认 8/8 通过
+3. 评测结论已同步回执行进展文档，当前设计文档也已更新到同一结论
+
+**下一步任务**：
+1. 沉淀 `logical_scenarios` 命中率、跨域互补召回率、语义相似误场景率、Step C 最终有效机会产出率
+2. 补第二层真实样本评测集，与理想化样本分层管理，避免混用
+3. 继续明确 `isolated_signals` 的实现语义说明
+4. 再决定是否推进候选集收敛策略（如 Anchor-based Window）
 
 ---
 
@@ -227,8 +238,8 @@ for iso_signal in step_a_result.isolated_signals:
 
 | 拍板项 | 建议 | 状态 |
 |--------|------|------|
-| 16-50 条批次时，Step C 是否对每个 scenario 独立调用，还是全量信号只调用一次（传入所有 scenarios 作为建议）？ | 建议每个 scenario 独立调用，结果去重合并；全量一次调用 context 太长，质量下降 | ⏳ 待拍板 |
-| 高强度孤立信号兜底阈值 intensity ≥ 7 是否合适？ | 7 对应"较强信号"，可根据实际跑批结果调整 | ⏳ 待拍板 |
+| 16-50 条批次时，Step C 是否对每个 scenario 独立调用，还是全量信号只调用一次（传入所有 scenarios 作为建议）？ | **已拍板：全量信号只调用一次**，所有 `logical_scenarios` 一并作为建议注入；理由：保留跨 scenario 关联发现能力，同时避免重复传输全量信号造成 token / 时延放大 | ✅ 已拍板 |
+| 高强度孤立信号兜底阈值 intensity ≥ 7 是否合适？ | 当前实现已采用 `intensity >= 7`，待后续真实跑批结果再校准 | ✅ 暂定实施 |
 
 ---
 
@@ -237,7 +248,11 @@ for iso_signal in step_a_result.isolated_signals:
 | 日期 | 阶段 | 关键进展 |
 |------|------|----------|
 | 2026-04-01 | 设计阶段 | 设计方案完成，参考 Kimi/Deepseek/Gemini 三方建议综合优化 |
-| 2026-04-01 | 实现阶段（预置）| 小批次快速路径（≤ 15 条）已实现，commit `7193ef6` |
+| 2026-04-01 | 实现阶段 | 小批次快速路径（≤ 15 条）已实现，commit `7193ef6` |
+| 2026-04-01 | 实现阶段 | Step A v2 主干已落地：`logical_scenarios` 替代 `signal_groups`，`Step C` 改为接收“全量信号 + 场景建议” |
+| 2026-04-01 | 验证阶段 | 理想化评测样本文件已创建：`step_a_idealized_eval_samples_not_real_data.py`（明确标注非真实数据） |
+| 2026-04-01 | 验证阶段 | 理想化评测 runner 已实现：`run_step_a_idealized_eval.py`，`rules` baseline 8/8 PASS |
+| 2026-04-01 | 收口阶段 | 理想化样本 `auto / llm` 评测完成一轮收口：首轮全量结果 7/8，随后针对 4 个失败 case 完成 prompt 收口与解析兜底修复，并逐个复跑确认全部 PASS；当前 8 个理想化样本已确认 8/8 通过 |
 
 ---
 

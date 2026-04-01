@@ -183,6 +183,11 @@ def _build_step_a_prompt(signals_summary: str) -> str:
 - 一个场景需要2条以上信号，核心信号2-4条，上下文信号0-3条
 - 可以有多个场景，也可以没有（返回空列表）
 - 一条信号可以出现在多个场景中（软建议不需要互斥）
+- **只有在存在明确的逻辑链路时才能成场景**：例如因果链、供需互补、资源响应外部催化、时机信号与需求/资源形成闭环
+- **仅仅共享行业、主题、新闻类型、公司属性，不足以构成场景**：例如"都是游戏发布""都是融资新闻""都属于AI/游戏赛道"都不成立
+- **如果你拿不出清晰的逻辑链，而只能说它们像同一类新闻或同一行业趋势，请返回空列表 []**
+- **不确定时宁可少报或不报，也不要为了凑场景而分组**
+- **如果一个完整逻辑链依赖3条核心信号（如 catalyst + resource_validation + demand_evidence），这3条都应放在 primary_signal_ids 中；context_signal_ids 只放辅助理解、但不是论点骨架的信号**
 
 **逻辑互补案例参考**（理解什么是逻辑互补，而非语义相似）：
 
@@ -202,6 +207,12 @@ def _build_step_a_prompt(signals_summary: str) -> str:
 - 信号B：网易游戏新作发布
 ❌ 语义相似（都是游戏新作）但不构成逻辑链，不应作为场景
 
+反例 - 同类资本新闻但互不支撑：
+- 信号A：VR 硬件创业公司融资
+- 信号B：移动广告测量创业公司融资
+- 信号C：云基础设施公司融资
+❌ 它们只是都属于融资新闻，彼此不构成一个机会论点，应返回空列表
+
 ## 任务2：每条信号角色标注
 
 对每条信号标注：
@@ -211,6 +222,8 @@ def _build_step_a_prompt(signals_summary: str) -> str:
 - domains：信号所属领域（1-3个），从以下选择：
   gaming / ai / mobile / regulation / capital / geopolitics
 - waiting_for_text：一句话（15字以内），描述"这条信号在等待什么样的伙伴信号才能构成机会"
+- **每条信号都必须输出非空的 roles 和 domains**
+- **如果某条信号与当前任何机会方向都无关，不要留空 roles；请显式标为 negative_validator，并保留至少一个最贴近的 domain**
 
 ## 输出格式（严格JSON，不要有任何额外文字）
 
@@ -254,19 +267,40 @@ def _parse_step_a_response(raw: str, signals: List[dict]) -> StepAResult:
         print(f"[Step A] JSON 解析失败: {e}，使用规则 fallback")
         return _rule_fallback(signals)
 
-    # 构建角色标注索引
+    signal_map = {_get_signal_id(s): s for s in signals}
+
     role_annotations: Dict[str, dict] = {}
     for ann in data.get("annotations", []):
         sid = ann.get("signal_id", "")
         if sid:
+            signal = signal_map.get(sid, {})
+            rule_ann = _infer_roles_by_rule(signal) if signal else {
+                "roles": ["catalyst"],
+                "needs": [],
+                "domains": ["gaming"],
+                "waiting_for_text": "等待更多证据",
+            }
+            waiting_for_text = ann.get("waiting_for_text", "")
+            if ann.get("roles"):
+                roles = ann.get("roles")
+            elif _looks_irrelevant_annotation(waiting_for_text):
+                roles = ["negative_validator"]
+            else:
+                roles = rule_ann["roles"]
+
+            domains = ann.get("domains") or rule_ann["domains"]
+            if roles == ["negative_validator"]:
+                needs = []
+            else:
+                needs = ann.get("needs") or rule_ann["needs"]
+
             role_annotations[sid] = {
-                "roles":            ann.get("roles", ["catalyst"]),
-                "needs":            ann.get("needs", []),
-                "domains":          ann.get("domains", ["gaming"]),
-                "waiting_for_text": ann.get("waiting_for_text", ""),
+                "roles": roles,
+                "needs": needs,
+                "domains": domains,
+                "waiting_for_text": waiting_for_text or rule_ann["waiting_for_text"],
             }
 
-    # 解析 logical_scenarios
     logical_scenarios: List[LogicalScenario] = []
     for sc in data.get("logical_scenarios", []):
         primary_ids = sc.get("primary_signal_ids", [])
@@ -279,7 +313,6 @@ def _parse_step_a_response(raw: str, signals: List[dict]) -> StepAResult:
                 opportunity_direction=sc.get("opportunity_direction", ""),
             ))
 
-    # 所有信号补全角色标注（LLM 没有标注的用规则兜底）
     isolated = []
     for s in signals:
         sid = _get_signal_id(s)
@@ -290,9 +323,6 @@ def _parse_step_a_response(raw: str, signals: List[dict]) -> StepAResult:
         s_copy["_role_annotation"] = role_annotations[sid]
         isolated.append(s_copy)
 
-    # isolated_signals = 所有信号（Step C 通过 logical_scenarios 软建议使用，非硬隔离）
-    # 注意：这里返回全量信号作为 isolated_signals，是为了兼容 Step B 路径
-    # judgment_engine 会根据 logical_scenarios 决定哪些信号送 Step C，哪些走 Step B
     return StepAResult(
         logical_scenarios=logical_scenarios,
         isolated_signals=isolated,
@@ -322,6 +352,12 @@ def _rule_fallback(signals: List[dict]) -> StepAResult:
         role_annotations=role_annotations,
         fallback_used=True,
     )
+
+
+def _looks_irrelevant_annotation(waiting_for_text: str) -> bool:
+    text = (waiting_for_text or "").lower()
+    markers = ["无关", "不相关", "irrelevant", "unrelated", "noise"]
+    return any(marker in text for marker in markers)
 
 
 def _infer_roles_by_rule(signal: dict) -> dict:

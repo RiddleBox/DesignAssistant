@@ -2,7 +2,7 @@
 
 > **文档类型**：执行进展追踪
 > **最后更新**：2026-04-01
-> **当前状态**：✅ MVP 实现完成，✅ 验收通过，✅ 消费语义拍板，✅ Prompt-first v2 落地，✅ 验证案例集 v2 重写，✅ BoundaryValidator 误判修复，✅ next_validation_questions 语义修正，⏳ LLM 完整验证待稳定 API 窗口，✅ **Signal Store MVP 实现完成并切换（2026-03-31）**，✅ **小批次快速路径（≤15条）已实现（2026-04-01）**，📋 **Step A 优化方案设计完成（2026-04-01）**
+> **当前状态**：✅ MVP 实现完成，✅ 验收通过，✅ 消费语义拍板，✅ Prompt-first v2 落地，✅ 验证案例集 v2 重写，✅ BoundaryValidator 误判修复，✅ next_validation_questions 语义修正，✅ **Signal Store MVP 实现完成并切换（2026-03-31）**，✅ **小批次快速路径（≤15条）已实现（2026-04-01）**，✅ **Step A v2 软场景主干已实现（logical_scenarios + 全量信号送 Step C，2026-04-01）**，✅ **Step A 理想化评测样本文件已创建（非真实数据，2026-04-01）**，✅ **Step A 理想化评测 runner 已实现并跑通 rules baseline（2026-04-01）**，✅ **Step A LLM 理想化样本评测已收口（auto / llm，8/8 确认通过，2026-04-01）**，⏳ **Step A 指标基线沉淀 / 候选集收敛策略继续推进中**
 
 ---
 
@@ -37,6 +37,11 @@
 | 2026-04-01 | 修复阶段 | **Bug 修复三项**：① Bug1 精确绑定 warning log + `_matches` 移出循环（commit `5f2caab`）② P2 pending/insufficient_evidence 终态 summary 报告 + dashboard 展示卡片（commit `48bb24e`）③ source_ref 绑定失败时增加结构化 warning（commit `5f2caab`） | 实现落地视角 |
 | 2026-04-01 | 优化阶段 | **小批次快速路径**：≤ 15 条信号跳过 Step A，全量直送 Step C（commit `7193ef6`）；解决小批次下 Step A 分组假设污染精度问题 | 实现落地视角 |
 | 2026-04-01 | 设计阶段 | **Step A 优化方案设计完成**：logical_scenarios 软建议替代 signal_groups 硬分组；参考 Kimi/Deepseek/Gemini 三方建议综合输出；设计文档：`docs/step_a_optimization_design.md` | 方案设计视角 |
+| 2026-04-01 | 实现阶段 | **Step A v2 软场景主干已落地**：`step_a_cluster.py` 输出 `logical_scenarios`，`judgment_engine.py` 改为 `Step C` 接收“全量信号 + 场景建议”；兼容保留 `signal_groups=[]` 空壳；高强度孤立信号兜底阈值 `intensity >= 7` 已接入 | 实现落地视角 |
+| 2026-04-01 | 验证准备阶段 | **Step A 理想化评测样本文件已创建**：新增 `phase2.2_implementation/step_a_idealized_eval_samples_not_real_data.py`，首批包含跨域互补正例 / 语义相似反例 / 小批次直送样本 / 中批次混合样本；文件名已明确标注“idealized / not real data”，避免与真实样本混淆 | 评测验收视角 |
+| 2026-04-01 | 验证阶段 | **Step A 理想化评测 runner 已实现**：新增 `phase2.2_implementation/run_step_a_idealized_eval.py`，支持 `auto / llm / rules` 三种模式；已对齐真实主链路的 `<=15` 小批次直送语义，并完成 `rules` baseline 跑通（8/8 PASS） | 评测验收视角 |
+| 2026-04-01 | 收口阶段 | **Step A LLM 理想化样本评测收口**：`auto` 模式运行于 `runtime_mode=llm`；首轮全量结果为 7/8，随后针对 4 个失败 case 完成 prompt 收口与解析兜底修复，并逐个复跑确认全部 PASS；当前 8 个理想化样本已确认 8/8 通过 | 评测验收视角 |
+| 2026-04-01 | 规划阶段 | **后续关注点重排**：Step A 下一阶段重点转为指标基线沉淀（跨域互补召回 / 语义相似误场景率 / Step C 有效机会产出率）、`isolated_signals` 语义与文档说明同步、以及候选集收敛策略（Anchor-based Window）评估 | 总协调视角 |
 
 ---
 
@@ -184,7 +189,8 @@ result = engine.judge(req)
 
 ### 3.2 进行中
 
-- ⏳ LLM 完整验证（api123.icu 限流中，待稳定 API 窗口跑多组样本）
+- ⏳ Step A 指标基线沉淀（理想化样本 `auto / llm` 已确认 8/8，通过后续需沉淀跨域互补召回率、语义相似误场景率、Step C 有效机会产出率）
+- ⏳ 真实样本分层评测扩展（当前理想化样本已收口，下一步补真实样本集，与 idealized 样本分层管理）
 
 ### 3.4 已修复 Bug（2026-03-28）
 
@@ -194,11 +200,12 @@ result = engine.judge(req)
 
 | # | 项目 | 优先级 | 状态 | 备注 |
 |---|------|--------|------|------|
-| 1 | LLM 完整验证 | P1 | ⏳ 等待稳定 API 窗口 | api123.icu 限流，7 案例全 fallback 到规则引擎；prompt 修改效果（next_validation_questions 语义）待 LLM 恢复后验证 |
+| 1 | Step A 指标基线沉淀 | P1 | ⏳ 进行中 | 理想化样本 `auto / llm` 已确认 8/8 通过；下一步沉淀跨域互补召回率、语义相似误场景率、Step C 有效机会产出率 |
 | 2 | 2.2→2.3 联调回归 | P1 | ⏳ 待做 | next_validation_questions 语义已修正（从"信息收集问题"改为"供 2.3 行动决策的前置问题"），需确认 2.3 消费逻辑未受影响 |
 | 3 | 多信号聚合策略确认 | ✅ 已拍板 | **方案 A：当天全部信号打包传入 2.2** | 2.2 first principle 要求自主决定信号组合，预分组会前移判断职责；token 压力由 2.1 两阶段筛选兜底（规则预筛+haiku粗筛），有效范式信号每天数量有限；2.2 侧 evidence_text 已截 120 字符可控 |
-| 4 | Schema 标准化（phase2_common） | P2 | ⏳ 待 Prompt-first 跑稳后做 | 现在做是过早优化 |
-| 5 | 2.4 深度集成 | P2 | ⏳ 暂缓 | 结构未稳 |
+| 4 | 真实样本分层评测扩展 | P1 | ⏳ 待做 | 当前理想化样本已收口，需补真实样本集并与 idealized 样本分层管理，避免混用 |
+| 5 | Schema 标准化（phase2_common） | P2 | ⏳ 待 Prompt-first 跑稳后做 | 现在做是过早优化 |
+| 6 | 2.4 深度集成 | P2 | ⏳ 暂缓 | 结构未稳 |
 
 **⚠️ 工程遗留问题（2026-03-28 对照 first principle 全面梳理后记录）**：
 
@@ -303,84 +310,60 @@ result = engine.judge(req)
 
 ## 六、下一步行动建议
 
-### 6.1 优先级 P0：Schema 探索准备（本周）
+### 6.1 优先级 P0：补齐 Step A v2 验证闭环（当前最高优先级）
 
-**目标**：为 Prompt-first 实现做准备
+**目标**：把“软场景主干已实现”收口为“效果已验证、可稳定演进”
 
-**具体动作**：
-1. 创建 Schema 探索文档（`phase2_plan/schema_exploration.md`）
-2. 记录待解决的 Schema 设计问题
-3. 定义 Prompt-first 阶段需要验证的假设
-
-**预期产出**：Schema 探索文档
-
-### 6.2 优先级 P1：引入 Prompt-first 实现（未来 2 周）
-
-**目标**：提升判断质量和灵活性
+**当前进度**：
+- 已创建首版理想化样本文件：`phase2.2_implementation/step_a_idealized_eval_samples_not_real_data.py`
+- 已新增 Step A 评测 runner：`phase2.2_implementation/run_step_a_idealized_eval.py`
+- `rules` baseline 已跑通（8/8 PASS），确认了小批次直送策略、fallback 注释覆盖和信号覆盖校验逻辑可用
+- `auto / llm` 理想化样本评测已完成一轮收口：首轮全量结果为 7/8，随后针对 4 个失败 case 完成 prompt 收口与解析兜底修复，并逐个复跑确认全部 PASS；当前 8 个理想化样本已确认 8/8 通过
+- 当前样本明确标注为**idealized synthetic test samples / not real data**，用于受控评测，不代表真实生产数据
 
 **具体动作**：
-1. 设计 Prompt 模板（包含 6 步判断流程指令）
-2. 准备 few-shot 样例（覆盖 4 个优先级）
-3. 实现 LLM 调用逻辑（使用 Claude Opus 4.6）
-4. 在 Prompt 设计过程中记录 Schema 需求
-5. 对比规则引擎 vs Prompt-first 的效果差异
-6. 运行 benchmark 验证
+1. 沉淀 4 个观察指标：
+   - `logical_scenarios` 命中率
+   - 跨域互补召回率
+   - 语义相似误场景率
+   - Step C 最终有效机会产出率
+2. 补第二层真实样本评测集，与理想化样本分层管理，避免混用
+3. 将本轮评测结论同步回 `docs/step_a_optimization_design.md`
+4. 再决定是否推进候选集收敛策略（如 Anchor-based Window）
 
-**前置条件**：完成 Schema 探索准备
+**预期产出**：指标基线 + 第一轮效果复盘 + 后续收敛策略决策输入
 
-**预期效果**：
-- 论点形成更自然
-- 证据组织更合理
-- 不确定性评估更细致
-- 明确最优 Schema 设计方向
+### 6.2 优先级 P1：推进 2.1 V2 结构化字段（logic_frame）
 
-**Schema 探索重点**：
-- uncertainty_map 最佳格式（Dict vs List[Dict] vs 强类型对象）
-- priority_level 是否需要置信度字段
-- 证据是否需要元数据（来源、可信度、时效性）
-- 假设是否需要重要性分级
-
-### 6.3 优先级 P2：Schema 标准化（第 3-4 周）
-
-**目标**：基于 Prompt-first 经验设计统一 Schema
+**目标**：从信息层解决 Step A 退化为语义相似匹配的问题
 
 **具体动作**：
-1. 总结 Prompt-first 阶段的 Schema 需求
-2. 设计统一的 `phase2_common/schemas.py`
-3. 定义版本化策略（v1.0, v2.0）
-4. 实施标准化并迁移 2.2 和 2.3
-5. 移除临时转换层
-6. 更新所有测试和文档
+1. 在 2.1 schema 中新增 `logic_frame.what_changed / change_direction / affects`
+2. 扩展 2.1 prompt 与 few-shot，约束最小结构化逻辑字段输出
+3. 在 decoder 中增加契约规范化与 audit flags
+4. 统计 `logic_frame` 覆盖率与缺失率
 
-**前置条件**：完成 Prompt-first 实现
+**前置条件**：2.1 V2 拍板稿已确认
 
-**预期产出**：
-- 统一的 Schema 定义
-- 版本化管理机制
-- 向后兼容策略
+**预期效果**：Step A 由“读短文本猜关系”逐步转向“基于结构化字段做规则匹配 / 轻量推理”
 
-### 6.4 优先级 P3：扩展验证案例集
+### 6.3 优先级 P2：Step A 候选集收敛策略迭代
 
-**目标**：更全面覆盖边界场景
+**目标**：在保留跨场景发现能力的前提下，进一步降低中等批次的 Step C 上下文压力
 
 **具体动作**：
-1. 补充边界案例（信号数量边界、证据比边界、强度边界）
-2. 补充负例案例（无效输入、格式错误）
-3. 补充复杂场景（多维度冲突、时效性判断）
-4. 补充 escalate 优先级案例
-5. 扩展到 15-20 个案例
+1. 评估 `全量一次调用` 与 `按 scenario 独立调用` 的实际效果差异
+2. 在 `logic_frame` 稳定后评估 `Anchor-based Window`（高强度信号为锚，拉取 10–15 条候选集）
+3. 决定是否将当前“全量信号 + 场景建议”升级为“候选集收敛 + 场景建议”
 
-### 6.5 优先级 P4：与 Phase 2.4 集成（可选）
+### 6.4 优先级 P3：文档与接口语义收口
 
-**目标**：验证 2.4 证据包增强效果
+**目标**：避免实现状态、设计文档和进展文档继续分叉
 
 **具体动作**：
-1. 确认 2.4 ContextPacket 接口
-2. 实现 2.4 证据包消费逻辑
-3. 对比有/无 2.4 的判断质量差异
-4. 验证降级策略在实际场景中的表现
-
-**前置条件**：Phase 2.4 MVP 完成
+1. 同步 `docs/step_a_optimization_design.md` 状态（设计完成 → 主干已实现 / 待验证）
+2. 明确 `isolated_signals` 当前语义：实现中为“全量信号（含角色标注）的兼容容器”，不是严格意义上的孤立信号
+3. 为后续维护者补一段 Step A v2 的实现语义说明
 
 ---
 
@@ -405,73 +388,6 @@ result = engine.judge(req)
 - ✅ 优先级映射不匹配 → 已修改 2.3 姿态判断逻辑
 - ✅ uncertainty_map 格式不一致 → 已实现转换层
 - ✅ **规则引擎 intensity 字段名不一致**（2026-03-28）→ `s.get("intensity", 0)` 改为 `s.get("intensity_score", s.get("intensity", 0))`，修复 priority 分级和执行风险判断中 avg_intensity 始终为 0 的问题
-
----
-
-**具体动作**：
-1. 确认 OpportunityObject 输出契约可被 2.3 稳定消费
-2. 联合测试端到端流程（原始情报 → 信号解码 → 机会判断 → 行动方案）
-3. 识别接口优化需求
-4. 验证降级策略在实际场景中的表现
-
-**预期产出**：联调测试报告、接口优化清单
-
-### 5.2 优先级 P1：引入 Prompt-first 实现
-
-**目标**：提升判断质量和灵活性
-
-**具体动作**：
-1. 设计 Prompt 模板（包含 6 步判断流程指令）
-2. 准备 few-shot 样例（覆盖 4 个优先级）
-3. 实现 LLM 调用逻辑（使用 Claude Opus 4.6）
-4. 对比规则引擎 vs Prompt-first 的效果差异
-5. 运行 benchmark 验证
-
-**前置条件**：完成 P0 联调后
-
-**预期效果**：
-- 论点形成更自然
-- 证据组织更合理
-- 不确定性评估更细致
-
-### 5.3 优先级 P2：扩展验证案例集
-
-**目标**：更全面覆盖边界场景
-
-**具体动作**：
-1. 补充边界案例（信号数量边界、证据比边界、强度边界）
-2. 补充负例案例（无效输入、格式错误）
-3. 补充复杂场景（多维度冲突、时效性判断）
-4. 扩展到 15-20 个案例
-
-### 5.4 优先级 P3：性能优化
-
-**目标**：提升处理效率
-
-**具体动作**：
-1. 优化边界检查逻辑
-2. 缓存机制（相似信号聚类结果）
-3. 批量处理支持
-4. 异步处理支持
-
----
-
-## 六、风险与问题
-
-### 6.1 当前风险
-
-| 风险 | 影响 | 应对措施 | 状态 |
-|------|------|----------|------|
-| 规则引擎判断质量有限 | 中 | 已规划 Prompt-first 实现 | ⏳ 待推进 |
-| 2.3 接口不兼容 | 中 | 通过联调及时发现并调整 | ⏳ 待联调 |
-| 验证案例覆盖不足 | 低 | 已规划扩展案例集 | ⏳ 待推进 |
-
-### 6.2 已解决问题
-
-- ✅ 优先级分级逻辑缺失 escalate 级别 → 已补充竞争压力检测逻辑
-- ✅ 不确定性标注不完整 → 已补充高强度机会的执行风险标注
-- ✅ 证据并列验证逻辑过严 → 已豁免 insufficient_evidence 状态
-- ✅ deep_dive 阈值过高 → 已调整为更合理的分级标准
 
 ---
 

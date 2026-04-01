@@ -36,9 +36,10 @@ def _find_env_path():
 
 _ENV_PATH = _find_env_path()
 
-
 def _load_env():
     """加载 .env 文件（不覆盖已有环境变量）"""
+    if not _ENV_PATH:
+        return
     if os.path.exists(_ENV_PATH):
         with open(_ENV_PATH, encoding="utf-8") as f:
             for line in f:

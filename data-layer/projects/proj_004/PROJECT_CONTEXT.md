@@ -105,7 +105,7 @@
   与 opportunity_thesis（已是 2-4 句可读论点）定位重叠，差异未被定义。
   **从优先级列表删除**，等有人明确提出"thesis 不够用"再讨论。
 
-**当前状态**：✅ MVP 完成 | ✅ 消费语义拍板 | ✅ Prompt-first v2 + 多机会输出重构 | ✅ EvidenceValidator 可追溯性 | ⏳ LLM 完整验证（后续完善）| ⏳ 2.3 联调回归（进行中）| ✅ **Signal Store MVP 实现并跑通（batch1/2 验证）** | ✅ **死代码清理完成（judgment_engine.py 1196→812行）** | ✅ **单元测试全部通过（18/18，unit_tests_phase22.py）**
+**当前状态**：✅ MVP 完成 | ✅ 消费语义拍板 | ✅ Prompt-first v2 + 多机会输出重构 | ✅ EvidenceValidator 可追溯性 | ⏳ LLM 完整验证（后续完善）| ⏳ 2.3 联调回归（进行中）| ✅ **Signal Store MVP 实现并跑通（batch1/2 验证）** | ✅ **Step A v2 软场景主干已实现（logical_scenarios + 全量信号送 Step C）** | ✅ **Step A 理想化评测样本文件已创建（非真实数据）** | ✅ **Step A 理想化评测 runner 已实现并跑通 rules baseline（8/8 PASS）** | ✅ **死代码清理完成（judgment_engine.py 1196→812行）** | ✅ **单元测试全部通过（18/18，unit_tests_phase22.py）**
 
 **关键文件**：
 - 执行进展：[phase2.2_执行进展.md](data-layer/projects/proj_004/phase2_plan/phase2.2_执行进展.md)
@@ -353,7 +353,7 @@
 | P1 | **简版自然语言摘要** | 结构化对象基础上派生可读摘要，服务于人工验证与协作沟通 |
 | P2 | **多 Agent 辩论增强（P3-A）** | `debate_summary` 透传（hawk/dove/arbitrator），已有代码骨架，~30 分钟；详见 phase2.3_联调与增强计划.md P3-A 节 |
 | P2 | **历史案例对比** | 接入 2.4 知识库的相似案例，支持"为什么这次选 deep_dive 而不是 research"的可追溯解释 |
-| P2 | **Signal Store 跨批次信号积累**（v2 迭代） | 信号不成机会时暂存，跨批次组合尝试（Step A批内聚类+Step B分层漏斗）；已成机会的信号沉淀为 case_record 写回 2.4 RAG；纯 2.2 内部改造，不改变任何对外接口。详见：[phase2.2_signal_store_设计方案_v2.md](phase2.2_signal_store_设计方案_v2.md) |
+| P2 | **Signal Store 跨批次信号积累**（v2 迭代） | 信号不成机会时暂存，跨批次组合尝试（Step A批内聚类+Step B分层漏斗）；已成机会的信号沉淀为 case_record 写回 2.4 RAG；纯 2.2 内部改造，不改变任何对外接口。`Step A v2` 已从 `signal_groups` 切到 `logical_scenarios` 软建议，并改为 `Step C` 接收全量信号；理想化评测样本与 runner 已落地，当前进入 `auto / llm` 指标基线与效果复盘阶段。详见：[phase2.2_signal_store_设计方案_v2.md](phase2.2_signal_store_设计方案_v2.md) |
 | P3 | **完整可配置评分体系** | 维度权重配置、评分版本管理、评分校准与案例回放；建立在轻量评分验证之后 |
 | P3 | **姿态变更追踪** | 同一机会在不同时间点重新评估时记录姿态变化轨迹 |
 
@@ -419,12 +419,10 @@
 | 2026-03-28 | 修复 2.2 规则引擎 fallback 中 intensity 字段名 bug（avg_intensity 始终为 0 导致 priority 分级偏低） |
 | 2026-03-28（晚） | 2.4 ContextPacket 协议 v1.0 冻结：content_type 枚举（glossary/few_shot_example/constraint_rule/case_record/market_data/background）、ContextRequest/ContextResponse 字段定义、三模块消费场景差异确认、兼容策略（新增 /context 接口，原接口不变） |
 | 2026-03-29 | 接入真实 LLM API（api123.icu 中转），2.1 v1.5 prompt + Precision 测量体系，2.2/2.3 LLM 判断上线，报告输出层（report_writer.py）上线，2.5 upstream_outputs 字段修正，2.1 per-sample 容错，2.3 多 agent 完善路线写入规划文档 |
-| 2026-03-28（凌晨） | 2.2 消费语义重构：多条输入+Prompt-first v2（_llm_judge_v2），2.1 打分全透传，冒烟验证通过 |
-| 2026-03-28 | 修复 2.2 规则引擎 fallback 中 intensity 字段名 bug（avg_intensity 始终为 0 导致 priority 分级偏低） |
-| 2026-03-28（晚） | 2.4 ContextPacket 协议 v1.0 冻结：content_type 枚举（glossary/few_shot_example/constraint_rule/case_record/market_data/background）、ContextRequest/ContextResponse 字段定义、三模块消费场景差异确认、兼容策略（新增 /context 接口，原接口不变） |
 | 2026-03-29（上午） | 2.4 四层文档结构确立（industry/category/content_type/tags 正交），MetadataFilter 重构，2.5 LLM 深层归因跑通（llm_attributor.py 新增，findings=5 全部准确），关键工程修复：流式请求绕过中转截断、JSON 兼容前缀解析、prompt 体积压缩、信号字段名对齐。Phase 3 入场条件第 4 条正式通过。 |
 | 2026-03-30 | 2.2 Signal Store 迭代方案设计完成（v2）：三步流程（Step A/B/C）、7种信号角色、分层漏斗检索（L1-L4）、已成机会知识沉淀闭环；纯2.2内部改造，所有对外接口不变。多 provider LLM 配置改造（provider字段+各phase独立key/url），dashboard配置区扩展为per-phase卡片。2.1展示区增加原文tab（标题/来源/正文/链接）。 |
 | 2026-03-31 | **[2.2 代码规范化完成]** ① `judgment_engine.py` 死代码删除：旧版 `_execute_judgment_pipeline`（L483~L787）+ `_llm_judge`（L788~L866）共 384 行彻底移除，主链路只保留 `_execute_judgment_pipeline_v2` + `_llm_judge_v2`，文件从 1196 行精简至 812 行。② `unit_tests_phase22.py` 新建，18个测试用例全部通过（18/18），覆盖：SignalEntry枚举安全性（3种情形）、SignalStore基本读写+持久化（4个用例）、contributed不参与query_pending约束（2个）、Step A信号完整性+fallback不丢失（2个）、Step B跨批次匹配完整路径—L1命中+L4确认/L1无命中/L4空fallback（3个）、query_pending跨批次前提验证（1个）、signal_store=None抛ValueError接口契约（1个）、contributed/pending写入时机成功/失败两场景（2个）。commit: `769c2cf`。③ 辅助临时脚本（`_check_stepa.py`、`_find_dead.py`、`_del_dead.py`）已清理。 |
+| 2026-04-01 | 2.2 Step A v2 软场景主干实现：`logical_scenarios` 替代 `signal_groups`，`Step C` 改为接收全量信号 + 场景建议，小批次 `≤15` 直送路径生效；并新增 `step_a_idealized_eval_samples_not_real_data.py` 作为首版理想化评测样本文件（明确标注非真实数据）。 |
 
 ---
 
