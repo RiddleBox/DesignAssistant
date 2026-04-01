@@ -631,6 +631,29 @@ class JudgmentEngine:
                 int((_time.time() - start_time) * 1000)
             )
 
+        # ── 小批次快速路径：≤ SMALL_BATCH_THRESHOLD 条信号直接全量送 Step C ──
+        # 原因：小批次下 Step A 的分组带来前置假设污染，反而降低精度；
+        #       全量送 Step C 成本可控（< 20 条信号约 3000–6000 tokens），精度更高。
+        SMALL_BATCH_THRESHOLD = 15
+        if len(enriched_signals) <= SMALL_BATCH_THRESHOLD:
+            print(f"[Step A] 小批次快速路径（{len(enriched_signals)} 条 ≤ {SMALL_BATCH_THRESHOLD}），跳过 Step A，全量送 Step C")
+            direct_request = self._build_group_request(request, enriched_signals)
+            direct_result = self.judge(direct_request)
+            # 小批次所有信号一律视为 contributed / pending（无需 Signal Store 精确绑定）
+            from signal_store import build_signal_entry
+            for sig in enriched_signals:
+                ann = sig.get("_role_annotation", {})
+                entry = build_signal_entry(
+                    signal=sig if isinstance(sig, dict) else self._signal_entry_to_dict(sig),
+                    roles=ann.get("roles", ["catalyst"]),
+                    needs=ann.get("needs", []),
+                )
+                try:
+                    signal_store.add(entry)
+                except Exception:
+                    pass  # 重复信号忽略
+            return direct_result
+
         step_a_result = run_step_a(
             enriched_signals=enriched_signals,
             llm_client=self._llm,
