@@ -329,7 +329,11 @@ class JudgmentEngine:
 
         if self.api_key:
             try:
-                llm_results = self._llm_judge_v2(enriched_signals, context_packet)
+                llm_results = self._llm_judge_v2(
+                    enriched_signals,
+                    context_packet,
+                    scenario_hints=getattr(request, "_scenario_hints", None),
+                )
                 opportunities = []
                 for opp_data in llm_results:
                     # 从 related_signal_indices 解析出对应信号子集
@@ -412,7 +416,8 @@ class JudgmentEngine:
     def _llm_judge_v2(
         self,
         enriched_signals: List[Dict[str, Any]],
-        context_packet
+        context_packet,
+        scenario_hints: List[str] = None,
     ) -> List[Dict[str, Any]]:
         """
         v2 LLM 判断 prompt：
@@ -460,7 +465,12 @@ class JudgmentEngine:
    - research：2+ 条互补信号，有初步逻辑链
    - deep_dive：3+ 条高 intensity 信号（≥7），逻辑链清晰，反证可控
    - escalate：多维度信号聚合（technical+capital 或 market+capital），时效紧迫
-
+{f"""
+## 初步分析建议（来自 Step A，供参考，可突破）
+以下是基于信号初步分析的场景建议，你可以参考，也可以忽略或突破这些建议，以你对全量信号的完整分析为准：
+{chr(10).join(f"- {h}" for h in scenario_hints)}
+如果发现其他更有价值的信号关联，优先以你的分析为准。
+""" if scenario_hints else ""}
 ## 输入信号（来自 2.1，编号从 1 开始）
 {chr(10).join(signal_lines)}
 
@@ -662,45 +672,50 @@ class JudgmentEngine:
 
         if step_a_result.fallback_used:
             print("[Step A] 使用规则 fallback（LLM 未响应）")
-        print(f"[Step A] 分组结果: {len(step_a_result.signal_groups)} 组批内信号 / {len(step_a_result.isolated_signals)} 条孤立信号")
+        print(f"[Step A] 场景识别结果: {len(step_a_result.logical_scenarios)} 个逻辑场景 / {len(step_a_result.isolated_signals)} 条信号（含角色标注）")
 
-        # ── Step C（批内直接组合）────────────────────────────
+        # ── Step C（批内逻辑场景 → 软约束全量判断）──────────
+        # 设计：Step A 输出 logical_scenarios（软建议），Step C 接收全量信号 + 场景建议
+        # Step C 一次调用，可见所有信号，场景只作 prompt 前缀建议，不硬隔离
         all_opportunities = []
         source_signal_map = {}  # opportunity_id → List[SignalEntry]
 
-        for group in step_a_result.signal_groups:
-            # 将信号组注入 request，调用现有判断逻辑
-            group_request = self._build_group_request(request, group)
-            result = self.judge(group_request)
+        # 高强度孤立信号兜底阈值（intensity ≥ 7 对应 deep_dive 级信号）
+        HIGH_INTENSITY_THRESHOLD = 7
+
+        if step_a_result.logical_scenarios or any(
+            (s.get("intensity_score") or s.get("intensity", 0)) >= HIGH_INTENSITY_THRESHOLD
+            for s in enriched_signals
+        ):
+            # 有逻辑场景，或有高强度信号 → 发起 Step C 全量判断
+            scenario_request = self._build_scenario_request(
+                request=request,
+                all_signals=enriched_signals,
+                logical_scenarios=step_a_result.logical_scenarios,
+            )
+            result = self.judge(scenario_request)
             all_opportunities.extend(result.opportunities or [])
-            # 记录信号来源（用于黄金模板）
             for opp in (result.opportunities or []):
-                source_signal_map[opp.opportunity_id] = group
+                source_signal_map[opp.opportunity_id] = enriched_signals
 
             # 成功产出机会的信号以 contributed 状态写入 Signal Store
-            # 保留历史记录，供后续跨批次 Step B 检索时感知状态
             if result.opportunities:
                 contributed_entries = []
-                # 按机会精确绑定：每条信号绑到它实际参与的 opp
-                # 方法：用 opp.related_signals 里的 source_ref 反查 group 里的信号
-                # fallback：若 related_signals 为空或无法对应，绑到第一个 opp（旧行为）
                 def _matches(s_src, ref_set):
                     if not s_src or not ref_set:
-                        return True  # 无法判断时放行
+                        return True
                     for ref in ref_set:
                         if ref == s_src or ref.startswith(s_src + ":"):
                             return True
                     return False
 
                 for opp in result.opportunities:
-                    # 提取该机会实际关联的 source_ref 集合
                     related_source_refs = set()
                     for rs in (opp.related_signals or []):
                         ref = rs.get("source_ref") or rs.get("source_id", "")
                         if ref:
                             related_source_refs.add(ref)
 
-                    # [Bug1 验证] LLM 未填 related_signals 时记录警告
                     if not related_source_refs and opp.related_signals is not None:
                         print(
                             f"[Bug1][WARN] opp '{opp.opportunity_title}' 的 related_signals "
@@ -708,15 +723,10 @@ class JudgmentEngine:
                         )
 
                     bound_count = 0
-                    for s in group:
-                        # enriched_signal 里来源存在 _source_id，source_id 可能为空
+                    for s in enriched_signals:
                         s_source = (
                             s.get("source_id") or s.get("_source_id", "")
                         ) if isinstance(s, dict) else ""
-                        # opp.related_signals 里 source_ref 格式为 "incoming_031:sig_001"
-                        # s_source 格式为 "incoming_031"，做前缀匹配
-
-                        # 若该机会有 related_signals 且信号来源不匹配，跳过（由其他 opp 绑定）
                         if related_source_refs and not _matches(s_source, related_source_refs):
                             continue
                         bound_count += 1
@@ -733,11 +743,10 @@ class JudgmentEngine:
                         entry.matched_opportunity_id = opp.opportunity_id
                         contributed_entries.append(entry)
 
-                    # [Bug1 验证] 精确绑定后若该 opp 一条信号都没绑上，说明 source_ref 全部无效
                     if related_source_refs and bound_count == 0:
                         print(
                             f"[Bug1][WARN] opp '{opp.opportunity_title}' 精确绑定失败："
-                            f"related_source_refs={related_source_refs} 均无法匹配 group 中的信号，"
+                            f"related_source_refs={related_source_refs} 均无法匹配信号，"
                             f"请检查 LLM 输出的 source_ref 格式是否与实际 _source_id 一致"
                         )
 
@@ -746,6 +755,17 @@ class JudgmentEngine:
                     print(f"[Signal Store] 写入 {len(contributed_entries)} 条已贡献信号（contributed）")
 
         # ── Step B + Step C（孤立信号 → 历史检索）────────────
+        # Step A v2.0：isolated_signals 包含所有信号（角色已标注）
+        # 孤立信号 = 未在 Step C 中成功转化为机会的信号，走跨批次 Step B 路径
+        # 如果 Step C 已产出机会，参与机会的信号已写入 contributed，不重复写入
+        contributed_source_ids = set()
+        for entries in source_signal_map.values():
+            if isinstance(entries, list):
+                for e in entries:
+                    sid = e.get("source_id") or e.get("_source_id", "") if isinstance(e, dict) else getattr(e, "source_id", "")
+                    if sid:
+                        contributed_source_ids.add(sid)
+
         signals_to_store = []   # 最终需要写入 Signal Store 的孤立信号
 
         for iso_signal in step_a_result.isolated_signals:
@@ -903,15 +923,42 @@ class JudgmentEngine:
 
     def _build_group_request(self, original_request, signals: list):
         """基于原始 request 和指定信号列表，构建子 request（复用 rag_retriever 等配置）"""
-        # 将 dict 格式信号包装回 DecodedIntelligence-like 对象
-        # 直接传 enriched_signals 格式（_execute_judgment_pipeline_v2 已支持）
         new_req = OpportunityJudgmentRequest(
             decoded_intelligences=original_request.decoded_intelligences,
             context_packet=original_request.context_packet,
         )
-        # 临时注入：用信号直接覆盖，让 pipeline 只看这组信号
-        # 写入前按 source_id 去重，防止同一来源在同一机会中被重复计数
         new_req._override_signals = self._dedup_signals_by_source(signals)
+        return new_req
+
+    def _build_scenario_request(self, original_request, all_signals: list, logical_scenarios: list):
+        """
+        构建 Step C 的全量信号 + 逻辑场景建议 request。
+
+        Step A v2.0 的核心：Step C 看到全量信号，logical_scenarios 以 prompt 建议形式注入，
+        Step C 可自由突破场景边界发现跨组关联。
+
+        Args:
+            original_request: 原始 OpportunityJudgmentRequest
+            all_signals: 全量 enriched_signals
+            logical_scenarios: Step A 输出的 LogicalScenario 列表（软建议）
+        """
+        new_req = OpportunityJudgmentRequest(
+            decoded_intelligences=original_request.decoded_intelligences,
+            context_packet=original_request.context_packet,
+        )
+        # 全量信号去重后传入
+        new_req._override_signals = self._dedup_signals_by_source(all_signals)
+        # 注入场景建议（pipeline 会在 prompt 前插入场景建议前缀）
+        if logical_scenarios:
+            scenario_hints = []
+            for sc in logical_scenarios:
+                hint = (
+                    f"[场景{sc.scenario_id}] 可能指向：{sc.opportunity_direction} | "
+                    f"核心信号：{', '.join(sc.primary_signal_ids)} | "
+                    f"依据：{sc.reasoning}"
+                )
+                scenario_hints.append(hint)
+            new_req._scenario_hints = scenario_hints
         return new_req
 
     def _signal_entry_to_dict(self, entry) -> dict:
