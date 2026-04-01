@@ -635,6 +635,10 @@ class JudgmentEngine:
         # ── Step A：批内聚类 + 角色标注 ─────────────────────
         enriched_signals = self._extract_enriched_signals(request.decoded_intelligences)
 
+        # _override_signals 支持：直接注入信号（测试/子请求场景）
+        if hasattr(request, "_override_signals") and request._override_signals:
+            enriched_signals = request._override_signals
+
         if not enriched_signals:
             return self._create_insufficient_evidence_result(
                 [], ["没有可用信号"],
@@ -657,7 +661,13 @@ class JudgmentEngine:
                     signal=sig if isinstance(sig, dict) else self._signal_entry_to_dict(sig),
                     roles=ann.get("roles", ["catalyst"]),
                     needs=ann.get("needs", []),
+                    domains=ann.get("domains", ["gaming"]),
+                    waiting_for_text=ann.get("waiting_for_text", ""),
+                    batch_date=today,
                 )
+                # 若 Step C 产出了机会，标记为 contributed；否则 pending 等待后续批次
+                if direct_result.opportunities:
+                    entry.status = "contributed"
                 try:
                     signal_store.add(entry)
                 except Exception:
