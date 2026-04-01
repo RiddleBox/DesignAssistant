@@ -661,6 +661,14 @@ class JudgmentEngine:
                 # 按机会精确绑定：每条信号绑到它实际参与的 opp
                 # 方法：用 opp.related_signals 里的 source_ref 反查 group 里的信号
                 # fallback：若 related_signals 为空或无法对应，绑到第一个 opp（旧行为）
+                def _matches(s_src, ref_set):
+                    if not s_src or not ref_set:
+                        return True  # 无法判断时放行
+                    for ref in ref_set:
+                        if ref == s_src or ref.startswith(s_src + ":"):
+                            return True
+                    return False
+
                 for opp in result.opportunities:
                     # 提取该机会实际关联的 source_ref 集合
                     related_source_refs = set()
@@ -669,6 +677,14 @@ class JudgmentEngine:
                         if ref:
                             related_source_refs.add(ref)
 
+                    # [Bug1 验证] LLM 未填 related_signals 时记录警告
+                    if not related_source_refs and opp.related_signals is not None:
+                        print(
+                            f"[Bug1][WARN] opp '{opp.opportunity_title}' 的 related_signals "
+                            f"全部缺失 source_ref/source_id，精确绑定退化为全量 fallback"
+                        )
+
+                    bound_count = 0
                     for s in group:
                         # enriched_signal 里来源存在 _source_id，source_id 可能为空
                         s_source = (
@@ -676,16 +692,11 @@ class JudgmentEngine:
                         ) if isinstance(s, dict) else ""
                         # opp.related_signals 里 source_ref 格式为 "incoming_031:sig_001"
                         # s_source 格式为 "incoming_031"，做前缀匹配
-                        def _matches(s_src, ref_set):
-                            if not s_src or not ref_set:
-                                return True  # 无法判断时放行
-                            for ref in ref_set:
-                                if ref == s_src or ref.startswith(s_src + ":"):
-                                    return True
-                            return False
+
                         # 若该机会有 related_signals 且信号来源不匹配，跳过（由其他 opp 绑定）
                         if related_source_refs and not _matches(s_source, related_source_refs):
                             continue
+                        bound_count += 1
                         ann = s.get("_role_annotation", {}) if isinstance(s, dict) else {}
                         entry = build_signal_entry(
                             signal=s if isinstance(s, dict) else self._signal_entry_to_dict(s),
@@ -698,6 +709,15 @@ class JudgmentEngine:
                         entry.status = "contributed"
                         entry.matched_opportunity_id = opp.opportunity_id
                         contributed_entries.append(entry)
+
+                    # [Bug1 验证] 精确绑定后若该 opp 一条信号都没绑上，说明 source_ref 全部无效
+                    if related_source_refs and bound_count == 0:
+                        print(
+                            f"[Bug1][WARN] opp '{opp.opportunity_title}' 精确绑定失败："
+                            f"related_source_refs={related_source_refs} 均无法匹配 group 中的信号，"
+                            f"请检查 LLM 输出的 source_ref 格式是否与实际 _source_id 一致"
+                        )
+
                 if contributed_entries:
                     signal_store.add_batch(contributed_entries)
                     print(f"[Signal Store] 写入 {len(contributed_entries)} 条已贡献信号（contributed）")
