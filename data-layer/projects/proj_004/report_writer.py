@@ -353,3 +353,76 @@ def generate_report(
         f.writelines(lines)
 
     return fpath
+
+
+def generate_no_opportunity_report(
+    status: str,
+    signal_count: int,
+    sample_count: int,
+    pending_in_store: int,
+    total_ms: int,
+    run_timestamp=None,
+) -> str:
+    """
+    为 pending_signals / insufficient_evidence 两种终态生成轻量 summary 报告。
+    不依赖 LLM，纯规则拼接。
+    """
+    os.makedirs(REPORTS_DIR, exist_ok=True)
+
+    ts = run_timestamp or datetime.now()
+    ts_str = ts.strftime("%Y-%m-%d %H:%M")
+    ts_file = ts.strftime("%Y-%m-%d_%H%M")
+
+    status_label = {
+        "pending_signals":      "信号待组合（pending_signals）",
+        "insufficient_evidence":"证据不足（insufficient_evidence）",
+    }.get(status, status)
+
+    status_icon = {
+        "pending_signals":      "🕐",
+        "insufficient_evidence":"⚠️",
+    }.get(status, "📋")
+
+    reason_text = {
+        "pending_signals": (
+            "本批次信号均为孤立信号，尚未找到可与已有 Signal Store 信号组合成机会的逻辑链。"
+            "信号已写入 Signal Store，等待后续批次补全组合条件。"
+        ),
+        "insufficient_evidence": (
+            "信号整体强度或置信度不足以支撑机会判断（intensity/confidence 均值未达门槛），"
+            "或信号数量过少、相互之间缺乏逻辑关联。建议等待更多高质量信号汇入后重判。"
+        ),
+    }.get(status, "未发现可操作机会，原因未知。")
+
+    fname = f"{ts_file}_no_opportunity_{status}.md"
+    fpath = os.path.join(REPORTS_DIR, fname)
+
+    lines = []
+    lines.append(f"# {status_icon} 批次摘要（无机会产出）\n\n")
+    lines.append(f"> 生成时间：{ts_str}　｜　样本数：{sample_count}　｜　信号数：{signal_count}　｜　耗时：{total_ms/1000:.1f}s\n\n")
+    lines.append("---\n\n")
+
+    lines.append(f"## 终态：{status_label}\n\n")
+    lines.append(f"{reason_text}\n\n")
+
+    lines.append("## 本批次信号处理情况\n\n")
+    lines.append(f"- 处理样本数：**{sample_count}** 条\n")
+    lines.append(f"- 提取有效信号：**{signal_count}** 个\n")
+    lines.append(f"- Signal Store 当前 pending 信号：**{pending_in_store}** 条\n\n")
+
+    if status == "pending_signals":
+        lines.append("## 下一步\n\n")
+        lines.append(f"- 下批次运行时，Signal Store 中已有 **{pending_in_store}** 条 pending 信号参与组合检索\n")
+        lines.append("- 若新批次信号能与 pending 信号形成逻辑链，将触发机会判断\n")
+    elif status == "insufficient_evidence":
+        lines.append("## 下一步\n\n")
+        lines.append("- 可手动检查本批次信号质量（2.1 解码结果）\n")
+        lines.append("- 建议等待 intensity ≥ 6 或 confidence ≥ 6 的信号出现后再运行\n")
+
+    lines.append("\n---\n")
+    lines.append(f"*本摘要由 proj_004 workflow 自动生成 · {ts_str}*\n")
+
+    with open(fpath, "w", encoding="utf-8") as f:
+        f.writelines(lines)
+
+    return fpath

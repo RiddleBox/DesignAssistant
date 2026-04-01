@@ -169,6 +169,52 @@ def run_pipeline(api_key: str, base_url: str) -> Generator[dict, None, None]:
             yield _event("pipeline_done", None, "运行完成（无信号样本已归档）", {"total_ms": int((time.time()-t_total)*1000)})
             return
 
+        # ── pending_signals / insufficient_evidence：无机会产出，生成轻量 summary
+        if not judgment_result.opportunities:
+            status = getattr(judgment_result, "status", "unknown")
+            sig_count_22 = judgment_result.diagnostics.signal_count if judgment_result.diagnostics else len(all_signals)
+
+            # Signal Store 当前 pending 数量
+            try:
+                from signal_store import SignalStore
+                _ss = SignalStore()
+                _ss_stats = _ss.stats()
+                pending_in_store = _ss_stats.get("by_status", {}).get("pending", 0)
+            except Exception:
+                pending_in_store = 0
+
+            no_opp_data = {
+                "status": status,
+                "signal_count": sig_count_22,
+                "sample_count": len(samples),
+                "pending_in_store": pending_in_store,
+                "elapsed_ms": elapsed2,
+            }
+
+            # 生成轻量报告文件
+            report_path_no_opp = None
+            try:
+                from report_writer import generate_no_opportunity_report
+                report_path_no_opp = generate_no_opportunity_report(
+                    status=status,
+                    signal_count=sig_count_22,
+                    sample_count=len(samples),
+                    pending_in_store=pending_in_store,
+                    total_ms=int((time.time() - t_total) * 1000),
+                )
+                no_opp_data["report_path"] = report_path_no_opp
+            except Exception as e:
+                yield _event("log", None, f"轻量报告生成失败（不影响主流程）：{e}")
+
+            move_to_processed(samples)
+            total_ms = int((time.time() - t_total) * 1000)
+            yield _event(
+                "pipeline_no_opportunity", None,
+                f"本批次未发现可操作机会（{status}），{sig_count_22} 条信号已处理",
+                {**no_opp_data, "total_ms": total_ms},
+            )
+            return
+
         opp = judgment_result.opportunities[0] if judgment_result.opportunities else None
         opp_data = {}
         if opp:

@@ -235,6 +235,7 @@ if run_btn:
         "step_21": None, "step_22": None, "step_23": None,
         "step_24_packets": [], "step_25": None,
         "report_path": None, "total_ms": None,
+        "no_opportunity": None,
         "logs": [], "errors": [],
     }
     completed_steps = set()
@@ -281,6 +282,17 @@ if run_btn:
         elif etype == "error":
             st.session_state.run_result["errors"].append({"step": step, "message": msg, "detail": data.get("traceback", "")})
             progress_bar.progress(1.0, text=f"❌ {step} 出错")
+
+        elif etype == "pipeline_no_opportunity":
+            # pending_signals / insufficient_evidence 终态
+            st.session_state.run_result["total_ms"] = data.get("total_ms")
+            st.session_state.run_result["report_path"] = data.get("report_path")
+            st.session_state.run_result["no_opportunity"] = data  # 完整数据供展示
+            status_label = {
+                "pending_signals":       "🕐 信号待组合",
+                "insufficient_evidence": "⚠️ 证据不足",
+            }.get(data.get("status", ""), f"📋 {data.get('status','')}")
+            progress_bar.progress(1.0, text=f"{status_label}，本批次无机会产出，耗时 {data.get('total_ms',0)//1000}s")
 
         elif etype == "pipeline_done":
             st.session_state.run_result["total_ms"] = data.get("total_ms")
@@ -473,6 +485,39 @@ else:
                 _render_list(causes)
             with tabs[2]:
                 _render_list(priorities)
+
+    # ── 无机会产出的终态展示 ─────────────────────────────────────
+    no_opp = result.get("no_opportunity")
+    if no_opp:
+        status = no_opp.get("status", "unknown")
+        status_cfg = {
+            "pending_signals": {
+                "icon": "🕐",
+                "label": "信号待组合",
+                "color": "blue",
+                "desc": "本批次信号均为孤立信号，已写入 Signal Store 等待后续批次触发组合。",
+            },
+            "insufficient_evidence": {
+                "icon": "⚠️",
+                "label": "证据不足",
+                "color": "orange",
+                "desc": "信号整体强度或置信度不足，未发现可操作机会。",
+            },
+        }.get(status, {"icon": "📋", "label": status, "color": "gray", "desc": ""})
+
+        with st.container(border=True):
+            st.markdown(f"### {status_cfg['icon']} 本批次结果：{status_cfg['label']}")
+            st.info(status_cfg["desc"])
+
+            c1, c2, c3 = st.columns(3)
+            c1.metric("处理样本", no_opp.get("sample_count", 0))
+            c2.metric("提取信号", no_opp.get("signal_count", 0))
+            c3.metric("Store pending 积累", no_opp.get("pending_in_store", 0))
+
+            if status == "pending_signals":
+                st.caption(f"💡 Signal Store 中已有 **{no_opp.get('pending_in_store', 0)}** 条 pending 信号，下批次运行时将参与组合检索。")
+            elif status == "insufficient_evidence":
+                st.caption("💡 建议检查 2.1 解码结果，确认信号质量后再运行。")
 
     # ── 报告入口 ─────────────────────────────────────────────────
     report_path = result.get("report_path")
