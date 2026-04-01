@@ -82,3 +82,32 @@
 
 **文档状态**：v1.0
 **最后更新**：2026-03-16
+
+---
+
+## 五、Step A 优化增强任务（2026-04-01 新增）
+
+### 背景
+
+Step A 优化方案设计完成，详见 docs/step_a_optimization_design.md。
+核心变化：signal_groups（硬分组）→ logical_scenarios（软场景建议），Step C 接收全量信号。
+
+### 实施任务
+
+| 步骤 | 任务 | 文件 | 验收标准 |
+|------|------|------|----------|
+| SA1 | step_a_cluster.py：新增 LogicalScenario 数据类，改造输出结构 | step_a_cluster.py | StepAResult.logical_scenarios 有正确输出 |
+| SA2 | step_a_cluster.py：Prompt 增加 few-shot 逻辑互补案例（3-5个） | step_a_cluster.py | LLM 输出跨域组合概率提升 |
+| SA3 | judgment_engine.py：新增 _build_scenario_request，全量信号 + 场景建议注入 | judgment_engine.py | Step C 每次调用可见全量信号 |
+| SA4 | judgment_engine.py：高强度孤立信号兜底扫描（intensity ≥ 7） | judgment_engine.py | 强信号不因无 scenario 而直接进 Step B |
+| SA5 | unit_tests_phase22.py：更新涉及 signal_groups 的断言 | unit_tests_phase22.py | 原有测试全部通过 |
+
+### 待拍板事项（实施前确认）
+
+| 拍板项 | 建议 | 状态 |
+|--------|------|------|
+| 16-50 条批次：每个 scenario 独立调用 Step C，还是全量信号一次调用（传入所有 scenarios 作建议）？ | 建议每个 scenario 独立调用后去重合并 | ⏳ 待拍板 |
+| 高强度孤立信号兜底阈值：intensity ≥ 7 是否合适？ | 先用 7，跑批后按实际结果调整 | ⏳ 待拍板 |
+
+**文档状态**：v1.1
+**最后更新**：2026-04-01

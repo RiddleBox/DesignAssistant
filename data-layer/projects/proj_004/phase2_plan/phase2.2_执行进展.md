@@ -1,8 +1,8 @@
 # Phase 2.2 执行进展记录
 
 > **文档类型**：执行进展追踪
-> **最后更新**：2026-03-31
-> **当前状态**：✅ MVP 实现完成，✅ 验收通过，✅ 消费语义拍板，✅ Prompt-first v2 落地，✅ 验证案例集 v2 重写，✅ BoundaryValidator 误判修复，✅ next_validation_questions 语义修正，⏳ LLM 完整验证待稳定 API 窗口，✅ **Signal Store MVP 实现完成并切换（2026-03-31）**
+> **最后更新**：2026-04-01
+> **当前状态**：✅ MVP 实现完成，✅ 验收通过，✅ 消费语义拍板，✅ Prompt-first v2 落地，✅ 验证案例集 v2 重写，✅ BoundaryValidator 误判修复，✅ next_validation_questions 语义修正，⏳ LLM 完整验证待稳定 API 窗口，✅ **Signal Store MVP 实现完成并切换（2026-03-31）**，✅ **小批次快速路径（≤15条）已实现（2026-04-01）**，📋 **Step A 优化方案设计完成（2026-04-01）**
 
 ---
 
@@ -34,6 +34,9 @@
 | 2026-03-31 | 实现阶段 | **Signal Store MVP 全部文件实现完成**：signal_store.py / step_a_cluster.py / step_b_retrieval.py / golden_pattern.py / judgment_engine.py(+judge_with_signal_store) | 实现落地视角 |
 | 2026-03-31 | 验证阶段 | 冒烟测试通过（4/4）：SignalStore读写、Step A规则fallback、Step B空store、judge_with_signal_store主流程 | 评测验收视角 |
 | 2026-03-31 | 切换阶段 | run_batch_real.py 切换为 judge_with_signal_store()，保留自动 fallback 到 judge()；**变更与回退见下方说明** | 实现落地视角 |
+| 2026-04-01 | 修复阶段 | **Bug 修复三项**：① Bug1 精确绑定 warning log + `_matches` 移出循环（commit `5f2caab`）② P2 pending/insufficient_evidence 终态 summary 报告 + dashboard 展示卡片（commit `48bb24e`）③ source_ref 绑定失败时增加结构化 warning（commit `5f2caab`） | 实现落地视角 |
+| 2026-04-01 | 优化阶段 | **小批次快速路径**：≤ 15 条信号跳过 Step A，全量直送 Step C（commit `7193ef6`）；解决小批次下 Step A 分组假设污染精度问题 | 实现落地视角 |
+| 2026-04-01 | 设计阶段 | **Step A 优化方案设计完成**：logical_scenarios 软建议替代 signal_groups 硬分组；参考 Kimi/Deepseek/Gemini 三方建议综合输出；设计文档：`docs/step_a_optimization_design.md` | 方案设计视角 |
 
 ---
 
