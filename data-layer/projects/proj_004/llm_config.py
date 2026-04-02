@@ -21,8 +21,18 @@ except ImportError:
     _has_yaml = False
 
 # 配置文件路径（与本文件同目录）
-_THIS_DIR    = os.path.dirname(os.path.abspath(__file__))
-_CONFIG_PATH = os.path.join(_THIS_DIR, "llm_config.yaml")
+_THIS_DIR = os.path.dirname(os.path.abspath(__file__))
+_LOCAL_CONFIG_PATH = os.path.join(_THIS_DIR, "llm_config.local.yaml")
+_TEMPLATE_CONFIG_PATH = os.path.join(_THIS_DIR, "llm_config.yaml")
+
+
+def _get_active_config_path():
+    """优先使用本地私有配置，否则回退到可提交模板配置"""
+    if os.path.exists(_LOCAL_CONFIG_PATH):
+        return _LOCAL_CONFIG_PATH
+    if os.path.exists(_TEMPLATE_CONFIG_PATH):
+        return _TEMPLATE_CONFIG_PATH
+    return None
 
 # .env 搜索顺序：当前目录 → 上1级 → 上2级 → 上3级（项目根）
 def _find_env_path():
@@ -50,12 +60,15 @@ def _load_env():
 
 
 def _load_yaml_config() -> dict:
-    """加载 llm_config.yaml，返回原始 dict"""
+    """优先加载本地私有配置，其次加载可提交模板配置"""
     if not _has_yaml:
         return {}
-    if not os.path.exists(_CONFIG_PATH):
+
+    config_path = _get_active_config_path()
+    if not config_path:
         return {}
-    with open(_CONFIG_PATH, encoding="utf-8") as f:
+
+    with open(config_path, encoding="utf-8") as f:
         return yaml.safe_load(f) or {}
 
 
@@ -125,7 +138,8 @@ def print_config_summary():
     """打印各阶段配置摘要（调试用）"""
     _load_env()
     print("LLM 配置摘要:")
-    print(f"  配置文件: {'存在' if os.path.exists(_CONFIG_PATH) else '不存在，使用环境变量'}")
+    active_path = _get_active_config_path()
+    print(f"  配置文件: {os.path.basename(active_path) if active_path else '不存在，使用环境变量'}")
     for phase in [None, "2.1", "2.2", "2.3", "2.4", "2.5"]:
         cfg = get_llm_config(phase)
         key_hint = cfg['api_key'][:12] + "..." if cfg['api_key'] else "(未设置)"

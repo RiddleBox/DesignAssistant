@@ -65,17 +65,19 @@ def _render_list(items: list):
 
 import yaml as _yaml
 
-# ── 读取 llm_config.yaml ─────────────────────────────────────────
-LLM_CONFIG_PATH = os.path.join(PROJ_DIR, "llm_config.yaml")
+# ── 读取配置：优先本地私有文件，其次可提交模板 ─────────────────────
+LLM_TEMPLATE_CONFIG_PATH = os.path.join(PROJ_DIR, "llm_config.yaml")
+LLM_LOCAL_CONFIG_PATH = os.path.join(PROJ_DIR, "llm_config.local.yaml")
 
 def load_llm_config() -> dict:
-    if os.path.exists(LLM_CONFIG_PATH):
-        with open(LLM_CONFIG_PATH, encoding="utf-8") as f:
+    config_path = LLM_LOCAL_CONFIG_PATH if os.path.exists(LLM_LOCAL_CONFIG_PATH) else LLM_TEMPLATE_CONFIG_PATH
+    if os.path.exists(config_path):
+        with open(config_path, encoding="utf-8") as f:
             return _yaml.safe_load(f) or {}
     return {}
 
 def save_llm_config(cfg: dict):
-    with open(LLM_CONFIG_PATH, "w", encoding="utf-8") as f:
+    with open(LLM_LOCAL_CONFIG_PATH, "w", encoding="utf-8") as f:
         _yaml.dump(cfg, f, allow_unicode=True, default_flow_style=False, sort_keys=False)
 
 def get_phase_cfg(cfg: dict, phase: str) -> dict:
@@ -194,7 +196,7 @@ with st.container(border=True):
                     del llm_cfg["phases"][phase]["base_url"]
 
             save_llm_config(llm_cfg)
-            st.success("已保存到 llm_config.yaml")
+            st.success("已保存到 llm_config.local.yaml（本地私有，不入库）")
     with stat_col:
         incoming_count = len(glob.glob(os.path.join(INCOMING_DIR, "*.json")))
         st.metric("incoming/ 样本数", incoming_count, label_visibility="visible")

@@ -42,3 +42,12 @@ Thumbs.db
 # Temporary files
 *.tmp
 *.bak
+
+# Project-specific temporary evaluation artifacts
+data-layer/projects/proj_004/phase2.2_implementation/_tmp_*
+data-layer/projects/proj_004/phase2.2_implementation/_case_*_direct.json
+data-layer/projects/proj_004/phase2.2_implementation/auto_eval.json
+
+# Private local config with secrets
+data-layer/projects/proj_004/llm_config.local.yaml
+data-layer/projects/proj_004/.env
