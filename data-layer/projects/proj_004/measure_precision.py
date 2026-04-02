@@ -24,6 +24,7 @@ import importlib.util
 from datetime import datetime
 
 BASE = os.path.dirname(os.path.abspath(__file__))
+LLM_CONFIG_PATH = os.path.join(BASE, "llm_config.py")
 SAMPLES_ROOT = os.path.join(BASE, "..", "..", "..", "background", "real_intel_samples")
 
 
@@ -64,6 +65,14 @@ def load_module(name, path, dep_modules=None):
     return mod
 
 
+def load_llm_config(phase: str) -> dict:
+    spec = importlib.util.spec_from_file_location("llm_config", LLM_CONFIG_PATH)
+    mod = importlib.util.module_from_spec(spec)
+    sys.modules["llm_config"] = mod
+    spec.loader.exec_module(mod)
+    return mod.get_llm_config(phase)
+
+
 def is_noise_sample(filename: str) -> bool:
     """根据文件名判断 ground truth 是否为噪音（预期 0 信号）"""
     stem = os.path.splitext(filename)[0]
@@ -92,9 +101,10 @@ def main():
     # 加载环境变量
     _load_env_file(os.path.join(BASE, '..', '..', '..', '.env'))
 
-    api_key = os.environ.get("ANTHROPIC_API_KEY")
-    if not api_key:
-        print("ERROR: ANTHROPIC_API_KEY 未设置")
+    llm_config = load_llm_config("2.1")
+    if not llm_config.get("api_key"):
+        print("ERROR: 未找到 phase 2.1 的 LLM API key")
+        print("请在 llm_config.local.yaml 或环境变量中配置 phase 2.1 的 api_key")
         sys.exit(1)
 
     # 加载 2.1 模块
@@ -110,9 +120,15 @@ def main():
     IntelligenceDecoder = decoder_mod.IntelligenceDecoder
     IntelligenceDecodeRequest = m21_schemas.IntelligenceDecodeRequest
 
-    decoder = IntelligenceDecoder(api_key=api_key, model="claude-sonnet-4-6")
+    decoder = IntelligenceDecoder(
+        api_key=llm_config.get("api_key", ""),
+        model=llm_config.get("model", "claude-opus-4-6"),
+        provider=llm_config.get("provider", "anthropic"),
+        base_url=llm_config.get("base_url", ""),
+    )
     print(f"Prompt version: {m21_prompts.PROMPT_VERSION}")
-    print(f"Model: claude-sonnet-4-6")
+    print(f"Model: {llm_config.get('model', 'claude-opus-4-6')}")
+    print(f"Provider: {llm_config.get('provider', 'anthropic')}")
 
     # 加载样本
     sample_dir = os.path.join(SAMPLES_ROOT, args.sample_dir)

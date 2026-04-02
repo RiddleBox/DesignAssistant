@@ -430,13 +430,23 @@ class JudgmentEngine:
         # 构建信号描述（完整上下文，含 source_ref）
         signal_lines = []
         for i, s in enumerate(enriched_signals, 1):
+            logic_frame = s.get('logic_frame') or {}
+            logic_parts = []
+            if logic_frame.get('what_changed'):
+                logic_parts.append(f"what_changed={logic_frame.get('what_changed')}")
+            if logic_frame.get('change_direction'):
+                logic_parts.append(f"direction={logic_frame.get('change_direction')}")
+            if logic_frame.get('affects'):
+                logic_parts.append(f"affects={','.join(logic_frame.get('affects', [])[:3])}")
+            logic_text = f"\n   logic_frame：{' | '.join(logic_parts)}" if logic_parts else ""
+
             signal_lines.append(
                 f"{i}. [{s.get('signal_type','?')}] {s.get('signal_label','')}\n"
                 f"   描述：{s.get('description','')}\n"
                 f"   原文：{s.get('evidence_text','')[:120]}\n"
                 f"   打分：intensity={s.get('intensity_score',0)} "
                 f"confidence={s.get('confidence_score',0)} "
-                f"timeliness={s.get('timeliness_score',0)}\n"
+                f"timeliness={s.get('timeliness_score',0)}{logic_text}\n"
                 f"   来源类型：{s.get('_source_type','unknown')} / 来源ID：{s.get('_source_id','')} / 信号来源ref：{s.get('source_ref','')}"
             )
 

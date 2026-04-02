@@ -8,6 +8,7 @@ llm_client.py — 统一 LLM 调用客户端
 """
 
 import json
+import os
 import time
 import requests
 
@@ -48,6 +49,32 @@ class LLMClient:
         """openai / gemini / deepseek 等 OpenAI 兼容格式"""
         return self.provider in ("openai", "gemini", "custom")
 
+    @staticmethod
+    def _env_flag(name: str, default: bool = False) -> bool:
+        value = os.environ.get(name)
+        if value is None:
+            return default
+        return str(value).strip().lower() in {"1", "true", "yes", "on"}
+
+    @staticmethod
+    def _env_int(name: str, default: int) -> int:
+        value = os.environ.get(name)
+        if value is None:
+            return default
+        try:
+            return int(value)
+        except ValueError:
+            return default
+
+    def _get_request_timeouts(self) -> tuple:
+        connect_timeout = self._env_int("LLM_CONNECT_TIMEOUT_SECONDS", 30)
+        read_timeout = self._env_int("LLM_READ_TIMEOUT_SECONDS", 180)
+        return (connect_timeout, read_timeout)
+
+    def _debug_log(self, message: str) -> None:
+        if self._env_flag("LLM_DEBUG", False):
+            print(f"[LLMClient] {message}", flush=True)
+
     def call(
         self,
         prompt: str,
@@ -75,6 +102,7 @@ class LLMClient:
             str: 模型输出文本
         """
         headers = self._build_headers()
+        timeouts = self._get_request_timeouts()
 
         if self._is_openai_compat():
             # ── OpenAI 兼容格式（DeepSeek / Gemini / 自定义中转）──────────
@@ -106,13 +134,28 @@ class LLMClient:
 
         for attempt in range(max_retries):
             try:
-                resp = requests.post(url, headers=headers, json=payload, timeout=(30, 180), stream=True)
+                started_at = time.time()
+                self._debug_log(
+                    f"request_start provider={self.provider} model={model} attempt={attempt + 1}/{max_retries} "
+                    f"url={url} connect_timeout={timeouts[0]} read_timeout={timeouts[1]}"
+                )
+                resp = requests.post(url, headers=headers, json=payload, timeout=timeouts, stream=True)
                 resp.raise_for_status()
+                self._debug_log(
+                    f"response_headers status={resp.status_code} elapsed_ms={int((time.time() - started_at) * 1000)}"
+                )
                 if self._is_openai_compat():
-                    return self._collect_stream_openai(resp)
+                    text = self._collect_stream_openai(resp)
                 else:
-                    return self._collect_stream_anthropic(resp)
+                    text = self._collect_stream_anthropic(resp)
+                self._debug_log(
+                    f"response_complete chars={len(text)} elapsed_ms={int((time.time() - started_at) * 1000)}"
+                )
+                return text
             except Exception as e:
+                self._debug_log(
+                    f"request_error provider={self.provider} model={model} attempt={attempt + 1}/{max_retries} error={e}"
+                )
                 if attempt < max_retries - 1:
                     time.sleep(2 ** attempt)
                 else:

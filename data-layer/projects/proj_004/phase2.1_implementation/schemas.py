@@ -25,6 +25,27 @@ class SourceType(str, Enum):
     ANNOUNCEMENT = "announcement"    # 公告
 
 
+class ChangeDirection(str, Enum):
+    """逻辑变化方向枚举（2.1 V2）"""
+    INCREASE = "increase"
+    DECREASE = "decrease"
+    TIGHTEN = "tighten"
+    LOOSEN = "loosen"
+    ENTER = "enter"
+    EXIT = "exit"
+    SHIFT = "shift"
+    VALIDATE = "validate"
+    INVALIDATE = "invalidate"
+    UNKNOWN = "unknown"
+
+
+class SignalLogicFrame(BaseModel):
+    """供 Step A / Step B / Step C 消费的最小结构化逻辑框架"""
+    what_changed: str = Field(..., description="发生变化的变量")
+    change_direction: ChangeDirection = Field(..., description="变化方向")
+    affects: List[str] = Field(default_factory=list, description="主要受影响对象")
+
+
 class Signal(BaseModel):
     """信号结构 - 最小字段（MVP 版本）"""
     signal_id: str = Field(..., description="信号唯一ID，如 sig_001")
@@ -38,6 +59,10 @@ class Signal(BaseModel):
     timeliness_score: int = Field(..., ge=1, le=10, description="时效性评分 1-10")
     source_ref: str = Field(..., description="对应原始来源 ID")
     extracted_at: str = Field(..., description="抽取时间 ISO8601")
+    logic_frame: Optional[SignalLogicFrame] = Field(
+        default=None,
+        description="供 Step A / Step B / Step C 消费的最小结构化逻辑框架"
+    )
     metadata: Optional[Dict[str, Any]] = Field(default=None, description="扩展信息")
 
 

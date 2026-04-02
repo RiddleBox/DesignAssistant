@@ -6,18 +6,40 @@ Phase 2.1 首轮 Baseline Benchmark 执行脚本
 import json
 import os
 import time
+from collections import Counter
 from typing import List, Dict, Any, Tuple
 from datetime import datetime
+from pathlib import Path
+import importlib.util
 
 from decoder import IntelligenceDecoder
 from schemas import IntelligenceDecodeRequest, DecodedIntelligence, Signal, SourceType
 
 
+_THIS_DIR = Path(__file__).resolve().parent
+_PROJECT_ROOT = _THIS_DIR.parent
+_LLM_CONFIG_PATH = _PROJECT_ROOT / "llm_config.py"
+
+
+def _load_llm_config(phase: str) -> Dict[str, Any]:
+    spec = importlib.util.spec_from_file_location("llm_config", _LLM_CONFIG_PATH)
+    module = importlib.util.module_from_spec(spec)
+    assert spec and spec.loader, f"Failed to load llm_config from {_LLM_CONFIG_PATH}"
+    spec.loader.exec_module(module)
+    return module.get_llm_config(phase)
+
+
 class BenchmarkRunner:
     """Benchmark 执行器"""
 
-    def __init__(self, api_key: str):
-        self.decoder = IntelligenceDecoder(api_key=api_key)
+    def __init__(self, llm_config: Dict[str, Any]):
+        self.llm_config = llm_config
+        self.decoder = IntelligenceDecoder(
+            api_key=llm_config.get("api_key", ""),
+            model=llm_config.get("model", "claude-opus-4-6"),
+            provider=llm_config.get("provider", "anthropic"),
+            base_url=llm_config.get("base_url", ""),
+        )
         self.results = []
         self.metrics = {}
 
@@ -39,6 +61,14 @@ class BenchmarkRunner:
         true_positives = 0  # 正确抽取的信号
         false_positives = 0  # 误报的信号
         false_negatives = 0  # 漏报的信号
+
+        # 2.1 V2 结构化覆盖与审计统计
+        total_actual_signals = 0
+        logic_frame_present_count = 0
+        logic_frame_complete_count = 0
+        affects_non_empty_count = 0
+        change_direction_counter = Counter()
+        audit_flag_counter = Counter()
 
         # 错误案例收集
         false_positive_cases = []
@@ -73,6 +103,14 @@ class BenchmarkRunner:
                 expected_signals = sample['annotation']['expected_signals']
                 actual_signals = result.signals
 
+                signal_stats = self._collect_signal_contract_stats(actual_signals)
+                total_actual_signals += signal_stats['total_actual_signals']
+                logic_frame_present_count += signal_stats['logic_frame_present_count']
+                logic_frame_complete_count += signal_stats['logic_frame_complete_count']
+                affects_non_empty_count += signal_stats['affects_non_empty_count']
+                change_direction_counter.update(signal_stats['change_direction_counter'])
+                audit_flag_counter.update(signal_stats['audit_flag_counter'])
+
                 # 计算 TP, FP, FN
                 tp, fp, fn, case_analysis = self._evaluate_signals(
                     sample, expected_signals, actual_signals
@@ -98,6 +136,14 @@ class BenchmarkRunner:
                     'source_type': sample['source_type'],
                     'expected_count': len(expected_signals),
                     'actual_count': len(actual_signals),
+                    'logic_frame_stats': {
+                        'total_actual_signals': signal_stats['total_actual_signals'],
+                        'logic_frame_present_count': signal_stats['logic_frame_present_count'],
+                        'logic_frame_complete_count': signal_stats['logic_frame_complete_count'],
+                        'affects_non_empty_count': signal_stats['affects_non_empty_count'],
+                        'change_direction_counter': dict(signal_stats['change_direction_counter']),
+                        'audit_flag_counter': dict(signal_stats['audit_flag_counter']),
+                    },
                     'tp': tp,
                     'fp': fp,
                     'fn': fn,
@@ -130,6 +176,20 @@ class BenchmarkRunner:
             'true_positives': true_positives,
             'false_positives': false_positives,
             'false_negatives': false_negatives,
+            'logic_frame_coverage': {
+                'total_actual_signals': total_actual_signals,
+                'logic_frame_present_count': logic_frame_present_count,
+                'logic_frame_complete_count': logic_frame_complete_count,
+                'affects_non_empty_count': affects_non_empty_count,
+                'logic_frame_present_rate': logic_frame_present_count / total_actual_signals if total_actual_signals else 0,
+                'logic_frame_complete_rate': logic_frame_complete_count / total_actual_signals if total_actual_signals else 0,
+                'affects_non_empty_rate': affects_non_empty_count / total_actual_signals if total_actual_signals else 0,
+                'change_direction_distribution': dict(change_direction_counter),
+            },
+            'audit_statistics': {
+                'signals_with_audit_flags': sum(audit_flag_counter.values()),
+                'audit_flag_counts': dict(audit_flag_counter),
+            },
             'high_quality_cases': high_quality_cases[:2],
             'false_positive_cases': false_positive_cases[:2],
             'false_negative_cases': false_negative_cases[:2],
@@ -137,6 +197,40 @@ class BenchmarkRunner:
         }
 
         return self.metrics
+
+    def _collect_signal_contract_stats(self, actual: List[Signal]) -> Dict[str, Any]:
+        """统计 2.1 V2 logic_frame 覆盖率与 audit flags。"""
+        stats = {
+            'total_actual_signals': len(actual),
+            'logic_frame_present_count': 0,
+            'logic_frame_complete_count': 0,
+            'affects_non_empty_count': 0,
+            'change_direction_counter': Counter(),
+            'audit_flag_counter': Counter(),
+        }
+
+        for signal in actual:
+            logic_frame = getattr(signal, 'logic_frame', None)
+            if logic_frame:
+                stats['logic_frame_present_count'] += 1
+                what_changed = str(getattr(logic_frame, 'what_changed', '') or '').strip()
+                change_direction = getattr(logic_frame, 'change_direction', None)
+                affects = getattr(logic_frame, 'affects', []) or []
+
+                if what_changed and change_direction:
+                    stats['logic_frame_complete_count'] += 1
+                    stats['change_direction_counter'][str(change_direction.value if hasattr(change_direction, 'value') else change_direction)] += 1
+
+                if affects:
+                    stats['affects_non_empty_count'] += 1
+
+            metadata = getattr(signal, 'metadata', None) or {}
+            audit = metadata.get('audit', {}) if isinstance(metadata, dict) else {}
+            flags = audit.get('audit_flags', []) if isinstance(audit, dict) else []
+            for flag in flags:
+                stats['audit_flag_counter'][str(flag)] += 1
+
+        return stats
 
     def _evaluate_signals(
         self,
@@ -254,34 +348,19 @@ class BenchmarkRunner:
 
 def main():
     """主函数"""
-    # 从环境变量读取 API key
-    api_key = os.getenv('ANTHROPIC_API_KEY')
-    if not api_key:
-        # 尝试从 .env 文件读取
-        env_path = 'd:/AIProjects/DesignAssistant/.env'
-        if os.path.exists(env_path):
-            with open(env_path, 'r') as f:
-                for line in f:
-                    if line.startswith('ANTHROPIC_API_KEY='):
-                        api_key = line.strip().split('=', 1)[1].strip('"').strip("'")
-                        break
-
-    if not api_key:
-        print("错误: 未找到 ANTHROPIC_API_KEY")
-        print("请设置环境变量或在项目根目录创建 .env 文件")
+    llm_config = _load_llm_config("2.1")
+    if not llm_config.get("api_key"):
+        print("错误: 未找到 2.1 LLM API key")
+        print("请在 llm_config.local.yaml 或环境变量中配置 phase 2.1 的 api_key")
         return
 
-    # 初始化 runner
-    runner = BenchmarkRunner(api_key=api_key)
+    runner = BenchmarkRunner(llm_config=llm_config)
 
-    # 加载样本
-    samples_path = 'd:/AIProjects/DesignAssistant/data-layer/projects/proj_004/phase2.1_implementation/data/benchmark_samples.json'
-    samples = runner.load_samples(samples_path)
+    samples_path = _THIS_DIR / "data" / "benchmark_samples.json"
+    samples = runner.load_samples(str(samples_path))
 
-    # 执行 benchmark
     metrics = runner.run_benchmark(samples)
 
-    # 输出核心指标
     print("\n" + "="*60)
     print("Phase 2.1 首轮 Baseline Benchmark 结果")
     print("="*60)
@@ -297,10 +376,18 @@ def main():
     print(f"  True Positives (TP): {metrics['true_positives']}")
     print(f"  False Positives (FP): {metrics['false_positives']}")
     print(f"  False Negatives (FN): {metrics['false_negatives']}")
+    print(f"\n[2.1 V2 结构化覆盖]")
+    print(f"  实际信号总数: {metrics['logic_frame_coverage']['total_actual_signals']}")
+    print(f"  logic_frame 覆盖率: {metrics['logic_frame_coverage']['logic_frame_present_rate']:.2%}")
+    print(f"  logic_frame 完整率: {metrics['logic_frame_coverage']['logic_frame_complete_rate']:.2%}")
+    print(f"  affects 非空率: {metrics['logic_frame_coverage']['affects_non_empty_rate']:.2%}")
+    print(f"  change_direction 分布: {metrics['logic_frame_coverage']['change_direction_distribution']}")
+    print(f"\n[audit 统计]")
+    print(f"  audit flag 总数: {metrics['audit_statistics']['signals_with_audit_flags']}")
+    print(f"  audit flag 分布: {metrics['audit_statistics']['audit_flag_counts']}")
 
-    # 生成报告
-    report_path = 'd:/AIProjects/DesignAssistant/data-layer/projects/proj_004/phase2.1_implementation/data/benchmark_report.json'
-    runner.generate_report(report_path)
+    report_path = _THIS_DIR / "data" / "benchmark_report.json"
+    runner.generate_report(str(report_path))
 
     print("\n" + "="*60)
 

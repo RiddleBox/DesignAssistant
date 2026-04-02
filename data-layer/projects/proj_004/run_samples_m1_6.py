@@ -9,7 +9,7 @@ M1-M6 样本批量运行：多文档 → 多信号聚合 → 2.2 → 2.3 → 2.5
   5. 2.5 ×1：整合复盘
 
 运行方式: python run_samples_m1_6.py
-需要: ANTHROPIC_API_KEY
+需要: 在 llm_config.local.yaml 或环境变量中配置 phase 2.1 的 LLM 信息
 """
 
 import os
@@ -19,6 +19,7 @@ import importlib.util
 from dataclasses import asdict
 
 BASE = os.path.dirname(os.path.abspath(__file__))
+LLM_CONFIG_PATH = os.path.join(BASE, "llm_config.py")
 
 def _load_env_file(path):
     if os.path.exists(path):
@@ -44,6 +45,14 @@ def load_module(name, path, dep_modules=None):
             if dep_name != name:
                 sys.modules.pop(dep_name, None)
     return mod
+
+
+def load_llm_config(phase: str) -> dict:
+    spec = importlib.util.spec_from_file_location("llm_config", LLM_CONFIG_PATH)
+    mod = importlib.util.module_from_spec(spec)
+    sys.modules["llm_config"] = mod
+    spec.loader.exec_module(mod)
+    return mod.get_llm_config(phase)
 
 # 2.1
 m21_schemas = load_module('schemas_21', os.path.join(BASE, 'phase2.1_implementation', 'schemas.py'))
@@ -148,8 +157,13 @@ SAMPLES = [
 
 
 # ── Step 1: 2.1 逐篇解码，收集所有 signals ──────────────────────────────────
-def run_step1(api_key: str) -> list:
-    decoder = IntelligenceDecoder(api_key=api_key)
+def run_step1(llm_config_21: dict) -> list:
+    decoder = IntelligenceDecoder(
+        api_key=llm_config_21.get("api_key", ""),
+        model=llm_config_21.get("model", "claude-opus-4-6"),
+        provider=llm_config_21.get("provider", "anthropic"),
+        base_url=llm_config_21.get("base_url", ""),
+    )
     all_signals = []
     decode_results = []
 
@@ -294,15 +308,17 @@ def run_step4(judgment_result, action_result, decode_results) -> object:
 
 # ── 主入口 ─────────────────────────────────────────────────────────────────
 def main():
-    api_key = os.environ.get("ANTHROPIC_API_KEY")
-    if not api_key:
-        print("ERROR: ANTHROPIC_API_KEY 未设置")
+    llm_config_21 = load_llm_config("2.1")
+    if not llm_config_21.get("api_key"):
+        print("ERROR: 未找到 phase 2.1 的 LLM API key")
+        print("请在 llm_config.local.yaml 或环境变量中配置 phase 2.1 的 api_key")
         sys.exit(1)
-    print(f"API key: {api_key[:8]}...")
+    print(f"2.1 model: {llm_config_21.get('model', 'claude-opus-4-6')}")
+    print(f"2.1 provider: {llm_config_21.get('provider', 'anthropic')}")
 
     t_total = time.time()
 
-    all_signals, decode_results = run_step1(api_key)
+    all_signals, decode_results = run_step1(llm_config_21)
     judgment_result = run_step2(all_signals)
     action_result   = run_step3(judgment_result)
     retro_result    = run_step4(judgment_result, action_result, decode_results)

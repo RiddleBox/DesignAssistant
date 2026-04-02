@@ -331,6 +331,16 @@ result = engine.judge(req)
 3. 将本轮评测结论同步回 `docs/step_a_optimization_design.md`
 4. 再决定是否推进候选集收敛策略（如 Anchor-based Window）
 
+**补充进展（2026-04-02）**：
+- 已完成 decoder 侧最小定点验证：新增 `phase2.1_implementation/validate_decoder_split_minimal.py`
+- 验证锚点使用真实样本 `step_a_real_cross_domain_mobile_distribution_001` 中的 `r1`
+- 通过 monkeypatch 固定 LLM 返回，完成 3 条边界验证：
+  - 正常单方向样本不被误拆（1 条输出，`change_direction=tighten`，无 split flag）
+  - 明确双方向样本会被拆成 2 条（方向分别为 `tighten` / `loosen`，且带 `decoder_split_by_direction_fallback`）
+  - 拆不稳样本不强拆，只打 `multi_direction_detected_not_split`，并将 `change_direction` 规范化为 `unknown`
+- 当前可将该能力状态表述为：**prompt 优先拆，decoder 对少数明显违约样本保守兜底拆；拆不准则只审计不强拆**
+- 同日已补齐 `phase2.1_implementation/run_benchmark.py` 的运行入口，使其改为读取统一 `llm_config`、使用当前工作区相对路径，并对接 2.1 的 provider/base_url/model 配置，准备继续产出真实 benchmark 的覆盖率 / audit 基线
+
 **预期产出**：指标基线 + 第一轮效果复盘 + 后续收敛策略决策输入
 
 ### 6.2 优先级 P1：推进 2.1 V2 结构化字段（logic_frame）

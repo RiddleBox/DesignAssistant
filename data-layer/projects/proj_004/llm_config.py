@@ -46,6 +46,30 @@ def _find_env_path():
 
 _ENV_PATH = _find_env_path()
 
+
+def _provider_env_defaults(provider: str) -> dict:
+    provider = (provider or "anthropic").strip().lower()
+    mapping = {
+        "anthropic": {
+            "api_key": os.environ.get("ANTHROPIC_API_KEY", ""),
+            "base_url": os.environ.get("ANTHROPIC_BASE_URL", "https://api.anthropic.com"),
+        },
+        "openai": {
+            "api_key": os.environ.get("OPENAI_API_KEY", ""),
+            "base_url": os.environ.get("OPENAI_BASE_URL", "https://api.openai.com/v1"),
+        },
+        "gemini": {
+            "api_key": os.environ.get("GEMINI_API_KEY", ""),
+            "base_url": os.environ.get("GEMINI_BASE_URL", "https://generativelanguage.googleapis.com/v1beta/openai"),
+        },
+        "custom": {
+            "api_key": os.environ.get("CUSTOM_LLM_API_KEY", ""),
+            "base_url": os.environ.get("CUSTOM_LLM_BASE_URL", ""),
+        },
+    }
+    return mapping.get(provider, mapping["anthropic"])
+
+
 def _load_env():
     """加载 .env 文件（不覆盖已有环境变量）"""
     if not _ENV_PATH:
@@ -103,11 +127,13 @@ def get_llm_config(phase: str = None) -> dict:
             if v:  # 非空才覆盖
                 cfg[k] = v
 
-    # 3. 环境变量兜底（yaml 没填 api_key/base_url 时）
+    provider_env = _provider_env_defaults(cfg["provider"])
+
+    # 3. 环境变量兜底（yaml 没填 api_key/base_url 时，按 provider 取值）
     if not cfg["api_key"]:
-        cfg["api_key"] = os.environ.get("ANTHROPIC_API_KEY", "")
+        cfg["api_key"] = provider_env["api_key"]
     if not cfg["base_url"]:
-        cfg["base_url"] = os.environ.get("ANTHROPIC_BASE_URL", "https://api.anthropic.com")
+        cfg["base_url"] = provider_env["base_url"]
 
     return cfg
 
@@ -120,6 +146,8 @@ def make_llm_client(phase: str = None):
         LLMClient 实例，或 None（若 llm_client.py 不存在）
     """
     cfg = get_llm_config(phase)
+    if not cfg.get("api_key"):
+        return None
     client_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "llm_client.py")
     if not os.path.exists(client_path):
         return None

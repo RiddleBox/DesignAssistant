@@ -8,7 +8,7 @@ Phase 2.1 -> 2.2 -> 2.3 -> 2.5 端到端链路联调 (P1-4)
   4. 2.5 SystemRetrospectiveAnalyzer: 全链路输出 -> SystemRetrospectiveResult
 
 运行方式: python integration_test_e2e.py
-需要: ANTHROPIC_API_KEY 环境变量或 .env 文件
+需要: 在 llm_config.local.yaml 或环境变量中配置 phase 2.1 的 LLM 信息
 """
 
 import os
@@ -18,6 +18,7 @@ import importlib.util
 from dataclasses import asdict
 
 BASE = os.path.dirname(os.path.abspath(__file__))
+LLM_CONFIG_PATH = os.path.join(BASE, "llm_config.py")
 
 # 加载 API key（不依赖 dotenv）
 def _load_env_file(path):
@@ -47,6 +48,14 @@ def load_module(name, path, dep_modules=None):
             if dep_name != name:
                 sys.modules.pop(dep_name, None)
     return mod
+
+
+def load_llm_config(phase: str) -> dict:
+    spec = importlib.util.spec_from_file_location("llm_config", LLM_CONFIG_PATH)
+    mod = importlib.util.module_from_spec(spec)
+    sys.modules["llm_config"] = mod
+    spec.loader.exec_module(mod)
+    return mod.get_llm_config(phase)
 
 # --- 加载各模块 schemas（用唯一名注册）---
 m21_schemas = load_module('schemas_21', os.path.join(BASE, 'phase2.1_implementation', 'schemas.py'))
@@ -153,7 +162,7 @@ def build_upstream_outputs(decoded, opp22, result23) -> dict:
     }
 
 
-def run_e2e(case_id: str, raw_text: str, source_type, api_key: str):
+def run_e2e(case_id: str, raw_text: str, source_type, llm_config_21: dict):
     print(f"\n{'='*60}")
     print(f"端到端案例: {case_id}")
     print(f"{'='*60}")
@@ -161,7 +170,12 @@ def run_e2e(case_id: str, raw_text: str, source_type, api_key: str):
 
     # Step 1: 2.1 情报解码
     print("[Step 1] 2.1 情报解码...")
-    decoder = IntelligenceDecoder(api_key=api_key, model="claude-haiku-4-5-20251001")
+    decoder = IntelligenceDecoder(
+        api_key=llm_config_21.get("api_key", ""),
+        model=llm_config_21.get("model", "claude-opus-4-6"),
+        provider=llm_config_21.get("provider", "anthropic"),
+        base_url=llm_config_21.get("base_url", ""),
+    )
     req21 = IntelligenceDecodeRequest(
         source_id=case_id,
         source_type=source_type,
@@ -272,11 +286,13 @@ def run_e2e(case_id: str, raw_text: str, source_type, api_key: str):
 
 
 def main():
-    api_key = os.environ.get("ANTHROPIC_API_KEY")
-    if not api_key:
-        print("ERROR: ANTHROPIC_API_KEY 未设置")
+    llm_config_21 = load_llm_config("2.1")
+    if not llm_config_21.get("api_key"):
+        print("ERROR: 未找到 phase 2.1 的 LLM API key")
+        print("请在 llm_config.local.yaml 或环境变量中配置 phase 2.1 的 api_key")
         sys.exit(1)
-    print(f"API key: {api_key[:8]}...")
+    print(f"2.1 model: {llm_config_21.get('model', 'claude-opus-4-6')}")
+    print(f"2.1 provider: {llm_config_21.get('provider', 'anthropic')}")
 
     print("\nPhase 端到端链路联调 (P1-4)")
     print("="*60)
@@ -290,7 +306,7 @@ def main():
 投资方包括红杉资本、a16z等顶级VC机构。"""
 
     results = [
-        run_e2e("e2e_ai_npc_001", text1, SourceType.NEWS, api_key),
+        run_e2e("e2e_ai_npc_001", text1, SourceType.NEWS, llm_config_21),
     ]
 
     print(f"\n{'='*60}")

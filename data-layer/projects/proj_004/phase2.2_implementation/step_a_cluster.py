@@ -164,7 +164,21 @@ def _build_signals_summary(signals: List[dict]) -> str:
         label = s.get("signal_label") or s.get("label", "")
         desc = s.get("description", "")[:100]
         intensity = s.get("intensity_score") or s.get("intensity", 5)
-        lines.append(f"[{sid}] type={stype} intensity={intensity} | {label} | {desc}")
+        logic_frame = s.get("logic_frame") or {}
+        what_changed = logic_frame.get("what_changed", "")
+        change_direction = logic_frame.get("change_direction", "")
+        affects = logic_frame.get("affects", []) or []
+
+        logic_bits = []
+        if what_changed:
+            logic_bits.append(f"what_changed={what_changed}")
+        if change_direction:
+            logic_bits.append(f"direction={change_direction}")
+        if affects:
+            logic_bits.append(f"affects={','.join(affects[:3])}")
+
+        logic_text = f" | logic[{'; '.join(logic_bits)}]" if logic_bits else ""
+        lines.append(f"[{sid}] type={stype} intensity={intensity} | {label} | {desc}{logic_text}")
     return "\n".join(lines)
 
 
@@ -183,6 +197,11 @@ def _build_step_a_prompt(signals_summary: str) -> str:
 - 一个场景需要2条以上信号，核心信号2-4条，上下文信号0-3条
 - 可以有多个场景，也可以没有（返回空列表）
 - 一条信号可以出现在多个场景中（软建议不需要互斥）
+- **优先使用结构化 logic_frame 做判断**：如果信号里带有 `what_changed / direction / affects`，优先依据这些字段判断逻辑互补关系
+- **当 logic_frame 缺失时再回退**：回退使用 `signal_type + signal_label + description` 做轻量推理，不要因为缺失 logic_frame 就忽略该信号
+- **如果两个信号只是主题相近，但 what_changed 不同且不存在清晰互补链路，不应成场景**
+- **如果两个信号 what_changed 相近，但一个是 tighten / decrease，另一个是 loosen / increase，要判断它们是互补、对冲还是彼此否定，不要机械归为同类**
+- **同一篇原文里若已经被 2.1 拆成多条 Signal，视为多个独立变化单元进行组合，不要再强行合并回一个模糊大主题**
 - **只有在存在明确的逻辑链路时才能成场景**：例如因果链、供需互补、资源响应外部催化、时机信号与需求/资源形成闭环
 - **仅仅共享行业、主题、新闻类型、公司属性，不足以构成场景**：例如"都是游戏发布""都是融资新闻""都属于AI/游戏赛道"都不成立
 - **如果你拿不出清晰的逻辑链，而只能说它们像同一类新闻或同一行业趋势，请返回空列表 []**

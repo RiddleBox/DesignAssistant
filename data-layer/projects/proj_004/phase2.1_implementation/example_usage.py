@@ -4,8 +4,32 @@ Phase 2.1 情报解码模块 - 使用示例
 """
 
 import os
+import importlib.util
 from decoder import IntelligenceDecoder
 from schemas import IntelligenceDecodeRequest, SourceType
+
+_THIS_DIR = os.path.dirname(os.path.abspath(__file__))
+_PROJECT_ROOT = os.path.dirname(_THIS_DIR)
+_LLM_CONFIG_PATH = os.path.join(_PROJECT_ROOT, "llm_config.py")
+
+
+def load_llm_config(phase: str) -> dict:
+    spec = importlib.util.spec_from_file_location("llm_config", _LLM_CONFIG_PATH)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod.get_llm_config(phase)
+
+
+def build_decoder() -> IntelligenceDecoder:
+    llm_config = load_llm_config("2.1")
+    if not llm_config.get("api_key"):
+        raise RuntimeError("未找到 phase 2.1 的 LLM API key，请先在 llm_config.local.yaml 或环境变量中配置")
+    return IntelligenceDecoder(
+        api_key=llm_config.get("api_key", ""),
+        model=llm_config.get("model", "claude-opus-4-6"),
+        provider=llm_config.get("provider", "anthropic"),
+        base_url=llm_config.get("base_url", ""),
+    )
 
 
 def example_1_technical_signal():
@@ -15,8 +39,7 @@ def example_1_technical_signal():
     print("=" * 60)
 
     # 初始化解码器
-    api_key = os.getenv("ANTHROPIC_API_KEY")
-    decoder = IntelligenceDecoder(api_key=api_key)
+    decoder = build_decoder()
 
     # 构建请求
     request = IntelligenceDecodeRequest(
@@ -63,8 +86,7 @@ def example_2_capital_signal():
     print("示例 2：资本信号")
     print("=" * 60)
 
-    api_key = os.getenv("ANTHROPIC_API_KEY")
-    decoder = IntelligenceDecoder(api_key=api_key)
+    decoder = build_decoder()
 
     request = IntelligenceDecodeRequest(
         source_id="news_002",
@@ -96,8 +118,7 @@ def example_3_no_signal():
     print("示例 3：无信号（负例）")
     print("=" * 60)
 
-    api_key = os.getenv("ANTHROPIC_API_KEY")
-    decoder = IntelligenceDecoder(api_key=api_key)
+    decoder = build_decoder()
 
     request = IntelligenceDecodeRequest(
         source_id="news_003",
@@ -116,7 +137,7 @@ def example_3_no_signal():
 
 if __name__ == "__main__":
     # 运行示例
-    # 注意：需要设置 ANTHROPIC_API_KEY 环境变量
+    # 注意：需要先在 llm_config.local.yaml 或环境变量中配置 phase 2.1
 
     print("Phase 2.1 情报解码模块 - 使用示例\n")
 

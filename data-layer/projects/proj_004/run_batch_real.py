@@ -9,7 +9,7 @@ Iteration 3 批量真实样本运行脚本（RAG 集成版）
   python run_batch_real.py
 
 依赖:
-  ANTHROPIC_API_KEY
+  在 llm_config.local.yaml 或环境变量中配置 phase 2.1 的 LLM 信息
 """
 
 import os
@@ -34,6 +34,7 @@ except Exception:
     show_token_summary = lambda: None
 
 BASE = os.path.dirname(os.path.abspath(__file__))
+LLM_CONFIG_PATH = os.path.join(BASE, "llm_config.py")
 SAMPLES_ROOT = os.path.join(BASE, "..", "..", "..", "background", "real_intel_samples")
 INCOMING_DIR = os.path.join(SAMPLES_ROOT, "incoming")
 PROCESSED_DIR = os.path.join(SAMPLES_ROOT, "processed")
@@ -65,6 +66,14 @@ def load_module(name, path, dep_modules=None):
             if dep_name != name:
                 sys.modules.pop(dep_name, None)
     return mod
+
+
+def load_llm_config(phase: str) -> dict:
+    spec = importlib.util.spec_from_file_location("llm_config", LLM_CONFIG_PATH)
+    mod = importlib.util.module_from_spec(spec)
+    sys.modules["llm_config"] = mod
+    spec.loader.exec_module(mod)
+    return mod.get_llm_config(phase)
 
 
 # 2.1
@@ -132,8 +141,13 @@ def load_samples(file_paths):
     return samples
 
 
-def run_step1_decode(samples, api_key):
-    decoder = IntelligenceDecoder(api_key=api_key, model="claude-sonnet-4-6")
+def run_step1_decode(samples, llm_config_21):
+    decoder = IntelligenceDecoder(
+        api_key=llm_config_21.get("api_key", ""),
+        model=llm_config_21.get("model", "claude-opus-4-6"),
+        provider=llm_config_21.get("provider", "anthropic"),
+        base_url=llm_config_21.get("base_url", ""),
+    )
     patch_decoder(decoder)
 
     all_signals = []
@@ -554,9 +568,10 @@ def move_to_processed(samples):
 def main():
     ensure_dirs()
 
-    api_key = os.environ.get("ANTHROPIC_API_KEY")
-    if not api_key:
-        print("ERROR: ANTHROPIC_API_KEY 未设置")
+    llm_config_21 = load_llm_config("2.1")
+    if not llm_config_21.get("api_key"):
+        print("ERROR: 未找到 phase 2.1 的 LLM API key")
+        print("请在 llm_config.local.yaml 或环境变量中配置 phase 2.1 的 api_key")
         sys.exit(1)
 
     incoming_files = list_incoming_json_files()
@@ -565,13 +580,13 @@ def main():
         print("      请将 openclaw 输出的 JSON 放入 incoming/ 后再运行。")
         return
 
-    print(f"API key: {api_key[:8]}...")
+    print(f"2.1 provider: {llm_config_21.get('provider', 'anthropic')}")
     print(f"incoming 样本数: {len(incoming_files)}")
 
     t_total = time.time()
 
     samples = load_samples(incoming_files)
-    all_signals, decode_results, per_sample_stats = run_step1_decode(samples, api_key)
+    all_signals, decode_results, per_sample_stats = run_step1_decode(samples, llm_config_21)
 
     # api123.icu 限流缓解：2.1 批量调用完后等待，避免 2.2/2.3 撞上限流窗口
     cooldown = 15 * len(samples)
@@ -579,7 +594,7 @@ def main():
     time.sleep(cooldown)
 
     rag_retriever = build_rag_retriever()
-    judgment_result = run_step2_judgment(all_signals, len(samples), rag_retriever, api_key)
+    judgment_result = run_step2_judgment(all_signals, len(samples), rag_retriever, llm_config_21.get("api_key"))
     if judgment_result is None:
         moved_count = move_to_processed(samples)
         print(f"\n全部样本无信号，已移动 {moved_count} 个文件到 processed/")
@@ -596,7 +611,7 @@ def main():
         print(f"  样本已移动: {moved_count} 个 -> processed/")
         return
 
-    action_result = run_step3_action(judgment_result, api_key=api_key)
+    action_result = run_step3_action(judgment_result, api_key=llm_config_21.get("api_key"))
     retro_result = run_step4_retro(judgment_result, action_result, decode_results, per_sample_stats, rag_retriever=rag_retriever, t_start=t_total)
 
     moved_count = move_to_processed(samples)

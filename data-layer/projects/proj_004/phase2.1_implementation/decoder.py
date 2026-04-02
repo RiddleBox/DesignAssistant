@@ -4,6 +4,7 @@ Phase 2.1 情报解码模块 - 核心解码器
 """
 
 import json
+import copy
 import re
 import time
 import os
@@ -27,38 +28,52 @@ class IntelligenceDecoder:
     """情报解码器 - Prompt-first + 轻量后处理策略"""
 
     def __init__(self, api_key: str, model: str = "claude-opus-4-6",
-                 screen_model: str = "claude-haiku-4-5-20251001",
-                 enable_two_stage: bool = True):
+                 screen_model: str = None,
+                 enable_two_stage: bool = True,
+                 provider: str = "anthropic",
+                 base_url: str = None):
         """
         初始化解码器
 
         Args:
-            api_key: Anthropic API key
-            model: 精筛模型，默认 Claude Opus 4.6
-            screen_model: 粗筛模型，默认 Claude Haiku（轻量快速）
+            api_key: LLM API key
+            model: 精筛模型
+            screen_model: 粗筛模型；未指定时，Anthropic 默认用 Claude Haiku，其他 provider 复用主模型
             enable_two_stage: 是否启用两阶段筛选（默认开启）
+            provider: LLM provider（anthropic / openai / gemini / custom）
+            base_url: 自定义 API 端点；未指定时按 provider 或环境变量兜底
         """
         self.api_key = api_key
-        self.base_url = os.environ.get("ANTHROPIC_BASE_URL", "https://api.anthropic.com")
+        self.provider = str(provider or "anthropic").strip().lower()
+        env_base_url = os.environ.get("ANTHROPIC_BASE_URL") if self.provider == "anthropic" else ""
+        default_base_url = "https://api.anthropic.com" if self.provider == "anthropic" else ""
+        self.base_url = (base_url or env_base_url or default_base_url).rstrip("/")
         self.model = model
-        self.screen_model = screen_model
+        self.screen_model = screen_model or (
+            "claude-haiku-4-5-20251001" if self.provider == "anthropic" else model
+        )
         self.enable_two_stage = enable_two_stage
         self.decoder_version = PROMPT_VERSION
-        # Anthropic SDK client：只在走官方端点时初始化，避免在未安装 anthropic
-        # 包的环境（如云桌面 + 中转 API）启动时崩溃。
-        if not os.environ.get("ANTHROPIC_BASE_URL"):
+        self.debug_enabled = os.environ.get("PHASE21_DEBUG", "").strip().lower() in {"1", "true", "yes", "on"}
+        # Anthropic SDK client：只在走官方 Anthropic 端点时初始化；
+        # openai/gemini/custom 以及 anthropic 中转都走 requests。
+        if self.provider == "anthropic" and self.base_url == "https://api.anthropic.com":
             try:
                 from anthropic import Anthropic as _Anthropic
                 self.client = _Anthropic(api_key=api_key)
             except ImportError:
                 raise ImportError(
-                    "未设置 ANTHROPIC_BASE_URL 且 anthropic 包未安装。\n"
+                    "当前 2.1 配置使用官方 Anthropic 端点，但 anthropic 包未安装。\n"
                     "请二选一：\n"
                     "  1) 安装 anthropic 包：pip install anthropic\n"
-                    "  2) 设置 ANTHROPIC_BASE_URL 使用中转/兼容 API"
+                    "  2) 改用兼容 API 并提供 base_url"
                 )
         else:
             self.client = None
+
+    def _debug(self, message: str) -> None:
+        if self.debug_enabled:
+            print(f"[decoder-debug] {message}", flush=True)
 
     def decode(self, request: IntelligenceDecodeRequest) -> DecodedIntelligence:
         """
@@ -76,6 +91,9 @@ class IntelligenceDecoder:
         try:
             # [1] 文本预处理
             cleaned_text = self._preprocess(request.content)
+            self._debug(
+                f"decode.start source_id={request.source_id} source_type={request.source_type} text_len={len(cleaned_text)}"
+            )
 
             # 检查文本长度
             if len(cleaned_text) < 50:
@@ -83,7 +101,11 @@ class IntelligenceDecoder:
 
             # [1.5] 两阶段筛选：先粗筛，有信号才精筛
             if self.enable_two_stage:
+                self._debug(f"decode.before_screen source_id={request.source_id} model={self.screen_model}")
                 screen_result = self._screen(cleaned_text, request.source_type, warnings)
+                self._debug(
+                    f"decode.after_screen source_id={request.source_id} has_signal={screen_result.get('has_signal')} method={screen_result.get('screen_method')}"
+                )
                 if not screen_result["has_signal"]:
                     # 粗筛判断无信号，提前返回空结果
                     processing_time_ms = int((time.time() - start_time) * 1000)
@@ -101,7 +123,9 @@ class IntelligenceDecoder:
             prompt = build_prompt(cleaned_text, request.source_id)
 
             # [3] LLM 调用
+            self._debug(f"decode.before_main_llm source_id={request.source_id} model={self.model}")
             response = self._call_llm(prompt)
+            self._debug(f"decode.after_main_llm source_id={request.source_id} response_len={len(response)}")
 
             # [4] 后处理与规范化
             signals = self._post_process(response, request.source_id, warnings)
@@ -171,7 +195,9 @@ class IntelligenceDecoder:
         # ── LLM 粗筛层：haiku 轻量判断 ───────────────────────────
         try:
             screen_prompt = build_screen_prompt(text)
+            self._debug(f"screen.before_llm model={self.screen_model} text_len={len(text)}")
             raw = self._call_llm(screen_prompt, model_override=self.screen_model, max_tokens=80)
+            self._debug(f"screen.after_llm model={self.screen_model} response_len={len(raw)}")
             # 解析 JSON
             json_match = re.search(r'\{.*?\}', raw, re.DOTALL)
             if json_match:
@@ -217,8 +243,25 @@ class IntelligenceDecoder:
         model = model_override or self.model
         for attempt in range(max_retries):
             try:
-                if self.base_url != "https://api.anthropic.com":
-                    # 中转代理：直接用 requests 发送，避免 SDK 认证头污染
+                if self.provider == "anthropic" and self.base_url == "https://api.anthropic.com":
+                    self._debug(
+                        f"llm.request provider=anthropic sdk model={model} attempt={attempt + 1}/{max_retries} max_tokens={max_tokens}"
+                    )
+                    # 官方 Anthropic 端点：使用 SDK（self.client 在 __init__ 中初始化）
+                    message = self.client.messages.create(
+                        model=model,
+                        max_tokens=max_tokens,
+                        temperature=0.0,
+                        messages=[{"role": "user", "content": prompt}]
+                    )
+                    text = message.content[0].text
+                    self._debug(
+                        f"llm.response provider=anthropic sdk model={model} attempt={attempt + 1}/{max_retries} response_len={len(text)}"
+                    )
+                    return text
+
+                if self.provider == "anthropic":
+                    # Anthropic 中转代理：仍走 /v1/messages 协议
                     url = self.base_url.rstrip("/") + "/v1/messages"
                     headers = {
                         "Authorization": f"Bearer {self.api_key}",
@@ -231,25 +274,76 @@ class IntelligenceDecoder:
                         "temperature": 0.0,
                         "messages": [{"role": "user", "content": prompt}],
                     }
+                    self._debug(
+                        f"llm.request provider=anthropic proxy model={model} attempt={attempt + 1}/{max_retries} max_tokens={max_tokens} url={url}"
+                    )
                     resp = _requests.post(url, headers=headers, json=payload, timeout=(30, 180))
+                    self._debug(
+                        f"llm.http_response provider=anthropic proxy model={model} attempt={attempt + 1}/{max_retries} status={resp.status_code}"
+                    )
                     resp.raise_for_status()
                     data = resp.json()
-                    # 提取文本内容（跳过 thinking 块）
-                    for block in data["content"]:
+                    for block in data.get("content", []):
                         if block.get("type") == "text":
-                            return block["text"]
-                    return ""
-                else:
-                    # 官方 Anthropic 端点：使用 SDK（self.client 在 __init__ 中初始化）
-                    message = self.client.messages.create(
-                        model=model,
-                        max_tokens=max_tokens,
-                        temperature=0.0,
-                        messages=[{"role": "user", "content": prompt}]
+                            text = block.get("text", "")
+                            self._debug(
+                                f"llm.response provider=anthropic proxy model={model} attempt={attempt + 1}/{max_retries} response_len={len(text)}"
+                            )
+                            return text
+                    self._debug(
+                        f"llm.response provider=anthropic proxy model={model} attempt={attempt + 1}/{max_retries} response_len=0"
                     )
-                    return message.content[0].text
+                    return ""
+
+                # openai / gemini / custom / deepseek 等 OpenAI 兼容协议
+                url = self.base_url.rstrip("/") + "/chat/completions"
+                headers = {
+                    "Authorization": f"Bearer {self.api_key}",
+                    "content-type": "application/json",
+                }
+                payload = {
+                    "model": model,
+                    "max_tokens": max_tokens,
+                    "temperature": 0.0,
+                    "messages": [{"role": "user", "content": prompt}],
+                }
+                self._debug(
+                    f"llm.request provider={self.provider} model={model} attempt={attempt + 1}/{max_retries} max_tokens={max_tokens} url={url}"
+                )
+                resp = _requests.post(url, headers=headers, json=payload, timeout=(30, 180))
+                self._debug(
+                    f"llm.http_response provider={self.provider} model={model} attempt={attempt + 1}/{max_retries} status={resp.status_code}"
+                )
+                resp.raise_for_status()
+                data = resp.json()
+                choices = data.get("choices", [])
+                if choices:
+                    message = choices[0].get("message", {})
+                    content = message.get("content", "")
+                    if isinstance(content, str):
+                        self._debug(
+                            f"llm.response provider={self.provider} model={model} attempt={attempt + 1}/{max_retries} response_len={len(content)}"
+                        )
+                        return content
+                    if isinstance(content, list):
+                        text_parts = []
+                        for item in content:
+                            if isinstance(item, dict) and item.get("type") == "text":
+                                text_parts.append(item.get("text", ""))
+                        text = "".join(text_parts)
+                        self._debug(
+                            f"llm.response provider={self.provider} model={model} attempt={attempt + 1}/{max_retries} response_len={len(text)}"
+                        )
+                        return text
+                self._debug(
+                    f"llm.response provider={self.provider} model={model} attempt={attempt + 1}/{max_retries} response_len=0"
+                )
+                return ""
 
             except Exception as e:
+                self._debug(
+                    f"llm.error provider={self.provider} model={model} attempt={attempt + 1}/{max_retries} error={type(e).__name__}: {str(e)}"
+                )
                 if attempt < max_retries - 1:
                     wait_time = 2 ** attempt
                     time.sleep(wait_time)
@@ -284,33 +378,47 @@ class IntelligenceDecoder:
                 json_str = response
 
             data = json.loads(json_str)
-            signals = data.get("signals", [])
+            raw_signals = data.get("signals", [])
+            signals = []
 
-            # 格式规范化
-            for signal in signals:
-                # 去除多余空格
-                if "signal_label" in signal:
-                    signal["signal_label"] = signal["signal_label"].strip()
-                if "description" in signal:
-                    signal["description"] = signal["description"].strip()
+            # 格式规范化 + 保守多方向拆分兜底
+            for raw_signal in raw_signals:
+                for signal in self._split_multi_direction_signal(raw_signal, warnings):
+                    # 去除多余空格
+                    if "signal_label" in signal and isinstance(signal.get("signal_label"), str):
+                        signal["signal_label"] = signal["signal_label"].strip()
+                    if "description" in signal and isinstance(signal.get("description"), str):
+                        signal["description"] = signal["description"].strip()
+                    if "evidence_text" in signal and isinstance(signal.get("evidence_text"), str):
+                        signal["evidence_text"] = signal["evidence_text"].strip()
 
-                # 字段补全：如果 entities 为空，尝试从 evidence_text 提取
-                if not signal.get("entities") and signal.get("evidence_text"):
-                    # 简单的实体提取（可以后续增强）
-                    signal["entities"] = []
+                    # 字段补全：如果 entities 为空，尝试从 evidence_text 提取
+                    if not signal.get("entities") and signal.get("evidence_text"):
+                        # 简单的实体提取（可以后续增强）
+                        signal["entities"] = []
 
-                # 确保 source_ref 正确
-                signal["source_ref"] = source_id
+                    # 确保 source_ref 正确
+                    signal["source_ref"] = source_id
 
-                # 确保 extracted_at 存在
-                if "extracted_at" not in signal:
-                    signal["extracted_at"] = datetime.utcnow().isoformat() + "Z"
+                    # 确保 extracted_at 存在
+                    if "extracted_at" not in signal:
+                        signal["extracted_at"] = datetime.utcnow().isoformat() + "Z"
+
+                    self._normalize_signal_contract(signal, source_id, warnings)
+                    self._audit_signal_reliability(signal)
+                    signals.append(signal)
 
             # 去重：同一 source 内的重复信号
             unique_signals = []
             seen = set()
             for signal in signals:
-                key = (signal.get("signal_type"), signal.get("signal_label"))
+                logic_frame = signal.get("logic_frame") or {}
+                key = (
+                    signal.get("signal_type"),
+                    signal.get("signal_label"),
+                    logic_frame.get("what_changed", ""),
+                    logic_frame.get("change_direction", "")
+                )
                 if key not in seen:
                     seen.add(key)
                     unique_signals.append(signal)
@@ -323,6 +431,106 @@ class IntelligenceDecoder:
         except Exception as e:
             warnings.append(f"后处理失败: {str(e)}")
             return []
+
+    def _split_multi_direction_signal(
+        self,
+        signal: Dict[str, Any],
+        warnings: List[str]
+    ) -> List[Dict[str, Any]]:
+        """对少数明显违约的多方向输出做保守兜底拆分。"""
+        logic_frame = signal.get("logic_frame")
+        if not isinstance(logic_frame, dict):
+            return [signal]
+
+        directions = self._extract_direction_tokens(logic_frame.get("change_direction", ""))
+        if len(directions) <= 1:
+            return [signal]
+
+        what_changed_parts = self._split_multi_value_field(logic_frame.get("what_changed", ""))
+        if len(what_changed_parts) != len(directions):
+            self._add_audit_flag(signal, "multi_direction_detected_not_split")
+            return [signal]
+
+        evidence_parts = self._split_clause_text(signal.get("evidence_text", ""), len(directions))
+        description_parts = self._split_clause_text(signal.get("description", ""), len(directions))
+
+        base_signal_id = str(signal.get("signal_id", "") or "sig")
+        base_label = str(signal.get("signal_label", "") or "").strip()
+        split_signals = []
+
+        for index, direction in enumerate(directions, start=1):
+            split_signal = copy.deepcopy(signal)
+            split_signal["signal_id"] = f"{base_signal_id}_split_{index}"
+
+            if base_label:
+                split_signal["signal_label"] = f"{base_label} [{direction}]"
+
+            if len(description_parts) == len(directions):
+                split_signal["description"] = description_parts[index - 1]
+            else:
+                self._add_audit_flag(split_signal, "split_reused_description")
+
+            if len(evidence_parts) == len(directions):
+                split_signal["evidence_text"] = evidence_parts[index - 1]
+            else:
+                self._add_audit_flag(split_signal, "split_reused_evidence_text")
+
+            split_logic_frame = split_signal.setdefault("logic_frame", {})
+            split_logic_frame["what_changed"] = what_changed_parts[index - 1]
+            split_logic_frame["change_direction"] = direction
+            self._add_audit_flag(split_signal, "decoder_split_by_direction_fallback")
+            split_signals.append(split_signal)
+
+        warnings.append(
+            f"信号 {base_signal_id} 检测到多方向输出，decoder 已保守拆分为 {len(split_signals)} 条"
+        )
+        return split_signals
+
+    @staticmethod
+    def _extract_direction_tokens(value: Any) -> List[str]:
+        text = str(value or "").strip().lower()
+        if not text:
+            return []
+
+        pattern = r'(?<![a-z])(invalidate|validate|increase|decrease|tighten|loosen|unknown|enter|shift|exit)(?![a-z])'
+        matches = re.findall(pattern, text)
+
+        directions = []
+        seen = set()
+        for match in matches:
+            if match not in seen:
+                seen.add(match)
+                directions.append(match)
+        return directions
+
+    @staticmethod
+    def _split_multi_value_field(value: Any) -> List[str]:
+        text = str(value or "").strip()
+        if not text:
+            return []
+
+        parts = re.split(
+            r'\s*(?:/|\||;|；|,|，|、|→|->|=>|\band\b|\bor\b|与|和|及|以及)\s*',
+            text,
+            flags=re.IGNORECASE
+        )
+        return [part.strip() for part in parts if part and part.strip()]
+
+    @staticmethod
+    def _split_clause_text(value: Any, expected_parts: int) -> List[str]:
+        text = str(value or "").strip()
+        if not text or expected_parts <= 1:
+            return []
+
+        parts = re.split(
+            r'\s*(?:;|；|。|\.\s+|,\s+and\s+|,\s+but\s+|,\s+while\s+|，并且|，并|同时|而同时)\s*',
+            text,
+            flags=re.IGNORECASE
+        )
+        parts = [part.strip() for part in parts if part and part.strip()]
+        if len(parts) == expected_parts:
+            return parts
+        return []
 
     def _validate_signals(
         self,
@@ -360,6 +568,122 @@ class IntelligenceDecoder:
                 continue
 
         return validated
+
+    def _normalize_signal_contract(
+        self,
+        signal: Dict[str, Any],
+        source_id: str,
+        warnings: List[str]
+    ) -> None:
+        """规范化 2.1 输出契约，并尽量保留原始信号。"""
+        metadata = self._ensure_audit_metadata(signal)
+
+        raw_signal_type = signal.get("signal_type", "")
+        normalized_signal_type = str(raw_signal_type).strip().lower() if raw_signal_type is not None else ""
+        metadata["raw_signal_type"] = raw_signal_type
+        metadata["normalized_signal_type"] = normalized_signal_type
+        signal["signal_type"] = normalized_signal_type or "market"
+
+        for score_field in ["intensity_score", "confidence_score", "timeliness_score"]:
+            raw_score = signal.get(score_field, 5)
+            try:
+                score = int(raw_score)
+            except Exception:
+                self._add_audit_flag(signal, f"invalid_{score_field}")
+                score = 5
+            score = max(1, min(10, score))
+            signal[score_field] = score
+
+        logic_frame = signal.get("logic_frame")
+        if not logic_frame:
+            self._add_audit_flag(signal, "missing_logic_frame")
+            return
+
+        if not isinstance(logic_frame, dict):
+            self._add_audit_flag(signal, "invalid_logic_frame")
+            signal["logic_frame"] = None
+            return
+
+        what_changed = str(logic_frame.get("what_changed", "") or "").strip()
+        raw_direction = str(logic_frame.get("change_direction", "") or "").strip().lower()
+        affects = logic_frame.get("affects", [])
+
+        allowed_directions = {
+            "increase", "decrease", "tighten", "loosen", "enter",
+            "exit", "shift", "validate", "invalidate", "unknown"
+        }
+
+        if not what_changed:
+            self._add_audit_flag(signal, "missing_what_changed")
+
+        if raw_direction not in allowed_directions:
+            if raw_direction:
+                self._add_audit_flag(signal, "invalid_change_direction")
+            raw_direction = "unknown"
+
+        if isinstance(affects, str):
+            affects = [affects]
+        elif not isinstance(affects, list):
+            self._add_audit_flag(signal, "invalid_affects")
+            affects = []
+
+        normalized_affects = []
+        for item in affects:
+            text = str(item).strip()
+            if text:
+                normalized_affects.append(text)
+
+        if not what_changed:
+            signal["logic_frame"] = None
+            return
+
+        signal["logic_frame"] = {
+            "what_changed": what_changed,
+            "change_direction": raw_direction,
+            "affects": normalized_affects,
+        }
+
+    def _audit_signal_reliability(self, signal: Dict[str, Any]) -> None:
+        """生成轻量 audit flags，不阻断主链路。"""
+        intensity = signal.get("intensity_score", 5)
+        confidence = signal.get("confidence_score", 5)
+        evidence_text = str(signal.get("evidence_text", "") or "")
+        evidence_lower = evidence_text.lower()
+
+        if confidence <= 4 and intensity >= 8:
+            self._add_audit_flag(signal, "low_conf_high_intensity")
+
+        if len(evidence_text) < 60 and intensity >= 8:
+            self._add_audit_flag(signal, "short_evidence_high_intensity")
+
+        uncertain_markers = ["reportedly", "rumor", "rumour", "可能", "据称", "传闻", "分析师认为"]
+        if confidence >= 8 and any(marker in evidence_lower for marker in uncertain_markers):
+            self._add_audit_flag(signal, "uncertain_wording_high_confidence")
+
+        official_markers = ["announced", "confirmed", "official", "版权局", "委员会", "发布报告", "正式"]
+        if confidence <= 4 and any(marker in evidence_lower for marker in official_markers):
+            self._add_audit_flag(signal, "official_wording_low_confidence")
+
+    @staticmethod
+    def _ensure_audit_metadata(signal: Dict[str, Any]) -> Dict[str, Any]:
+        metadata = signal.get("metadata")
+        if not isinstance(metadata, dict):
+            metadata = {}
+            signal["metadata"] = metadata
+        audit = metadata.get("audit")
+        if not isinstance(audit, dict):
+            audit = {}
+            metadata["audit"] = audit
+        flags = audit.get("audit_flags")
+        if not isinstance(flags, list):
+            audit["audit_flags"] = []
+        return audit
+
+    def _add_audit_flag(self, signal: Dict[str, Any], flag: str) -> None:
+        audit = self._ensure_audit_metadata(signal)
+        flags = audit.setdefault("audit_flags", [])
+        if flag not in flags:
+            flags.append(flag)
 
     def _generate_summary(self, signals: List[Signal]) -> str:
         """

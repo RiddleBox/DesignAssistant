@@ -40,20 +40,46 @@ Phase 2.1 情报解码模块负责将非结构化信息（新闻、报告、公�
 pip install anthropic pydantic
 ```
 
-### 4.2 设置 API Key
+### 4.2 配置统一 LLM 参数
 
-```bash
-export ANTHROPIC_API_KEY="your-api-key"
+优先在项目根目录的 `llm_config.local.yaml` 中配置 `phase 2.1`，也支持通过对应 provider 的环境变量兜底。
+
+```yaml
+default:
+  provider: anthropic
+  model: claude-sonnet-4-6
+
+phases:
+  "2.1":
+    provider: openai
+    model: deepseek-chat
+    api_key: your-api-key
+    base_url: https://your-openai-compatible-endpoint/v1
 ```
 
 ### 4.3 运行示例
 
 ```python
+import os
+import importlib.util
 from decoder import IntelligenceDecoder
 from schemas import IntelligenceDecodeRequest, SourceType
 
+_PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+_LLM_CONFIG_PATH = os.path.join(_PROJECT_ROOT, "llm_config.py")
+
+spec = importlib.util.spec_from_file_location("llm_config", _LLM_CONFIG_PATH)
+llm_config_mod = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(llm_config_mod)
+cfg = llm_config_mod.get_llm_config("2.1")
+
 # 初始化解码器
-decoder = IntelligenceDecoder(api_key="your-api-key")
+decoder = IntelligenceDecoder(
+    api_key=cfg.get("api_key", ""),
+    model=cfg.get("model", "claude-opus-4-6"),
+    provider=cfg.get("provider", "anthropic"),
+    base_url=cfg.get("base_url", ""),
+)
 
 # 构建请求
 request = IntelligenceDecodeRequest(

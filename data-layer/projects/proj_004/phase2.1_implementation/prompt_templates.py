@@ -122,7 +122,12 @@ regulatory 信号注意事项：
       "confidence_score": integer(1-10),
       "timeliness_score": integer(1-10),
       "source_ref": "string",
-      "extracted_at": "ISO8601 string"
+      "extracted_at": "ISO8601 string",
+      "logic_frame": {
+        "what_changed": "string",
+        "change_direction": "increase|decrease|tighten|loosen|enter|exit|shift|validate|invalidate|unknown",
+        "affects": ["string"]
+      }
     }}
   ]
 }}
@@ -134,6 +139,17 @@ regulatory 信号注意事项：
   * 4-6：间接证据、表述模糊
   * 7-10：官方确认、直接证据、原文明确支持
 - timeliness_score（时效性）：1-3 过时，4-7 近期，8-10 最新
+
+logic_frame 抽取规则（2.1 V2）：
+- 每条信号都应尽量补充一个 logic_frame，用于后续 Step A / Step C 做逻辑互补判断
+- logic_frame.what_changed：只能写"发生变化的变量"，优先短语型变量名，如 platform_policy / studio_headcount / distribution_access / ai_tool_cost
+- logic_frame.change_direction：只能从以下枚举中选择：increase / decrease / tighten / loosen / enter / exit / shift / validate / invalidate / unknown
+- logic_frame.affects：只写主要受影响对象，可以为空数组
+- 如果证据不足，不要脑补；可将 change_direction 写为 unknown，affects 写为空数组
+- logic_frame 里严禁写机会结论、投资建议、优先级判断、行动建议
+- 如果同一段原文包含多个独立变化，尤其是不同变量或不同方向的变化，应该拆成多条 Signal
+- 一个 Signal 只能表达一个主变化变量和一个 change_direction；affects 可以多值，但 change_direction 不能多值
+- 如果只是一个变化影响多个对象，不要拆分为多条 Signal，而应在 affects 中写多个对象
 
 重要规则：
 1. 如果文本中没有明确的范式信号，返回空的 signals 数组
@@ -160,7 +176,12 @@ FEW_SHOT_EXAMPLES = [
                     "confidence_score": 10,
                     "timeliness_score": 9,
                     "source_ref": "example",
-                    "extracted_at": "2026-03-14T00:00:00Z"
+                    "extracted_at": "2026-03-14T00:00:00Z",
+                    "logic_frame": {
+                        "what_changed": "engine_migration",
+                        "change_direction": "enter",
+                        "affects": ["game development projects"]
+                    }
                 }
             ]
         }
@@ -182,7 +203,12 @@ FEW_SHOT_EXAMPLES = [
                     "confidence_score": 8,
                     "timeliness_score": 9,
                     "source_ref": "example",
-                    "extracted_at": "2026-03-14T00:00:00Z"
+                    "extracted_at": "2026-03-14T00:00:00Z",
+                    "logic_frame": {
+                        "what_changed": "category_growth",
+                        "change_direction": "increase",
+                        "affects": ["indie game developers", "game publishers"]
+                    }
                 }
             ]
         }
@@ -204,7 +230,12 @@ FEW_SHOT_EXAMPLES = [
                     "confidence_score": 9,
                     "timeliness_score": 10,
                     "source_ref": "example",
-                    "extracted_at": "2026-03-14T00:00:00Z"
+                    "extracted_at": "2026-03-14T00:00:00Z",
+                    "logic_frame": {
+                        "what_changed": "key_personnel_join",
+                        "change_direction": "enter",
+                        "affects": ["game development teams"]
+                    }
                 }
             ]
         }
@@ -226,7 +257,12 @@ FEW_SHOT_EXAMPLES = [
                     "confidence_score": 10,
                     "timeliness_score": 10,
                     "source_ref": "example",
-                    "extracted_at": "2026-03-14T00:00:00Z"
+                    "extracted_at": "2026-03-14T00:00:00Z",
+                    "logic_frame": {
+                        "what_changed": "funding",
+                        "change_direction": "increase",
+                        "affects": ["game development projects"]
+                    }
                 }
             ]
         }
@@ -248,7 +284,12 @@ FEW_SHOT_EXAMPLES = [
                     "confidence_score": 3,
                     "timeliness_score": 8,
                     "source_ref": "example",
-                    "extracted_at": "2026-03-14T00:00:00Z"
+                    "extracted_at": "2026-03-14T00:00:00Z",
+                    "logic_frame": {
+                        "what_changed": "funding",
+                        "change_direction": "unknown",
+                        "affects": []
+                    }
                 }
             ]
         }
@@ -278,7 +319,57 @@ FEW_SHOT_EXAMPLES = [
                     "confidence_score": 10,
                     "timeliness_score": 10,
                     "source_ref": "example",
-                    "extracted_at": "2026-03-14T00:00:00Z"
+                    "extracted_at": "2026-03-14T00:00:00Z",
+                    "logic_frame": {
+                        "what_changed": "studio_headcount",
+                        "change_direction": "decrease",
+                        "affects": ["game development teams"]
+                    }
+                }
+            ]
+        }
+    },
+
+    # 样例 7b：多独立变化应拆成两条信号
+    {
+        "input": "Apple was fined €500 million under the DMA anti-steering rules, and developers were given more room to direct users to alternative offers outside the App Store.",
+        "output": {
+            "signals": [
+                {
+                    "signal_id": "sig_example_7b_1",
+                    "signal_type": "regulatory",
+                    "signal_label": "Apple 因 DMA 反引导规则被罚",
+                    "description": "欧盟认定 Apple 违反 DMA 反引导义务并处以 5 亿欧元罚款",
+                    "evidence_text": "Apple was fined €500 million under the DMA anti-steering rules",
+                    "entities": ["Apple", "DMA", "European Commission"],
+                    "intensity_score": 8,
+                    "confidence_score": 10,
+                    "timeliness_score": 8,
+                    "source_ref": "example",
+                    "extracted_at": "2026-04-02T00:00:00Z",
+                    "logic_frame": {
+                        "what_changed": "platform_compliance_pressure",
+                        "change_direction": "tighten",
+                        "affects": ["app store operators", "mobile game publishers"]
+                    }
+                },
+                {
+                    "signal_id": "sig_example_7b_2",
+                    "signal_type": "market",
+                    "signal_label": "开发者站外导流空间扩大",
+                    "description": "开发者被允许更多地将用户引导至 App Store 外部优惠渠道",
+                    "evidence_text": "developers were given more room to direct users to alternative offers outside the App Store",
+                    "entities": ["developers", "App Store"],
+                    "intensity_score": 7,
+                    "confidence_score": 9,
+                    "timeliness_score": 8,
+                    "source_ref": "example",
+                    "extracted_at": "2026-04-02T00:00:00Z",
+                    "logic_frame": {
+                        "what_changed": "distribution_access",
+                        "change_direction": "loosen",
+                        "affects": ["mobile developers", "indie studios"]
+                    }
                 }
             ]
         }
@@ -308,7 +399,12 @@ FEW_SHOT_EXAMPLES = [
                     "confidence_score": 10,
                     "timeliness_score": 9,
                     "source_ref": "example",
-                    "extracted_at": "2026-03-14T00:00:00Z"
+                    "extracted_at": "2026-03-14T00:00:00Z",
+                    "logic_frame": {
+                        "what_changed": "financial_write_down",
+                        "change_direction": "decrease",
+                        "affects": ["company assets"]
+                    }
                 }
             ]
         }
@@ -330,7 +426,12 @@ FEW_SHOT_EXAMPLES = [
                     "confidence_score": 10,
                     "timeliness_score": 10,
                     "source_ref": "example",
-                    "extracted_at": "2026-03-14T00:00:00Z"
+                    "extracted_at": "2026-03-14T00:00:00Z",
+                    "logic_frame": {
+                        "what_changed": "product_line_adjustment",
+                        "change_direction": "unknown",
+                        "affects": []
+                    }
                 }
             ]
         }
@@ -352,7 +453,12 @@ FEW_SHOT_EXAMPLES = [
                     "confidence_score": 10,
                     "timeliness_score": 9,
                     "source_ref": "example",
-                    "extracted_at": "2026-03-14T00:00:00Z"
+                    "extracted_at": "2026-03-14T00:00:00Z",
+                    "logic_frame": {
+                        "what_changed": "ip_protection",
+                        "change_direction": "loosen",
+                        "affects": ["game developers", "AI asset creators"]
+                    }
                 }
             ]
         }
@@ -382,7 +488,12 @@ FEW_SHOT_EXAMPLES = [
                     "confidence_score": 9,
                     "timeliness_score": 9,
                     "source_ref": "example",
-                    "extracted_at": "2026-03-27T00:00:00Z"
+                    "extracted_at": "2026-03-27T00:00:00Z",
+                    "logic_frame": {
+                        "what_changed": "sales_milestone",
+                        "change_direction": "increase",
+                        "affects": ["game developers", "game publishers"]
+                    }
                 }
             ]
         }
@@ -404,7 +515,12 @@ FEW_SHOT_EXAMPLES = [
                     "confidence_score": 8,
                     "timeliness_score": 9,
                     "source_ref": "example",
-                    "extracted_at": "2026-03-27T00:00:00Z"
+                    "extracted_at": "2026-03-27T00:00:00Z",
+                    "logic_frame": {
+                        "what_changed": "dau",
+                        "change_direction": "increase",
+                        "affects": ["game developers", "game publishers"]
+                    }
                 }
             ]
         }
@@ -473,8 +589,19 @@ def build_prompt(content: str, source_id: str) -> str:
 
 
 # Prompt 版本管理
-PROMPT_VERSION = "v1.6"
+PROMPT_VERSION = "v2.1"
 PROMPT_CHANGELOG = {
+    "v2.1": {
+        "date": "2026-04-02",
+        "changes": "2.1 V2 结构化逻辑字段增强：(1) JSON Schema 新增 logic_frame.what_changed / change_direction / affects；(2) 系统规则新增 logic_frame 抽取约束与不过界规则；(3) 明确同一原文包含多个独立变化时应拆成多条 Signal，而不是在一条信号里混合多个方向；(4) 新增多独立变化拆分 few-shot 示例",
+        "few_shot_count": 16,
+        "optimization_targets": [
+            "让 2.1 输出可被 Step A / Step C 规则消费的最小逻辑框架",
+            "减少 Step A 退化为语义相似匹配的概率",
+            "明确多变化文本的拆分口径，避免一个 Signal 混合多个方向"
+        ],
+        "trigger": "Step A v2 收口后，确认需要从 2.1 信息层补足结构化逻辑字段"
+    },
     "v1.0": {
         "date": "2026-03-14",
         "changes": "初始版本，包含 6 个 few-shot 样例（4 类信号 + 1 边界例 + 1 负例）",
