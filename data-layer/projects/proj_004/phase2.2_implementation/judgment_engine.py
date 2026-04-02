@@ -693,6 +693,22 @@ class JudgmentEngine:
         if step_a_result.fallback_used:
             print("[Step A] 使用规则 fallback（LLM 未响应）")
         print(f"[Step A] 场景识别结果: {len(step_a_result.logical_scenarios)} 个逻辑场景 / {len(step_a_result.isolated_signals)} 条信号（含角色标注）")
+        if getattr(step_a_result, "exploration_scenarios", None):
+            print(f"[Step A] 探索通道候选: {len(step_a_result.exploration_scenarios)} 个")
+        if getattr(step_a_result, "emerging_links", None):
+            stored_link_ids = signal_store.save_emerging_links(
+                getattr(step_a_result, "emerging_links", []),
+                batch_date=today,
+            )
+            if stored_link_ids:
+                print(f"[Signal Store] 写入/更新 {len(stored_link_ids)} 条关系痕迹（emerging links）")
+        if getattr(step_a_result, "scenario_candidates", None):
+            stored_scenario_ids = signal_store.save_scenario_memories(
+                getattr(step_a_result, "scenario_candidates", []),
+                batch_date=today,
+            )
+            if stored_scenario_ids:
+                print(f"[Signal Store] 写入/更新 {len(stored_scenario_ids)} 条半成品场景（scenario memories）")
 
         # ── Step C（批内逻辑场景 → 软约束全量判断）──────────
         # 设计：Step A 输出 logical_scenarios（软建议），Step C 接收全量信号 + 场景建议
@@ -703,20 +719,25 @@ class JudgmentEngine:
         # 高强度孤立信号兜底阈值（intensity ≥ 7 对应 deep_dive 级信号）
         HIGH_INTENSITY_THRESHOLD = 7
 
-        if step_a_result.logical_scenarios or any(
+        if step_a_result.logical_scenarios or getattr(step_a_result, "exploration_scenarios", None) or any(
             (s.get("intensity_score") or s.get("intensity", 0)) >= HIGH_INTENSITY_THRESHOLD
             for s in enriched_signals
         ):
-            # 有逻辑场景，或有高强度信号 → 发起 Step C 全量判断
+            # 有逻辑场景、探索场景，或有高强度信号 → 发起 Step C 全量判断
             scenario_request = self._build_scenario_request(
                 original_request=request,
                 all_signals=enriched_signals,
                 logical_scenarios=step_a_result.logical_scenarios,
+                exploration_scenarios=getattr(step_a_result, "exploration_scenarios", []),
             )
             result = self.judge(scenario_request)
             all_opportunities.extend(result.opportunities or [])
             for opp in (result.opportunities or []):
                 source_signal_map[opp.opportunity_id] = enriched_signals
+                for sc in getattr(step_a_result, "logical_scenarios", []):
+                    signal_store.update_scenario_state(sc.scenario_id, "promoted", opp.opportunity_id)
+                for sc in getattr(step_a_result, "exploration_scenarios", []):
+                    signal_store.update_scenario_state(sc.scenario_id, "matched", opp.opportunity_id)
 
             # 成功产出机会的信号以 contributed 状态写入 Signal Store
             if result.opportunities:
@@ -787,9 +808,12 @@ class JudgmentEngine:
                         contributed_source_ids.add(sid)
 
         signals_to_store = []   # 最终需要写入 Signal Store 的孤立信号
+        step_b_summary = self._init_step_b_summary(step_a_result.isolated_signals)
+        step_b_trace = []
 
         for iso_signal in step_a_result.isolated_signals:
             iso_label = iso_signal.get("signal_label", iso_signal.get("_signal_id", "unknown"))
+            iso_signal_id = iso_signal.get("signal_id") or iso_signal.get("id") or iso_label
             print(f"[Step B] 孤立信号进入检索: {iso_label}")
             step_b_result = run_step_b(
                 isolated_signal=iso_signal,
@@ -799,52 +823,147 @@ class JudgmentEngine:
             )
 
             if step_b_result.matched:
-                total_candidates = sum(len(g) for g in step_b_result.candidate_groups)
-                fallback_tag = "（fallback）" if step_b_result.fallback_used else ""
-                print(f"[Step B] ✅ 命中历史伙伴{fallback_tag}: {total_candidates} 条候选 → 进入 Step C")
-                # 找到历史伙伴，构建组合请求进 Step C
-                for candidate_group in step_b_result.candidate_groups:
-                    combined_signals = [iso_signal] + [
-                        self._signal_entry_to_dict(e) for e in candidate_group
+                step_b_summary["matched_signal_count"] += 1
+                if step_b_result.fallback_used:
+                    step_b_summary["fallback_match_count"] += 1
+
+                candidate_infos = getattr(step_b_result, "candidate_group_infos", []) or []
+                if not candidate_infos:
+                    candidate_infos = [
+                        {
+                            "route": "step_c_ready",
+                            "route_reason": "legacy candidate group",
+                            "entries": group,
+                            "scenario": None,
+                            "link": None,
+                            "group_id": f"legacy::{idx}",
+                            "rank_score": 0.0,
+                            "source_kind": "signal_entry",
+                            "slot_fill_count": 0,
+                            "core_role_coverage": 0,
+                        }
+                        for idx, group in enumerate(step_b_result.candidate_groups)
                     ]
-                    group_request = self._build_group_request(request, combined_signals)
+
+                total_candidates = sum(len(info.entries if hasattr(info, "entries") else info.get("entries", [])) for info in candidate_infos)
+                ready_count = len(getattr(step_b_result, "ready_candidate_groups", []) or [])
+                latent_count = len(getattr(step_b_result, "store_candidate_groups", []) or [])
+                scenario_count = len(getattr(step_b_result, "matched_scenarios", []) or [])
+                link_count = len(getattr(step_b_result, "matched_links", []) or [])
+                fallback_tag = "（fallback）" if step_b_result.fallback_used else ""
+                scenario_tag = f" / 激活场景 {scenario_count} 个" if scenario_count else ""
+                link_tag = f" / 命中关系 {link_count} 条" if link_count else ""
+                route_tag = f" / Step C-ready {ready_count} 组 / store-for-later {latent_count} 组"
+                print(f"[Step B] ✅ 命中历史伙伴{fallback_tag}: {total_candidates} 条候选{scenario_tag}{link_tag}{route_tag} → 进入 Step C")
+
+                step_b_summary["candidate_group_count"] += len(candidate_infos)
+                step_b_summary["step_c_ready_group_count"] += ready_count
+                step_b_summary["store_for_later_group_count"] += latent_count
+                step_b_summary["scenario_hit_count"] += scenario_count
+                step_b_summary["link_hit_count"] += link_count
+
+                trace_record = self._build_step_b_trace_record(
+                    iso_signal=iso_signal,
+                    step_b_result=step_b_result,
+                    candidate_infos=candidate_infos,
+                )
+                produced_opportunity = False
+
+                for candidate_info in candidate_infos:
+                    group_entries = candidate_info.entries if hasattr(candidate_info, "entries") else candidate_info.get("entries", [])
+                    if not group_entries:
+                        continue
+
+                    route = getattr(candidate_info, "route", None) if hasattr(candidate_info, "route") else candidate_info.get("route", "step_c_ready")
+                    source_kind = getattr(candidate_info, "source_kind", None) if hasattr(candidate_info, "source_kind") else candidate_info.get("source_kind", "signal_entry")
+                    step_b_summary["step_c_attempt_count"] += 1
+                    step_b_summary["route_attempt_counts"][route] = step_b_summary["route_attempt_counts"].get(route, 0) + 1
+                    step_b_summary["source_kind_counts"][source_kind] = step_b_summary["source_kind_counts"].get(source_kind, 0) + 1
+
+                    combined_signals = [iso_signal] + [
+                        self._signal_entry_to_dict(e) for e in group_entries
+                    ]
+                    group_request = self._build_step_b_group_request(
+                        original_request=request,
+                        signals=combined_signals,
+                        iso_signal=iso_signal,
+                        candidate_info=candidate_info,
+                    )
                     result = self.judge(group_request)
                     new_opps = result.opportunities or []
                     all_opportunities.extend(new_opps)
+                    trace_record["candidate_attempts"].append(
+                        self._build_step_b_attempt_record(candidate_info, group_entries, new_opps)
+                    )
 
-                    # 标记历史信号状态
+                    if new_opps:
+                        produced_opportunity = True
+                        step_b_summary["step_c_success_count"] += len(new_opps)
+                        step_b_summary["route_success_counts"][route] = step_b_summary["route_success_counts"].get(route, 0) + len(new_opps)
+
                     for opp in new_opps:
-                        # iso_signal 写入 Signal Store 并标记 matched
-                        # 若该信号已在本批 Step C 中以 contributed 写入，则跳过（不覆盖贡献记录）
-                        iso_sig_id = f"sig_{iso_signal.get('signal_id') or iso_signal.get('id') or ''}_{iso_signal.get('signal_type','')}"
-                        existing = signal_store.get(iso_sig_id)
-                        if existing and existing.status == "contributed":
-                            # 已有贡献记录，不重复写 matched，避免状态污染
-                            iso_entry = existing
-                        else:
-                            ann = iso_signal.get("_role_annotation", {})
-                            iso_entry = build_signal_entry(
-                                signal=iso_signal,
-                                roles=ann.get("roles", ["catalyst"]),
-                                needs=ann.get("needs", []),
-                                domains=ann.get("domains", ["gaming"]),
-                                waiting_for_text=ann.get("waiting_for_text", ""),
-                                batch_date=today,
-                            )
-                            iso_entry.status = "matched"
-                            iso_entry.matched_opportunity_id = opp.opportunity_id
-                            signal_store.add(iso_entry)
-
-                        # source_signal_map 包含 iso_entry + 历史伙伴，黄金模板完整
-                        source_signal_map[opp.opportunity_id] = [iso_entry] + list(candidate_group)
-                        for entry in candidate_group:
+                        iso_entry = self._upsert_iso_signal_as_matched(
+                            signal_store=signal_store,
+                            iso_signal=iso_signal,
+                            batch_date=today,
+                            opportunity_id=opp.opportunity_id,
+                            build_signal_entry=build_signal_entry,
+                        )
+                        source_signal_map[opp.opportunity_id] = [iso_entry] + list(group_entries)
+                        for entry in group_entries:
                             signal_store.update_status(
                                 entry.signal_id, "matched", opp.opportunity_id
                             )
+                        self._consume_step_b_candidate_success(
+                            signal_store=signal_store,
+                            candidate_info=candidate_info,
+                            opportunity_id=opp.opportunity_id,
+                        )
+
+                    if not new_opps:
+                        self._consume_step_b_candidate_miss(
+                            signal_store=signal_store,
+                            candidate_info=candidate_info,
+                        )
+
+                trace_record["produced_opportunity"] = produced_opportunity
+                trace_record["opportunity_count"] = sum(
+                    item.get("opportunity_count", 0) for item in trace_record["candidate_attempts"]
+                )
+                trace_record["stored_for_future"] = not produced_opportunity
+                step_b_trace.append(trace_record)
+
+                if not produced_opportunity:
+                    step_b_summary["matched_but_no_opportunity_count"] += 1
+                    print(f"[Step B] ⚠️ 命中历史候选但未形成机会: {iso_label} → 写入 Signal Store 继续等待")
+                    signals_to_store.append(iso_signal)
+                else:
+                    print(
+                        f"[Step B] 🎯 {iso_label} 产出 {trace_record['opportunity_count']} 个机会 / "
+                        f"尝试 {len(trace_record['candidate_attempts'])} 组候选"
+                    )
             else:
                 # 没有找到伙伴，当前信号写入 Signal Store
+                step_b_summary["unmatched_signal_count"] += 1
                 print(f"[Step B] ❌ 无历史伙伴: {iso_label} → 写入 Signal Store 等待后续批次")
                 signals_to_store.append(iso_signal)
+                step_b_trace.append({
+                    "signal_id": iso_signal_id,
+                    "signal_label": iso_label,
+                    "matched": False,
+                    "fallback_used": False,
+                    "candidate_count": 0,
+                    "step_c_ready_group_count": 0,
+                    "store_for_later_group_count": 0,
+                    "scenario_hit_count": 0,
+                    "link_hit_count": 0,
+                    "candidates": [],
+                    "candidate_attempts": [],
+                    "produced_opportunity": False,
+                    "opportunity_count": 0,
+                    "stored_for_future": True,
+                    "note": "no historical partner matched",
+                })
 
         # ── 写入孤立信号到 Signal Store ───────────────────────
         if signals_to_store:
@@ -888,6 +1007,7 @@ class JudgmentEngine:
                 )
 
         # ── 构建最终结果 ─────────────────────────────────────
+        self._finalize_step_b_summary(step_b_summary, step_b_trace)
         processing_time = int((_time.time() - start_time) * 1000)
         if all_opportunities:
             diagnostics = Diagnostics(
@@ -895,6 +1015,8 @@ class JudgmentEngine:
                 opportunity_count=len(all_opportunities),
                 evidence_completeness=1.0,
                 boundary_warnings=[],
+                step_b_summary=step_b_summary,
+                step_b_trace=step_b_trace,
             )
             return OpportunityJudgmentResult(
                 opportunities=all_opportunities,
@@ -910,12 +1032,112 @@ class JudgmentEngine:
                 boundary_warnings=[
                     f"当批次 {len(signals_to_store)} 条信号已写入 Signal Store，等待后续批次补全"
                 ],
+                step_b_summary=step_b_summary,
+                step_b_trace=step_b_trace,
             )
             return OpportunityJudgmentResult(
                 opportunities=[],
                 status="pending_signals",   # 新增状态：区别于 insufficient_evidence
                 diagnostics=diagnostics,
             )
+
+    def _init_step_b_summary(self, isolated_signals: list) -> dict:
+        return {
+            "isolated_signal_count": len(isolated_signals or []),
+            "matched_signal_count": 0,
+            "unmatched_signal_count": 0,
+            "fallback_match_count": 0,
+            "matched_but_no_opportunity_count": 0,
+            "candidate_group_count": 0,
+            "step_c_ready_group_count": 0,
+            "store_for_later_group_count": 0,
+            "scenario_hit_count": 0,
+            "link_hit_count": 0,
+            "step_c_attempt_count": 0,
+            "step_c_success_count": 0,
+            "route_attempt_counts": {
+                "step_c_ready": 0,
+                "store_for_later": 0,
+                "discard": 0,
+            },
+            "route_success_counts": {
+                "step_c_ready": 0,
+                "store_for_later": 0,
+                "discard": 0,
+            },
+            "source_kind_counts": {
+                "scenario_memory": 0,
+                "emerging_link": 0,
+                "signal_entry": 0,
+            },
+            "step_c_success_rate": 0.0,
+        }
+
+    def _finalize_step_b_summary(self, summary: dict, trace: list):
+        attempt_count = summary.get("step_c_attempt_count", 0)
+        success_count = summary.get("step_c_success_count", 0)
+        summary["step_c_success_rate"] = round(success_count / attempt_count, 3) if attempt_count else 0.0
+        summary["trace_count"] = len(trace or [])
+        summary["produced_opportunity_signal_count"] = sum(
+            1 for item in (trace or []) if item.get("produced_opportunity")
+        )
+        return summary
+
+    def _build_step_b_trace_record(self, iso_signal: dict, step_b_result, candidate_infos: list) -> dict:
+        signal_id = iso_signal.get("signal_id") or iso_signal.get("id") or iso_signal.get("signal_label", "unknown")
+        signal_label = iso_signal.get("signal_label") or iso_signal.get("label", signal_id)
+        return {
+            "signal_id": signal_id,
+            "signal_label": signal_label,
+            "matched": bool(getattr(step_b_result, "matched", False)),
+            "fallback_used": bool(getattr(step_b_result, "fallback_used", False)),
+            "candidate_count": len(candidate_infos or []),
+            "step_c_ready_group_count": len(getattr(step_b_result, "ready_candidate_groups", []) or []),
+            "store_for_later_group_count": len(getattr(step_b_result, "store_candidate_groups", []) or []),
+            "scenario_hit_count": len(getattr(step_b_result, "matched_scenarios", []) or []),
+            "link_hit_count": len(getattr(step_b_result, "matched_links", []) or []),
+            "candidates": [self._serialize_step_b_candidate_info(info) for info in (candidate_infos or [])],
+            "candidate_attempts": [],
+            "produced_opportunity": False,
+            "opportunity_count": 0,
+            "stored_for_future": False,
+        }
+
+    def _build_step_b_attempt_record(self, candidate_info, group_entries: list, new_opps: list) -> dict:
+        group_id = getattr(candidate_info, "group_id", None) if hasattr(candidate_info, "group_id") else candidate_info.get("group_id", "step_b_group")
+        route = getattr(candidate_info, "route", None) if hasattr(candidate_info, "route") else candidate_info.get("route", "step_c_ready")
+        source_kind = getattr(candidate_info, "source_kind", None) if hasattr(candidate_info, "source_kind") else candidate_info.get("source_kind", "signal_entry")
+        rank_score = getattr(candidate_info, "rank_score", None) if hasattr(candidate_info, "rank_score") else candidate_info.get("rank_score")
+        route_reason = getattr(candidate_info, "route_reason", None) if hasattr(candidate_info, "route_reason") else candidate_info.get("route_reason", "")
+        return {
+            "group_id": group_id,
+            "route": route,
+            "source_kind": source_kind,
+            "rank_score": rank_score,
+            "route_reason": route_reason,
+            "entry_signal_ids": [getattr(entry, "signal_id", "") for entry in (group_entries or [])],
+            "opportunity_count": len(new_opps or []),
+            "produced_opportunity": bool(new_opps),
+            "opportunity_ids": [getattr(opp, "opportunity_id", "") for opp in (new_opps or [])],
+            "opportunity_titles": [getattr(opp, "opportunity_title", "") for opp in (new_opps or [])],
+        }
+
+    def _serialize_step_b_candidate_info(self, candidate_info) -> dict:
+        entries = getattr(candidate_info, "entries", None) if hasattr(candidate_info, "entries") else candidate_info.get("entries", [])
+        scenario = getattr(candidate_info, "scenario", None) if hasattr(candidate_info, "scenario") else candidate_info.get("scenario")
+        link = getattr(candidate_info, "link", None) if hasattr(candidate_info, "link") else candidate_info.get("link")
+        return {
+            "group_id": getattr(candidate_info, "group_id", None) if hasattr(candidate_info, "group_id") else candidate_info.get("group_id", "step_b_group"),
+            "route": getattr(candidate_info, "route", None) if hasattr(candidate_info, "route") else candidate_info.get("route", "step_c_ready"),
+            "route_reason": getattr(candidate_info, "route_reason", None) if hasattr(candidate_info, "route_reason") else candidate_info.get("route_reason", ""),
+            "source_kind": getattr(candidate_info, "source_kind", None) if hasattr(candidate_info, "source_kind") else candidate_info.get("source_kind", "signal_entry"),
+            "rank_score": getattr(candidate_info, "rank_score", None) if hasattr(candidate_info, "rank_score") else candidate_info.get("rank_score", 0.0),
+            "slot_fill_count": getattr(candidate_info, "slot_fill_count", None) if hasattr(candidate_info, "slot_fill_count") else candidate_info.get("slot_fill_count", 0),
+            "core_role_coverage": getattr(candidate_info, "core_role_coverage", None) if hasattr(candidate_info, "core_role_coverage") else candidate_info.get("core_role_coverage", 0),
+            "entry_signal_ids": [getattr(entry, "signal_id", "") for entry in (entries or [])],
+            "scenario_id": getattr(scenario, "scenario_id", None) if scenario else None,
+            "link_id": getattr(link, "link_id", None) if link else None,
+        }
 
     @staticmethod
     def _dedup_signals_by_source(signals: list) -> list:
@@ -950,7 +1172,79 @@ class JudgmentEngine:
         new_req._override_signals = self._dedup_signals_by_source(signals)
         return new_req
 
-    def _build_scenario_request(self, original_request, all_signals: list, logical_scenarios: list):
+    def _build_step_b_group_request(self, original_request, signals: list, iso_signal: dict, candidate_info):
+        new_req = self._build_group_request(original_request, signals)
+        route = getattr(candidate_info, "route", None) or candidate_info.get("route", "step_c_ready")
+        route_reason = getattr(candidate_info, "route_reason", None) or candidate_info.get("route_reason", "")
+        source_kind = getattr(candidate_info, "source_kind", None) or candidate_info.get("source_kind", "signal_entry")
+        group_id = getattr(candidate_info, "group_id", None) or candidate_info.get("group_id", "step_b_group")
+        rank_score = getattr(candidate_info, "rank_score", None)
+        slot_fill_count = getattr(candidate_info, "slot_fill_count", None)
+        core_role_coverage = getattr(candidate_info, "core_role_coverage", None)
+
+        iso_label = iso_signal.get("signal_label") or iso_signal.get("label", "当前信号")
+        hint = (
+            f"[Step B {route} 候选 {group_id}] 当前信号：{iso_label} | 来源：{source_kind} | "
+            f"理由：{route_reason}"
+        )
+        if rank_score is not None:
+            hint += f" | 排序分={rank_score}"
+        if slot_fill_count is not None:
+            hint += f" | 补槽数={slot_fill_count}"
+        if core_role_coverage is not None:
+            hint += f" | 核心角色覆盖={core_role_coverage}"
+        hint += " | 请将其视为 Step B 提供的候选逻辑路径，而不是已确认结论。"
+
+        existing_hints = list(getattr(new_req, "_scenario_hints", []) or [])
+        if route == "store_for_later":
+            hint += " 该候选仍属于机会前状态，本轮默认不应直接进入 Step C。"
+        else:
+            hint += " 该候选已被 Step B 视为 Step C-ready，请判断其是否真的形成可验证机会。"
+        existing_hints.append(hint)
+        new_req._scenario_hints = existing_hints
+        return new_req
+
+    def _upsert_iso_signal_as_matched(self, signal_store, iso_signal: dict, batch_date: str, opportunity_id: str, build_signal_entry):
+        iso_sig_id = f"sig_{iso_signal.get('signal_id') or iso_signal.get('id') or ''}_{iso_signal.get('signal_type','')}"
+        existing = signal_store.get(iso_sig_id)
+        if existing and existing.status == "contributed":
+            return existing
+
+        ann = iso_signal.get("_role_annotation", {})
+        iso_entry = build_signal_entry(
+            signal=iso_signal,
+            roles=ann.get("roles", ["catalyst"]),
+            needs=ann.get("needs", []),
+            domains=ann.get("domains", ["gaming"]),
+            waiting_for_text=ann.get("waiting_for_text", ""),
+            batch_date=batch_date,
+        )
+        iso_entry.status = "matched"
+        iso_entry.matched_opportunity_id = opportunity_id
+        signal_store.add(iso_entry)
+        return iso_entry
+
+    def _consume_step_b_candidate_success(self, signal_store, candidate_info, opportunity_id: str):
+        scenario = getattr(candidate_info, "scenario", None) if hasattr(candidate_info, "scenario") else candidate_info.get("scenario")
+        link = getattr(candidate_info, "link", None) if hasattr(candidate_info, "link") else candidate_info.get("link")
+
+        if scenario:
+            signal_store.update_scenario_state(scenario.scenario_id, "promoted", opportunity_id)
+        if link:
+            signal_store.mark_link_promoted(
+                link.link_id,
+                scenario_id=(scenario.scenario_id if scenario else None),
+            )
+
+    def _consume_step_b_candidate_miss(self, signal_store, candidate_info):
+        scenario = getattr(candidate_info, "scenario", None) if hasattr(candidate_info, "scenario") else candidate_info.get("scenario")
+        link = getattr(candidate_info, "link", None) if hasattr(candidate_info, "link") else candidate_info.get("link")
+        if scenario:
+            signal_store.activate_scenario_memory(scenario.scenario_id)
+        if link:
+            signal_store.activate_link(link.link_id)
+
+    def _build_scenario_request(self, original_request, all_signals: list, logical_scenarios: list, exploration_scenarios: list = None):
         """
         构建 Step C 的全量信号 + 逻辑场景建议 request。
 
@@ -960,7 +1254,8 @@ class JudgmentEngine:
         Args:
             original_request: 原始 OpportunityJudgmentRequest
             all_signals: 全量 enriched_signals
-            logical_scenarios: Step A 输出的 LogicalScenario 列表（软建议）
+            logical_scenarios: Step A 输出的 LogicalScenario 列表（主通道软建议）
+            exploration_scenarios: Step A 输出的探索通道场景建议
         """
         new_req = OpportunityJudgmentRequest(
             decoded_intelligences=original_request.decoded_intelligences,
@@ -969,15 +1264,28 @@ class JudgmentEngine:
         # 全量信号去重后传入
         new_req._override_signals = self._dedup_signals_by_source(all_signals)
         # 注入场景建议（pipeline 会在 prompt 前插入场景建议前缀）
+        scenario_hints = []
         if logical_scenarios:
-            scenario_hints = []
             for sc in logical_scenarios:
                 hint = (
-                    f"[场景{sc.scenario_id}] 可能指向：{sc.opportunity_direction} | "
+                    f"[主通道场景 {sc.scenario_id}] 可能指向：{sc.opportunity_direction} | "
                     f"核心信号：{', '.join(sc.primary_signal_ids)} | "
                     f"依据：{sc.reasoning}"
                 )
+                if getattr(sc, "missing_slots", None):
+                    hint += f" | 尚缺：{', '.join(sc.missing_slots)}"
                 scenario_hints.append(hint)
+        if exploration_scenarios:
+            for sc in exploration_scenarios:
+                hint = (
+                    f"[探索通道场景 {sc.scenario_id}] 可能指向：{sc.opportunity_direction} | "
+                    f"核心信号：{', '.join(sc.primary_signal_ids)} | "
+                    f"依据：{sc.reasoning}"
+                )
+                if getattr(sc, "missing_slots", None):
+                    hint += f" | 尚缺：{', '.join(sc.missing_slots)}"
+                scenario_hints.append(hint)
+        if scenario_hints:
             new_req._scenario_hints = scenario_hints
         return new_req
 

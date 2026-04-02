@@ -75,6 +75,8 @@ class TmpStoreMixin:
         def patched_init(self_store):
             self_store.store_path = _pkl
             self_store._store = {}
+            self_store._emerging_links = {}
+            self_store._scenario_memories = {}
             self_store._load()
 
         SignalStore.__init__ = patched_init
@@ -279,7 +281,7 @@ class TestStepBCrossBatchMatch(TmpStoreMixin, unittest.TestCase):
     @patch("step_b_retrieval._l4_llm_confirm")
     def test_step_b_finds_historical_partner(self, mock_l4):
         """
-        L1 命中 + mock L4 确认 → matched=True，candidate_groups 包含历史信号
+        L1 命中到历史伙伴，但若只是补到部分结构、尚未形成机会，则应保留为 store-for-later。
         """
         from step_b_retrieval import run_step_b
 
@@ -289,23 +291,24 @@ class TestStepBCrossBatchMatch(TmpStoreMixin, unittest.TestCase):
 
         new_signal = self._make_new_signal()
 
-        # mock L4：确认可以组合
         mock_l4.return_value = [[nacon]]
 
         result = run_step_b(
             isolated_signal=new_signal,
             signal_store=store,
-            llm_client=MagicMock(),   # 非 None，才会走 L4
+            llm_client=MagicMock(),
             model="mock",
         )
 
-        self.assertTrue(result.matched,
-                        "Step B 应识别历史伙伴，returned matched=False")
-        self.assertGreater(len(result.candidate_groups), 0,
-                           "candidate_groups 应非空")
-        all_ids = [e.signal_id for g in result.candidate_groups for e in g]
-        self.assertIn(nacon.signal_id, all_ids,
-                      "历史信号应出现在 candidate_groups 中")
+        self.assertFalse(result.matched,
+                         "未形成机会闭环时不应返回 matched=True")
+        self.assertEqual(len(result.candidate_groups), 0,
+                         "只有 Step-C-ready 候选才应进入 candidate_groups")
+        self.assertGreaterEqual(len(result.store_candidate_groups), 1,
+                                "应保留 store-for-later 候选供后续成长")
+        latent_ids = [e.signal_id for g in result.store_candidate_groups for e in g]
+        self.assertIn(nacon.signal_id, latent_ids,
+                      "历史信号应出现在 store_candidate_groups 中")
 
     @patch("step_b_retrieval._l4_llm_confirm")
     def test_step_b_no_l1_hit_returns_false(self, mock_l4):
@@ -331,13 +334,41 @@ class TestStepBCrossBatchMatch(TmpStoreMixin, unittest.TestCase):
     @patch("step_b_retrieval._l4_llm_confirm")
     def test_step_b_l4_returns_empty_uses_fallback(self, mock_l4):
         """
-        L4 返回空 → fallback_used=True，把 L2 候选作为单组返回
+        L4 返回空 → fallback_used=True，把 Step-C-ready 候选作为结果返回
         """
         from step_b_retrieval import run_step_b
 
         store = SignalStore()
         nacon = self._make_nacon_entry()
+        helper = build_signal_entry(
+            signal=_make_signal("helper_001", "market", "历史需求信号"),
+            roles=["demand_evidence"],
+            needs=["resource_validation"],
+            domains=["gaming"],
+            waiting_for_text="等待资源验证",
+            batch_date="2026-03-31",
+        )
+        helper.status = "pending"
         store.add(nacon)
+        store.add(helper)
+
+        store.save_scenario_memories([
+            {
+                "scenario_id": "scenario_fallback_1",
+                "anchor_signal_ids": [nacon.original_signal_id],
+                "member_signal_ids": [nacon.original_signal_id, helper.original_signal_id],
+                "covered_roles": ["catalyst", "demand_evidence"],
+                "missing_slots": ["execution_risk"],
+                "shared_affects": ["gaming"],
+                "state": "developing",
+                "promotion_score": 0.8,
+                "option_value_score": 0.75,
+                "novelty_score": 0.4,
+                "gap_fill_value": 0.8,
+                "cross_domain_bonus": 0.1,
+                "reasoning_path": "已有催化剂和需求，等待执行风险补槽形成机会",
+            }
+        ], batch_date="2026-03-31")
 
         new_signal = self._make_new_signal()
         mock_l4.return_value = []  # L4 无法确认
@@ -349,11 +380,289 @@ class TestStepBCrossBatchMatch(TmpStoreMixin, unittest.TestCase):
             model="mock",
         )
 
-        # L4 无确认但 L2 有候选 → fallback=True，matched=True（让 Step C 判断）
         self.assertTrue(result.fallback_used,
                         "L4 无确认时应使用 fallback")
         self.assertTrue(result.matched,
-                        "L2 有候选时 fallback 路径 matched 应为 True")
+                        "存在 Step-C-ready 候选时 fallback 路径 matched 应为 True")
+        self.assertGreaterEqual(len(result.ready_candidate_groups), 1)
+
+    def test_step_b_prefers_scenario_memory_over_raw_signal(self):
+        """
+        若同时命中 ScenarioMemory 与普通历史信号，应优先保留 ScenarioMemory 产物，
+        但只有形成机会时才 matched=True。
+        """
+        from step_b_retrieval import run_step_b
+
+        store = SignalStore()
+        raw_partner = self._make_nacon_entry()
+        store.add(raw_partner)
+
+        helper = build_signal_entry(
+            signal=_make_signal("helper_001", "market", "用户需求升温"),
+            roles=["demand_evidence"],
+            needs=["resource_validation"],
+            domains=["gaming"],
+            waiting_for_text="等待资源验证",
+            batch_date="2026-03-31",
+        )
+        helper.status = "pending"
+        store.add(helper)
+
+        store.save_scenario_memories([
+            {
+                "scenario_id": "scenario_test_1",
+                "anchor_signal_ids": [raw_partner.original_signal_id],
+                "member_signal_ids": [raw_partner.original_signal_id, helper.original_signal_id],
+                "covered_roles": ["catalyst", "demand_evidence"],
+                "missing_slots": ["execution_risk"],
+                "shared_affects": ["gaming"],
+                "state": "developing",
+                "promotion_score": 0.66,
+                "option_value_score": 0.78,
+                "novelty_score": 0.4,
+                "gap_fill_value": 0.67,
+                "cross_domain_bonus": 0.1,
+                "reasoning_path": "已有催化剂与需求证据，等待执行风险补槽",
+            }
+        ], batch_date="2026-03-31")
+
+        result = run_step_b(
+            isolated_signal=self._make_new_signal(),
+            signal_store=store,
+            llm_client=None,
+            model="mock",
+        )
+
+        self.assertFalse(result.matched)
+        self.assertGreater(len(result.matched_scenarios), 0,
+                           "应优先命中 ScenarioMemory")
+        self.assertEqual(result.matched_scenarios[0].scenario_id, "scenario_test_1")
+        self.assertGreaterEqual(len(result.store_candidate_groups[0]), 2,
+                                "优先返回的场景候选应展开为场景中的历史信号集合")
+
+    def test_step_b_exposes_step_c_ready_and_store_for_later(self):
+        """
+        Step B 应显式暴露真正进入 Step C 的候选，以及只保留待后续成长的候选。
+        """
+        from step_b_retrieval import run_step_b
+
+        store = SignalStore()
+
+        strong_partner = self._make_nacon_entry()
+        store.add(strong_partner)
+
+        demand_partner = build_signal_entry(
+            signal=_make_signal("demand_001", "market", "需求已经出现"),
+            roles=["demand_evidence"],
+            needs=["resource_validation"],
+            domains=["gaming"],
+            waiting_for_text="等待资源验证",
+            batch_date="2026-03-31",
+        )
+        demand_partner.status = "pending"
+        store.add(demand_partner)
+
+        weak_partner = build_signal_entry(
+            signal=_make_signal("weak_001", "market", "外围社区关注"),
+            roles=["timing_signal"],
+            needs=["execution_risk"],
+            domains=["gaming"],
+            waiting_for_text="等待催化剂或风险信号",
+            batch_date="2026-03-31",
+        )
+        weak_partner.status = "pending"
+        weak_partner.intensity_score = 5
+        store.add(weak_partner)
+
+        store.save_scenario_memories([
+            {
+                "scenario_id": "scenario_route_test",
+                "anchor_signal_ids": [strong_partner.original_signal_id],
+                "member_signal_ids": [strong_partner.original_signal_id, demand_partner.original_signal_id],
+                "covered_roles": ["catalyst", "demand_evidence"],
+                "missing_slots": ["execution_risk"],
+                "shared_affects": ["gaming"],
+                "state": "developing",
+                "promotion_score": 0.8,
+                "option_value_score": 0.72,
+                "novelty_score": 0.4,
+                "gap_fill_value": 0.8,
+                "cross_domain_bonus": 0.1,
+                "reasoning_path": "已有催化剂和需求，当前执行风险可把逻辑补成机会",
+            }
+        ], batch_date="2026-03-31")
+
+        result = run_step_b(
+            isolated_signal=self._make_new_signal(),
+            signal_store=store,
+            llm_client=None,
+            model="mock",
+        )
+
+        self.assertTrue(result.matched)
+        self.assertGreater(len(result.candidate_group_infos), 0,
+                           "应暴露 candidate_group_infos 供上层查看上送结果")
+        self.assertGreaterEqual(len(result.ready_candidate_groups), 1,
+                                "应暴露 ready_candidate_groups")
+        self.assertGreaterEqual(len(result.store_candidate_groups), 1,
+                                "应暴露 store_candidate_groups")
+        routes = {info.route for info in result.candidate_group_infos + result.latent_candidate_group_infos}
+        self.assertIn("step_c_ready", routes)
+        self.assertIn("store_for_later", routes)
+
+    def test_single_signal_pair_should_not_auto_escalate_to_step_c(self):
+        """
+        单条历史 signal 即使很强，只要还只是补到最小关系、不足以形成机会，也不应直接进入 Step C。
+        """
+        from step_b_retrieval import run_step_b
+
+        store = SignalStore()
+        demand_only = build_signal_entry(
+            signal=_make_signal("hist_sig_only_001", "market", "强需求信号"),
+            roles=["demand_evidence"],
+            needs=["catalyst"],
+            domains=["gaming"],
+            waiting_for_text="等待催化剂",
+            batch_date="2026-03-31",
+        )
+        demand_only.status = "pending"
+        demand_only.intensity_score = 9
+        store.add(demand_only)
+
+        isolated = _make_signal("iso_sig_only_001", "regulatory", "新催化剂")
+        isolated["_role_annotation"] = {
+            "roles": ["catalyst"],
+            "needs": ["demand_evidence"],
+            "domains": ["gaming"],
+            "waiting_for_text": "等待需求信号",
+        }
+
+        result = run_step_b(
+            isolated_signal=isolated,
+            signal_store=store,
+            llm_client=None,
+            model="mock",
+        )
+
+        self.assertFalse(result.matched,
+                         "仅形成 signal pair 时不应自动视为已成机会")
+        self.assertEqual(len(result.ready_candidate_groups), 0)
+        self.assertGreaterEqual(len(result.store_candidate_groups), 1)
+        self.assertEqual(result.latent_candidate_group_infos[0].source_kind, "signal_entry")
+        self.assertEqual(result.latent_candidate_group_infos[0].route, "store_for_later")
+
+    def test_emerging_link_should_not_auto_escalate_without_opportunity_loop(self):
+        """
+        emerging_link 形成关系本身不等于机会；没有补成机会闭环时只能保留待后续成长。
+        """
+        from step_b_retrieval import run_step_b
+
+        store = SignalStore()
+
+        hist_market = build_signal_entry(
+            signal=_make_signal("hist_link_market_001", "market", "需求信号"),
+            roles=["demand_evidence"],
+            needs=["resource_validation"],
+            domains=["gaming", "ai"],
+            waiting_for_text="等待资源验证",
+            batch_date="2026-03-31",
+        )
+        hist_team = build_signal_entry(
+            signal=_make_signal("hist_link_team_001", "team", "团队准备"),
+            roles=["timing_signal"],
+            needs=["demand_evidence"],
+            domains=["ai"],
+            waiting_for_text="等待更明确需求",
+            batch_date="2026-03-31",
+        )
+        hist_market.status = "pending"
+        hist_team.status = "pending"
+        store.add_batch([hist_market, hist_team])
+
+        store.save_emerging_links([
+            {
+                "link_id": "link_boundary_001",
+                "signal_ids": [hist_market.original_signal_id, hist_team.original_signal_id],
+                "edge_type": "complementary",
+                "strength_band": "emerging",
+                "gate_passed": True,
+                "final_score": 0.58,
+                "reasoning": "关系存在但未闭环",
+                "shared_affects": ["ai workflow"],
+            }
+        ], batch_date="2026-03-31")
+
+        isolated = _make_signal("iso_link_boundary_001", "technical", "部署摩擦上升")
+        isolated["_role_annotation"] = {
+            "roles": ["execution_risk"],
+            "needs": ["demand_evidence"],
+            "domains": ["gaming", "ai"],
+            "waiting_for_text": "等待商业意义更明确的配对",
+        }
+
+        result = run_step_b(
+            isolated_signal=isolated,
+            signal_store=store,
+            llm_client=None,
+            model="mock",
+        )
+
+        self.assertFalse(result.matched)
+        self.assertEqual(len(result.ready_candidate_groups), 0)
+        self.assertGreaterEqual(len(result.store_candidate_groups), 1)
+        latent = result.latent_candidate_group_infos[0]
+        self.assertEqual(latent.source_kind, "emerging_link")
+        self.assertEqual(latent.route, "store_for_later")
+
+    def test_scenario_memory_can_escalate_when_core_loop_is_closed(self):
+        """
+        只有当 scenario memory 被补成最小机会闭环时，才应该真正进入 Step C。
+        """
+        from step_b_retrieval import run_step_b
+
+        store = SignalStore()
+        catalyst = self._make_nacon_entry()
+        demand = build_signal_entry(
+            signal=_make_signal("hist_scn_demand_001", "market", "需求明确出现"),
+            roles=["demand_evidence"],
+            needs=["resource_validation"],
+            domains=["gaming"],
+            waiting_for_text="等待资源验证",
+            batch_date="2026-03-31",
+        )
+        catalyst.status = "pending"
+        demand.status = "pending"
+        store.add_batch([catalyst, demand])
+
+        store.save_scenario_memories([
+            {
+                "scenario_id": "scenario_closed_loop_001",
+                "anchor_signal_ids": [catalyst.original_signal_id],
+                "member_signal_ids": [catalyst.original_signal_id, demand.original_signal_id],
+                "covered_roles": ["catalyst", "demand_evidence"],
+                "missing_slots": ["execution_risk"],
+                "shared_affects": ["gaming"],
+                "state": "developing",
+                "promotion_score": 0.82,
+                "option_value_score": 0.76,
+                "novelty_score": 0.5,
+                "gap_fill_value": 0.82,
+                "cross_domain_bonus": 0.1,
+                "reasoning_path": "催化剂和需求已具备，只等执行风险补槽形成最小机会逻辑",
+            }
+        ], batch_date="2026-03-31")
+
+        result = run_step_b(
+            isolated_signal=self._make_new_signal(),
+            signal_store=store,
+            llm_client=None,
+            model="mock",
+        )
+
+        self.assertTrue(result.matched)
+        self.assertGreaterEqual(len(result.ready_candidate_groups), 1)
+        self.assertEqual(result.candidate_group_infos[0].source_kind, "scenario_memory")
+        self.assertEqual(result.candidate_group_infos[0].route, "step_c_ready")
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -540,6 +849,281 @@ class TestContributedWrittenOnSuccess(TmpStoreMixin, unittest.TestCase):
 
         self.assertEqual(store.stats().get("by_status", {}).get("contributed", 0), 0,
                          "未产出机会时不应有 contributed 信号")
+
+    def test_step_b_exploration_route_hint_reaches_step_c(self):
+        """
+        Step B v1.2：探索通道候选进入 Step C 时，应把 route-aware hint 注入子请求。
+        """
+        from judgment_engine import JudgmentEngine
+        from schemas import OpportunityJudgmentRequest, OpportunityJudgmentResult
+        from step_b_retrieval import StepBResult, CandidateGroupInfo
+        from step_a_cluster import StepAResult
+
+        iso_signal = _make_signal("iso_001", "capital", "孤立信号")
+        iso_signal["_role_annotation"] = {
+            "roles": ["execution_risk"],
+            "needs": ["catalyst"],
+            "domains": ["gaming"],
+            "waiting_for_text": "等待催化剂",
+        }
+        partner = _make_entry("hist_001", "market", "历史伙伴")
+
+        candidate_info = CandidateGroupInfo(
+            group_id="scenario::explore_1",
+            entries=[partner],
+            source_kind="scenario_memory",
+            rank_score=0.64,
+            route="store_for_later",
+            route_reason="retain high option value scenario",
+            slot_fill_count=1,
+            core_role_coverage=2,
+        )
+        step_b_result = StepBResult(
+            candidate_groups=[[partner]],
+            current_signal_id="iso_001",
+            matched=True,
+            fallback_used=True,
+            candidate_group_infos=[candidate_info],
+        )
+
+        mock_step_a = StepAResult.__new__(StepAResult)
+        mock_step_a.signal_groups = []
+        mock_step_a.isolated_signals = [iso_signal]
+        mock_step_a.role_annotations = {}
+        mock_step_a.fallback_used = False
+        mock_step_a.logical_scenarios = []
+        mock_step_a.exploration_scenarios = []
+        mock_step_a.emerging_links = []
+        mock_step_a.scenario_candidates = []
+
+        captured_hints = []
+
+        def fake_judge(self_engine, request_obj):
+            captured_hints.extend(getattr(request_obj, "_scenario_hints", []) or [])
+            return OpportunityJudgmentResult(
+                opportunities=[],
+                status="insufficient_evidence",
+                diagnostics=None,
+            )
+
+        large_batch_signals = [iso_signal] + [
+            _make_signal(f"pad_{i:03d}", "capital", f"填充信号{i:03d}")
+            for i in range(15)
+        ]
+
+        import step_a_cluster, step_b_retrieval, golden_pattern
+        with patch.object(step_a_cluster, "run_step_a", return_value=mock_step_a):
+            with patch.object(step_b_retrieval, "run_step_b", return_value=step_b_result):
+                with patch.object(JudgmentEngine, "judge", fake_judge):
+                    with patch.object(JudgmentEngine, "_extract_enriched_signals", return_value=large_batch_signals):
+                        engine = JudgmentEngine(api_key="")
+                        store = SignalStore()
+                        req = OpportunityJudgmentRequest(decoded_intelligences=[])
+                        result = engine.judge_with_signal_store(req, signal_store=store)
+
+        self.assertEqual(len(captured_hints), 1)
+        self.assertIn("scenario::explore_1", captured_hints[0])
+        self.assertIn("store_for_later", captured_hints[0])
+        self.assertIn("排序分=0.64", captured_hints[0])
+
+    def test_step_b_diagnostics_exposes_summary_and_trace(self):
+        """
+        Step B v1.3：最终 diagnostics 应暴露 step_b_summary 和 step_b_trace，
+        便于评估主/探索通道的真实收益。
+        """
+        from judgment_engine import JudgmentEngine
+        from schemas import OpportunityJudgmentRequest, OpportunityJudgmentResult
+        from step_b_retrieval import StepBResult, CandidateGroupInfo
+        from step_a_cluster import StepAResult
+
+        iso_signal = _make_signal("iso_diag_001", "capital", "诊断孤立信号")
+        iso_signal["_role_annotation"] = {
+            "roles": ["execution_risk"],
+            "needs": ["catalyst"],
+            "domains": ["gaming"],
+            "waiting_for_text": "等待催化剂",
+        }
+        primary_partner = _make_entry("hist_diag_001", "market", "主通道伙伴")
+        exploration_partner = _make_entry("hist_diag_002", "team", "探索通道伙伴")
+
+        primary_info = CandidateGroupInfo(
+            group_id="scenario::diag_primary",
+            entries=[primary_partner],
+            source_kind="scenario_memory",
+            rank_score=0.81,
+            route="step_c_ready",
+            route_reason="fills scenario missing slot",
+            slot_fill_count=1,
+            core_role_coverage=2,
+        )
+        exploration_info = CandidateGroupInfo(
+            group_id="link::diag_explore",
+            entries=[exploration_partner],
+            source_kind="emerging_link",
+            rank_score=0.58,
+            route="store_for_later",
+            route_reason="retain promising emerging relation",
+            slot_fill_count=0,
+            core_role_coverage=1,
+        )
+        step_b_result = StepBResult(
+            candidate_groups=[[primary_partner]],
+            current_signal_id="iso_diag_001",
+            matched=True,
+            fallback_used=True,
+            candidate_group_infos=[primary_info],
+            latent_candidate_group_infos=[exploration_info],
+        )
+
+        mock_step_a = StepAResult.__new__(StepAResult)
+        mock_step_a.signal_groups = []
+        mock_step_a.isolated_signals = [iso_signal]
+        mock_step_a.role_annotations = {}
+        mock_step_a.fallback_used = False
+        mock_step_a.logical_scenarios = []
+        mock_step_a.exploration_scenarios = []
+        mock_step_a.emerging_links = []
+        mock_step_a.scenario_candidates = []
+
+        def fake_judge(self_engine, request_obj):
+            hints = getattr(request_obj, "_scenario_hints", []) or []
+            if hints and "diag_primary" in hints[0]:
+                opp = self._make_mock_opportunity()
+                opp.opportunity_id = "opp_diag_001"
+                opp.opportunity_title = "主通道机会"
+                return OpportunityJudgmentResult(
+                    opportunities=[opp],
+                    status="success",
+                    diagnostics=None,
+                )
+            return OpportunityJudgmentResult(
+                opportunities=[],
+                status="insufficient_evidence",
+                diagnostics=None,
+            )
+
+        large_batch_signals = [iso_signal] + [
+            _make_signal(f"diag_pad_{i:03d}", "capital", f"诊断填充信号{i:03d}")
+            for i in range(15)
+        ]
+
+        import step_a_cluster, step_b_retrieval
+        with patch.object(step_a_cluster, "run_step_a", return_value=mock_step_a):
+            with patch.object(step_b_retrieval, "run_step_b", return_value=step_b_result):
+                with patch.object(JudgmentEngine, "judge", fake_judge):
+                    with patch.object(JudgmentEngine, "_extract_enriched_signals", return_value=large_batch_signals):
+                        engine = JudgmentEngine(api_key="")
+                        store = SignalStore()
+                        req = OpportunityJudgmentRequest(decoded_intelligences=[])
+                        result = engine.judge_with_signal_store(req, signal_store=store)
+
+        self.assertEqual(result.status, "success")
+        self.assertIsNotNone(result.diagnostics)
+        self.assertIsNotNone(result.diagnostics.step_b_summary)
+        self.assertIsNotNone(result.diagnostics.step_b_trace)
+        self.assertEqual(result.diagnostics.step_b_summary["matched_signal_count"], 1)
+        self.assertEqual(result.diagnostics.step_b_summary["step_c_ready_group_count"], 1)
+        self.assertEqual(result.diagnostics.step_b_summary["store_for_later_group_count"], 1)
+        self.assertEqual(result.diagnostics.step_b_summary["step_c_attempt_count"], 1)
+        self.assertEqual(result.diagnostics.step_b_summary["step_c_success_count"], 1)
+        self.assertEqual(result.diagnostics.step_b_summary["route_success_counts"]["step_c_ready"], 1)
+        self.assertEqual(result.diagnostics.step_b_summary["route_success_counts"]["store_for_later"], 0)
+        self.assertEqual(len(result.diagnostics.step_b_trace), 1)
+        trace = result.diagnostics.step_b_trace[0]
+        self.assertTrue(trace["matched"])
+        self.assertTrue(trace["produced_opportunity"])
+        self.assertEqual(trace["candidate_count"], 1)
+        self.assertEqual(len(trace["candidate_attempts"]), 1)
+        self.assertEqual(trace["candidate_attempts"][0]["group_id"], "scenario::diag_primary")
+        self.assertEqual(trace["candidate_attempts"][0]["opportunity_count"], 1)
+
+
+class TestStepBIdealizedEvalRunner(unittest.TestCase):
+    def test_step_b_idealized_eval_runner_case_passes(self):
+        from run_step_b_idealized_eval import StepBIdealizedEvalRunner
+
+        runner = StepBIdealizedEvalRunner(case_id="step_b_scenario_primary_001", json_output=True)
+        result = runner._run_case(runner._get_target_cases()[0])
+
+        self.assertTrue(result["validation"]["passed"])
+        self.assertTrue(result["execution"]["matched"])
+        self.assertGreaterEqual(result["execution"]["step_c_ready_group_count"], 1)
+        self.assertEqual(result["execution"]["top_route"], "step_c_ready")
+        self.assertEqual(result["execution"]["top_source_kind"], "scenario_memory")
+        self.assertIsNotNone(result["execution"]["top_rank_score"])
+        self.assertIsNotNone(result["execution"]["step_c_ready_avg_rank_score"])
+        self.assertGreaterEqual(result["execution"]["store_for_later_group_count"], 1)
+
+    def test_step_b_idealized_eval_runner_store_for_later_case(self):
+        from run_step_b_idealized_eval import StepBIdealizedEvalRunner
+
+        runner = StepBIdealizedEvalRunner(case_id="step_b_signal_store_for_later_001", json_output=True)
+        result = runner._run_case(runner._get_target_cases()[0])
+
+        self.assertTrue(result["validation"]["passed"])
+        self.assertFalse(result["execution"]["matched"])
+        self.assertEqual(result["execution"]["step_c_ready_group_count"], 0)
+        self.assertGreaterEqual(result["execution"]["store_for_later_group_count"], 1)
+        self.assertEqual(result["execution"]["top_route"], "store_for_later")
+
+    def test_step_b_idealized_eval_runner_json_report_has_diff_friendly_metrics(self):
+        from run_step_b_idealized_eval import StepBIdealizedEvalRunner
+
+        runner = StepBIdealizedEvalRunner(json_output=True)
+        runner.results = [runner._run_case(case) for case in runner._get_target_cases()]
+        report = runner._build_json_report()
+        aggregate = report["aggregate"]
+
+        self.assertIn("top1_route_counts", aggregate)
+        self.assertIn("top1_source_kind_counts", aggregate)
+        self.assertIn("top1_rank_score_avg", aggregate)
+        self.assertIn("candidate_rank_score_avg", aggregate)
+        self.assertIn("case_overview", aggregate)
+        self.assertIn("generated_at", report)
+        self.assertEqual(report["case_scope"], "all_cases")
+        self.assertEqual(len(aggregate["case_overview"]), len(runner.results))
+        self.assertEqual(aggregate["top1_route_counts"]["step_c_ready"], 2)
+        self.assertEqual(aggregate["top1_route_counts"]["store_for_later"], 2)
+        self.assertEqual(aggregate["top1_route_counts"]["none"], 1)
+        self.assertEqual(aggregate["top1_source_kind_counts"]["scenario_memory"], 2)
+        self.assertEqual(aggregate["top1_source_kind_counts"]["emerging_link"], 1)
+        self.assertEqual(aggregate["top1_source_kind_counts"]["signal_entry"], 1)
+        self.assertEqual(aggregate["top1_source_kind_counts"]["none"], 1)
+
+    def test_step_b_idealized_eval_runner_scenario_can_beat_strong_signal(self):
+        from run_step_b_idealized_eval import StepBIdealizedEvalRunner
+
+        runner = StepBIdealizedEvalRunner(case_id="step_b_scenario_beats_strong_signal_001", json_output=True)
+        result = runner._run_case(runner._get_target_cases()[0])
+        execution = result["execution"]
+
+        self.assertTrue(result["validation"]["passed"])
+        self.assertEqual(execution["top_route"], "step_c_ready")
+        self.assertEqual(execution["top_source_kind"], "scenario_memory")
+        self.assertTrue((execution["top_group_id"] or "").startswith("scenario::"))
+        self.assertGreaterEqual(execution["step_c_ready_group_count"], 1)
+        self.assertGreaterEqual(execution["matched_scenario_count"], 1)
+        self.assertIn("signal_entry", {item["source_kind"] for item in execution["candidates"]})
+
+    def test_step_b_idealized_eval_runner_can_save_report_snapshot(self):
+        import json
+        from run_step_b_idealized_eval import StepBIdealizedEvalRunner
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            runner = StepBIdealizedEvalRunner(json_output=True, save_report=True, report_dir=tmpdir)
+            runner.results = [runner._run_case(case) for case in runner._get_target_cases()]
+            report = runner._build_json_report()
+            saved_path = runner._write_report(report)
+
+            self.assertTrue(os.path.exists(saved_path))
+            self.assertTrue(saved_path.endswith(".json"))
+
+            with open(saved_path, "r", encoding="utf-8") as f:
+                saved_report = json.load(f)
+
+            self.assertIn("aggregate", saved_report)
+            self.assertIn("generated_at", saved_report)
+            self.assertEqual(saved_report["case_scope"], "all_cases")
 
 
 # ─────────────────────────────────────────────────────────────────────────────
