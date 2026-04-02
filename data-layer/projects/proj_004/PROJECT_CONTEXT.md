@@ -1,9 +1,9 @@
 # PROJECT_CONTEXT.md — 项目一站式开工入口
 
 > **文档类型**：项目状态总览 + 开工上下文
-> **最后更新**：2026-03-29（工程收尾：processing_time_ms 修复、MetadataFilter 重构确认完成、索引重建、background 覆盖缺口记录）
-> **当前阶段**：2.5 真实链路跑通，Phase 3 入场条件评估中
-> **项目状态**：✅ 主链路联调完成，✅ 真实 LLM API 接入，✅ 报告输出层上线，✅ 2.1 两阶段筛选框架，✅ 2.2 多机会输出重构+字段完善，✅ 2.3 结构性缺口修复，✅ 2.4 四层文档结构+MetadataFilter 重构+ContextPacket 联调完成，✅ 2.5 LLM 深层归因跑通（findings=5，全部准确）
+> **最后更新**：2026-04-02（补齐 `2.1 llm_config` 收口、`2.2 Step A v2 / Signal Store v2` 进展，并重排开头摘要提升可读性）
+> **当前阶段**：主链路已跑通，Phase 3 入场条件持续评估中
+> **项目状态**：✅ 主链路联调完成，✅ 真实 LLM API 已接入，✅ `2.1` 两阶段筛选框架 + 统一 `llm_config` 收口，✅ `2.2` Prompt-first v2 + Signal Store v2 + Step A v2 主干落地，✅ `2.3` 行动设计链路稳定，✅ `2.4` 四层文档结构 + ContextPacket 联调完成，✅ `2.5` LLM 深层归因跑通
 
 ---
 
@@ -11,15 +11,15 @@
 
 ### 1.1 当前整体状态（一句话）
 
-> Phase 2.1 / 2.2 / 2.3 / 2.4 / 2.5 的 MVP 均已完成并通过验证，**主链路联调（P0+P1-1~P1-4）已全部完成**。下一步可选：2.4 知识增强联调（P1-5/6/7）。
+> Phase 2.1 / 2.2 / 2.3 / 2.4 / 2.5 的 MVP 均已完成并通过验证，**主链路联调（P0+P1-1~P1-4）已全部完成**。当前最值得关注的是：`2.1` 统一配置后的稳定性治理，以及 `2.2 Step A v2` 的指标基线和真实样本评测收口。
 
 ### 1.2 当前最高优先级（P0）
 
-| # | 任务 | 阻塞方 | 状态 |
-|---|------|--------|------|
-| P0-1 | 接入真实 LLM API（2.1 + 2.4 当前为模拟服务） | 2.1、2.4 | ✅ 完成（2.1/2.2/2.3 已接入，2.4 待修） |
-| P0-2 | 冻结 2.1→2.2 接口契约 | 整条主链路 | ✅ 完成 |
-| P0-3 | 修复 2.4 RAG 本地模型路径 | 知识增强 | ⚠️ 待处理（当前 fallback 跳过，不阻塞主链路） |
+| # | 任务 | 归属模块 | 状态 |
+|---|------|----------|------|
+| P0-1 | `2.1` 统一 `llm_config` 后的稳定性治理（timeout / 日志 / provider 对照） | 2.1 | ⏳ 待处理 |
+| P0-2 | `2.2 Step A v2` 指标基线沉淀 + 真实样本分层评测 | 2.2 | ⏳ 进行中 |
+| P0-3 | `2.5` 真实案例积累 + 趋势复盘基线沉淀 | 2.5 | ⏳ 待推进 |
 
 ### 1.3 联调优先级总览
 
@@ -42,21 +42,26 @@
 **本质**：把全球游戏行业高熵、碎片化的外部信息，压缩为可进入战略判断流程的低歧义信号单元。不是资讯摘要，而是"变化感知→解码"的前端节点。
 
 **MVP 边界**（已完成）：
-- 输入：非结构化文本（新闻/报告/公告）
-- 输出：DecodedIntelligence（Signal 列表 + 结构化字段）
+- 输入：非结构化文本（新闻 / 报告 / 公告）
+- 输出：`DecodedIntelligence`（`Signal` 列表 + 结构化字段）
 - 方法：Prompt-first + 轻量后处理 + Schema 校验
-- v1.5 benchmark（25条真实样本）：Precision=95.2% / Recall=87.0% / F1=90.9%
+- benchmark：真实样本 `v1.5` 达到 `Precision=95.2% / Recall=87.0% / F1=90.9%`
 
-**2026-03-27 增强**：
-- Prompt v1.6：五类信号判断框架统一（technical/team/capital 补充显式规则）
-- 两阶段筛选：source_type 规则预筛（report 纯趋势 0ms 跳过）+ haiku 粗筛架构（待验证）
-- 信号来源：当前依托 knowledge base 仓库每日订阅，后期独立 ingestion 层（已记录，待做）
+**最近关键变化（建议优先读这一段）**：
+- **Prompt v1.6**：五类信号判断框架统一，补齐 `technical / team / capital` 的 noise boundary 显式规则
+- **两阶段筛选**：加入 `source_type` 规则预筛；`haiku` 粗筛架构已落地但仍待 provider 验证
+- **统一配置收口（2026-04-02）**：`decoder`、测试脚本、批处理脚本等历史旧入口已统一改为读取项目级 `llm_config`
+- **真实调用现状**：DeepSeek 不是接线失败，而是当前环境下请求已发出、completion 响应挂起；结论是先保留统一配置，不回滚，后续做稳定性治理
 
-**后置增强**：taxonomy 边界澄清、2.4 知识增强、并发批处理（100条/天目标）、ingestion 独立化
+**当前重点关注**：
+- `timeout` 配置补齐
+- provider / model / 异常类型日志补齐
+- provider 对照测试（区分实现问题 vs 环境问题）
+- benchmark 对照实验、`haiku` 粗筛验证、ingestion 独立化
 
-**遗留待办**：benchmark 对照实验（API 限流中）、haiku 粗筛验证、DecodedIntelligence 消费语义（2.2 推进时定）
+**后置增强**：taxonomy 边界澄清、`2.4` 知识增强、并发批处理（100 条 / 天目标）、ingestion 独立化
 
-**当前状态**：✅ MVP 完成 | ✅ LLM API 已接入 | ✅ P1-1 联调完成 | ✅ v1.6 noise boundary 增强完成
+**当前状态**：✅ MVP 完成 | ✅ `v1.6` noise boundary 增强完成 | ✅ P1-1 联调完成 | ✅ 历史旧入口已统一收口到 `llm_config` | ⏳ DeepSeek 挂起问题待专项诊断
 
 **关键文件**：
 - 执行进展：[phase2.1_执行进展.md](data-layer/projects/proj_004/phase2_plan/phase2.1_执行进展.md)
@@ -70,42 +75,40 @@
 **本质**：帮助组织更早、更稳、更可解释地识别哪些变化值得被升级为下一步行动。不是评估报告生成器，而是"机会判断层 / 机会升级层"。
 
 **MVP 边界**（已完成）：
-- 输入：`List[DecodedIntelligence]`（多条，来自 2.1）+ 可选 ContextPacket（来自 2.4）
-- 输出：OpportunityObject（12字段，含 priority_level: watch/research/deep_dive/escalate）
-- 方法：Prompt-first v2（LLM 自主信号组合+逻辑链推导）+ 规则引擎 fallback
-- 2.1 打分（intensity/confidence/timeliness）完整传入，作为 LLM 信号权重判断依据
+- 输入：`List[DecodedIntelligence]`（多条，来自 `2.1`）+ 可选 `ContextPacket`（来自 `2.4`）
+- 输出：`OpportunityObject`（12 字段，含 `priority_level: watch / research / deep_dive / escalate`）
+- 方法：Prompt-first v2（LLM 自主信号组合 + 逻辑链推导）+ 规则引擎 fallback
+- `2.1` 打分（`intensity / confidence / timeliness`）完整传入，作为 LLM 信号权重判断依据
 
-**2026-03-28 重构（消费语义拍板）**：
-- 输入从单条改为多条 `decoded_intelligences: List[DecodedIntelligence]`
-- 由 2.2 自主决定哪些信号可以组合成机会（不依赖调用方预分组）
-- Prompt-first v2 落地：完整暴露打分+source_type，LLM 做跨文章信号逻辑链组合
-- uncertainty_map 格式约定：`[类型] 描述：影响说明`（5种类型枚举）
-- 冒烟验证通过：2条跨来源信号（technical+capital）→ 输出逻辑链完整的 OpportunityObject
-- **Bug 修复（2026-03-28）**：规则引擎 fallback 中 `intensity` 字段名改为 `intensity_score`（兼容写法），修复 priority 分级 avg_intensity 始终为 0 的问题
+**v2 核心变化（这是理解当前 2.2 的最短路径）**：
+- **消费语义升级**：输入从单条改为 `decoded_intelligences: List[DecodedIntelligence]`，由 `2.2` 自己决定哪些信号能组合成机会，不再依赖调用方预分组
+- **判断链路升级**：主路径切到 Prompt-first v2，完整消费 `2.1` 的分数与来源上下文；规则引擎只做 fallback
+- **Signal Store v2**：形成 `Step A / Step B / Step C` 三步结构，开始支持"当批不成机会，先沉淀为待组合信号"的路径
+- **Step A v2 软场景**：`logical_scenarios` 替代 `signal_groups` 硬分组，`Step C` 改为接收"全量信号 + 场景建议"
+- **小批次快速路径**：`<=15` 条信号直接全量送 `Step C`，避免在小批次上过早聚类污染精度
 
-**遗留待办**：
+**最近验证与收口**：
+- 消费语义重构、`Prompt-first v2`、`uncertainty_map` 格式约定均已落地
+- `Signal Store MVP` 已实现并切换，`batch1 / batch2` 路径已跑通
+- `Step A` 理想化评测样本与 runner 已建立，`rules baseline` 跑通
+- `Step A` 的 `auto / llm` 理想化样本评测已收口到 **8/8 确认通过**
+- `judgment_engine.py` 死代码已清理，单元测试 **18/18** 通过
+
+**当前重点关注**：
 
 | # | 项目 | 优先级 | 状态 | 备注 |
 |---|------|--------|------|------|
-| 1 | **LLM 完整验证（7/7 全 LLM 路径）** | P1 | ⏳ 后续完善事项 | api123.icu 持续抖动，已验证 case_001/002/003/004 LLM 路径正确；005/006/007 因 API 随机空响应未完成；等稳定窗口重跑 |
-| 2 | **2.2→2.3 联调回归** | P1 | ⏳ 进行中 | 本轮推进；opportunities 列表输出、next_validation_questions 语义修正后，确认 2.3 消费逻辑未受影响 |
-| 3 | **EvidenceValidator 可信度加权** | P2 | ⏳ 待讨论 | 已实现可追溯性（source_ref 覆盖率占 completeness 20%）；可信度加权挂起——问题：2.1 已打 confidence_score，2.2 再基于 source_type 降权是否双重惩罚？等 2.1 打分机制稳定后讨论 |
-| 4 | v1 流程残留清理 | P2 | ⏳ 待做 | judgment_pipeline_v1 + validators v1 标记 deprecated，下次整理时移除 |
-| 5 | judgment_config 预留字段实现 | P2 | ⏳ 待做 | min_confidence_threshold 等字段有定义无实现 |
+| 1 | **Step A v2 指标基线沉淀** | P0 | ⏳ 进行中 | 下一步沉淀跨域互补召回率、语义相似误场景率、`Step C` 有效机会产出率 |
+| 2 | **真实样本分层评测扩展** | P0 | ⏳ 待做 | 当前理想化样本已收口，需补真实样本集并与 idealized 样本分层管理 |
+| 3 | **2.2→2.3 联调回归** | P1 | ⏳ 待做 | `next_validation_questions` 语义已修正，需确认 `2.3` 消费逻辑未受影响 |
+| 4 | **EvidenceValidator 可信度加权** | P2 | ⏳ 待讨论 | 需避免与 `2.1 confidence_score` 形成双重惩罚 |
+| 5 | v1 遗留与预留字段清理 | P2 | ⏳ 待做 | deprecated 流程与 `judgment_config` 预留字段后续统一收口 |
 
-**⚠️ 已移出 P1 的项目（附降级理由，避免误判优先级）**：
+**⚠️ 已明确降级 / 移出的事项**：
+- **轻量评分框架**：未正式拍板，且不属于 `2.2` 的判断骨架；降为 P2 条件性后置
+- **简版自然语言摘要**：与 `opportunity_thesis` 定位重叠，已从优先级列表移除
 
-- **轻量评分框架**（change_significance / capture_feasibility / timing_window / evidence_strength）：
-  原列为 P1，但从未正式拍板（见 phase2.2_待拍板决策清单.md §6.3 状态=☐ 待拍板）。
-  2.2 的 first principle 是"机会判断层，主产物是结构化对象+priority_level"，评分是辅助表达而非判断骨架（拍板结论 §5.2）。
-  消费方不清晰——2.3 消费 priority_level 做分流，不消费这 4 个维度；人工阅读由 opportunity_thesis 承担。
-  **降为 P2 条件性后置**，触发条件：2.3 明确反馈"priority_level 不足以支撑行动设计，需要辅助维度"时再做。
-
-- **简版自然语言摘要**：
-  与 opportunity_thesis（已是 2-4 句可读论点）定位重叠，差异未被定义。
-  **从优先级列表删除**，等有人明确提出"thesis 不够用"再讨论。
-
-**当前状态**：✅ MVP 完成 | ✅ 消费语义拍板 | ✅ Prompt-first v2 + 多机会输出重构 | ✅ EvidenceValidator 可追溯性 | ⏳ LLM 完整验证（后续完善）| ⏳ 2.3 联调回归（进行中）| ✅ **Signal Store MVP 实现并跑通（batch1/2 验证）** | ✅ **Step A v2 软场景主干已实现（logical_scenarios + 全量信号送 Step C）** | ✅ **Step A 理想化评测样本文件已创建（非真实数据）** | ✅ **Step A 理想化评测 runner 已实现并跑通 rules baseline（8/8 PASS）** | ✅ **死代码清理完成（judgment_engine.py 1196→812行）** | ✅ **单元测试全部通过（18/18，unit_tests_phase22.py）**
+**当前状态**：✅ MVP 完成 | ✅ 消费语义拍板 | ✅ Prompt-first v2 落地 | ✅ `Signal Store v2` 主干完成 | ✅ `Step A v2` 软场景主干完成 | ✅ 理想化样本 `8/8` 收口通过 | ✅ 单元测试 `18/18` 通过 | ⏳ 指标基线与真实样本评测继续推进
 
 **关键文件**：
 - 执行进展：[phase2.2_执行进展.md](data-layer/projects/proj_004/phase2_plan/phase2.2_执行进展.md)
@@ -245,10 +248,10 @@
 | 1 | LLM API 模型选型 | claude-sonnet-4-6 via api123.icu 中转 | ✅ 已拍板（2026-03-27 实跑确认） |
 | 2 | priority_level 到姿态映射规则维护方 | 2.2 定义，2.3 跟随 | ✅ 已拍板（LLM 模式下 2.2 直接输出，2.3 读取） |
 | 3 | key_assumptions >=3 触发 validate 阈值是否沿用 | LLM 模式下不强制阈值，规则引擎仅作 fallback | ✅ 已拍板（2.2/2.3 切换为 LLM 判断后规则退居备用） |
-| 4 | 2.4 知识增强在 MVP 联调是否必须集成 | 可选，不阻塞主链路 | ✅ 已拍板（RAG 路径报错自动 fallback 跳过，主链路正常） |
+| 4 | 2.4 知识增强在 MVP 联调是否必须集成 | 可选，不阻塞主链路 | ✅ 已拍板（知识增强为可选注入；未命中或未接入时允许降级为纯主链路判断） |
 | 5 | 知识检索失败时统一降级策略 | 降级为纯 LLM 判断，不报错 | ✅ 已拍板（实跑验证通过） |
 | 6 | ActionDesignResult 是否增加 confidence_score | 本轮不增加 | ✅ 已拍板（models.py 未定义，实际输出亦无此字段） |
-| 7 | 知识文档扩展目标 | 按命中率决定，不盲目扩展 | ⚠️ 待定（2.4 RAG 修复后，依据真实命中率数据再定） |
+| 7 | 知识文档扩展目标 | 按命中率决定，不盲目扩展 | ⚠️ 待定（待 2.4 命中率基线建立后确认） |
 
 ---
 
@@ -261,10 +264,10 @@
 | # | 条件 | 验收标准 | 当前状态 |
 |---|------|----------|----------|
 | 1 | 主链路联调通过 | 2.1→2.2→2.3→2.5 端到端跑通 ≥2 个真实案例，各节点无 schema 报错 | ✅ 完成（37条真实样本批量跑通，2026-03-27） |
-| 2 | 各模块 LLM API 接入真实服务 | 2.1 / 2.4 替换模拟服务，输出结果可信 | ✅ 2.1/2.2/2.3 已接入（api123.icu）⚠️ 2.4 RAG 本地模型路径异常，知识增强 fallback 跳过 |
+| 2 | 各模块核心能力已接入真实运行环境 | 2.1 / 2.2 / 2.3 / 2.5 均完成真实链路验证，2.4 具备正式检索能力 | ✅ 2.1/2.2/2.3/2.5 已完成真实链路验证；2.4 正式 Embedding 方案已切换为 `MiniLM-L6-v2` |
 | 3 | 接口契约全部冻结 | 2.1→2.2 / 2.2→2.3 / 2.3→2.5 接口契约文档已落档并双方确认 | ✅ 完成（各模块联调计划文档已落档） |
 | 4 | 2.5 整合验证完成 | SystemRetrospectiveObject 产出，含问题归因与 Phase 3 优先级建议 | ✅ **完成（2026-03-29，LLM 归因跑通，findings=5 全部准确，Phase 3 优先项可直接消费）** |
-| 5 | 联调前 7 项拍板事项全部确认 | 见第三节接口约定表，全部从「待拍板」变为「已拍板」 | ⚠️ 6/7 已拍板，第7项（知识文档扩展目标）待 2.4 RAG 修复后确认 |
+| 5 | 联调前 7 项拍板事项全部确认 | 见第三节接口约定表，全部从「待拍板」变为「已拍板」 | ⚠️ 6/7 已拍板，第7项（知识文档扩展目标）待 2.4 命中率基线建立后确认 |
 
 ### 可选但建议完成（不阻塞入场）
 
@@ -376,19 +379,19 @@
 
 ### 7.4 Phase 2.4 知识库与 RAG
 
-**当前状态**：骨架完成（40条知识文档，FAISS 向量索引），本地 BERT 模型路径报错导致 fallback，知识增强实际未生效
+**当前状态**：主体完成并进入维护 + 按需增强阶段；正式 Embedding 方案已切换为 `MiniLM-L6-v2`，当前重点从"能否跑通"转为"命中质量是否足够支撑下游判断"
 
 | 优先级 | 增强项 | 说明 |
 |--------|--------|------|
-| **P0** | **修复本地 BERT 模型路径** | 路径含中文/特殊字符，HuggingFace 拒绝识别；改用在线拉取或换用短路径；当前主链路 fallback 跳过，不阻塞但知识增强无效 |
-| P1 | **混合检索（向量 + 关键词）** | 当前只有向量搜索；BM25 或关键词检索作补充，提升精确命中率 |
-| P1 | **上下文包结构化输出** | 当前 RAG 返回纯文本；改为结构化 context_packet（source_type/excerpt/content_type/trust_level 等），对齐 FIRST_PRINCIPLES 设计 |
-| P1 | **2.4 → 2.1/2.2/2.3 真实联调** | BERT 路径修好后，与三个下游模块做真实数据联调，建立命中率基线（第7项拍板事项的前置条件） |
-| P2 | **知识文档扩展至 100 条** | 依据真实命中率数据决定扩展方向；不盲目扩展 |
-| P2 | **增益可验证机制** | 对比接入 2.4 前后下游模块输出质量变化（2.1 准确率/2.2 论点完整度/2.3 假设覆盖度） |
-| P2 | **文档版本管理** | 知识文档的更新/废弃/版本追踪机制 |
+| **P0** | **建立 2.4 命中率与增益基线** | 先沉淀 2.4 在 `2.1 / 2.2 / 2.3` 中的真实命中率与质量增益，再决定文档扩展或检索增强优先级 |
+| P1 | **补充 `case_record / market_data` 文档** | 当前对下游判断最直接有帮助的文档占比仍偏低；当证据包命中质量不足时优先补这两类 |
+| P1 | **混合检索（向量 + 关键词）** | 当前以向量检索为主；若专有名词、产品名、公司名命中不足，再补 BM25 / 关键词检索 |
+| P1 | **上下文包结构化输出深化** | 继续强化 `context_packet` 的结构化表达（`source_type / excerpt / content_type / trust_level` 等），与协议和下游消费语义更紧密对齐 |
+| P2 | **知识文档扩展至更大规模** | 依据命中率与增益基线决定扩展方向；不盲目追求数量 |
+| P2 | **增益可验证机制** | 对比接入 `2.4` 前后下游输出质量变化（`2.1` 准确率 / `2.2` 论点完整度 / `2.3` 假设覆盖度） |
+| P2 | **文档版本管理** | 知识文档的更新 / 废弃 / 版本追踪机制 |
 | P3 | **动态知识更新** | 新信号自动触发知识库更新评估；长期运行场景下保持知识库新鲜度 |
-| P3 | **跨模块证据追踪** | 同一知识片段被 2.1/2.2/2.3 分别引用时的来源统一追踪 |
+| P3 | **跨模块证据追踪** | 同一知识片段被 `2.1 / 2.2 / 2.3` 分别引用时的来源统一追踪 |
 
 ---
 
@@ -422,7 +425,9 @@
 | 2026-03-29（上午） | 2.4 四层文档结构确立（industry/category/content_type/tags 正交），MetadataFilter 重构，2.5 LLM 深层归因跑通（llm_attributor.py 新增，findings=5 全部准确），关键工程修复：流式请求绕过中转截断、JSON 兼容前缀解析、prompt 体积压缩、信号字段名对齐。Phase 3 入场条件第 4 条正式通过。 |
 | 2026-03-30 | 2.2 Signal Store 迭代方案设计完成（v2）：三步流程（Step A/B/C）、7种信号角色、分层漏斗检索（L1-L4）、已成机会知识沉淀闭环；纯2.2内部改造，所有对外接口不变。多 provider LLM 配置改造（provider字段+各phase独立key/url），dashboard配置区扩展为per-phase卡片。2.1展示区增加原文tab（标题/来源/正文/链接）。 |
 | 2026-03-31 | **[2.2 代码规范化完成]** ① `judgment_engine.py` 死代码删除：旧版 `_execute_judgment_pipeline`（L483~L787）+ `_llm_judge`（L788~L866）共 384 行彻底移除，主链路只保留 `_execute_judgment_pipeline_v2` + `_llm_judge_v2`，文件从 1196 行精简至 812 行。② `unit_tests_phase22.py` 新建，18个测试用例全部通过（18/18），覆盖：SignalEntry枚举安全性（3种情形）、SignalStore基本读写+持久化（4个用例）、contributed不参与query_pending约束（2个）、Step A信号完整性+fallback不丢失（2个）、Step B跨批次匹配完整路径—L1命中+L4确认/L1无命中/L4空fallback（3个）、query_pending跨批次前提验证（1个）、signal_store=None抛ValueError接口契约（1个）、contributed/pending写入时机成功/失败两场景（2个）。commit: `769c2cf`。③ 辅助临时脚本（`_check_stepa.py`、`_find_dead.py`、`_del_dead.py`）已清理。 |
-| 2026-04-01 | 2.2 Step A v2 软场景主干实现：`logical_scenarios` 替代 `signal_groups`，`Step C` 改为接收全量信号 + 场景建议，小批次 `≤15` 直送路径生效；并新增 `step_a_idealized_eval_samples_not_real_data.py` 作为首版理想化评测样本文件（明确标注非真实数据）。 |
+| 2026-04-01 | `2.2` Step A v2 软场景主干实现：`logical_scenarios` 替代 `signal_groups`，`Step C` 改为接收全量信号 + 场景建议；小批次 `≤15` 直送路径生效；新增 `step_a_idealized_eval_samples_not_real_data.py` 作为首版理想化评测样本文件（明确标注非真实数据）。 |
+| 2026-04-02 | `2.1` 历史旧入口统一收口到项目级 `llm_config`：`decoder`、测试脚本、批处理脚本改走统一配置链路；当前真实调用结论为 DeepSeek 请求可发出但 completion 挂起，因此后续方向转为 `timeout / 日志 / provider 对照` 稳定性治理，不回滚统一配置。 |
+| 2026-04-02 | `2.2` 项目上下文同步重写：补齐 `Prompt-first v2`、`Signal Store v2`、`Step A v2` 的核心语义，并明确当前阶段已从“功能是否存在”转入“指标基线与真实样本分层评测是否收口”。 |
 
 ---
 
