@@ -1,0 +1,67 @@
+{
+  "relative_path": "sample_006_technical_squareenix_gemini_npc.json",
+  "source_id": "real_006",
+  "elapsed_seconds": 8.647,
+  "payload": {
+    "source_id": "real_006",
+    "source_type": "news",
+    "title": "Google's Gemini AI will power NPC dialogue in Dragon Quest X",
+    "content": "Square Enix has announced a partnership with Google to integrate Gemini AI into Dragon Quest X Online, enabling dynamic NPC conversations. Players will be able to hold open-ended conversations with NPCs powered by large language models, with the AI responding contextually to player queries. This marks one of the first major JRPG franchises to embed generative AI directly into live game dialogue systems. Square Enix said the feature will roll out in a beta test for Japanese players in Q3 2026.",
+    "published_at": "2026-03-23T00:00:00Z",
+    "source_name": "Game Developer",
+    "language": "en",
+    "mode": "prompt_first"
+  },
+  "result": {
+    "source_id": "real_006",
+    "source_type": "news",
+    "signals": [
+      {
+        "signal_id": "sig_20250314_001",
+        "signal_type": "technical",
+        "signal_label": "JRPG 集成生成式 AI 对话系统",
+        "description": "Square Enix 与 Google 合作，将 Gemini AI 集成至《勇者斗恶龙 X Online》，实现由大语言模型驱动的动态 NPC 对话，为首批在实时游戏对话系统中嵌入生成式 AI 的主要 JRPG 系列之一。",
+        "evidence_text": "Square Enix has announced a partnership with Google to integrate Gemini AI into Dragon Quest X Online, enabling dynamic NPC conversations. Players will be able to hold open-ended conversations with NPCs powered by large language models, with the AI responding contextually to player queries. This marks one of the first major JRPG franchises to embed generative AI directly into live game dialogue systems.",
+        "entities": [
+          "Square Enix",
+          "Google",
+          "Gemini AI",
+          "Dragon Quest X Online",
+          "JRPG"
+        ],
+        "intensity_score": 8,
+        "confidence_score": 10,
+        "timeliness_score": 9,
+        "source_ref": "real_006",
+        "extracted_at": "2026-03-14T00:00:00Z",
+        "logic_frame": {
+          "what_changed": "ai_npc_dialogue_capability",
+          "change_direction": "enter",
+          "affects": [
+            "live service games",
+            "JRPG developers"
+          ]
+        },
+        "metadata": {
+          "audit": {
+            "audit_flags": [],
+            "raw_signal_type": "technical",
+            "normalized_signal_type": "technical"
+          }
+        }
+      }
+    ],
+    "summary": "检测到 1 个范式信号：技术信号 1 个",
+    "decoder_version": "v2.1",
+    "processing_time_ms": 8337,
+    "warnings": null
+  },
+  "fixture_metadata": {
+    "saved_at": "2026-04-03T17:57:17",
+    "fast_decode": true,
+    "connect_timeout_seconds": 5,
+    "read_timeout_seconds": 15,
+    "max_retries": 1,
+    "decode_execution_mode": "subprocess"
+  }
+}

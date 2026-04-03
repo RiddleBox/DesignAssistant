@@ -1,0 +1,100 @@
+{
+  "relative_path": "incoming/incoming_005_regulatory_eu_dma_apple_games.json",
+  "source_id": "incoming_005",
+  "elapsed_seconds": 12.737,
+  "payload": {
+    "source_id": "incoming_005",
+    "source_type": "news",
+    "title": "European Commission fines Apple €500 million for breaching Digital Markets Act anti-steering rules",
+    "content": "On April 23, 2025, the European Commission found Apple in breach of the Digital Markets Act (DMA), specifically its anti-steering obligation that prevents developers from directing users to better deals outside the App Store. Apple was fined €500 million ($570 million). The Commission found that Apple's App Store rules did not allow developers to freely steer consumers to alternative offers. Apple was given 60 days to comply or face further fines of up to 5% of average daily worldwide turnover.",
+    "published_at": "2025-04-23T00:00:00Z",
+    "source_name": "European Commission",
+    "source_url": "https://ec.europa.eu/commission/presscorner/api/files/document/print/en/ip_25_1085/IP_25_1085_EN.pdf",
+    "language": "en",
+    "mode": "prompt_first"
+  },
+  "result": {
+    "source_id": "incoming_005",
+    "source_type": "news",
+    "signals": [
+      {
+        "signal_id": "sig_20250423_1",
+        "signal_type": "regulatory",
+        "signal_label": "欧盟认定 Apple 违反 DMA 反引导义务并处以罚款",
+        "description": "欧盟委员会认定 Apple 违反《数字市场法案》的反引导义务，处以 5 亿欧元罚款，并要求其在 60 天内整改",
+        "evidence_text": "On April 23, 2025, the European Commission found Apple in breach of the Digital Markets Act (DMA), specifically its anti-steering obligation that prevents developers from directing users to better deals outside the App Store. Apple was fined €500 million ($570 million). Apple was given 60 days to comply or face further fines of up to 5% of average daily worldwide turnover.",
+        "entities": [
+          "European Commission",
+          "Apple",
+          "Digital Markets Act (DMA)",
+          "App Store"
+        ],
+        "intensity_score": 9,
+        "confidence_score": 10,
+        "timeliness_score": 9,
+        "source_ref": "incoming_005",
+        "extracted_at": "2025-04-23T00:00:00Z",
+        "logic_frame": {
+          "what_changed": "platform_compliance_pressure",
+          "change_direction": "tighten",
+          "affects": [
+            "app store operators",
+            "mobile game publishers"
+          ]
+        },
+        "metadata": {
+          "audit": {
+            "audit_flags": [],
+            "raw_signal_type": "regulatory",
+            "normalized_signal_type": "regulatory"
+          }
+        }
+      },
+      {
+        "signal_id": "sig_20250423_2",
+        "signal_type": "market",
+        "signal_label": "App Store 开发者站外导流限制被裁定违规",
+        "description": "欧盟委员会裁定 Apple App Store 规则不允许开发者自由引导消费者至外部优惠的行为违反 DMA，构成市场格局变化",
+        "evidence_text": "The Commission found that Apple's App Store rules did not allow developers to freely steer consumers to alternative offers.",
+        "entities": [
+          "European Commission",
+          "Apple",
+          "App Store",
+          "developers"
+        ],
+        "intensity_score": 8,
+        "confidence_score": 10,
+        "timeliness_score": 9,
+        "source_ref": "incoming_005",
+        "extracted_at": "2025-04-23T00:00:00Z",
+        "logic_frame": {
+          "what_changed": "distribution_access",
+          "change_direction": "loosen",
+          "affects": [
+            "mobile developers",
+            "indie studios"
+          ]
+        },
+        "metadata": {
+          "audit": {
+            "audit_flags": [],
+            "raw_signal_type": "market",
+            "normalized_signal_type": "market"
+          }
+        }
+      }
+    ],
+    "summary": "检测到 2 个范式信号：监管信号 1 个、市场信号 1 个",
+    "decoder_version": "v2.1",
+    "processing_time_ms": 12443,
+    "warnings": null
+  },
+  "fixture_metadata": {
+    "saved_at": "2026-04-03T17:57:52",
+    "fast_decode": true,
+    "connect_timeout_seconds": 5,
+    "read_timeout_seconds": 15,
+    "max_retries": 1,
+    "decode_execution_mode": "subprocess"
+  }
+}

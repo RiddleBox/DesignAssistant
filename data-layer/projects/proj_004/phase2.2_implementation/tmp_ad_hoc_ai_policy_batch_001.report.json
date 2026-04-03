@@ -1,0 +1,254 @@
+{
+  "runner": "run_step_a_real_eval.py",
+  "sample_version": "v0.3-baseline-v1",
+  "requested_mode": "auto",
+  "runtime_mode": "llm",
+  "fast_decode": true,
+  "decode_timeout_seconds": 15,
+  "decode_execution_mode": "subprocess",
+  "max_parallel_decodes": 3,
+  "fixture_mode": "fixture_only",
+  "fixture_root": "f:\\AIProjects\\DesignAssistant\\data-layer\\projects\\proj_004\\phase2.2_implementation\\real_eval_decode_fixtures",
+  "connect_timeout_seconds": 5,
+  "read_timeout_seconds": 15,
+  "max_retries": 1,
+  "max_llm_calls_per_sample": 1,
+  "small_batch_threshold": 15,
+  "real_sample_root": "f:\\AIProjects\\DesignAssistant\\background\\real_intel_samples",
+  "total_cases": 1,
+  "passed_cases": 1,
+  "summary": {
+    "executed_step_a_cases": 0,
+    "skipped_step_a_cases": 1,
+    "avg_cross_domain_complement_recall": null,
+    "avg_false_merge_rate": null,
+    "avg_noise_inclusion_rate": null,
+    "avg_step_c_opportunity_ready_proxy_rate": null
+  },
+  "results": [
+    {
+      "case": {
+        "case_id": "ad_hoc_ai_policy_batch_001",
+        "case_type": "ad_hoc_batch",
+        "validation_profile": "ad_hoc",
+        "data_nature": "real_samples_from_background_real_intel_samples",
+        "description": "Ad hoc batch extraction for 4 real sample files.",
+        "sample_files": [
+          "sample_004_technical_capcom_genai.json",
+          "sample_006_technical_squareenix_gemini_npc.json",
+          "sample_009_technical_netease_ai_replacing_outsource.json",
+          "incoming/incoming_014_technical_capcom_genai_policy.json"
+        ],
+        "expected_step_a": {}
+      },
+      "dataset": {
+        "decoded_samples": [
+          {
+            "relative_path": "sample_004_technical_capcom_genai.json",
+            "source_id": "real_004",
+            "elapsed_seconds": 6.723,
+            "signal_count": 1,
+            "fixture_hit": true,
+            "fixture_path": "f:\\AIProjects\\DesignAssistant\\data-layer\\projects\\proj_004\\phase2.2_implementation\\real_eval_decode_fixtures\\sample_004_technical_capcom_genai.json.decoded.json",
+            "fixture_metadata": {
+              "saved_at": "2026-04-03T17:57:15",
+              "fast_decode": true,
+              "connect_timeout_seconds": 5,
+              "read_timeout_seconds": 15,
+              "max_retries": 1,
+              "decode_execution_mode": "subprocess"
+            },
+            "warnings": []
+          },
+          {
+            "relative_path": "sample_006_technical_squareenix_gemini_npc.json",
+            "source_id": "real_006",
+            "elapsed_seconds": 8.647,
+            "signal_count": 1,
+            "fixture_hit": true,
+            "fixture_path": "f:\\AIProjects\\DesignAssistant\\data-layer\\projects\\proj_004\\phase2.2_implementation\\real_eval_decode_fixtures\\sample_006_technical_squareenix_gemini_npc.json.decoded.json",
+            "fixture_metadata": {
+              "saved_at": "2026-04-03T17:57:17",
+              "fast_decode": true,
+              "connect_timeout_seconds": 5,
+              "read_timeout_seconds": 15,
+              "max_retries": 1,
+              "decode_execution_mode": "subprocess"
+            },
+            "warnings": []
+          },
+          {
+            "relative_path": "sample_009_technical_netease_ai_replacing_outsource.json",
+            "source_id": "real_009",
+            "elapsed_seconds": 10.322,
+            "signal_count": 2,
+            "fixture_hit": true,
+            "fixture_path": "f:\\AIProjects\\DesignAssistant\\data-layer\\projects\\proj_004\\phase2.2_implementation\\real_eval_decode_fixtures\\sample_009_technical_netease_ai_replacing_outsource.json.decoded.json",
+            "fixture_metadata": {
+              "saved_at": "2026-04-03T17:20:40",
+              "fast_decode": true,
+              "connect_timeout_seconds": 5,
+              "read_timeout_seconds": 15,
+              "max_retries": 1,
+              "decode_execution_mode": "inline"
+            },
+            "warnings": []
+          },
+          {
+            "relative_path": "incoming/incoming_014_technical_capcom_genai_policy.json",
+            "source_id": "incoming_014",
+            "elapsed_seconds": 7.218,
+            "signal_count": 1,
+            "fixture_hit": true,
+            "fixture_path": "f:\\AIProjects\\DesignAssistant\\data-layer\\projects\\proj_004\\phase2.2_implementation\\real_eval_decode_fixtures\\incoming\\incoming_014_technical_capcom_genai_policy.json.decoded.json",
+            "fixture_metadata": {
+              "saved_at": "2026-04-03T17:57:15",
+              "fast_decode": true,
+              "connect_timeout_seconds": 5,
+              "read_timeout_seconds": 15,
+              "max_retries": 1,
+              "decode_execution_mode": "subprocess"
+            },
+            "warnings": []
+          }
+        ],
+        "decode_errors": [],
+        "signal_count": 5,
+        "source_signal_map": {
+          "real_004": [
+            "real_004__sig_1"
+          ],
+          "real_006": [
+            "real_006__sig_20250314_001"
+          ],
+          "real_009": [
+            "real_009__sig_1",
+            "real_009__sig_2"
+          ],
+          "incoming_014": [
+            "incoming_014__sig_1"
+          ]
+        },
+        "noise_source_ids": [],
+        "signals": [
+          {
+            "signal_id": "real_004__sig_1",
+            "source_id": "real_004",
+            "signal_type": "technical",
+            "signal_label": "Capcom 将生成式 AI 纳入开发管线",
+            "intensity_score": 7,
+            "logic_frame": {
+              "what_changed": "ai_tool_adoption",
+              "change_direction": "enter",
+              "affects": [
+                "game development workflows"
+              ]
+            }
+          },
+          {
+            "signal_id": "real_006__sig_20250314_001",
+            "source_id": "real_006",
+            "signal_type": "technical",
+            "signal_label": "JRPG 集成生成式 AI 对话系统",
+            "intensity_score": 8,
+            "logic_frame": {
+              "what_changed": "ai_npc_dialogue_capability",
+              "change_direction": "enter",
+              "affects": [
+                "live service games",
+                "JRPG developers"
+              ]
+            }
+          },
+          {
+            "signal_id": "real_009__sig_1",
+            "source_id": "real_009",
+            "signal_type": "team",
+            "signal_label": "网易互娱减少外包规模",
+            "intensity_score": 6,
+            "logic_frame": {
+              "what_changed": "outsourcing_scale",
+              "change_direction": "decrease",
+              "affects": [
+                "outsourcing companies"
+              ]
+            }
+          },
+          {
+            "signal_id": "real_009__sig_2",
+            "source_id": "real_009",
+            "signal_type": "technical",
+            "signal_label": "网易内部AI开发工具达到可用标准",
+            "intensity_score": 7,
+            "logic_frame": {
+              "what_changed": "ai_tool_capability",
+              "change_direction": "increase",
+              "affects": [
+                "game development workflow"
+              ]
+            }
+          },
+          {
+            "signal_id": "incoming_014__sig_1",
+            "source_id": "incoming_014",
+            "signal_type": "technical",
+            "signal_label": "Capcom 采用生成式 AI 工具加速管线",
+            "intensity_score": 7,
+            "logic_frame": {
+              "what_changed": "ai_tool_adoption",
+              "change_direction": "enter",
+              "affects": [
+                "game development pipeline"
+              ]
+            }
+          }
+        ]
+      },
+      "execution": {
+        "step_a_skipped": true,
+        "skip_reason": "small_batch_threshold",
+        "effective_batch_size": 5,
+        "signal_count": 5,
+        "logical_scenarios": [],
+        "exploration_scenarios": [],
+        "role_annotations": {},
+        "isolated_signal_ids": [
+          "real_004__sig_1",
+          "real_006__sig_20250314_001",
+          "real_009__sig_1",
+          "real_009__sig_2",
+          "incoming_014__sig_1"
+        ],
+        "fallback_used": false
+      },
+      "validation": {
+        "passed": true,
+        "decode_success": true,
+        "skip_policy_match": true,
+        "signal_volume_ok": true,
+        "noise_expectation_ok": true,
+        "source_coverage_ok": true,
+        "scenario_count_match": true,
+        "expected_core_match": true,
+        "forbidden_pairings_ok": true,
+        "annotations_complete": true,
+        "errors": [],
+        "warnings": [],
+        "metrics": {
+          "cross_domain_complement_recall": null,
+          "false_merge_rate": null,
+          "noise_inclusion_rate": null,
+          "step_c_opportunity_ready_proxy_rate": null,
+          "matched_expected_core_sets": 0,
+          "expected_core_sets": 0,
+          "forbidden_pairings_detected": 0,
+          "noise_scenarios": 0,
+          "opportunity_ready_scenarios": 0,
+          "scenario_count": 0
+        },
+        "error_attribution": [],
+        "dominant_error_attribution": "none"
+      }
+    }
+  ]
+}

@@ -1,0 +1,94 @@
+{
+  "relative_path": "incoming/incoming_026_capital_reforged_headup_acquisition.json",
+  "source_id": "incoming_026",
+  "elapsed_seconds": 11.348,
+  "payload": {
+    "source_id": "incoming_026",
+    "source_type": "news",
+    "title": "Reforged Studios acquires Super Meat Boy 3D co-publisher Headup, its fourth acquisition since 2024",
+    "content": "Reforged Studios has acquired Headup, the German indie publisher and co-publisher of Super Meat Boy 3D. This marks Reforged's fourth studio acquisition since 2024, continuing an aggressive consolidation strategy in the indie publishing space.",
+    "published_at": "2026-03-24T00:00:00Z",
+    "source_name": "Game Developer",
+    "source_url": "https://www.gamedeveloper.com/business/reforged-studios-acquires-super-meat-boy-3d-dev-headup",
+    "language": "en",
+    "mode": "prompt_first"
+  },
+  "result": {
+    "source_id": "incoming_026",
+    "source_type": "news",
+    "signals": [
+      {
+        "signal_id": "sig_1",
+        "signal_type": "capital",
+        "signal_label": "Reforged Studios 收购 Headup",
+        "description": "Reforged Studios 收购德国独立发行商 Headup，后者是《Super Meat Boy 3D》的联合发行商。",
+        "evidence_text": "Reforged Studios has acquired Headup, the German indie publisher and co-publisher of Super Meat Boy 3D.",
+        "entities": [
+          "Reforged Studios",
+          "Headup",
+          "Super Meat Boy 3D"
+        ],
+        "intensity_score": 7,
+        "confidence_score": 10,
+        "timeliness_score": 9,
+        "source_ref": "incoming_026",
+        "extracted_at": "2025-10-22T00:00:00Z",
+        "logic_frame": {
+          "what_changed": "acquisition",
+          "change_direction": "enter",
+          "affects": [
+            "indie publishing space"
+          ]
+        },
+        "metadata": {
+          "audit": {
+            "audit_flags": [],
+            "raw_signal_type": "capital",
+            "normalized_signal_type": "capital"
+          }
+        }
+      },
+      {
+        "signal_id": "sig_2",
+        "signal_type": "market",
+        "signal_label": "Reforged Studios 持续整合独立发行市场",
+        "description": "这是 Reforged Studios 自 2024 年以来的第四次工作室收购，标志着其在独立发行领域持续进行积极的整合策略。",
+        "evidence_text": "This marks Reforged's fourth studio acquisition since 2024, continuing an aggressive consolidation strategy in the indie publishing space.",
+        "entities": [
+          "Reforged Studios"
+        ],
+        "intensity_score": 6,
+        "confidence_score": 9,
+        "timeliness_score": 9,
+        "source_ref": "incoming_026",
+        "extracted_at": "2025-10-22T00:00:00Z",
+        "logic_frame": {
+          "what_changed": "market_consolidation",
+          "change_direction": "tighten",
+          "affects": [
+            "indie publishing space"
+          ]
+        },
+        "metadata": {
+          "audit": {
+            "audit_flags": [],
+            "raw_signal_type": "market",
+            "normalized_signal_type": "market"
+          }
+        }
+      }
+    ],
+    "summary": "检测到 2 个范式信号：资本信号 1 个、市场信号 1 个",
+    "decoder_version": "v2.1",
+    "processing_time_ms": 11046,
+    "warnings": null
+  },
+  "fixture_metadata": {
+    "saved_at": "2026-04-03T18:05:57",
+    "fast_decode": true,
+    "connect_timeout_seconds": 5,
+    "read_timeout_seconds": 15,
+    "max_retries": 1,
+    "decode_execution_mode": "subprocess"
+  }
+}

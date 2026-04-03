@@ -1,0 +1,66 @@
+{
+  "relative_path": "incoming/incoming_028_market_disney_gaming_ambition.json",
+  "source_id": "incoming_028",
+  "elapsed_seconds": 8.244,
+  "payload": {
+    "source_id": "incoming_028",
+    "source_type": "news",
+    "title": "Disney gaming boss describes 'massive disruption' in games, outlines ambition to rival film and theme parks",
+    "content": "Disney's Executive Vice President of Global Games & Digital Entertainment, Sean Shoptaw, speaking at SXSW 2026, described the current gaming market as experiencing 'massive disruption.' Shoptaw outlined Disney's ambition for games to stand alongside its film, TV, and theme park businesses as a major revenue pillar. Current Disney gaming investments include a major partnership with Epic Games in Fortnite, with further expansions planned.",
+    "published_at": "2026-03-24T00:00:00Z",
+    "source_name": "GameSpot",
+    "source_url": "https://www.gamespot.com/articles/disney-gaming-boss-on-massive-disruption-in-games-and-whats-coming-next/1100-6538983/",
+    "language": "en",
+    "mode": "prompt_first"
+  },
+  "result": {
+    "source_id": "incoming_028",
+    "source_type": "news",
+    "signals": [
+      {
+        "signal_id": "sig_20250314_1",
+        "signal_type": "market",
+        "signal_label": "迪士尼高层定义游戏市场为大规模颠覆期",
+        "description": "迪士尼全球游戏与数字娱乐执行副总裁在SXSW 2026上，将当前游戏市场描述为正在经历'大规模颠覆'，并明确游戏业务目标是与影视、主题公园并列的主要收入支柱。",
+        "evidence_text": "Disney's Executive Vice President of Global Games & Digital Entertainment, Sean Shoptaw, speaking at SXSW 2026, described the current gaming market as experiencing 'massive disruption.' Shoptaw outlined Disney's ambition for games to stand alongside its film, TV, and theme park businesses as a major revenue pillar.",
+        "entities": [
+          "Disney",
+          "Sean Shoptaw",
+          "SXSW 2026"
+        ],
+        "intensity_score": 6,
+        "confidence_score": 9,
+        "timeliness_score": 10,
+        "source_ref": "incoming_028",
+        "extracted_at": "2026-03-14T00:00:00Z",
+        "logic_frame": {
+          "what_changed": "market_perception",
+          "change_direction": "shift",
+          "affects": [
+            "game developers",
+            "game publishers"
+          ]
+        },
+        "metadata": {
+          "audit": {
+            "audit_flags": [],
+            "raw_signal_type": "market",
+            "normalized_signal_type": "market"
+          }
+        }
+      }
+    ],
+    "summary": "检测到 1 个范式信号：市场信号 1 个",
+    "decoder_version": "v2.1",
+    "processing_time_ms": 7963,
+    "warnings": null
+  },
+  "fixture_metadata": {
+    "saved_at": "2026-04-03T17:57:55",
+    "fast_decode": true,
+    "connect_timeout_seconds": 5,
+    "read_timeout_seconds": 15,
+    "max_retries": 1,
+    "decode_execution_mode": "subprocess"
+  }
+}

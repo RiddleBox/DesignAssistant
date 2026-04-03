@@ -1,0 +1,67 @@
+{
+  "relative_path": "incoming/incoming_032_technical_zuckerberg_ai_coceo.json",
+  "source_id": "incoming_032",
+  "elapsed_seconds": 7.742,
+  "payload": {
+    "source_id": "incoming_032",
+    "source_type": "news",
+    "title": "Mark Zuckerberg building AI co-CEO system to manage Meta operations",
+    "content": "Meta CEO Mark Zuckerberg has confirmed he is developing an AI system capable of serving as a co-CEO to help manage Meta's operations. The project is part of Zuckerberg's broader push to integrate AI agents into Meta's executive and operational decision-making, reducing reliance on human management layers.",
+    "published_at": "2026-03-24T00:00:00Z",
+    "source_name": "PC Gamer",
+    "source_url": "https://www.pcgamer.com/software/ai/mark-zuckerberg-is-building-an-ai-co-ceo-as-part-of-his-continuing-mission-to-free-himself-from-the-burden-of-human-interaction/",
+    "language": "en",
+    "mode": "prompt_first"
+  },
+  "result": {
+    "source_id": "incoming_032",
+    "source_type": "news",
+    "signals": [
+      {
+        "signal_id": "sig_20250314_001",
+        "signal_type": "technical",
+        "signal_label": "AI 系统作为联席 CEO 开发",
+        "description": "Meta CEO 确认正在开发能作为联席 CEO 管理公司运营的 AI 系统，旨在将 AI 智能体整合进高管和运营决策层",
+        "evidence_text": "Meta CEO Mark Zuckerberg has confirmed he is developing an AI system capable of serving as a co-CEO to help manage Meta's operations. The project is part of Zuckerberg's broader push to integrate AI agents into Meta's executive and operational decision-making, reducing reliance on human management layers.",
+        "entities": [
+          "Meta",
+          "Mark Zuckerberg",
+          "AI system",
+          "AI agents"
+        ],
+        "intensity_score": 8,
+        "confidence_score": 10,
+        "timeliness_score": 10,
+        "source_ref": "incoming_032",
+        "extracted_at": "2025-03-14T00:00:00Z",
+        "logic_frame": {
+          "what_changed": "ai_agent_capability",
+          "change_direction": "increase",
+          "affects": [
+            "corporate management",
+            "operational decision-making"
+          ]
+        },
+        "metadata": {
+          "audit": {
+            "audit_flags": [],
+            "raw_signal_type": "technical",
+            "normalized_signal_type": "technical"
+          }
+        }
+      }
+    ],
+    "summary": "检测到 1 个范式信号：技术信号 1 个",
+    "decoder_version": "v2.1",
+    "processing_time_ms": 7460,
+    "warnings": null
+  },
+  "fixture_metadata": {
+    "saved_at": "2026-04-03T17:58:01",
+    "fast_decode": true,
+    "connect_timeout_seconds": 5,
+    "read_timeout_seconds": 15,
+    "max_retries": 1,
+    "decode_execution_mode": "subprocess"
+  }
+}

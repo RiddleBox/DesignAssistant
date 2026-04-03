@@ -1,0 +1,64 @@
+{
+  "relative_path": "incoming/incoming_020_team_epic_1000_layoffs.json",
+  "source_id": "incoming_020",
+  "elapsed_seconds": 7.271,
+  "payload": {
+    "source_id": "incoming_020",
+    "source_type": "news",
+    "title": "Epic Games cuts over 1,000 jobs as Tim Sweeney cites Fortnite revenue shortfall",
+    "content": "Epic Games has laid off over 1,000 employees — approximately 16% of its workforce. CEO Tim Sweeney shared the news with employees, acknowledging that Fortnite 'remains one of the most successful games in the world' but citing that Epic had been spending beyond its means. The cuts affected teams across the company including the Fortnite live operations team, leading Epic to announce the discontinuation of several Fortnite game modes.",
+    "published_at": "2026-03-24T00:00:00Z",
+    "source_name": "Game Developer",
+    "source_url": "https://www.gamedeveloper.com/business/fortnite-developer-epic-games-is-cutting-1-000-jobs",
+    "language": "en",
+    "mode": "prompt_first"
+  },
+  "result": {
+    "source_id": "incoming_020",
+    "source_type": "news",
+    "signals": [
+      {
+        "signal_id": "sig_1",
+        "signal_type": "team",
+        "signal_label": "Epic Games 裁员超 1000 人",
+        "description": "Epic Games 裁员超过 1000 名员工，约占其员工总数的 16%",
+        "evidence_text": "Epic Games has laid off over 1,000 employees — approximately 16% of its workforce.",
+        "entities": [
+          "Epic Games"
+        ],
+        "intensity_score": 9,
+        "confidence_score": 10,
+        "timeliness_score": 10,
+        "source_ref": "incoming_020",
+        "extracted_at": "2024-07-11T00:00:00Z",
+        "logic_frame": {
+          "what_changed": "studio_headcount",
+          "change_direction": "decrease",
+          "affects": [
+            "Fortnite live operations team",
+            "Epic Games"
+          ]
+        },
+        "metadata": {
+          "audit": {
+            "audit_flags": [],
+            "raw_signal_type": "team",
+            "normalized_signal_type": "team"
+          }
+        }
+      }
+    ],
+    "summary": "检测到 1 个范式信号：团队信号 1 个",
+    "decoder_version": "v2.1",
+    "processing_time_ms": 6973,
+    "warnings": null
+  },
+  "fixture_metadata": {
+    "saved_at": "2026-04-03T18:06:17",
+    "fast_decode": true,
+    "connect_timeout_seconds": 5,
+    "read_timeout_seconds": 15,
+    "max_retries": 1,
+    "decode_execution_mode": "subprocess"
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "relative_path": "incoming/incoming_036_technical_ram_price_ai_handheld_impact.json",
+  "source_id": "incoming_036",
+  "elapsed_seconds": 6.658,
+  "payload": {
+    "source_id": "incoming_036",
+    "source_type": "news",
+    "title": "RAM price surge from AI/data center demand forces AyaNeo to suspend PC handheld preorders",
+    "content": "AyaNeo has suspended preorders and early-bird sales of its upcoming Next 2 handheld gaming PC due to 'significant cost pressure' from rising memory and storage prices. The price increases are driven by surging demand from AI training and data center infrastructure buildout competing with consumer electronics for DRAM supply. Current preorders will be fulfilled, but new orders are paused pending cost resolution.",
+    "published_at": "2026-03-24T00:00:00Z",
+    "source_name": "GameSpot",
+    "source_url": "https://www.gamespot.com/articles/the-rampocalypse-is-already-claiming-its-first-pc-gaming-handheld/1100-6538982/",
+    "language": "en",
+    "mode": "prompt_first"
+  },
+  "result": {
+    "source_id": "incoming_036",
+    "source_type": "news",
+    "signals": [
+      {
+        "signal_id": "sig_1",
+        "signal_type": "market",
+        "signal_label": "硬件成本压力导致产品预购暂停",
+        "description": "AyaNeo 因内存和存储价格上涨带来的显著成本压力，暂停了其即将推出的 Next 2 掌上游戏电脑的预购和早鸟销售。",
+        "evidence_text": "AyaNeo has suspended preorders and early-bird sales of its upcoming Next 2 handheld gaming PC due to 'significant cost pressure' from rising memory and storage prices.",
+        "entities": [
+          "AyaNeo",
+          "Next 2",
+          "memory",
+          "storage"
+        ],
+        "intensity_score": 6,
+        "confidence_score": 10,
+        "timeliness_score": 9,
+        "source_ref": "incoming_036",
+        "extracted_at": "2024-07-10T06:30:00Z",
+        "logic_frame": {
+          "what_changed": "product_availability",
+          "change_direction": "exit",
+          "affects": [
+            "handheld gaming PC manufacturers",
+            "consumers"
+          ]
+        },
+        "metadata": {
+          "audit": {
+            "audit_flags": [],
+            "raw_signal_type": "market",
+            "normalized_signal_type": "market"
+          }
+        }
+      }
+    ],
+    "summary": "检测到 1 个范式信号：市场信号 1 个",
+    "decoder_version": "v2.1",
+    "processing_time_ms": 6373,
+    "warnings": null
+  },
+  "fixture_metadata": {
+    "saved_at": "2026-04-03T18:05:38",
+    "fast_decode": true,
+    "connect_timeout_seconds": 5,
+    "read_timeout_seconds": 15,
+    "max_retries": 1,
+    "decode_execution_mode": "subprocess"
+  }
+}

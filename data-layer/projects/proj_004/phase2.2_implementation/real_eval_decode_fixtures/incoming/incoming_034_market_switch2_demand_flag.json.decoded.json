@@ -1,0 +1,66 @@
+{
+  "relative_path": "incoming/incoming_034_market_switch2_demand_flag.json",
+  "source_id": "incoming_034",
+  "elapsed_seconds": 7.025,
+  "payload": {
+    "source_id": "incoming_034",
+    "source_type": "news",
+    "title": "Switch 2 demand flagging in US as Nintendo cuts production targets by a third",
+    "content": "After initial record-breaking launch sales, demand for Nintendo Switch 2 appears to be weakening, especially in the US market. Nintendo has reportedly reduced production targets from 6 million to 4 million units. Multiple sources indicate US consumer price sensitivity and tariff concerns are the primary factors.",
+    "published_at": "2026-03-24T00:00:00Z",
+    "source_name": "Eurogamer",
+    "source_url": "https://www.eurogamer.net/switch-2-flagging-nintendo-lowers-production",
+    "language": "en",
+    "mode": "prompt_first"
+  },
+  "result": {
+    "source_id": "incoming_034",
+    "source_type": "news",
+    "signals": [
+      {
+        "signal_id": "sig_1",
+        "signal_type": "market",
+        "signal_label": "Switch 2 需求减弱，生产目标下调",
+        "description": "Nintendo Switch 2 需求减弱，尤其是在美国市场，导致生产目标从 600 万台下调至 400 万台。",
+        "evidence_text": "After initial record-breaking launch sales, demand for Nintendo Switch 2 appears to be weakening, especially in the US market. Nintendo has reportedly reduced production targets from 6 million to 4 million units.",
+        "entities": [
+          "Nintendo",
+          "Switch 2",
+          "US market"
+        ],
+        "intensity_score": 7,
+        "confidence_score": 7,
+        "timeliness_score": 9,
+        "source_ref": "incoming_034",
+        "extracted_at": "2025-08-07T00:00:00Z",
+        "logic_frame": {
+          "what_changed": "hardware_demand",
+          "change_direction": "decrease",
+          "affects": [
+            "console manufacturers",
+            "game publishers"
+          ]
+        },
+        "metadata": {
+          "audit": {
+            "audit_flags": [],
+            "raw_signal_type": "market",
+            "normalized_signal_type": "market"
+          }
+        }
+      }
+    ],
+    "summary": "检测到 1 个范式信号：市场信号 1 个",
+    "decoder_version": "v2.1",
+    "processing_time_ms": 6731,
+    "warnings": null
+  },
+  "fixture_metadata": {
+    "saved_at": "2026-04-03T18:06:00",
+    "fast_decode": true,
+    "connect_timeout_seconds": 5,
+    "read_timeout_seconds": 15,
+    "max_retries": 1,
+    "decode_execution_mode": "subprocess"
+  }
+}

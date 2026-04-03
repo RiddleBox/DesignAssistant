@@ -1,0 +1,66 @@
+{
+  "relative_path": "sample_008_market_crimson_desert_sales.json",
+  "source_id": "real_008",
+  "elapsed_seconds": 8.332,
+  "payload": {
+    "source_id": "real_008",
+    "source_type": "news",
+    "title": "Crimson Desert tops 2M sales within a day of launch",
+    "content": "Pearl Abyss's open-world action RPG Crimson Desert has surpassed 2 million copies sold within 24 hours of its global launch on PC and consoles. The title, which spent several years in development after multiple delay announcements, marks a significant commercial milestone for the Korean developer. The strong sales performance suggests growing appetite for premium single-player RPGs from Asian studios competing in the Western market. Pearl Abyss CEO stated the result exceeded internal projections.",
+    "published_at": "2026-03-22T00:00:00Z",
+    "source_name": "Eurogamer",
+    "language": "en",
+    "mode": "prompt_first"
+  },
+  "result": {
+    "source_id": "real_008",
+    "source_type": "news",
+    "signals": [
+      {
+        "signal_id": "sig_20250327_001",
+        "signal_type": "market",
+        "signal_label": "韩国工作室单机 RPG 西方市场首日 2M 验证",
+        "description": "Crimson Desert 全球首发 24 小时内销量超 200 万份，超出内部预期，验证了亚洲工作室高端单机 RPG 在西方市场的商业可行性",
+        "evidence_text": "Pearl Abyss's open-world action RPG Crimson Desert has surpassed 2 million copies sold within 24 hours of its global launch on PC and consoles. The strong sales performance suggests growing appetite for premium single-player RPGs from Asian studios competing in the Western market. Pearl Abyss CEO stated the result exceeded internal projections.",
+        "entities": [
+          "Pearl Abyss",
+          "Crimson Desert",
+          "PC",
+          "consoles"
+        ],
+        "intensity_score": 7,
+        "confidence_score": 9,
+        "timeliness_score": 9,
+        "source_ref": "real_008",
+        "extracted_at": "2025-03-27T00:00:00Z",
+        "logic_frame": {
+          "what_changed": "sales_milestone",
+          "change_direction": "increase",
+          "affects": [
+            "game developers",
+            "game publishers"
+          ]
+        },
+        "metadata": {
+          "audit": {
+            "audit_flags": [],
+            "raw_signal_type": "market",
+            "normalized_signal_type": "market"
+          }
+        }
+      }
+    ],
+    "summary": "检测到 1 个范式信号：市场信号 1 个",
+    "decoder_version": "v2.1",
+    "processing_time_ms": 8040,
+    "warnings": null
+  },
+  "fixture_metadata": {
+    "saved_at": "2026-04-03T17:57:47",
+    "fast_decode": true,
+    "connect_timeout_seconds": 5,
+    "read_timeout_seconds": 15,
+    "max_retries": 1,
+    "decode_execution_mode": "subprocess"
+  }
+}

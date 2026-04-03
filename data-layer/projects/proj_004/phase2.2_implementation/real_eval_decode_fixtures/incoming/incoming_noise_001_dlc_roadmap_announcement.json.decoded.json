@@ -1,0 +1,32 @@
+{
+  "relative_path": "incoming/incoming_noise_001_dlc_roadmap_announcement.json",
+  "source_id": "incoming_noise_001",
+  "elapsed_seconds": 2.261,
+  "payload": {
+    "source_id": "incoming_noise_001",
+    "source_type": "announcement",
+    "title": "Ubisoft announces Assassin's Creed Shadows Season Pass content roadmap",
+    "content": "Ubisoft today detailed the Season Pass content roadmap for Assassin's Creed Shadows, including two story expansions, a new playable character, and over 30 cosmetic items to be released through Q3 2026. The first expansion, 'The Echoes of Shinobi', will arrive in May and adds approximately 8 hours of new narrative content. Season Pass holders will also receive exclusive armor sets and mounts. 'We are thrilled to continue the journey of Naoe and Yasuke with our dedicated community,' said the creative director in a press release. The game has sold over 4 million units since launch.",
+    "published_at": "2026-03-20T00:00:00Z",
+    "source_name": "Ubisoft Press",
+    "language": "en",
+    "mode": "prompt_first"
+  },
+  "result": {
+    "source_id": "incoming_noise_001",
+    "source_type": "announcement",
+    "signals": [],
+    "summary": "未检测到范式信号",
+    "decoder_version": "v2.1",
+    "processing_time_ms": 1932,
+    "warnings": null
+  },
+  "fixture_metadata": {
+    "saved_at": "2026-04-03T18:06:24",
+    "fast_decode": true,
+    "connect_timeout_seconds": 5,
+    "read_timeout_seconds": 15,
+    "max_retries": 1,
+    "decode_execution_mode": "subprocess"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "relative_path": "noise_001_earnings_boilerplate.json",
+  "source_id": "noise_001",
+  "elapsed_seconds": 2.46,
+  "payload": {
+    "source_id": "noise_001",
+    "source_type": "announcement",
+    "title": "Activision Blizzard Reports Q4 2025 Financial Results",
+    "content": "Activision Blizzard today reported financial results for the quarter and full year ended December 31, 2025. Net revenues were $2.34 billion for the quarter. 'We are pleased with our strong performance in 2025,' said Bobby Kotick, President and CEO. 'Our world-class franchises continue to deliver exceptional entertainment to hundreds of millions of players around the world. We remain committed to delivering long-term value to our shareholders and look forward to continued growth in 2026.' The Board of Directors declared a cash dividend of $0.47 per common share.",
+    "published_at": "2026-02-10T00:00:00Z",
+    "source_name": "GameSpot",
+    "language": "en",
+    "mode": "prompt_first"
+  },
+  "result": {
+    "source_id": "noise_001",
+    "source_type": "announcement",
+    "signals": [],
+    "summary": "未检测到范式信号",
+    "decoder_version": "v2.1",
+    "processing_time_ms": 2162,
+    "warnings": null
+  },
+  "fixture_metadata": {
+    "saved_at": "2026-04-03T17:27:08",
+    "fast_decode": true,
+    "connect_timeout_seconds": 5,
+    "read_timeout_seconds": 15,
+    "max_retries": 1,
+    "decode_execution_mode": "subprocess"
+  }
+}

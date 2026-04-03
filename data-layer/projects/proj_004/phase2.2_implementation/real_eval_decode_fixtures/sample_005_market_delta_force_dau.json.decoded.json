@@ -1,0 +1,65 @@
+{
+  "relative_path": "sample_005_market_delta_force_dau.json",
+  "source_id": "real_005",
+  "elapsed_seconds": 7.767,
+  "payload": {
+    "source_id": "real_005",
+    "source_type": "news",
+    "title": "国产FPS现象级样本：《三角洲行动》开年交出5000万日活答卷",
+    "content": "《三角洲行动》在2026年开年实现5000万日活跃用户的里程碑，成为国产FPS游戏的现象级案例。这一数据不仅创下国产FPS品类纪录，也标志着中国游戏厂商在核心品类上的突破。该游戏由腾讯旗下工作室开发，主打硬核战术射击体验，自上线以来持续保持高热度，展示了国内玩家对高质量FPS内容的旺盛需求。",
+    "published_at": "2026-03-22T00:00:00Z",
+    "source_name": "触乐网",
+    "language": "zh-CN",
+    "mode": "prompt_first"
+  },
+  "result": {
+    "source_id": "real_005",
+    "source_type": "news",
+    "signals": [
+      {
+        "signal_id": "sig_1",
+        "signal_type": "market",
+        "signal_label": "国产FPS品类DAU纪录突破",
+        "description": "《三角洲行动》DAU达5000万，创下国产FPS品类纪录，验证中国厂商在核心品类的突破及玩家对高质量FPS的需求",
+        "evidence_text": "《三角洲行动》在2026年开年实现5000万日活跃用户的里程碑，成为国产FPS游戏的现象级案例。这一数据不仅创下国产FPS品类纪录，也标志着中国游戏厂商在核心品类上的突破。",
+        "entities": [
+          "三角洲行动",
+          "腾讯",
+          "FPS"
+        ],
+        "intensity_score": 8,
+        "confidence_score": 9,
+        "timeliness_score": 9,
+        "source_ref": "real_005",
+        "extracted_at": "2026-03-27T00:00:00Z",
+        "logic_frame": {
+          "what_changed": "dau",
+          "change_direction": "increase",
+          "affects": [
+            "Chinese game developers",
+            "FPS game publishers"
+          ]
+        },
+        "metadata": {
+          "audit": {
+            "audit_flags": [],
+            "raw_signal_type": "market",
+            "normalized_signal_type": "market"
+          }
+        }
+      }
+    ],
+    "summary": "检测到 1 个范式信号：市场信号 1 个",
+    "decoder_version": "v2.1",
+    "processing_time_ms": 7469,
+    "warnings": null
+  },
+  "fixture_metadata": {
+    "saved_at": "2026-04-03T17:57:47",
+    "fast_decode": true,
+    "connect_timeout_seconds": 5,
+    "read_timeout_seconds": 15,
+    "max_retries": 1,
+    "decode_execution_mode": "subprocess"
+  }
+}

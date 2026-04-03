@@ -1,0 +1,245 @@
+{
+  "runner": "run_step_a_real_eval.py",
+  "sample_version": "v0.3-baseline-v1",
+  "requested_mode": "auto",
+  "runtime_mode": "llm",
+  "fast_decode": true,
+  "decode_timeout_seconds": 15,
+  "decode_execution_mode": "subprocess",
+  "max_parallel_decodes": 3,
+  "fixture_mode": "fixture_only",
+  "fixture_root": "f:\\AIProjects\\DesignAssistant\\data-layer\\projects\\proj_004\\phase2.2_implementation\\real_eval_decode_fixtures",
+  "connect_timeout_seconds": 5,
+  "read_timeout_seconds": 15,
+  "max_retries": 1,
+  "max_llm_calls_per_sample": 1,
+  "small_batch_threshold": 15,
+  "real_sample_root": "f:\\AIProjects\\DesignAssistant\\background\\real_intel_samples",
+  "total_cases": 1,
+  "passed_cases": 1,
+  "summary": {
+    "executed_step_a_cases": 0,
+    "skipped_step_a_cases": 1,
+    "avg_cross_domain_complement_recall": null,
+    "avg_false_merge_rate": null,
+    "avg_noise_inclusion_rate": null,
+    "avg_step_c_opportunity_ready_proxy_rate": null
+  },
+  "results": [
+    {
+      "case": {
+        "case_id": "step_a_real_small_batch_control_001",
+        "case_type": "small_batch_direct_pass",
+        "validation_profile": "strict",
+        "data_nature": "real_samples_from_background_real_intel_samples",
+        "description": "A small real batch should bypass Step A and go directly to Step C under the <=15 policy.",
+        "sample_files": [
+          "sample_009_technical_netease_ai_replacing_outsource.json",
+          "sample_010_capital_epic_google_antitrust.json",
+          "sample_011_market_indie_selfpublish_trend.json"
+        ],
+        "expected_step_a": {
+          "should_skip_step_a": true,
+          "expected_reason": "small_batch_threshold",
+          "min_total_signals": 3,
+          "expected_non_noise_source_ids": [
+            "real_009",
+            "real_010",
+            "real_011"
+          ]
+        }
+      },
+      "dataset": {
+        "decoded_samples": [
+          {
+            "relative_path": "sample_009_technical_netease_ai_replacing_outsource.json",
+            "source_id": "real_009",
+            "elapsed_seconds": 10.322,
+            "signal_count": 2,
+            "fixture_hit": true,
+            "fixture_path": "f:\\AIProjects\\DesignAssistant\\data-layer\\projects\\proj_004\\phase2.2_implementation\\real_eval_decode_fixtures\\sample_009_technical_netease_ai_replacing_outsource.json.decoded.json",
+            "fixture_metadata": {
+              "saved_at": "2026-04-03T17:20:40",
+              "fast_decode": true,
+              "connect_timeout_seconds": 5,
+              "read_timeout_seconds": 15,
+              "max_retries": 1,
+              "decode_execution_mode": "inline"
+            },
+            "warnings": []
+          },
+          {
+            "relative_path": "sample_010_capital_epic_google_antitrust.json",
+            "source_id": "real_010",
+            "elapsed_seconds": 9.866,
+            "signal_count": 2,
+            "fixture_hit": true,
+            "fixture_path": "f:\\AIProjects\\DesignAssistant\\data-layer\\projects\\proj_004\\phase2.2_implementation\\real_eval_decode_fixtures\\sample_010_capital_epic_google_antitrust.json.decoded.json",
+            "fixture_metadata": {
+              "saved_at": "2026-04-03T17:20:50",
+              "fast_decode": true,
+              "connect_timeout_seconds": 5,
+              "read_timeout_seconds": 15,
+              "max_retries": 1,
+              "decode_execution_mode": "inline"
+            },
+            "warnings": []
+          },
+          {
+            "relative_path": "sample_011_market_indie_selfpublish_trend.json",
+            "source_id": "real_011",
+            "elapsed_seconds": 7.901,
+            "signal_count": 1,
+            "fixture_hit": true,
+            "fixture_path": "f:\\AIProjects\\DesignAssistant\\data-layer\\projects\\proj_004\\phase2.2_implementation\\real_eval_decode_fixtures\\sample_011_market_indie_selfpublish_trend.json.decoded.json",
+            "fixture_metadata": {
+              "saved_at": "2026-04-03T17:20:58",
+              "fast_decode": true,
+              "connect_timeout_seconds": 5,
+              "read_timeout_seconds": 15,
+              "max_retries": 1,
+              "decode_execution_mode": "inline"
+            },
+            "warnings": []
+          }
+        ],
+        "decode_errors": [],
+        "signal_count": 5,
+        "source_signal_map": {
+          "real_009": [
+            "real_009__sig_1",
+            "real_009__sig_2"
+          ],
+          "real_010": [
+            "real_010__sig_1",
+            "real_010__sig_2"
+          ],
+          "real_011": [
+            "real_011__sig_1"
+          ]
+        },
+        "noise_source_ids": [],
+        "signals": [
+          {
+            "signal_id": "real_009__sig_1",
+            "source_id": "real_009",
+            "signal_type": "team",
+            "signal_label": "网易互娱减少外包规模",
+            "intensity_score": 6,
+            "logic_frame": {
+              "what_changed": "outsourcing_scale",
+              "change_direction": "decrease",
+              "affects": [
+                "outsourcing companies"
+              ]
+            }
+          },
+          {
+            "signal_id": "real_009__sig_2",
+            "source_id": "real_009",
+            "signal_type": "technical",
+            "signal_label": "网易内部AI开发工具达到可用标准",
+            "intensity_score": 7,
+            "logic_frame": {
+              "what_changed": "ai_tool_capability",
+              "change_direction": "increase",
+              "affects": [
+                "game development workflow"
+              ]
+            }
+          },
+          {
+            "signal_id": "real_010__sig_1",
+            "source_id": "real_010",
+            "signal_type": "regulatory",
+            "signal_label": "法院裁定 Google 必须开放支付系统",
+            "intensity_score": 9,
+            "logic_frame": {
+              "what_changed": "platform_payment_policy",
+              "change_direction": "loosen",
+              "affects": [
+                "app store operators",
+                "mobile game publishers"
+              ]
+            }
+          },
+          {
+            "signal_id": "real_010__sig_2",
+            "source_id": "real_010",
+            "signal_type": "market",
+            "signal_label": "Fortnite 重返 Google Play",
+            "intensity_score": 7,
+            "logic_frame": {
+              "what_changed": "distribution_access",
+              "change_direction": "enter",
+              "affects": [
+                "Epic Games",
+                "Android users"
+              ]
+            }
+          },
+          {
+            "signal_id": "real_011__sig_1",
+            "source_id": "real_011",
+            "signal_type": "market",
+            "signal_label": "独立游戏自发行案例验证",
+            "intensity_score": 7,
+            "logic_frame": {
+              "what_changed": "distribution_channel_value",
+              "change_direction": "shift",
+              "affects": [
+                "indie game developers",
+                "traditional game publishers"
+              ]
+            }
+          }
+        ]
+      },
+      "execution": {
+        "step_a_skipped": true,
+        "skip_reason": "small_batch_threshold",
+        "effective_batch_size": 5,
+        "signal_count": 5,
+        "logical_scenarios": [],
+        "exploration_scenarios": [],
+        "role_annotations": {},
+        "isolated_signal_ids": [
+          "real_009__sig_1",
+          "real_009__sig_2",
+          "real_010__sig_1",
+          "real_010__sig_2",
+          "real_011__sig_1"
+        ],
+        "fallback_used": false
+      },
+      "validation": {
+        "passed": true,
+        "decode_success": true,
+        "skip_policy_match": true,
+        "signal_volume_ok": true,
+        "noise_expectation_ok": true,
+        "source_coverage_ok": true,
+        "scenario_count_match": true,
+        "expected_core_match": true,
+        "forbidden_pairings_ok": true,
+        "annotations_complete": true,
+        "errors": [],
+        "warnings": [],
+        "metrics": {
+          "cross_domain_complement_recall": null,
+          "false_merge_rate": null,
+          "noise_inclusion_rate": null,
+          "step_c_opportunity_ready_proxy_rate": null,
+          "matched_expected_core_sets": 0,
+          "expected_core_sets": 0,
+          "forbidden_pairings_detected": 0,
+          "noise_scenarios": 0,
+          "opportunity_ready_scenarios": 0,
+          "scenario_count": 0
+        },
+        "error_attribution": [],
+        "dominant_error_attribution": "none"
+      }
+    }
+  ]
+}

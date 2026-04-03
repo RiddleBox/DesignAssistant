@@ -1,0 +1,65 @@
+{
+  "relative_path": "incoming/incoming_031_team_xbox_new_ceo_brand_reset.json",
+  "source_id": "incoming_031",
+  "elapsed_seconds": 7.085,
+  "payload": {
+    "source_id": "incoming_031",
+    "source_type": "news",
+    "title": "New Xbox CEO Asha Sharma killed 'This Is An Xbox' campaign upon taking over — report",
+    "content": "Xbox's new CEO Asha Sharma was the driving force behind Microsoft's decision to kill the 'This is an Xbox' marketing campaign shortly after taking the helm, according to The Information. All evidence of the campaign, except a few YouTube videos, was scrubbed from the internet following Sharma's appointment. The move signals a strategic reset in Xbox's brand communications under new leadership.",
+    "published_at": "2026-03-24T00:00:00Z",
+    "source_name": "GameSpot / The Information",
+    "source_url": "https://www.gamespot.com/articles/killing-this-is-an-xbox-campaign-was-new-ceos-decision-report/1100-6538987/",
+    "language": "en",
+    "mode": "prompt_first"
+  },
+  "result": {
+    "source_id": "incoming_031",
+    "source_type": "news",
+    "signals": [
+      {
+        "signal_id": "sig_1",
+        "signal_type": "team",
+        "signal_label": "Xbox 新任 CEO 上任",
+        "description": "Asha Sharma 被任命为 Xbox 新任 CEO，并已开始推动战略调整",
+        "evidence_text": "Xbox's new CEO Asha Sharma was the driving force behind Microsoft's decision to kill the 'This is an Xbox' marketing campaign shortly after taking the helm",
+        "entities": [
+          "Asha Sharma",
+          "Xbox",
+          "Microsoft"
+        ],
+        "intensity_score": 7,
+        "confidence_score": 8,
+        "timeliness_score": 9,
+        "source_ref": "incoming_031",
+        "extracted_at": "2026-03-27T00:00:00Z",
+        "logic_frame": {
+          "what_changed": "key_personnel_join",
+          "change_direction": "enter",
+          "affects": [
+            "Xbox brand strategy"
+          ]
+        },
+        "metadata": {
+          "audit": {
+            "audit_flags": [],
+            "raw_signal_type": "team",
+            "normalized_signal_type": "team"
+          }
+        }
+      }
+    ],
+    "summary": "检测到 1 个范式信号：团队信号 1 个",
+    "decoder_version": "v2.1",
+    "processing_time_ms": 6719,
+    "warnings": null
+  },
+  "fixture_metadata": {
+    "saved_at": "2026-04-03T17:31:08",
+    "fast_decode": true,
+    "connect_timeout_seconds": 5,
+    "read_timeout_seconds": 15,
+    "max_retries": 1,
+    "decode_execution_mode": "subprocess"
+  }
+}

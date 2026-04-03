@@ -1,0 +1,98 @@
+{
+  "relative_path": "sample_010_capital_epic_google_antitrust.json",
+  "source_id": "real_010",
+  "elapsed_seconds": 9.866,
+  "payload": {
+    "source_id": "real_010",
+    "source_type": "news",
+    "title": "Fortnite returns to Google Play worldwide after Epic antitrust win",
+    "content": "Epic Games has restored Fortnite to Google Play globally following its landmark antitrust victory against Google. A US federal judge ordered Google to open its app store to competing payment systems and restore previously removed apps. Epic CEO Tim Sweeney called the ruling a turning point for the mobile gaming ecosystem, as it could force platform holders to allow third-party payment processing. Analysts estimate Fortnite's return to Android could add $200-400M in annual revenue for Epic by bypassing Google's 30% commission.",
+    "published_at": "2026-03-21T00:00:00Z",
+    "source_name": "PC Gamer",
+    "language": "en",
+    "mode": "prompt_first"
+  },
+  "result": {
+    "source_id": "real_010",
+    "source_type": "news",
+    "signals": [
+      {
+        "signal_id": "sig_1",
+        "signal_type": "regulatory",
+        "signal_label": "法院裁定 Google 必须开放支付系统",
+        "description": "美国联邦法官裁定 Google 必须向竞争性支付系统开放其应用商店，并恢复先前被移除的应用。",
+        "evidence_text": "A US federal judge ordered Google to open its app store to competing payment systems and restore previously removed apps.",
+        "entities": [
+          "Google",
+          "US federal judge",
+          "app store",
+          "payment systems"
+        ],
+        "intensity_score": 9,
+        "confidence_score": 10,
+        "timeliness_score": 9,
+        "source_ref": "real_010",
+        "extracted_at": "2024-05-17T00:00:00Z",
+        "logic_frame": {
+          "what_changed": "platform_payment_policy",
+          "change_direction": "loosen",
+          "affects": [
+            "app store operators",
+            "mobile game publishers"
+          ]
+        },
+        "metadata": {
+          "audit": {
+            "audit_flags": [],
+            "raw_signal_type": "regulatory",
+            "normalized_signal_type": "regulatory"
+          }
+        }
+      },
+      {
+        "signal_id": "sig_2",
+        "signal_type": "market",
+        "signal_label": "Fortnite 重返 Google Play",
+        "description": "Epic Games 在全球范围内将《Fortnite》恢复上架 Google Play。",
+        "evidence_text": "Epic Games has restored Fortnite to Google Play globally following its landmark antitrust victory against Google.",
+        "entities": [
+          "Epic Games",
+          "Fortnite",
+          "Google Play"
+        ],
+        "intensity_score": 7,
+        "confidence_score": 10,
+        "timeliness_score": 9,
+        "source_ref": "real_010",
+        "extracted_at": "2024-05-17T00:00:00Z",
+        "logic_frame": {
+          "what_changed": "distribution_access",
+          "change_direction": "enter",
+          "affects": [
+            "Epic Games",
+            "Android users"
+          ]
+        },
+        "metadata": {
+          "audit": {
+            "audit_flags": [],
+            "raw_signal_type": "market",
+            "normalized_signal_type": "market"
+          }
+        }
+      }
+    ],
+    "summary": "检测到 2 个范式信号：监管信号 1 个、市场信号 1 个",
+    "decoder_version": "v2.1",
+    "processing_time_ms": 9865,
+    "warnings": null
+  },
+  "fixture_metadata": {
+    "saved_at": "2026-04-03T17:20:50",
+    "fast_decode": true,
+    "connect_timeout_seconds": 5,
+    "read_timeout_seconds": 15,
+    "max_retries": 1,
+    "decode_execution_mode": "inline"
+  }
+}

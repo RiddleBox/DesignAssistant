@@ -1,0 +1,67 @@
+{
+  "relative_path": "incoming/incoming_017_technical_squareenix_gemini_npc.json",
+  "source_id": "incoming_017",
+  "elapsed_seconds": 8.885,
+  "payload": {
+    "source_id": "incoming_017",
+    "source_type": "news",
+    "title": "Square Enix is turning slimes into AI chatbots in Dragon Quest X using Google's Gemini",
+    "content": "Square Enix has announced a partnership with Google to integrate Gemini AI into Dragon Quest X, turning in-game slime characters into AI-powered chatbots capable of holding conversations with players. The feature represents one of the first major deployments of a frontier LLM as an interactive NPC system in a live MMORPG.",
+    "published_at": "2026-03-23T00:00:00Z",
+    "source_name": "Game Developer",
+    "source_url": "https://www.gamedeveloper.com/design/google-s-gemini-will-make-its-way-into-dragon-quest-x-to-power-ai-slime-npcs",
+    "language": "en",
+    "mode": "prompt_first"
+  },
+  "result": {
+    "source_id": "incoming_017",
+    "source_type": "news",
+    "signals": [
+      {
+        "signal_id": "sig_20250327_001",
+        "signal_type": "technical",
+        "signal_label": "MMORPG 集成前沿 LLM 作为交互式 NPC 系统",
+        "description": "Square Enix 与 Google 合作，将 Gemini AI 集成到《勇者斗恶龙 X》中，使史莱姆角色成为能与玩家对话的 AI 聊天机器人。这是前沿 LLM 在大型 MMORPG 中作为交互式 NPC 系统的首次重大部署。",
+        "evidence_text": "Square Enix has announced a partnership with Google to integrate Gemini AI into Dragon Quest X, turning in-game slime characters into AI-powered chatbots capable of holding conversations with players. The feature represents one of the first major deployments of a frontier LLM as an interactive NPC system in a live MMORPG.",
+        "entities": [
+          "Square Enix",
+          "Google",
+          "Gemini AI",
+          "Dragon Quest X"
+        ],
+        "intensity_score": 8,
+        "confidence_score": 10,
+        "timeliness_score": 9,
+        "source_ref": "incoming_017",
+        "extracted_at": "2025-03-27T00:00:00Z",
+        "logic_frame": {
+          "what_changed": "ai_npc_capability",
+          "change_direction": "enter",
+          "affects": [
+            "MMORPG developers",
+            "live service games"
+          ]
+        },
+        "metadata": {
+          "audit": {
+            "audit_flags": [],
+            "raw_signal_type": "technical",
+            "normalized_signal_type": "technical"
+          }
+        }
+      }
+    ],
+    "summary": "检测到 1 个范式信号：技术信号 1 个",
+    "decoder_version": "v2.1",
+    "processing_time_ms": 8596,
+    "warnings": null
+  },
+  "fixture_metadata": {
+    "saved_at": "2026-04-03T18:05:40",
+    "fast_decode": true,
+    "connect_timeout_seconds": 5,
+    "read_timeout_seconds": 15,
+    "max_retries": 1,
+    "decode_execution_mode": "subprocess"
+  }
+}

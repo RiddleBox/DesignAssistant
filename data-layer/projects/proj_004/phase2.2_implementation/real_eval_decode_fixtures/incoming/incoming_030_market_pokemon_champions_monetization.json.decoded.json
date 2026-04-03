@@ -1,0 +1,67 @@
+{
+  "relative_path": "incoming/incoming_030_market_pokemon_champions_monetization.json",
+  "source_id": "incoming_030",
+  "elapsed_seconds": 7.75,
+  "payload": {
+    "source_id": "incoming_030",
+    "source_type": "news",
+    "title": "Pokémon Champions launches April 2026 on Switch with paid starter pack for 'early progression support'",
+    "content": "The Pokémon Company has announced Pokémon Champions, a free-to-play competitive battler, will launch in April 2026 on Nintendo Switch and Switch 2. The game launches with a paid upgrade pack described as providing 'useful in-game items' to 'support early progression,' a monetization approach that has drawn scrutiny from players concerned about pay-to-win mechanics in a competitive game.",
+    "published_at": "2026-03-24T00:00:00Z",
+    "source_name": "IGN",
+    "source_url": "https://www.ign.com/articles/pokemon-champions-launches-next-month-with-paid-upgrade-pack-to-support-early-progression",
+    "language": "en",
+    "mode": "prompt_first"
+  },
+  "result": {
+    "source_id": "incoming_030",
+    "source_type": "news",
+    "signals": [
+      {
+        "signal_id": "sig_1",
+        "signal_type": "market",
+        "signal_label": "宝可梦IP推出免费竞技游戏",
+        "description": "The Pokémon Company宣布推出免费竞技游戏《Pokémon Champions》，将于2026年4月在Switch和Switch 2平台上线，采用付费升级包支持早期进度的商业模式。",
+        "evidence_text": "The Pokémon Company has announced Pokémon Champions, a free-to-play competitive battler, will launch in April 2026 on Nintendo Switch and Switch 2. The game launches with a paid upgrade pack described as providing 'useful in-game items' to 'support early progression,'",
+        "entities": [
+          "The Pokémon Company",
+          "Pokémon Champions",
+          "Nintendo Switch",
+          "Switch 2"
+        ],
+        "intensity_score": 7,
+        "confidence_score": 10,
+        "timeliness_score": 9,
+        "source_ref": "incoming_030",
+        "extracted_at": "2025-04-02T00:00:00Z",
+        "logic_frame": {
+          "what_changed": "ip_monetization_model",
+          "change_direction": "enter",
+          "affects": [
+            "competitive game market",
+            "free-to-play market"
+          ]
+        },
+        "metadata": {
+          "audit": {
+            "audit_flags": [],
+            "raw_signal_type": "market",
+            "normalized_signal_type": "market"
+          }
+        }
+      }
+    ],
+    "summary": "检测到 1 个范式信号：市场信号 1 个",
+    "decoder_version": "v2.1",
+    "processing_time_ms": 7467,
+    "warnings": null
+  },
+  "fixture_metadata": {
+    "saved_at": "2026-04-03T17:58:01",
+    "fast_decode": true,
+    "connect_timeout_seconds": 5,
+    "read_timeout_seconds": 15,
+    "max_retries": 1,
+    "decode_execution_mode": "subprocess"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "relative_path": "noise_003_pr_anniversary.json",
+  "source_id": "noise_003",
+  "elapsed_seconds": 2.007,
+  "payload": {
+    "source_id": "noise_003",
+    "source_type": "news",
+    "title": "Ubisoft Celebrates 10 Years of Assassin's Creed Unity with Behind-the-Scenes Tribute Video",
+    "content": "Ubisoft has released a special behind-the-scenes tribute video celebrating the 10th anniversary of Assassin's Creed Unity. The video features interviews with original team members reflecting on the game's turbulent launch and subsequent redemption arc following years of patches. 'We're incredibly proud of what the team achieved,' said the original game director in the video. The tribute includes never-before-seen concept art and early prototype footage. Fans on social media responded warmly to the nostalgic content.",
+    "published_at": "2026-03-22T00:00:00Z",
+    "source_name": "Eurogamer",
+    "language": "en",
+    "mode": "prompt_first"
+  },
+  "result": {
+    "source_id": "noise_003",
+    "source_type": "news",
+    "signals": [],
+    "summary": "未检测到范式信号",
+    "decoder_version": "v2.1",
+    "processing_time_ms": 1706,
+    "warnings": null
+  },
+  "fixture_metadata": {
+    "saved_at": "2026-04-03T17:27:12",
+    "fast_decode": true,
+    "connect_timeout_seconds": 5,
+    "read_timeout_seconds": 15,
+    "max_retries": 1,
+    "decode_execution_mode": "subprocess"
+  }
+}

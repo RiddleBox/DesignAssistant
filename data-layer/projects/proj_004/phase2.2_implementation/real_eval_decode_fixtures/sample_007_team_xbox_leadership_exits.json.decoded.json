@@ -1,0 +1,64 @@
+{
+  "relative_path": "sample_007_team_xbox_leadership_exits.json",
+  "source_id": "real_007",
+  "elapsed_seconds": 7.001,
+  "payload": {
+    "source_id": "real_007",
+    "source_type": "news",
+    "title": "Two more leadership exits take place at Xbox",
+    "content": "Microsoft's Xbox division has seen two more senior leadership departures this week, continuing a pattern of executive turnover following the Activision Blizzard acquisition. The departures include a VP-level product leader and a head of studio partnerships. Industry observers note that Xbox has lost over a dozen senior leaders in the past 18 months, raising questions about the long-term strategic direction of the division under Microsoft's broader gaming ambitions.",
+    "published_at": "2026-03-23T00:00:00Z",
+    "source_name": "Rock Paper Shotgun",
+    "language": "en",
+    "mode": "prompt_first"
+  },
+  "result": {
+    "source_id": "real_007",
+    "source_type": "news",
+    "signals": [
+      {
+        "signal_id": "sig_1",
+        "signal_type": "team",
+        "signal_label": "Xbox 高层领导离职",
+        "description": "Xbox 部门本周再有两位高级领导离职，包括副总裁级产品负责人和工作室合作主管。",
+        "evidence_text": "Microsoft's Xbox division has seen two more senior leadership departures this week, continuing a pattern of executive turnover following the Activision Blizzard acquisition. The departures include a VP-level product leader and a head of studio partnerships.",
+        "entities": [
+          "Microsoft",
+          "Xbox",
+          "Activision Blizzard"
+        ],
+        "intensity_score": 7,
+        "confidence_score": 9,
+        "timeliness_score": 10,
+        "source_ref": "real_007",
+        "extracted_at": "2026-03-27T00:00:00Z",
+        "logic_frame": {
+          "what_changed": "senior_leadership_headcount",
+          "change_direction": "decrease",
+          "affects": [
+            "Xbox division"
+          ]
+        },
+        "metadata": {
+          "audit": {
+            "audit_flags": [],
+            "raw_signal_type": "team",
+            "normalized_signal_type": "team"
+          }
+        }
+      }
+    ],
+    "summary": "检测到 1 个范式信号：团队信号 1 个",
+    "decoder_version": "v2.1",
+    "processing_time_ms": 6697,
+    "warnings": null
+  },
+  "fixture_metadata": {
+    "saved_at": "2026-04-03T17:31:01",
+    "fast_decode": true,
+    "connect_timeout_seconds": 5,
+    "read_timeout_seconds": 15,
+    "max_retries": 1,
+    "decode_execution_mode": "subprocess"
+  }
+}

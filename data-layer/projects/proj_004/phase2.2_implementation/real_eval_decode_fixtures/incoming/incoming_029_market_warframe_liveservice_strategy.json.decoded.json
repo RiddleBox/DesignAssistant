@@ -1,0 +1,66 @@
+{
+  "relative_path": "incoming/incoming_029_market_warframe_liveservice_strategy.json",
+  "source_id": "incoming_029",
+  "elapsed_seconds": 6.35,
+  "payload": {
+    "source_id": "incoming_029",
+    "source_type": "news",
+    "title": "Warframe creative director Rebecca Ford: 'We've sportified Steam Charts' — how Digital Extremes keeps live service alive after 13 years",
+    "content": "Warframe Creative Director Rebecca Ford, speaking at GDC 2026, described how Digital Extremes has maintained Warframe as a successful live service game for over 13 years. Ford coined the phrase 'we've sportified Steam Charts,' referring to the studio's practice of closely tracking and reacting to concurrent player numbers like a sports team tracks statistics. The studio is also bringing Warframe to Nintendo Switch 2.",
+    "published_at": "2026-03-24T00:00:00Z",
+    "source_name": "IGN",
+    "source_url": "https://www.ign.com/articles/weve-sportified-steam-charts-warframe-creative-director-rebecca-ford-reveals-how-digital-extremes-is-keeping-the-live-service-dream-alive",
+    "language": "en",
+    "mode": "prompt_first"
+  },
+  "result": {
+    "source_id": "incoming_029",
+    "source_type": "news",
+    "signals": [
+      {
+        "signal_id": "sig_20250327_1",
+        "signal_type": "technical",
+        "signal_label": "Warframe 登陆 Nintendo Switch 2",
+        "description": "Digital Extremes 宣布将 Warframe 带到 Nintendo Switch 2 平台",
+        "evidence_text": "The studio is also bringing Warframe to Nintendo Switch 2.",
+        "entities": [
+          "Digital Extremes",
+          "Warframe",
+          "Nintendo Switch 2"
+        ],
+        "intensity_score": 7,
+        "confidence_score": 10,
+        "timeliness_score": 9,
+        "source_ref": "incoming_029",
+        "extracted_at": "2026-03-27T00:00:00Z",
+        "logic_frame": {
+          "what_changed": "platform_release",
+          "change_direction": "enter",
+          "affects": [
+            "live service games",
+            "cross-platform players"
+          ]
+        },
+        "metadata": {
+          "audit": {
+            "audit_flags": [],
+            "raw_signal_type": "technical",
+            "normalized_signal_type": "technical"
+          }
+        }
+      }
+    ],
+    "summary": "检测到 1 个范式信号：技术信号 1 个",
+    "decoder_version": "v2.1",
+    "processing_time_ms": 6050,
+    "warnings": null
+  },
+  "fixture_metadata": {
+    "saved_at": "2026-04-03T17:57:58",
+    "fast_decode": true,
+    "connect_timeout_seconds": 5,
+    "read_timeout_seconds": 15,
+    "max_retries": 1,
+    "decode_execution_mode": "subprocess"
+  }
+}

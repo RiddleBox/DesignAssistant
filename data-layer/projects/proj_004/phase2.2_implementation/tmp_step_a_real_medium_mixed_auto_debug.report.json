@@ -1,0 +1,1098 @@
+{
+  "runner": "run_step_a_real_eval.py",
+  "sample_version": "v0.3-baseline-v1",
+  "requested_mode": "auto",
+  "runtime_mode": "llm",
+  "fast_decode": true,
+  "decode_timeout_seconds": 15,
+  "decode_execution_mode": "subprocess",
+  "max_parallel_decodes": 3,
+  "fixture_mode": "fixture_only",
+  "fixture_root": "f:\\AIProjects\\DesignAssistant\\data-layer\\projects\\proj_004\\phase2.2_implementation\\real_eval_decode_fixtures",
+  "connect_timeout_seconds": 5,
+  "read_timeout_seconds": 15,
+  "max_retries": 1,
+  "max_llm_calls_per_sample": 1,
+  "small_batch_threshold": 15,
+  "real_sample_root": "f:\\AIProjects\\DesignAssistant\\background\\real_intel_samples",
+  "total_cases": 1,
+  "passed_cases": 1,
+  "summary": {
+    "executed_step_a_cases": 1,
+    "skipped_step_a_cases": 0,
+    "avg_cross_domain_complement_recall": 0.5,
+    "avg_false_merge_rate": 0.0,
+    "avg_noise_inclusion_rate": 0.0,
+    "avg_step_c_opportunity_ready_proxy_rate": 1.0
+  },
+  "results": [
+    {
+      "case": {
+        "case_id": "step_a_real_medium_mixed_001",
+        "case_type": "medium_batch_mixed_exploratory",
+        "validation_profile": "exploratory",
+        "data_nature": "real_samples_from_background_real_intel_samples",
+        "description": "A mixed real batch should execute Step A and ideally surface at least one coherent scenario around platform/distribution change or AI workflow change.",
+        "sample_files": [
+          "sample_003_team_ubisoft_redstorm_layoffs.json",
+          "sample_006_technical_squareenix_gemini_npc.json",
+          "sample_009_technical_netease_ai_replacing_outsource.json",
+          "sample_010_capital_epic_google_antitrust.json",
+          "sample_011_market_indie_selfpublish_trend.json",
+          "sample_001_capital_moonton_acquisition.json",
+          "sample_005_market_delta_force_dau.json",
+          "sample_008_market_crimson_desert_sales.json",
+          "incoming/incoming_005_regulatory_eu_dma_apple_games.json",
+          "incoming/incoming_014_technical_capcom_genai_policy.json",
+          "incoming/incoming_019_technical_crimson_desert_ai_assets.json",
+          "incoming/incoming_025_technical_tencent_genai_animation_gdc.json",
+          "incoming/incoming_028_market_disney_gaming_ambition.json",
+          "incoming/incoming_029_market_warframe_liveservice_strategy.json",
+          "incoming/incoming_030_market_pokemon_champions_monetization.json",
+          "incoming/incoming_032_technical_zuckerberg_ai_coceo.json"
+        ],
+        "expected_step_a": {
+          "should_skip_step_a": false,
+          "min_total_signals": 16,
+          "min_scenarios": 1,
+          "max_scenarios": 5,
+          "expected_core_source_sets": [
+            [
+              "incoming_005",
+              "real_010",
+              "real_011"
+            ],
+            [
+              "real_006",
+              "real_009",
+              "incoming_025"
+            ]
+          ],
+          "forbidden_source_pairings": [
+            [
+              "real_003",
+              "incoming_005"
+            ]
+          ]
+        }
+      },
+      "dataset": {
+        "decoded_samples": [
+          {
+            "relative_path": "sample_003_team_ubisoft_redstorm_layoffs.json",
+            "source_id": "real_003",
+            "elapsed_seconds": 6.769,
+            "signal_count": 1,
+            "fixture_hit": true,
+            "fixture_path": "f:\\AIProjects\\DesignAssistant\\data-layer\\projects\\proj_004\\phase2.2_implementation\\real_eval_decode_fixtures\\sample_003_team_ubisoft_redstorm_layoffs.json.decoded.json",
+            "fixture_metadata": {
+              "saved_at": "2026-04-03T17:31:01",
+              "fast_decode": true,
+              "connect_timeout_seconds": 5,
+              "read_timeout_seconds": 15,
+              "max_retries": 1,
+              "decode_execution_mode": "subprocess"
+            },
+            "warnings": []
+          },
+          {
+            "relative_path": "sample_006_technical_squareenix_gemini_npc.json",
+            "source_id": "real_006",
+            "elapsed_seconds": 8.647,
+            "signal_count": 1,
+            "fixture_hit": true,
+            "fixture_path": "f:\\AIProjects\\DesignAssistant\\data-layer\\projects\\proj_004\\phase2.2_implementation\\real_eval_decode_fixtures\\sample_006_technical_squareenix_gemini_npc.json.decoded.json",
+            "fixture_metadata": {
+              "saved_at": "2026-04-03T17:57:17",
+              "fast_decode": true,
+              "connect_timeout_seconds": 5,
+              "read_timeout_seconds": 15,
+              "max_retries": 1,
+              "decode_execution_mode": "subprocess"
+            },
+            "warnings": []
+          },
+          {
+            "relative_path": "sample_009_technical_netease_ai_replacing_outsource.json",
+            "source_id": "real_009",
+            "elapsed_seconds": 10.322,
+            "signal_count": 2,
+            "fixture_hit": true,
+            "fixture_path": "f:\\AIProjects\\DesignAssistant\\data-layer\\projects\\proj_004\\phase2.2_implementation\\real_eval_decode_fixtures\\sample_009_technical_netease_ai_replacing_outsource.json.decoded.json",
+            "fixture_metadata": {
+              "saved_at": "2026-04-03T17:20:40",
+              "fast_decode": true,
+              "connect_timeout_seconds": 5,
+              "read_timeout_seconds": 15,
+              "max_retries": 1,
+              "decode_execution_mode": "inline"
+            },
+            "warnings": []
+          },
+          {
+            "relative_path": "sample_010_capital_epic_google_antitrust.json",
+            "source_id": "real_010",
+            "elapsed_seconds": 9.866,
+            "signal_count": 2,
+            "fixture_hit": true,
+            "fixture_path": "f:\\AIProjects\\DesignAssistant\\data-layer\\projects\\proj_004\\phase2.2_implementation\\real_eval_decode_fixtures\\sample_010_capital_epic_google_antitrust.json.decoded.json",
+            "fixture_metadata": {
+              "saved_at": "2026-04-03T17:20:50",
+              "fast_decode": true,
+              "connect_timeout_seconds": 5,
+              "read_timeout_seconds": 15,
+              "max_retries": 1,
+              "decode_execution_mode": "inline"
+            },
+            "warnings": []
+          },
+          {
+            "relative_path": "sample_011_market_indie_selfpublish_trend.json",
+            "source_id": "real_011",
+            "elapsed_seconds": 7.901,
+            "signal_count": 1,
+            "fixture_hit": true,
+            "fixture_path": "f:\\AIProjects\\DesignAssistant\\data-layer\\projects\\proj_004\\phase2.2_implementation\\real_eval_decode_fixtures\\sample_011_market_indie_selfpublish_trend.json.decoded.json",
+            "fixture_metadata": {
+              "saved_at": "2026-04-03T17:20:58",
+              "fast_decode": true,
+              "connect_timeout_seconds": 5,
+              "read_timeout_seconds": 15,
+              "max_retries": 1,
+              "decode_execution_mode": "inline"
+            },
+            "warnings": []
+          },
+          {
+            "relative_path": "sample_001_capital_moonton_acquisition.json",
+            "source_id": "real_001",
+            "elapsed_seconds": 6.843,
+            "signal_count": 1,
+            "fixture_hit": true,
+            "fixture_path": "f:\\AIProjects\\DesignAssistant\\data-layer\\projects\\proj_004\\phase2.2_implementation\\real_eval_decode_fixtures\\sample_001_capital_moonton_acquisition.json.decoded.json",
+            "fixture_metadata": {
+              "saved_at": "2026-04-03T17:57:46",
+              "fast_decode": true,
+              "connect_timeout_seconds": 5,
+              "read_timeout_seconds": 15,
+              "max_retries": 1,
+              "decode_execution_mode": "subprocess"
+            },
+            "warnings": []
+          },
+          {
+            "relative_path": "sample_005_market_delta_force_dau.json",
+            "source_id": "real_005",
+            "elapsed_seconds": 7.767,
+            "signal_count": 1,
+            "fixture_hit": true,
+            "fixture_path": "f:\\AIProjects\\DesignAssistant\\data-layer\\projects\\proj_004\\phase2.2_implementation\\real_eval_decode_fixtures\\sample_005_market_delta_force_dau.json.decoded.json",
+            "fixture_metadata": {
+              "saved_at": "2026-04-03T17:57:47",
+              "fast_decode": true,
+              "connect_timeout_seconds": 5,
+              "read_timeout_seconds": 15,
+              "max_retries": 1,
+              "decode_execution_mode": "subprocess"
+            },
+            "warnings": []
+          },
+          {
+            "relative_path": "sample_008_market_crimson_desert_sales.json",
+            "source_id": "real_008",
+            "elapsed_seconds": 8.332,
+            "signal_count": 1,
+            "fixture_hit": true,
+            "fixture_path": "f:\\AIProjects\\DesignAssistant\\data-layer\\projects\\proj_004\\phase2.2_implementation\\real_eval_decode_fixtures\\sample_008_market_crimson_desert_sales.json.decoded.json",
+            "fixture_metadata": {
+              "saved_at": "2026-04-03T17:57:47",
+              "fast_decode": true,
+              "connect_timeout_seconds": 5,
+              "read_timeout_seconds": 15,
+              "max_retries": 1,
+              "decode_execution_mode": "subprocess"
+            },
+            "warnings": []
+          },
+          {
+            "relative_path": "incoming/incoming_005_regulatory_eu_dma_apple_games.json",
+            "source_id": "incoming_005",
+            "elapsed_seconds": 12.737,
+            "signal_count": 2,
+            "fixture_hit": true,
+            "fixture_path": "f:\\AIProjects\\DesignAssistant\\data-layer\\projects\\proj_004\\phase2.2_implementation\\real_eval_decode_fixtures\\incoming\\incoming_005_regulatory_eu_dma_apple_games.json.decoded.json",
+            "fixture_metadata": {
+              "saved_at": "2026-04-03T17:57:52",
+              "fast_decode": true,
+              "connect_timeout_seconds": 5,
+              "read_timeout_seconds": 15,
+              "max_retries": 1,
+              "decode_execution_mode": "subprocess"
+            },
+            "warnings": []
+          },
+          {
+            "relative_path": "incoming/incoming_014_technical_capcom_genai_policy.json",
+            "source_id": "incoming_014",
+            "elapsed_seconds": 7.218,
+            "signal_count": 1,
+            "fixture_hit": true,
+            "fixture_path": "f:\\AIProjects\\DesignAssistant\\data-layer\\projects\\proj_004\\phase2.2_implementation\\real_eval_decode_fixtures\\incoming\\incoming_014_technical_capcom_genai_policy.json.decoded.json",
+            "fixture_metadata": {
+              "saved_at": "2026-04-03T17:57:15",
+              "fast_decode": true,
+              "connect_timeout_seconds": 5,
+              "read_timeout_seconds": 15,
+              "max_retries": 1,
+              "decode_execution_mode": "subprocess"
+            },
+            "warnings": []
+          },
+          {
+            "relative_path": "incoming/incoming_019_technical_crimson_desert_ai_assets.json",
+            "source_id": "incoming_019",
+            "elapsed_seconds": 7.443,
+            "signal_count": 1,
+            "fixture_hit": true,
+            "fixture_path": "f:\\AIProjects\\DesignAssistant\\data-layer\\projects\\proj_004\\phase2.2_implementation\\real_eval_decode_fixtures\\incoming\\incoming_019_technical_crimson_desert_ai_assets.json.decoded.json",
+            "fixture_metadata": {
+              "saved_at": "2026-04-03T17:57:53",
+              "fast_decode": true,
+              "connect_timeout_seconds": 5,
+              "read_timeout_seconds": 15,
+              "max_retries": 1,
+              "decode_execution_mode": "subprocess"
+            },
+            "warnings": []
+          },
+          {
+            "relative_path": "incoming/incoming_025_technical_tencent_genai_animation_gdc.json",
+            "source_id": "incoming_025",
+            "elapsed_seconds": 6.966,
+            "signal_count": 1,
+            "fixture_hit": true,
+            "fixture_path": "f:\\AIProjects\\DesignAssistant\\data-layer\\projects\\proj_004\\phase2.2_implementation\\real_eval_decode_fixtures\\incoming\\incoming_025_technical_tencent_genai_animation_gdc.json.decoded.json",
+            "fixture_metadata": {
+              "saved_at": "2026-04-03T17:57:54",
+              "fast_decode": true,
+              "connect_timeout_seconds": 5,
+              "read_timeout_seconds": 15,
+              "max_retries": 1,
+              "decode_execution_mode": "subprocess"
+            },
+            "warnings": []
+          },
+          {
+            "relative_path": "incoming/incoming_028_market_disney_gaming_ambition.json",
+            "source_id": "incoming_028",
+            "elapsed_seconds": 8.244,
+            "signal_count": 1,
+            "fixture_hit": true,
+            "fixture_path": "f:\\AIProjects\\DesignAssistant\\data-layer\\projects\\proj_004\\phase2.2_implementation\\real_eval_decode_fixtures\\incoming\\incoming_028_market_disney_gaming_ambition.json.decoded.json",
+            "fixture_metadata": {
+              "saved_at": "2026-04-03T17:57:55",
+              "fast_decode": true,
+              "connect_timeout_seconds": 5,
+              "read_timeout_seconds": 15,
+              "max_retries": 1,
+              "decode_execution_mode": "subprocess"
+            },
+            "warnings": []
+          },
+          {
+            "relative_path": "incoming/incoming_029_market_warframe_liveservice_strategy.json",
+            "source_id": "incoming_029",
+            "elapsed_seconds": 6.35,
+            "signal_count": 1,
+            "fixture_hit": true,
+            "fixture_path": "f:\\AIProjects\\DesignAssistant\\data-layer\\projects\\proj_004\\phase2.2_implementation\\real_eval_decode_fixtures\\incoming\\incoming_029_market_warframe_liveservice_strategy.json.decoded.json",
+            "fixture_metadata": {
+              "saved_at": "2026-04-03T17:57:58",
+              "fast_decode": true,
+              "connect_timeout_seconds": 5,
+              "read_timeout_seconds": 15,
+              "max_retries": 1,
+              "decode_execution_mode": "subprocess"
+            },
+            "warnings": []
+          },
+          {
+            "relative_path": "incoming/incoming_030_market_pokemon_champions_monetization.json",
+            "source_id": "incoming_030",
+            "elapsed_seconds": 7.75,
+            "signal_count": 1,
+            "fixture_hit": true,
+            "fixture_path": "f:\\AIProjects\\DesignAssistant\\data-layer\\projects\\proj_004\\phase2.2_implementation\\real_eval_decode_fixtures\\incoming\\incoming_030_market_pokemon_champions_monetization.json.decoded.json",
+            "fixture_metadata": {
+              "saved_at": "2026-04-03T17:58:01",
+              "fast_decode": true,
+              "connect_timeout_seconds": 5,
+              "read_timeout_seconds": 15,
+              "max_retries": 1,
+              "decode_execution_mode": "subprocess"
+            },
+            "warnings": []
+          },
+          {
+            "relative_path": "incoming/incoming_032_technical_zuckerberg_ai_coceo.json",
+            "source_id": "incoming_032",
+            "elapsed_seconds": 7.742,
+            "signal_count": 1,
+            "fixture_hit": true,
+            "fixture_path": "f:\\AIProjects\\DesignAssistant\\data-layer\\projects\\proj_004\\phase2.2_implementation\\real_eval_decode_fixtures\\incoming\\incoming_032_technical_zuckerberg_ai_coceo.json.decoded.json",
+            "fixture_metadata": {
+              "saved_at": "2026-04-03T17:58:01",
+              "fast_decode": true,
+              "connect_timeout_seconds": 5,
+              "read_timeout_seconds": 15,
+              "max_retries": 1,
+              "decode_execution_mode": "subprocess"
+            },
+            "warnings": []
+          }
+        ],
+        "decode_errors": [],
+        "signal_count": 19,
+        "source_signal_map": {
+          "real_003": [
+            "real_003__sig_20250314_001"
+          ],
+          "real_006": [
+            "real_006__sig_20250314_001"
+          ],
+          "real_009": [
+            "real_009__sig_1",
+            "real_009__sig_2"
+          ],
+          "real_010": [
+            "real_010__sig_1",
+            "real_010__sig_2"
+          ],
+          "real_011": [
+            "real_011__sig_1"
+          ],
+          "real_001": [
+            "real_001__sig_1"
+          ],
+          "real_005": [
+            "real_005__sig_1"
+          ],
+          "real_008": [
+            "real_008__sig_20250327_001"
+          ],
+          "incoming_005": [
+            "incoming_005__sig_20250423_1",
+            "incoming_005__sig_20250423_2"
+          ],
+          "incoming_014": [
+            "incoming_014__sig_1"
+          ],
+          "incoming_019": [
+            "incoming_019__sig_1"
+          ],
+          "incoming_025": [
+            "incoming_025__sig_20250314_001"
+          ],
+          "incoming_028": [
+            "incoming_028__sig_20250314_1"
+          ],
+          "incoming_029": [
+            "incoming_029__sig_20250327_1"
+          ],
+          "incoming_030": [
+            "incoming_030__sig_1"
+          ],
+          "incoming_032": [
+            "incoming_032__sig_20250314_001"
+          ]
+        },
+        "noise_source_ids": [],
+        "signals": [
+          {
+            "signal_id": "real_003__sig_20250314_001",
+            "source_id": "real_003",
+            "signal_type": "team",
+            "signal_label": "育碧关闭 Red Storm 游戏开发并裁员 105 人",
+            "intensity_score": 8,
+            "logic_frame": {
+              "what_changed": "studio_headcount",
+              "change_direction": "decrease",
+              "affects": [
+                "Red Storm Entertainment",
+                "Ubisoft development teams"
+              ]
+            }
+          },
+          {
+            "signal_id": "real_006__sig_20250314_001",
+            "source_id": "real_006",
+            "signal_type": "technical",
+            "signal_label": "JRPG 集成生成式 AI 对话系统",
+            "intensity_score": 8,
+            "logic_frame": {
+              "what_changed": "ai_npc_dialogue_capability",
+              "change_direction": "enter",
+              "affects": [
+                "live service games",
+                "JRPG developers"
+              ]
+            }
+          },
+          {
+            "signal_id": "real_009__sig_1",
+            "source_id": "real_009",
+            "signal_type": "team",
+            "signal_label": "网易互娱减少外包规模",
+            "intensity_score": 6,
+            "logic_frame": {
+              "what_changed": "outsourcing_scale",
+              "change_direction": "decrease",
+              "affects": [
+                "outsourcing companies"
+              ]
+            }
+          },
+          {
+            "signal_id": "real_009__sig_2",
+            "source_id": "real_009",
+            "signal_type": "technical",
+            "signal_label": "网易内部AI开发工具达到可用标准",
+            "intensity_score": 7,
+            "logic_frame": {
+              "what_changed": "ai_tool_capability",
+              "change_direction": "increase",
+              "affects": [
+                "game development workflow"
+              ]
+            }
+          },
+          {
+            "signal_id": "real_010__sig_1",
+            "source_id": "real_010",
+            "signal_type": "regulatory",
+            "signal_label": "法院裁定 Google 必须开放支付系统",
+            "intensity_score": 9,
+            "logic_frame": {
+              "what_changed": "platform_payment_policy",
+              "change_direction": "loosen",
+              "affects": [
+                "app store operators",
+                "mobile game publishers"
+              ]
+            }
+          },
+          {
+            "signal_id": "real_010__sig_2",
+            "source_id": "real_010",
+            "signal_type": "market",
+            "signal_label": "Fortnite 重返 Google Play",
+            "intensity_score": 7,
+            "logic_frame": {
+              "what_changed": "distribution_access",
+              "change_direction": "enter",
+              "affects": [
+                "Epic Games",
+                "Android users"
+              ]
+            }
+          },
+          {
+            "signal_id": "real_011__sig_1",
+            "source_id": "real_011",
+            "signal_type": "market",
+            "signal_label": "独立游戏自发行案例验证",
+            "intensity_score": 7,
+            "logic_frame": {
+              "what_changed": "distribution_channel_value",
+              "change_direction": "shift",
+              "affects": [
+                "indie game developers",
+                "traditional game publishers"
+              ]
+            }
+          },
+          {
+            "signal_id": "real_001__sig_1",
+            "source_id": "real_001",
+            "signal_type": "capital",
+            "signal_label": "Savvy Games Group 收购 Moonton Games",
+            "intensity_score": 9,
+            "logic_frame": {
+              "what_changed": "acquisition",
+              "change_direction": "enter",
+              "affects": [
+                "mobile gaming market",
+                "Southeast Asia gaming landscape"
+              ]
+            }
+          },
+          {
+            "signal_id": "real_005__sig_1",
+            "source_id": "real_005",
+            "signal_type": "market",
+            "signal_label": "国产FPS品类DAU纪录突破",
+            "intensity_score": 8,
+            "logic_frame": {
+              "what_changed": "dau",
+              "change_direction": "increase",
+              "affects": [
+                "Chinese game developers",
+                "FPS game publishers"
+              ]
+            }
+          },
+          {
+            "signal_id": "real_008__sig_20250327_001",
+            "source_id": "real_008",
+            "signal_type": "market",
+            "signal_label": "韩国工作室单机 RPG 西方市场首日 2M 验证",
+            "intensity_score": 7,
+            "logic_frame": {
+              "what_changed": "sales_milestone",
+              "change_direction": "increase",
+              "affects": [
+                "game developers",
+                "game publishers"
+              ]
+            }
+          },
+          {
+            "signal_id": "incoming_005__sig_20250423_1",
+            "source_id": "incoming_005",
+            "signal_type": "regulatory",
+            "signal_label": "欧盟认定 Apple 违反 DMA 反引导义务并处以罚款",
+            "intensity_score": 9,
+            "logic_frame": {
+              "what_changed": "platform_compliance_pressure",
+              "change_direction": "tighten",
+              "affects": [
+                "app store operators",
+                "mobile game publishers"
+              ]
+            }
+          },
+          {
+            "signal_id": "incoming_005__sig_20250423_2",
+            "source_id": "incoming_005",
+            "signal_type": "market",
+            "signal_label": "App Store 开发者站外导流限制被裁定违规",
+            "intensity_score": 8,
+            "logic_frame": {
+              "what_changed": "distribution_access",
+              "change_direction": "loosen",
+              "affects": [
+                "mobile developers",
+                "indie studios"
+              ]
+            }
+          },
+          {
+            "signal_id": "incoming_014__sig_1",
+            "source_id": "incoming_014",
+            "signal_type": "technical",
+            "signal_label": "Capcom 采用生成式 AI 工具加速管线",
+            "intensity_score": 7,
+            "logic_frame": {
+              "what_changed": "ai_tool_adoption",
+              "change_direction": "enter",
+              "affects": [
+                "game development pipeline"
+              ]
+            }
+          },
+          {
+            "signal_id": "incoming_019__sig_1",
+            "source_id": "incoming_019",
+            "signal_type": "technical",
+            "signal_label": "AI 生成资产用于商业游戏",
+            "intensity_score": 7,
+            "logic_frame": {
+              "what_changed": "ai_asset_usage",
+              "change_direction": "enter",
+              "affects": [
+                "game development pipelines",
+                "asset creation workflows"
+              ]
+            }
+          },
+          {
+            "signal_id": "incoming_025__sig_20250314_001",
+            "source_id": "incoming_025",
+            "signal_type": "technical",
+            "signal_label": "腾讯生成式AI动画工具GDC展示",
+            "intensity_score": 7,
+            "logic_frame": {
+              "what_changed": "ai_tool_capability",
+              "change_direction": "increase",
+              "affects": [
+                "game development teams"
+              ]
+            }
+          },
+          {
+            "signal_id": "incoming_028__sig_20250314_1",
+            "source_id": "incoming_028",
+            "signal_type": "market",
+            "signal_label": "迪士尼高层定义游戏市场为大规模颠覆期",
+            "intensity_score": 6,
+            "logic_frame": {
+              "what_changed": "market_perception",
+              "change_direction": "shift",
+              "affects": [
+                "game developers",
+                "game publishers"
+              ]
+            }
+          },
+          {
+            "signal_id": "incoming_029__sig_20250327_1",
+            "source_id": "incoming_029",
+            "signal_type": "technical",
+            "signal_label": "Warframe 登陆 Nintendo Switch 2",
+            "intensity_score": 7,
+            "logic_frame": {
+              "what_changed": "platform_release",
+              "change_direction": "enter",
+              "affects": [
+                "live service games",
+                "cross-platform players"
+              ]
+            }
+          },
+          {
+            "signal_id": "incoming_030__sig_1",
+            "source_id": "incoming_030",
+            "signal_type": "market",
+            "signal_label": "宝可梦IP推出免费竞技游戏",
+            "intensity_score": 7,
+            "logic_frame": {
+              "what_changed": "ip_monetization_model",
+              "change_direction": "enter",
+              "affects": [
+                "competitive game market",
+                "free-to-play market"
+              ]
+            }
+          },
+          {
+            "signal_id": "incoming_032__sig_20250314_001",
+            "source_id": "incoming_032",
+            "signal_type": "technical",
+            "signal_label": "AI 系统作为联席 CEO 开发",
+            "intensity_score": 8,
+            "logic_frame": {
+              "what_changed": "ai_agent_capability",
+              "change_direction": "increase",
+              "affects": [
+                "corporate management",
+                "operational decision-making"
+              ]
+            }
+          }
+        ]
+      },
+      "execution": {
+        "step_a_skipped": false,
+        "skip_reason": null,
+        "effective_batch_size": 19,
+        "signal_count": 19,
+        "logical_scenarios": [
+          {
+            "scenario_id": "s1",
+            "primary_signal_ids": [
+              "incoming_005__sig_20250423_1",
+              "incoming_005__sig_20250423_2",
+              "real_010__sig_1",
+              "real_010__sig_2"
+            ],
+            "context_signal_ids": [
+              "real_011__sig_1"
+            ],
+            "reasoning": "监管压力迫使主流应用商店开放支付与分发渠道，为开发者（尤其是独立开发者）创造了绕过平台抽成的机会，并已有市场先行者验证此路径。",
+            "opportunity_direction": "为游戏开发者（尤其是独立和移动开发者）提供替代支付、分发和用户获取服务的机会。",
+            "reasoning_path": "监管压力迫使主流应用商店开放支付与分发渠道，为开发者（尤其是独立开发者）创造了绕过平台抽成的机会，并已有市场先行者验证此路径。",
+            "missing_slots": [],
+            "scenario_score": 0.8,
+            "lane": "primary"
+          },
+          {
+            "scenario_id": "s2",
+            "primary_signal_ids": [
+              "real_009__sig_2",
+              "incoming_014__sig_1",
+              "incoming_025__sig_20250314_001"
+            ],
+            "context_signal_ids": [
+              "real_009__sig_1",
+              "incoming_019__sig_1"
+            ],
+            "reasoning": "多家头部游戏公司（网易、Capcom、腾讯）验证了AI工具在游戏开发管线（代码、美术、动画）中的可用性与效率提升，并已开始影响传统外包模式。",
+            "opportunity_direction": "面向游戏开发商的AI工具（代码生成、美术辅助、动画制作）及集成服务存在市场机会。",
+            "reasoning_path": "多家头部游戏公司（网易、Capcom、腾讯）验证了AI工具在游戏开发管线（代码、美术、动画）中的可用性与效率提升，并已开始影响传统外包模式。",
+            "missing_slots": [],
+            "scenario_score": 0.8,
+            "lane": "primary"
+          },
+          {
+            "scenario_id": "s3",
+            "primary_signal_ids": [
+              "real_006__sig_20250314_001",
+              "real_011__sig_1"
+            ],
+            "context_signal_ids": [
+              "incoming_032__sig_20250314_001"
+            ],
+            "reasoning": "生成式AI技术（如动态NPC对话）降低了高质量内容创作的门槛，而内容平台算法分发又削弱了传统发行渠道的价值，两者共同降低了独立/中小团队的制作与发行壁垒。",
+            "opportunity_direction": "为独立或中小型游戏工作室提供结合AI内容生成与新型内容分发（如短视频）的轻量化开发与发行解决方案。",
+            "reasoning_path": "生成式AI技术（如动态NPC对话）降低了高质量内容创作的门槛，而内容平台算法分发又削弱了传统发行渠道的价值，两者共同降低了独立/中小团队的制作与发行壁垒。",
+            "missing_slots": [],
+            "scenario_score": 0.8,
+            "lane": "primary"
+          },
+          {
+            "scenario_id": "s4",
+            "primary_signal_ids": [
+              "real_001__sig_1",
+              "real_005__sig_1",
+              "real_008__sig_20250327_001"
+            ],
+            "context_signal_ids": [
+              "incoming_028__sig_20250314_1"
+            ],
+            "reasoning": "亚洲游戏厂商在核心品类（FPS）、高端单机RPG以及移动游戏领域接连取得商业成功和市场验证，吸引了大规模资本（如Savvy收购Moonton），表明该区域开发实力和全球市场潜力正被重新评估。",
+            "opportunity_direction": "投资或与具备特定品类（如FPS、高端RPG）开发能力的亚洲游戏工作室合作，以捕捉全球市场增长机会。",
+            "reasoning_path": "亚洲游戏厂商在核心品类（FPS）、高端单机RPG以及移动游戏领域接连取得商业成功和市场验证，吸引了大规模资本（如Savvy收购Moonton），表明该区域开发实力和全球市场潜力正被重新评估。",
+            "missing_slots": [],
+            "scenario_score": 0.8,
+            "lane": "primary"
+          },
+          {
+            "scenario_id": "candidate_1",
+            "primary_signal_ids": [
+              "incoming_005__sig_20250423_1",
+              "incoming_005__sig_20250423_2",
+              "incoming_014__sig_1"
+            ],
+            "context_signal_ids": [
+              "incoming_019__sig_1",
+              "incoming_025__sig_20250314_001",
+              "incoming_028__sig_20250314_1"
+            ],
+            "reasoning": "JRPG 集成生成式 AI 对话系统 + Fortnite 重返 Google Play + AI 系统作为联席 CEO 开发 形成 catalyst, competitive_gap, demand_evidence 的互补结构，共同影响 app store operators, game developers",
+            "opportunity_direction": "围绕 app store operators 的机会窗口",
+            "reasoning_path": "JRPG 集成生成式 AI 对话系统 + Fortnite 重返 Google Play + AI 系统作为联席 CEO 开发 形成 catalyst, competitive_gap, demand_evidence 的互补结构，共同影响 app store operators, game developers",
+            "missing_slots": [],
+            "scenario_score": 0.772,
+            "lane": "primary"
+          }
+        ],
+        "exploration_scenarios": [],
+        "role_annotations": {
+          "real_003__sig_20250314_001": {
+            "roles": [
+              "negative_validator"
+            ],
+            "needs": [],
+            "domains": [
+              "gaming",
+              "capital"
+            ],
+            "waiting_for_text": "等待其他厂商因AI工具普及而调整开发模式的证据"
+          },
+          "real_006__sig_20250314_001": {
+            "roles": [
+              "resource_validation"
+            ],
+            "needs": [
+              "demand_evidence",
+              "timing_signal"
+            ],
+            "domains": [
+              "gaming",
+              "ai"
+            ],
+            "waiting_for_text": "等待玩家对AI生成内容的接受度数据"
+          },
+          "real_009__sig_1": {
+            "roles": [
+              "demand_evidence"
+            ],
+            "needs": [
+              "resource_validation"
+            ],
+            "domains": [
+              "gaming"
+            ],
+            "waiting_for_text": "等待AI工具效能提升的直接证据"
+          },
+          "real_009__sig_2": {
+            "roles": [
+              "resource_validation"
+            ],
+            "needs": [
+              "demand_evidence",
+              "timing_signal"
+            ],
+            "domains": [
+              "gaming",
+              "ai"
+            ],
+            "waiting_for_text": "等待市场对AI工具的商业化需求信号"
+          },
+          "real_010__sig_1": {
+            "roles": [
+              "catalyst"
+            ],
+            "needs": [
+              "demand_evidence",
+              "resource_validation"
+            ],
+            "domains": [
+              "regulation",
+              "mobile"
+            ],
+            "waiting_for_text": "等待开发者利用新规则的行动证据"
+          },
+          "real_010__sig_2": {
+            "roles": [
+              "demand_evidence"
+            ],
+            "needs": [
+              "resource_validation"
+            ],
+            "domains": [
+              "gaming",
+              "mobile"
+            ],
+            "waiting_for_text": "等待更多开发者跟随的迹象"
+          },
+          "real_011__sig_1": {
+            "roles": [
+              "demand_evidence",
+              "competitive_gap"
+            ],
+            "needs": [
+              "resource_validation"
+            ],
+            "domains": [
+              "gaming"
+            ],
+            "waiting_for_text": "等待降低内容创作成本的技术验证"
+          },
+          "real_001__sig_1": {
+            "roles": [
+              "resource_validation",
+              "timing_signal"
+            ],
+            "needs": [
+              "demand_evidence"
+            ],
+            "domains": [
+              "gaming",
+              "capital",
+              "mobile"
+            ],
+            "waiting_for_text": "等待被收购方产品在目标市场的成功验证"
+          },
+          "real_005__sig_1": {
+            "roles": [
+              "demand_evidence"
+            ],
+            "needs": [
+              "resource_validation"
+            ],
+            "domains": [
+              "gaming"
+            ],
+            "waiting_for_text": "等待其他厂商复制成功的能力验证"
+          },
+          "real_008__sig_20250327_001": {
+            "roles": [
+              "demand_evidence"
+            ],
+            "needs": [
+              "resource_validation"
+            ],
+            "domains": [
+              "gaming"
+            ],
+            "waiting_for_text": "等待更多亚洲工作室同类产品的成功"
+          },
+          "incoming_005__sig_20250423_1": {
+            "roles": [
+              "catalyst"
+            ],
+            "needs": [
+              "demand_evidence",
+              "resource_validation"
+            ],
+            "domains": [
+              "regulation",
+              "mobile"
+            ],
+            "waiting_for_text": "等待开发者对新生态的响应行动"
+          },
+          "incoming_005__sig_20250423_2": {
+            "roles": [
+              "catalyst"
+            ],
+            "needs": [
+              "demand_evidence",
+              "resource_validation"
+            ],
+            "domains": [
+              "regulation",
+              "mobile"
+            ],
+            "waiting_for_text": "等待开发者利用新导流规则的成功案例"
+          },
+          "incoming_014__sig_1": {
+            "roles": [
+              "resource_validation"
+            ],
+            "needs": [
+              "demand_evidence",
+              "timing_signal"
+            ],
+            "domains": [
+              "gaming",
+              "ai"
+            ],
+            "waiting_for_text": "等待市场对AI工具的商业化需求信号"
+          },
+          "incoming_019__sig_1": {
+            "roles": [
+              "execution_risk"
+            ],
+            "needs": [
+              "demand_evidence"
+            ],
+            "domains": [
+              "gaming",
+              "ai"
+            ],
+            "waiting_for_text": "等待玩家对AI资产质量的接受度反馈"
+          },
+          "incoming_025__sig_20250314_001": {
+            "roles": [
+              "resource_validation"
+            ],
+            "needs": [
+              "demand_evidence",
+              "timing_signal"
+            ],
+            "domains": [
+              "gaming",
+              "ai"
+            ],
+            "waiting_for_text": "等待市场对AI动画工具的商业化需求信号"
+          },
+          "incoming_028__sig_20250314_1": {
+            "roles": [
+              "timing_signal"
+            ],
+            "needs": [
+              "demand_evidence",
+              "resource_validation"
+            ],
+            "domains": [
+              "gaming"
+            ],
+            "waiting_for_text": "等待颠覆性变化的具体案例证据"
+          },
+          "incoming_029__sig_20250327_1": {
+            "roles": [
+              "timing_signal"
+            ],
+            "needs": [
+              "demand_evidence"
+            ],
+            "domains": [
+              "gaming"
+            ],
+            "waiting_for_text": "等待新硬件平台的市场表现数据"
+          },
+          "incoming_030__sig_1": {
+            "roles": [
+              "competitive_gap"
+            ],
+            "needs": [
+              "demand_evidence"
+            ],
+            "domains": [
+              "gaming"
+            ],
+            "waiting_for_text": "等待市场对免费竞技+IP模式的接受度"
+          },
+          "incoming_032__sig_20250314_001": {
+            "roles": [
+              "timing_signal"
+            ],
+            "needs": [
+              "demand_evidence",
+              "resource_validation"
+            ],
+            "domains": [
+              "ai"
+            ],
+            "waiting_for_text": "等待AI决策在具体业务场景的效能验证"
+          }
+        },
+        "isolated_signal_ids": [
+          "real_003__sig_20250314_001",
+          "real_006__sig_20250314_001",
+          "real_009__sig_1",
+          "real_009__sig_2",
+          "real_010__sig_1",
+          "real_010__sig_2",
+          "real_011__sig_1",
+          "real_001__sig_1",
+          "real_005__sig_1",
+          "real_008__sig_20250327_001",
+          "incoming_005__sig_20250423_1",
+          "incoming_005__sig_20250423_2",
+          "incoming_014__sig_1",
+          "incoming_019__sig_1",
+          "incoming_025__sig_20250314_001",
+          "incoming_028__sig_20250314_1",
+          "incoming_029__sig_20250327_1",
+          "incoming_030__sig_1",
+          "incoming_032__sig_20250314_001"
+        ],
+        "fallback_used": false
+      },
+      "validation": {
+        "passed": true,
+        "decode_success": true,
+        "skip_policy_match": true,
+        "signal_volume_ok": true,
+        "noise_expectation_ok": true,
+        "source_coverage_ok": true,
+        "scenario_count_match": true,
+        "expected_core_match": true,
+        "forbidden_pairings_ok": true,
+        "annotations_complete": true,
+        "errors": [],
+        "warnings": [
+          "Exploratory expectation not met for source set: ['real_006', 'real_009', 'incoming_025']"
+        ],
+        "metrics": {
+          "cross_domain_complement_recall": 0.5,
+          "false_merge_rate": 0.0,
+          "noise_inclusion_rate": 0.0,
+          "step_c_opportunity_ready_proxy_rate": 1.0,
+          "matched_expected_core_sets": 1,
+          "expected_core_sets": 2,
+          "forbidden_pairings_detected": 0,
+          "noise_scenarios": 0,
+          "opportunity_ready_scenarios": 5,
+          "scenario_count": 5
+        },
+        "error_attribution": [
+          "exploratory_gap"
+        ],
+        "dominant_error_attribution": "exploratory_gap"
+      }
+    }
+  ]
+}

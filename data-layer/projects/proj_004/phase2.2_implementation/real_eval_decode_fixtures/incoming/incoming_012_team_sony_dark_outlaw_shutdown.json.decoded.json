@@ -1,0 +1,96 @@
+{
+  "relative_path": "incoming/incoming_012_team_sony_dark_outlaw_shutdown.json",
+  "source_id": "incoming_012",
+  "elapsed_seconds": 10.839,
+  "payload": {
+    "source_id": "incoming_012",
+    "source_type": "news",
+    "title": "Sony shuts down Dark Outlaw Games, former CoD developer's studio, amid wider PlayStation cuts",
+    "content": "Sony has shut down Dark Outlaw Games, the studio founded by former Call of Duty developer Jason Blundell, amid broader cuts to PlayStation overall. Around 50 people are losing their jobs across PlayStation, including on the mobile teams. Blundell's previous studio Deviation was also partnered with Sony and closed in 2024. Sony confirmed the changes, stating they were made 'to support long-term sustainability.'",
+    "published_at": "2026-03-24T00:00:00Z",
+    "source_name": "GameSpot / Jason Schreier",
+    "source_url": "https://www.gamespot.com/articles/sony-shuts-down-former-cod-devs-studio-amid-wider-cuts/1100-6538989/",
+    "language": "en",
+    "mode": "prompt_first"
+  },
+  "result": {
+    "source_id": "incoming_012",
+    "source_type": "news",
+    "signals": [
+      {
+        "signal_id": "sig_1",
+        "signal_type": "team",
+        "signal_label": "Sony 关闭 Dark Outlaw Games 工作室",
+        "description": "Sony 关闭了由前《使命召唤》开发者 Jason Blundell 创立的工作室 Dark Outlaw Games，作为 PlayStation 整体裁员的一部分。",
+        "evidence_text": "Sony has shut down Dark Outlaw Games, the studio founded by former Call of Duty developer Jason Blundell, amid broader cuts to PlayStation overall.",
+        "entities": [
+          "Sony",
+          "Dark Outlaw Games",
+          "Jason Blundell",
+          "PlayStation"
+        ],
+        "intensity_score": 8,
+        "confidence_score": 10,
+        "timeliness_score": 9,
+        "source_ref": "incoming_012",
+        "extracted_at": "2025-10-15T00:00:00Z",
+        "logic_frame": {
+          "what_changed": "studio_closure",
+          "change_direction": "exit",
+          "affects": [
+            "game development teams"
+          ]
+        },
+        "metadata": {
+          "audit": {
+            "audit_flags": [],
+            "raw_signal_type": "team",
+            "normalized_signal_type": "team"
+          }
+        }
+      },
+      {
+        "signal_id": "sig_2",
+        "signal_type": "team",
+        "signal_label": "PlayStation 裁员约 50 人",
+        "description": "PlayStation 整体裁员约 50 人，涉及移动团队等。",
+        "evidence_text": "Around 50 people are losing their jobs across PlayStation, including on the mobile teams.",
+        "entities": [
+          "PlayStation",
+          "mobile teams"
+        ],
+        "intensity_score": 7,
+        "confidence_score": 10,
+        "timeliness_score": 9,
+        "source_ref": "incoming_012",
+        "extracted_at": "2025-10-15T00:00:00Z",
+        "logic_frame": {
+          "what_changed": "studio_headcount",
+          "change_direction": "decrease",
+          "affects": [
+            "game development teams"
+          ]
+        },
+        "metadata": {
+          "audit": {
+            "audit_flags": [],
+            "raw_signal_type": "team",
+            "normalized_signal_type": "team"
+          }
+        }
+      }
+    ],
+    "summary": "检测到 2 个范式信号：团队信号 2 个",
+    "decoder_version": "v2.1",
+    "processing_time_ms": 10552,
+    "warnings": null
+  },
+  "fixture_metadata": {
+    "saved_at": "2026-04-03T18:06:20",
+    "fast_decode": true,
+    "connect_timeout_seconds": 5,
+    "read_timeout_seconds": 15,
+    "max_retries": 1,
+    "decode_execution_mode": "subprocess"
+  }
+}

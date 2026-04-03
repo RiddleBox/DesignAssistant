@@ -1,0 +1,67 @@
+{
+  "relative_path": "sample_011_market_indie_selfpublish_trend.json",
+  "source_id": "real_011",
+  "elapsed_seconds": 7.901,
+  "payload": {
+    "source_id": "real_011",
+    "source_type": "news",
+    "title": "《喵喵的结合》为什么没有找发行商？",
+    "content": "独立游戏《喵喵的结合》开发者在采访中分享了选择自发行路线的原因。开发者表示，当前市场上中小体量独立游戏的发行商分成比例普遍在30%-50%，而通过Steam直发加上社区运营，实际触达成本更低。该游戏在没有发行商的情况下，依靠TikTok和B站的短视频传播实现了冷启动，首周销售额突破百万元。这一案例反映出独立游戏发行生态的结构性变化：内容平台的算法分发正在削弱传统发行商的渠道价值。",
+    "published_at": "2026-03-23T00:00:00Z",
+    "source_name": "触乐网",
+    "language": "zh-CN",
+    "mode": "prompt_first"
+  },
+  "result": {
+    "source_id": "real_011",
+    "source_type": "news",
+    "signals": [
+      {
+        "signal_id": "sig_1",
+        "signal_type": "market",
+        "signal_label": "独立游戏自发行案例验证",
+        "description": "独立游戏《喵喵的结合》通过Steam直发及短视频平台传播实现冷启动，首周销售额突破百万元，反映出内容平台算法分发削弱传统发行商渠道价值的结构性变化",
+        "evidence_text": "该游戏在没有发行商的情况下，依靠TikTok和B站的短视频传播实现了冷启动，首周销售额突破百万元。这一案例反映出独立游戏发行生态的结构性变化：内容平台的算法分发正在削弱传统发行商的渠道价值。",
+        "entities": [
+          "《喵喵的结合》",
+          "Steam",
+          "TikTok",
+          "B站",
+          "独立游戏发行生态"
+        ],
+        "intensity_score": 7,
+        "confidence_score": 9,
+        "timeliness_score": 8,
+        "source_ref": "real_011",
+        "extracted_at": "2025-08-07T00:00:00Z",
+        "logic_frame": {
+          "what_changed": "distribution_channel_value",
+          "change_direction": "shift",
+          "affects": [
+            "indie game developers",
+            "traditional game publishers"
+          ]
+        },
+        "metadata": {
+          "audit": {
+            "audit_flags": [],
+            "raw_signal_type": "market",
+            "normalized_signal_type": "market"
+          }
+        }
+      }
+    ],
+    "summary": "检测到 1 个范式信号：市场信号 1 个",
+    "decoder_version": "v2.1",
+    "processing_time_ms": 7901,
+    "warnings": null
+  },
+  "fixture_metadata": {
+    "saved_at": "2026-04-03T17:20:58",
+    "fast_decode": true,
+    "connect_timeout_seconds": 5,
+    "read_timeout_seconds": 15,
+    "max_retries": 1,
+    "decode_execution_mode": "inline"
+  }
+}

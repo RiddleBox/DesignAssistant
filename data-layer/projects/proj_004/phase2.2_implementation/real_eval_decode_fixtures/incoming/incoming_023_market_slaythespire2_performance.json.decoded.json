@@ -1,0 +1,65 @@
+{
+  "relative_path": "incoming/incoming_023_market_slaythespire2_performance.json",
+  "source_id": "incoming_023",
+  "elapsed_seconds": 7.706,
+  "payload": {
+    "source_id": "incoming_023",
+    "source_type": "news",
+    "title": "Slay the Spire 2 is the best-performing deckbuilder of all time, averaging over 1 million daily users since launch",
+    "content": "Analysts say Slay the Spire 2 is the best-performing deckbuilder ever released, and the competition is not close. The game has been averaging over one million daily active users since its launch, an unprecedented number for the genre.",
+    "published_at": "2026-03-24T00:00:00Z",
+    "source_name": "PC Gamer",
+    "source_url": "https://www.pcgamer.com/games/roguelike/analysts-say-slay-the-spire-2-is-the-best-performing-deckbuilder-of-all-time-and-the-competition-isnt-close/",
+    "language": "en",
+    "mode": "prompt_first"
+  },
+  "result": {
+    "source_id": "incoming_023",
+    "source_type": "news",
+    "signals": [
+      {
+        "signal_id": "sig_20250327_001",
+        "signal_type": "market",
+        "signal_label": "deckbuilder 品类历史最高 DAU 验证",
+        "description": "Slay the Spire 2 平均日活用户超 100 万，分析师确认为该品类有史以来表现最佳，验证了品类市场规模上限的突破。",
+        "evidence_text": "Analysts say Slay the Spire 2 is the best-performing deckbuilder ever released, and the competition is not close. The game has been averaging over one million daily active users since its launch, an unprecedented number for the genre.",
+        "entities": [
+          "Slay the Spire 2",
+          "deckbuilder"
+        ],
+        "intensity_score": 8,
+        "confidence_score": 8,
+        "timeliness_score": 9,
+        "source_ref": "incoming_023",
+        "extracted_at": "2025-03-27T00:00:00Z",
+        "logic_frame": {
+          "what_changed": "dau",
+          "change_direction": "increase",
+          "affects": [
+            "game developers",
+            "game publishers"
+          ]
+        },
+        "metadata": {
+          "audit": {
+            "audit_flags": [],
+            "raw_signal_type": "market",
+            "normalized_signal_type": "market"
+          }
+        }
+      }
+    ],
+    "summary": "检测到 1 个范式信号：市场信号 1 个",
+    "decoder_version": "v2.1",
+    "processing_time_ms": 7427,
+    "warnings": null
+  },
+  "fixture_metadata": {
+    "saved_at": "2026-04-03T18:06:51",
+    "fast_decode": true,
+    "connect_timeout_seconds": 5,
+    "read_timeout_seconds": 15,
+    "max_retries": 1,
+    "decode_execution_mode": "subprocess"
+  }
+}

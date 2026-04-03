@@ -1,0 +1,95 @@
+{
+  "relative_path": "incoming/incoming_016_team_uk_industry_jobs_decline.json",
+  "source_id": "incoming_016",
+  "elapsed_seconds": 10.244,
+  "payload": {
+    "source_id": "incoming_016",
+    "source_type": "news",
+    "title": "UK games industry sees 1,537 development job losses in a year, 'decline of unprecedented scale and speed' — TIGA report",
+    "content": "The UK games industry is experiencing 'a decline of unprecedented scale and speed' according to the latest research by trade association TIGA. The report found 1,537 development jobs were lost in the sector during the year-long period leading up to September 2025, marking the first downturn in 14 years. Studio numbers have fallen and startup companies are struggling to secure funding.",
+    "published_at": "2026-03-24T00:00:00Z",
+    "source_name": "Rock Paper Shotgun / TIGA",
+    "source_url": "https://www.rockpapershotgun.com/a-decline-of-unprecedented-scale-and-speed-is-hitting-uk-game-development-trade-association-report-finds",
+    "language": "en",
+    "mode": "prompt_first"
+  },
+  "result": {
+    "source_id": "incoming_016",
+    "source_type": "news",
+    "signals": [
+      {
+        "signal_id": "sig_1",
+        "signal_type": "team",
+        "signal_label": "英国游戏行业大规模裁员",
+        "description": "英国游戏行业在截至2025年9月的一年内流失1537个开发岗位，为14年来首次下滑",
+        "evidence_text": "The report found 1,537 development jobs were lost in the sector during the year-long period leading up to September 2025, marking the first downturn in 14 years.",
+        "entities": [
+          "UK games industry",
+          "TIGA"
+        ],
+        "intensity_score": 8,
+        "confidence_score": 9,
+        "timeliness_score": 9,
+        "source_ref": "incoming_016",
+        "extracted_at": "2025-09-30T00:00:00Z",
+        "logic_frame": {
+          "what_changed": "industry_headcount",
+          "change_direction": "decrease",
+          "affects": [
+            "game development studios",
+            "game developers"
+          ]
+        },
+        "metadata": {
+          "audit": {
+            "audit_flags": [],
+            "raw_signal_type": "team",
+            "normalized_signal_type": "team"
+          }
+        }
+      },
+      {
+        "signal_id": "sig_2",
+        "signal_type": "capital",
+        "signal_label": "英国游戏初创公司融资困难",
+        "description": "英国游戏初创公司难以获得融资",
+        "evidence_text": "startup companies are struggling to secure funding.",
+        "entities": [
+          "UK games industry",
+          "startup companies"
+        ],
+        "intensity_score": 6,
+        "confidence_score": 8,
+        "timeliness_score": 9,
+        "source_ref": "incoming_016",
+        "extracted_at": "2025-09-30T00:00:00Z",
+        "logic_frame": {
+          "what_changed": "funding_access",
+          "change_direction": "tighten",
+          "affects": [
+            "game startup companies"
+          ]
+        },
+        "metadata": {
+          "audit": {
+            "audit_flags": [],
+            "raw_signal_type": "capital",
+            "normalized_signal_type": "capital"
+          }
+        }
+      }
+    ],
+    "summary": "检测到 2 个范式信号：团队信号 1 个、资本信号 1 个",
+    "decoder_version": "v2.1",
+    "processing_time_ms": 9957,
+    "warnings": null
+  },
+  "fixture_metadata": {
+    "saved_at": "2026-04-03T18:06:20",
+    "fast_decode": true,
+    "connect_timeout_seconds": 5,
+    "read_timeout_seconds": 15,
+    "max_retries": 1,
+    "decode_execution_mode": "subprocess"
+  }
+}

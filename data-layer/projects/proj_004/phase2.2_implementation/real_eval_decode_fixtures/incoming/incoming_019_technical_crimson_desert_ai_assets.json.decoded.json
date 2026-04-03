@@ -1,0 +1,67 @@
+{
+  "relative_path": "incoming/incoming_019_technical_crimson_desert_ai_assets.json",
+  "source_id": "incoming_019",
+  "elapsed_seconds": 7.443,
+  "payload": {
+    "source_id": "incoming_019",
+    "source_type": "news",
+    "title": "Pearl Abyss used generative AI to create paintings in Crimson Desert without disclosing it",
+    "content": "Pearl Abyss has acknowledged that generative AI was used to create in-game paintings in Crimson Desert, following player discoveries of visual artifacts and watermark remnants consistent with AI image generation tools. The studio did not disclose AI asset usage prior to launch, sparking backlash from players and artists. Pearl Abyss stated the AI paintings were 'not supposed to be in the final game.'",
+    "published_at": "2026-03-22T00:00:00Z",
+    "source_name": "PC Gamer / Game Developer",
+    "source_url": "https://www.gamedeveloper.com/design/pearl-abyss-forgot-to-mention-it-used-generative-ai-to-create-in-game-paintings",
+    "language": "en",
+    "mode": "prompt_first"
+  },
+  "result": {
+    "source_id": "incoming_019",
+    "source_type": "news",
+    "signals": [
+      {
+        "signal_id": "sig_1",
+        "signal_type": "technical",
+        "signal_label": "AI 生成资产用于商业游戏",
+        "description": "Pearl Abyss 承认在 Crimson Desert 中使用生成式 AI 创建游戏内绘画，玩家发现视觉伪影和水印残留。",
+        "evidence_text": "Pearl Abyss has acknowledged that generative AI was used to create in-game paintings in Crimson Desert, following player discoveries of visual artifacts and watermark remnants consistent with AI image generation tools.",
+        "entities": [
+          "Pearl Abyss",
+          "Crimson Desert",
+          "generative AI",
+          "AI image generation tools"
+        ],
+        "intensity_score": 7,
+        "confidence_score": 10,
+        "timeliness_score": 9,
+        "source_ref": "incoming_019",
+        "extracted_at": "2026-03-27T00:00:00Z",
+        "logic_frame": {
+          "what_changed": "ai_asset_usage",
+          "change_direction": "enter",
+          "affects": [
+            "game development pipelines",
+            "asset creation workflows"
+          ]
+        },
+        "metadata": {
+          "audit": {
+            "audit_flags": [],
+            "raw_signal_type": "technical",
+            "normalized_signal_type": "technical"
+          }
+        }
+      }
+    ],
+    "summary": "检测到 1 个范式信号：技术信号 1 个",
+    "decoder_version": "v2.1",
+    "processing_time_ms": 7113,
+    "warnings": null
+  },
+  "fixture_metadata": {
+    "saved_at": "2026-04-03T17:57:53",
+    "fast_decode": true,
+    "connect_timeout_seconds": 5,
+    "read_timeout_seconds": 15,
+    "max_retries": 1,
+    "decode_execution_mode": "subprocess"
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "relative_path": "sample_003_team_ubisoft_redstorm_layoffs.json",
+  "source_id": "real_003",
+  "elapsed_seconds": 6.769,
+  "payload": {
+    "source_id": "real_003",
+    "source_type": "news",
+    "title": "Ubisoft ends game development at Red Storm and lays off 105 workers",
+    "content": "Ubisoft has announced it is ending game development at Red Storm Entertainment and laying off 105 workers. The studio, known for creating the Tom Clancy's Rainbow Six series, will continue operating in a reduced capacity focused on global IT support and Snowdrop engine support. This move is part of Ubisoft's broader restructuring efforts as the company faces financial pressures and declining game sales. Red Storm was one of Ubisoft's oldest North American studios.",
+    "published_at": "2026-03-19T00:00:00Z",
+    "source_name": "Game Developer",
+    "language": "en",
+    "mode": "prompt_first"
+  },
+  "result": {
+    "source_id": "real_003",
+    "source_type": "news",
+    "signals": [
+      {
+        "signal_id": "sig_20250314_001",
+        "signal_type": "team",
+        "signal_label": "育碧关闭 Red Storm 游戏开发并裁员 105 人",
+        "description": "育碧宣布结束 Red Storm Entertainment 的游戏开发业务，并裁员 105 人。该工作室将继续以缩减规模运营，专注于全球 IT 支持和 Snowdrop 引擎支持。",
+        "evidence_text": "Ubisoft has announced it is ending game development at Red Storm Entertainment and laying off 105 workers.",
+        "entities": [
+          "Ubisoft",
+          "Red Storm Entertainment"
+        ],
+        "intensity_score": 8,
+        "confidence_score": 10,
+        "timeliness_score": 10,
+        "source_ref": "real_003",
+        "extracted_at": "2025-03-14T00:00:00Z",
+        "logic_frame": {
+          "what_changed": "studio_headcount",
+          "change_direction": "decrease",
+          "affects": [
+            "Red Storm Entertainment",
+            "Ubisoft development teams"
+          ]
+        },
+        "metadata": {
+          "audit": {
+            "audit_flags": [],
+            "raw_signal_type": "team",
+            "normalized_signal_type": "team"
+          }
+        }
+      }
+    ],
+    "summary": "检测到 1 个范式信号：团队信号 1 个",
+    "decoder_version": "v2.1",
+    "processing_time_ms": 6464,
+    "warnings": null
+  },
+  "fixture_metadata": {
+    "saved_at": "2026-04-03T17:31:01",
+    "fast_decode": true,
+    "connect_timeout_seconds": 5,
+    "read_timeout_seconds": 15,
+    "max_retries": 1,
+    "decode_execution_mode": "subprocess"
+  }
+}

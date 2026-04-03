@@ -1,0 +1,65 @@
+{
+  "relative_path": "incoming/incoming_015_market_nintendo_switch2_production_cut.json",
+  "source_id": "incoming_015",
+  "elapsed_seconds": 7.624,
+  "payload": {
+    "source_id": "incoming_015",
+    "source_type": "news",
+    "title": "Report: Nintendo slashes Switch 2 production by a third due to weak U.S. sales forecasts",
+    "content": "Nintendo has reportedly downgraded Switch 2 production from 6 million units to 4 million units, a reduction of roughly one third, due to weaker-than-expected U.S. sales demand. The report comes ahead of the console's launch and suggests Nintendo is taking a more conservative approach following concerns about consumer price sensitivity in the North American market.",
+    "published_at": "2026-03-24T00:00:00Z",
+    "source_name": "Game Developer",
+    "source_url": "https://www.gamedeveloper.com/business/report-nintendo-slashes-switch-2-production-by-a-third-due-to-weak-u-s-sales",
+    "language": "en",
+    "mode": "prompt_first"
+  },
+  "result": {
+    "source_id": "incoming_015",
+    "source_type": "news",
+    "signals": [
+      {
+        "signal_id": "sig_switch2_production_adjustment",
+        "signal_type": "market",
+        "signal_label": "Switch 2 产量下调三分之一",
+        "description": "任天堂据报将 Switch 2 产量从 600 万台下调至 400 万台，下调约三分之一，原因是美国市场需求弱于预期。",
+        "evidence_text": "Nintendo has reportedly downgraded Switch 2 production from 6 million units to 4 million units, a reduction of roughly one third, due to weaker-than-expected U.S. sales demand.",
+        "entities": [
+          "Nintendo",
+          "Switch 2"
+        ],
+        "intensity_score": 7,
+        "confidence_score": 6,
+        "timeliness_score": 9,
+        "source_ref": "incoming_015",
+        "extracted_at": "2025-03-14T06:00:00Z",
+        "logic_frame": {
+          "what_changed": "hardware_production_volume",
+          "change_direction": "decrease",
+          "affects": [
+            "console manufacturers",
+            "game publishers"
+          ]
+        },
+        "metadata": {
+          "audit": {
+            "audit_flags": [],
+            "raw_signal_type": "market",
+            "normalized_signal_type": "market"
+          }
+        }
+      }
+    ],
+    "summary": "检测到 1 个范式信号：市场信号 1 个",
+    "decoder_version": "v2.1",
+    "processing_time_ms": 7324,
+    "warnings": null
+  },
+  "fixture_metadata": {
+    "saved_at": "2026-04-03T18:05:53",
+    "fast_decode": true,
+    "connect_timeout_seconds": 5,
+    "read_timeout_seconds": 15,
+    "max_retries": 1,
+    "decode_execution_mode": "subprocess"
+  }
+}

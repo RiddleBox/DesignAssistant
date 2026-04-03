@@ -1,0 +1,96 @@
+{
+  "relative_path": "incoming/incoming_039_team_epic_fortnite_modes_cut.json",
+  "source_id": "incoming_039",
+  "elapsed_seconds": 10.912,
+  "payload": {
+    "source_id": "incoming_039",
+    "source_type": "news",
+    "title": "Epic Games ends 3 Fortnite game modes following 1,000-person layoffs",
+    "content": "Following its layoff of over 1,000 employees, Epic Games is ending three Fortnite game modes as the company restructures its live operations team. The cuts to Fortnite's game mode portfolio follow CEO Tim Sweeney's acknowledgment that Epic had been spending beyond its means despite Fortnite remaining 'one of the most successful games in the world.'",
+    "published_at": "2026-03-25T00:00:00Z",
+    "source_name": "Game Developer",
+    "source_url": "https://www.gamedeveloper.com/business/epic-is-ending-3-fortnite-game-modes-following-its-latest-round-of-layoffs",
+    "language": "en",
+    "mode": "prompt_first"
+  },
+  "result": {
+    "source_id": "incoming_039",
+    "source_type": "news",
+    "signals": [
+      {
+        "signal_id": "sig_1",
+        "signal_type": "team",
+        "signal_label": "Epic Games 裁员超 1000 人",
+        "description": "Epic Games 裁员超过 1000 名员工，并重组其实时运营团队。",
+        "evidence_text": "Following its layoff of over 1,000 employees, Epic Games is ending three Fortnite game modes as the company restructures its live operations team.",
+        "entities": [
+          "Epic Games",
+          "Fortnite"
+        ],
+        "intensity_score": 9,
+        "confidence_score": 10,
+        "timeliness_score": 9,
+        "source_ref": "incoming_039",
+        "extracted_at": "2024-07-11T00:00:00Z",
+        "logic_frame": {
+          "what_changed": "studio_headcount",
+          "change_direction": "decrease",
+          "affects": [
+            "live operations teams",
+            "game development teams"
+          ]
+        },
+        "metadata": {
+          "audit": {
+            "audit_flags": [],
+            "raw_signal_type": "team",
+            "normalized_signal_type": "team"
+          }
+        }
+      },
+      {
+        "signal_id": "sig_2",
+        "signal_type": "team",
+        "signal_label": "Fortnite 游戏模式缩减",
+        "description": "Epic Games 将终止三个 Fortnite 游戏模式，作为实时运营团队重组的一部分。",
+        "evidence_text": "Epic Games is ending three Fortnite game modes as the company restructures its live operations team.",
+        "entities": [
+          "Epic Games",
+          "Fortnite"
+        ],
+        "intensity_score": 6,
+        "confidence_score": 10,
+        "timeliness_score": 9,
+        "source_ref": "incoming_039",
+        "extracted_at": "2024-07-11T00:00:00Z",
+        "logic_frame": {
+          "what_changed": "live_service_portfolio",
+          "change_direction": "decrease",
+          "affects": [
+            "Fortnite players",
+            "live operations teams"
+          ]
+        },
+        "metadata": {
+          "audit": {
+            "audit_flags": [],
+            "raw_signal_type": "team",
+            "normalized_signal_type": "team"
+          }
+        }
+      }
+    ],
+    "summary": "检测到 2 个范式信号：团队信号 2 个",
+    "decoder_version": "v2.1",
+    "processing_time_ms": 10634,
+    "warnings": null
+  },
+  "fixture_metadata": {
+    "saved_at": "2026-04-03T18:06:31",
+    "fast_decode": true,
+    "connect_timeout_seconds": 5,
+    "read_timeout_seconds": 15,
+    "max_retries": 1,
+    "decode_execution_mode": "subprocess"
+  }
+}

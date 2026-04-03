@@ -1,0 +1,65 @@
+{
+  "relative_path": "sample_001_capital_moonton_acquisition.json",
+  "source_id": "real_001",
+  "elapsed_seconds": 6.843,
+  "payload": {
+    "source_id": "real_001",
+    "source_type": "news",
+    "title": "Savvy Games Group to acquire Moonton Games for $6 billion",
+    "content": "Savvy Games Group has agreed to acquire Moonton Games for $6 billion. TikTok maker ByteDance had originally paid $4 billion for Moonton in 2021. Moonton is the developer behind Mobile Legends: Bang Bang, one of the most popular mobile games in Southeast Asia. The deal represents a significant capital movement in the mobile gaming space, with the Saudi-backed Savvy Games Group continuing its aggressive expansion into the gaming industry.",
+    "published_at": "2026-03-20T00:00:00Z",
+    "source_name": "Game Developer",
+    "language": "en",
+    "mode": "prompt_first"
+  },
+  "result": {
+    "source_id": "real_001",
+    "source_type": "news",
+    "signals": [
+      {
+        "signal_id": "sig_1",
+        "signal_type": "capital",
+        "signal_label": "Savvy Games Group 收购 Moonton Games",
+        "description": "Savvy Games Group 同意以 60 亿美元收购 Moonton Games",
+        "evidence_text": "Savvy Games Group has agreed to acquire Moonton Games for $6 billion.",
+        "entities": [
+          "Savvy Games Group",
+          "Moonton Games",
+          "Mobile Legends: Bang Bang"
+        ],
+        "intensity_score": 9,
+        "confidence_score": 9,
+        "timeliness_score": 9,
+        "source_ref": "real_001",
+        "extracted_at": "2024-05-17T00:00:00Z",
+        "logic_frame": {
+          "what_changed": "acquisition",
+          "change_direction": "enter",
+          "affects": [
+            "mobile gaming market",
+            "Southeast Asia gaming landscape"
+          ]
+        },
+        "metadata": {
+          "audit": {
+            "audit_flags": [],
+            "raw_signal_type": "capital",
+            "normalized_signal_type": "capital"
+          }
+        }
+      }
+    ],
+    "summary": "检测到 1 个范式信号：资本信号 1 个",
+    "decoder_version": "v2.1",
+    "processing_time_ms": 6550,
+    "warnings": null
+  },
+  "fixture_metadata": {
+    "saved_at": "2026-04-03T17:57:46",
+    "fast_decode": true,
+    "connect_timeout_seconds": 5,
+    "read_timeout_seconds": 15,
+    "max_retries": 1,
+    "decode_execution_mode": "subprocess"
+  }
+}

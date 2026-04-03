@@ -1,0 +1,97 @@
+{
+  "relative_path": "incoming/incoming_035_team_xbox_ceo_asha_sharma.json",
+  "source_id": "incoming_035",
+  "elapsed_seconds": 10.403,
+  "payload": {
+    "source_id": "incoming_035",
+    "source_type": "news",
+    "title": "New Xbox CEO Asha Sharma 'willing to question everything,' comes from AI background",
+    "content": "Xbox VP Jason Ronald describes new Microsoft Gaming CEO Asha Sharma as 'willing to question everything.' Sharma's stated ambition is to 'retain what makes Xbox great' while reassessing previous strategies. Sharma comes from an AI background with no prior games industry experience, a combination Ronald suggests could be an asset. The appointment coincides with killing the 'This is an Xbox' campaign and multiple senior departures.",
+    "published_at": "2026-03-24T00:00:00Z",
+    "source_name": "GameSpot / The Information",
+    "source_url": "https://www.gamespot.com/articles/new-xbox-ceo-willing-to-question-everything-xbox-exec-says/1100-6538979/",
+    "language": "en",
+    "mode": "prompt_first"
+  },
+  "result": {
+    "source_id": "incoming_035",
+    "source_type": "news",
+    "signals": [
+      {
+        "signal_id": "sig_1",
+        "signal_type": "team",
+        "signal_label": "微软游戏任命新CEO",
+        "description": "微软游戏任命来自AI背景、无游戏行业经验的Asha Sharma为新任CEO，Xbox副总裁称其'愿意质疑一切'。",
+        "evidence_text": "Xbox VP Jason Ronald describes new Microsoft Gaming CEO Asha Sharma as 'willing to question everything.' Sharma comes from an AI background with no prior games industry experience, a combination Ronald suggests could be an asset.",
+        "entities": [
+          "Microsoft Gaming",
+          "Asha Sharma",
+          "Jason Ronald",
+          "Xbox"
+        ],
+        "intensity_score": 8,
+        "confidence_score": 10,
+        "timeliness_score": 10,
+        "source_ref": "incoming_035",
+        "extracted_at": "2024-06-05T00:00:00Z",
+        "logic_frame": {
+          "what_changed": "key_personnel_join",
+          "change_direction": "enter",
+          "affects": [
+            "Microsoft Gaming",
+            "Xbox"
+          ]
+        },
+        "metadata": {
+          "audit": {
+            "audit_flags": [],
+            "raw_signal_type": "team",
+            "normalized_signal_type": "team"
+          }
+        }
+      },
+      {
+        "signal_id": "sig_2",
+        "signal_type": "team",
+        "signal_label": "Xbox多名高管离职",
+        "description": "在任命新CEO的同时，Xbox发生多名高级管理人员离职。",
+        "evidence_text": "The appointment coincides with ... multiple senior departures.",
+        "entities": [
+          "Xbox"
+        ],
+        "intensity_score": 7,
+        "confidence_score": 9,
+        "timeliness_score": 10,
+        "source_ref": "incoming_035",
+        "extracted_at": "2024-06-05T00:00:00Z",
+        "logic_frame": {
+          "what_changed": "key_personnel_exit",
+          "change_direction": "exit",
+          "affects": [
+            "Microsoft Gaming",
+            "Xbox"
+          ]
+        },
+        "metadata": {
+          "audit": {
+            "audit_flags": [],
+            "raw_signal_type": "team",
+            "normalized_signal_type": "team"
+          }
+        }
+      }
+    ],
+    "summary": "检测到 2 个范式信号：团队信号 2 个",
+    "decoder_version": "v2.1",
+    "processing_time_ms": 10119,
+    "warnings": null
+  },
+  "fixture_metadata": {
+    "saved_at": "2026-04-03T18:06:30",
+    "fast_decode": true,
+    "connect_timeout_seconds": 5,
+    "read_timeout_seconds": 15,
+    "max_retries": 1,
+    "decode_execution_mode": "subprocess"
+  }
+}

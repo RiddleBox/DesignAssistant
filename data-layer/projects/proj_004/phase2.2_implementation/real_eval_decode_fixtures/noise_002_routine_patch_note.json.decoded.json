@@ -1,0 +1,32 @@
+{
+  "relative_path": "noise_002_routine_patch_note.json",
+  "source_id": "noise_002",
+  "elapsed_seconds": 2.019,
+  "payload": {
+    "source_id": "noise_002",
+    "source_type": "announcement",
+    "title": "《原神》4.5版本「异想·镜花之庭」今日正式上线",
+    "content": "《原神》4.5版本「异想·镜花之庭」于今日正式上线。本次更新新增了限定五星角色千织，新增璃月新场景「镜花之庭」，以及全新世界任务「织梦者之旅」。玩家可通过完成活动任务获取丰厚奖励，包括原石×1600、精锻用魔矿×18等。新版本还对部分角色天赋进行了数值微调，优化了旅行者的音效表现。祈愿活动将持续至4.6版本前。",
+    "published_at": "2026-03-20T00:00:00Z",
+    "source_name": "IGN Game News",
+    "language": "zh-CN",
+    "mode": "prompt_first"
+  },
+  "result": {
+    "source_id": "noise_002",
+    "source_type": "announcement",
+    "signals": [],
+    "summary": "未检测到范式信号",
+    "decoder_version": "v2.1",
+    "processing_time_ms": 1731,
+    "warnings": null
+  },
+  "fixture_metadata": {
+    "saved_at": "2026-04-03T17:27:10",
+    "fast_decode": true,
+    "connect_timeout_seconds": 5,
+    "read_timeout_seconds": 15,
+    "max_retries": 1,
+    "decode_execution_mode": "subprocess"
+  }
+}

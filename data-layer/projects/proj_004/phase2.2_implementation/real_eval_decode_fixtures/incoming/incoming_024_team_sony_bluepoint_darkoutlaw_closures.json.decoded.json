@@ -1,0 +1,35 @@
+{
+  "relative_path": "incoming/incoming_024_team_sony_bluepoint_darkoutlaw_closures.json",
+  "source_id": "incoming_024",
+  "elapsed_seconds": 15.649,
+  "payload": {
+    "source_id": "incoming_024",
+    "source_type": "news",
+    "title": "Sony also closed Bluepoint Games before Dark Outlaw; PlayStation studio closures accelerate in 2026",
+    "content": "Sony closed Bluepoint Games, the studio known for remastering Demon's Souls and Shadow of the Colossus, shortly before also closing Jason Blundell's Dark Outlaw Games in March 2026. The back-to-back first-party closures signal an acceleration of PlayStation's studio consolidation strategy, with around 50 staff losing jobs across the mobile and first-party teams.",
+    "published_at": "2026-03-24T00:00:00Z",
+    "source_name": "PC Gamer",
+    "source_url": "https://www.pcgamer.com/gaming-industry/call-of-duty-veterans-new-studio-which-was-just-announced-in-2025-is-reportedly-being-closed-by-sony/",
+    "language": "en",
+    "mode": "prompt_first"
+  },
+  "result": {
+    "source_id": "incoming_024",
+    "source_type": "news",
+    "signals": [],
+    "summary": null,
+    "decoder_version": "v2.1",
+    "processing_time_ms": 15359,
+    "warnings": [
+      "解码失败: HTTPSConnectionPool(host='api.deepseek.com', port=443): Read timed out."
+    ]
+  },
+  "fixture_metadata": {
+    "saved_at": "2026-04-03T18:06:33",
+    "fast_decode": true,
+    "connect_timeout_seconds": 5,
+    "read_timeout_seconds": 15,
+    "max_retries": 1,
+    "decode_execution_mode": "subprocess"
+  }
+}

@@ -1,0 +1,98 @@
+{
+  "relative_path": "incoming/incoming_037_market_china_games_feb2026_revenue.json",
+  "source_id": "incoming_037",
+  "elapsed_seconds": 12.318,
+  "payload": {
+    "source_id": "incoming_037",
+    "source_type": "news",
+    "title": "2026年2月中国游戏市场收入332亿元，同比增长18.96%；海外收入21亿美元，同比增长40%",
+    "content": "中国音数协游戏工委数据显示，2026年2月中国国内游戏市场实际销售收入为332.31亿元，环比增长2.35%，同比增长18.96%。其中移动游戏227.29亿元（同比+9.05%），客户端游戏88.70亿元（同比+56.75%）。中国自主研发游戏海外市场收入21.14亿美元，同比增长40.46%，显示出国产游戏全球化加速趋势。",
+    "published_at": "2026-03-21T00:00:00Z",
+    "source_name": "触乐网 / 中国音数协游戏工委",
+    "source_url": "http://www.chuapp.com/article/291255.html",
+    "language": "zh-CN",
+    "mode": "prompt_first"
+  },
+  "result": {
+    "source_id": "incoming_037",
+    "source_type": "news",
+    "signals": [
+      {
+        "signal_id": "sig_2026_03_27_1",
+        "signal_type": "market",
+        "signal_label": "中国游戏市场2月收入同比高增长",
+        "description": "2026年2月中国国内游戏市场实际销售收入332.31亿元，同比增长18.96%，其中客户端游戏收入同比大幅增长56.75%",
+        "evidence_text": "中国音数协游戏工委数据显示，2026年2月中国国内游戏市场实际销售收入为332.31亿元，环比增长2.35%，同比增长18.96%。其中移动游戏227.29亿元（同比+9.05%），客户端游戏88.70亿元（同比+56.75%）。",
+        "entities": [
+          "中国音数协游戏工委",
+          "中国游戏市场",
+          "移动游戏",
+          "客户端游戏"
+        ],
+        "intensity_score": 6,
+        "confidence_score": 9,
+        "timeliness_score": 9,
+        "source_ref": "incoming_037",
+        "extracted_at": "2026-03-27T00:00:00Z",
+        "logic_frame": {
+          "what_changed": "market_revenue",
+          "change_direction": "increase",
+          "affects": [
+            "game developers",
+            "game publishers"
+          ]
+        },
+        "metadata": {
+          "audit": {
+            "audit_flags": [],
+            "raw_signal_type": "market",
+            "normalized_signal_type": "market"
+          }
+        }
+      },
+      {
+        "signal_id": "sig_2026_03_27_2",
+        "signal_type": "market",
+        "signal_label": "中国自研游戏海外收入高增长",
+        "description": "2026年2月中国自主研发游戏海外市场收入21.14亿美元，同比增长40.46%",
+        "evidence_text": "中国自主研发游戏海外市场收入21.14亿美元，同比增长40.46%，显示出国产游戏全球化加速趋势。",
+        "entities": [
+          "中国自主研发游戏",
+          "海外市场"
+        ],
+        "intensity_score": 7,
+        "confidence_score": 9,
+        "timeliness_score": 9,
+        "source_ref": "incoming_037",
+        "extracted_at": "2026-03-27T00:00:00Z",
+        "logic_frame": {
+          "what_changed": "overseas_revenue",
+          "change_direction": "increase",
+          "affects": [
+            "Chinese game developers",
+            "global game publishers"
+          ]
+        },
+        "metadata": {
+          "audit": {
+            "audit_flags": [],
+            "raw_signal_type": "market",
+            "normalized_signal_type": "market"
+          }
+        }
+      }
+    ],
+    "summary": "检测到 2 个范式信号：市场信号 2 个",
+    "decoder_version": "v2.1",
+    "processing_time_ms": 12031,
+    "warnings": null
+  },
+  "fixture_metadata": {
+    "saved_at": "2026-04-03T18:06:09",
+    "fast_decode": true,
+    "connect_timeout_seconds": 5,
+    "read_timeout_seconds": 15,
+    "max_retries": 1,
+    "decode_execution_mode": "subprocess"
+  }
+}

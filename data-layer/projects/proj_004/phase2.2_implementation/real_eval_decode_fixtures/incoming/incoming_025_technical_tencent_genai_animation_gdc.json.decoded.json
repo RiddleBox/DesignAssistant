@@ -1,0 +1,65 @@
+{
+  "relative_path": "incoming/incoming_025_technical_tencent_genai_animation_gdc.json",
+  "source_id": "incoming_025",
+  "elapsed_seconds": 6.966,
+  "payload": {
+    "source_id": "incoming_025",
+    "source_type": "news",
+    "title": "Tencent's generative AI animation tools shown at GDC are technically impressive but offer little for game fun",
+    "content": "Tencent showcased its generative AI animation tools at GDC 2026, demonstrating technically impressive capabilities for procedural character animation and motion synthesis. However, industry observers noted that while the tools reduce production labor, they do not appear to improve gameplay feel or player experience. The demonstration highlighted a growing tension between AI-driven production efficiency and the creative craft that makes games engaging.",
+    "published_at": "2026-03-24T00:00:00Z",
+    "source_name": "Game Developer",
+    "source_url": "https://www.gamedeveloper.com/art/tencent-s-genai-animation-tools-don-t-seem-to-make-games-more-fun",
+    "language": "en",
+    "mode": "prompt_first"
+  },
+  "result": {
+    "source_id": "incoming_025",
+    "source_type": "news",
+    "signals": [
+      {
+        "signal_id": "sig_20250314_001",
+        "signal_type": "technical",
+        "signal_label": "腾讯生成式AI动画工具GDC展示",
+        "description": "腾讯在GDC 2026展示其生成式AI动画工具，具备程序化角色动画和运动合成的技术能力",
+        "evidence_text": "Tencent showcased its generative AI animation tools at GDC 2026, demonstrating technically impressive capabilities for procedural character animation and motion synthesis.",
+        "entities": [
+          "Tencent",
+          "GDC 2026",
+          "generative AI animation tools"
+        ],
+        "intensity_score": 7,
+        "confidence_score": 10,
+        "timeliness_score": 10,
+        "source_ref": "incoming_025",
+        "extracted_at": "2026-03-14T00:00:00Z",
+        "logic_frame": {
+          "what_changed": "ai_tool_capability",
+          "change_direction": "increase",
+          "affects": [
+            "game development teams"
+          ]
+        },
+        "metadata": {
+          "audit": {
+            "audit_flags": [],
+            "raw_signal_type": "technical",
+            "normalized_signal_type": "technical"
+          }
+        }
+      }
+    ],
+    "summary": "检测到 1 个范式信号：技术信号 1 个",
+    "decoder_version": "v2.1",
+    "processing_time_ms": 6675,
+    "warnings": null
+  },
+  "fixture_metadata": {
+    "saved_at": "2026-04-03T17:57:54",
+    "fast_decode": true,
+    "connect_timeout_seconds": 5,
+    "read_timeout_seconds": 15,
+    "max_retries": 1,
+    "decode_execution_mode": "subprocess"
+  }
+}

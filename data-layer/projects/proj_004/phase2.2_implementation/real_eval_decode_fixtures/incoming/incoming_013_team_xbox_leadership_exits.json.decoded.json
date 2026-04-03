@@ -1,0 +1,67 @@
+{
+  "relative_path": "incoming/incoming_013_team_xbox_leadership_exits.json",
+  "source_id": "incoming_013",
+  "elapsed_seconds": 6.682,
+  "payload": {
+    "source_id": "incoming_013",
+    "source_type": "news",
+    "title": "Xbox VP Lori Wright and gaming AI GM Haiyan Zhang depart Microsoft",
+    "content": "Two more senior leaders have left Xbox: VP Lori Wright and Haiyan Zhang, General Manager of Gaming AI, have both parted ways with Microsoft. The departures continue a pattern of leadership exits at Xbox following the appointment of a new CEO. Zhang's exit is particularly notable given her role overseeing Xbox's AI gaming initiatives.",
+    "published_at": "2026-03-23T00:00:00Z",
+    "source_name": "Game Developer",
+    "source_url": "https://www.gamedeveloper.com/business/two-more-leadership-exists-took-place-at-xbox",
+    "language": "en",
+    "mode": "prompt_first"
+  },
+  "result": {
+    "source_id": "incoming_013",
+    "source_type": "news",
+    "signals": [
+      {
+        "signal_id": "sig_1",
+        "signal_type": "team",
+        "signal_label": "Xbox 两位高管离职",
+        "description": "Xbox 副总裁 Lori Wright 和游戏 AI 总经理 Haiyan Zhang 已离开微软。",
+        "evidence_text": "Two more senior leaders have left Xbox: VP Lori Wright and Haiyan Zhang, General Manager of Gaming AI, have both parted ways with Microsoft.",
+        "entities": [
+          "Xbox",
+          "Lori Wright",
+          "Haiyan Zhang",
+          "Microsoft"
+        ],
+        "intensity_score": 7,
+        "confidence_score": 10,
+        "timeliness_score": 9,
+        "source_ref": "incoming_013",
+        "extracted_at": "2025-10-21T00:00:00Z",
+        "logic_frame": {
+          "what_changed": "key_personnel_exit",
+          "change_direction": "exit",
+          "affects": [
+            "Xbox leadership",
+            "gaming AI initiatives"
+          ]
+        },
+        "metadata": {
+          "audit": {
+            "audit_flags": [],
+            "raw_signal_type": "team",
+            "normalized_signal_type": "team"
+          }
+        }
+      }
+    ],
+    "summary": "检测到 1 个范式信号：团队信号 1 个",
+    "decoder_version": "v2.1",
+    "processing_time_ms": 6382,
+    "warnings": null
+  },
+  "fixture_metadata": {
+    "saved_at": "2026-04-03T17:31:01",
+    "fast_decode": true,
+    "connect_timeout_seconds": 5,
+    "read_timeout_seconds": 15,
+    "max_retries": 1,
+    "decode_execution_mode": "subprocess"
+  }
+}

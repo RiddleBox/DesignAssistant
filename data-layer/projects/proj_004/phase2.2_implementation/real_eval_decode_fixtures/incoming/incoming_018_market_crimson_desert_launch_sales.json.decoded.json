@@ -1,0 +1,66 @@
+{
+  "relative_path": "incoming/incoming_018_market_crimson_desert_launch_sales.json",
+  "source_id": "incoming_018",
+  "elapsed_seconds": 6.999,
+  "payload": {
+    "source_id": "incoming_018",
+    "source_type": "news",
+    "title": "Crimson Desert tops 2 million sales within a day of launch, Pearl Abyss pledges more content",
+    "content": "Pearl Abyss's open-world action RPG Crimson Desert surpassed 2 million units sold within a day of its launch. The title launched on PC via Steam and saw strong day-one numbers despite launch performance issues on Intel GPUs. Pearl Abyss has pledged rapid updates and additional content. The game subsequently reached 3 million sales within five days of launch.",
+    "published_at": "2026-03-20T00:00:00Z",
+    "source_name": "Game Developer",
+    "source_url": "https://www.gamedeveloper.com/business/crimson-desert-has-topped-2m-sales-within-a-day",
+    "language": "en",
+    "mode": "prompt_first"
+  },
+  "result": {
+    "source_id": "incoming_018",
+    "source_type": "news",
+    "signals": [
+      {
+        "signal_id": "sig_1",
+        "signal_type": "market",
+        "signal_label": "韩国工作室单机 RPG 西方市场首日 2M 验证",
+        "description": "Crimson Desert 首日销量突破 2M，验证了亚洲 AA 级单机 RPG 在西方市场的高端商业可行性",
+        "evidence_text": "Pearl Abyss's open-world action RPG Crimson Desert surpassed 2 million units sold within a day of its launch.",
+        "entities": [
+          "Pearl Abyss",
+          "Crimson Desert",
+          "Steam"
+        ],
+        "intensity_score": 7,
+        "confidence_score": 9,
+        "timeliness_score": 9,
+        "source_ref": "incoming_018",
+        "extracted_at": "2025-03-27T00:00:00Z",
+        "logic_frame": {
+          "what_changed": "sales_milestone",
+          "change_direction": "increase",
+          "affects": [
+            "game developers",
+            "game publishers"
+          ]
+        },
+        "metadata": {
+          "audit": {
+            "audit_flags": [],
+            "raw_signal_type": "market",
+            "normalized_signal_type": "market"
+          }
+        }
+      }
+    ],
+    "summary": "检测到 1 个范式信号：市场信号 1 个",
+    "decoder_version": "v2.1",
+    "processing_time_ms": 6712,
+    "warnings": null
+  },
+  "fixture_metadata": {
+    "saved_at": "2026-04-03T18:06:50",
+    "fast_decode": true,
+    "connect_timeout_seconds": 5,
+    "read_timeout_seconds": 15,
+    "max_retries": 1,
+    "decode_execution_mode": "subprocess"
+  }
+}

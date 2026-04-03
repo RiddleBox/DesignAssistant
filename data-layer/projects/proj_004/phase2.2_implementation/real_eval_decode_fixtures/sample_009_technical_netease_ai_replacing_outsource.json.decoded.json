@@ -1,0 +1,93 @@
+{
+  "relative_path": "sample_009_technical_netease_ai_replacing_outsource.json",
+  "source_id": "real_009",
+  "elapsed_seconds": 10.322,
+  "payload": {
+    "source_id": "real_009",
+    "source_type": "news",
+    "title": "独家｜网易清退外包传闻背后",
+    "content": "近期流传的\"网易将使用AI清退外包\"传言引发行业关注。据多位知情人士透露，网易互娱确实在部分项目上减少了外包规模，但规模远未达到传言中的80%。更值得关注的是，此次调整背后折射出大厂对AI辅助开发工具替代人工外包的真实测试：网易内部已有AI代码生成工具在测试岗位上达到可用标准，AI美术辅助工具也在压缩原画外包需求。这一趋势若在行业蔓延，将对中小外包公司形成实质性冲击。",
+    "published_at": "2026-03-20T00:00:00Z",
+    "source_name": "触乐网",
+    "language": "zh-CN",
+    "mode": "prompt_first"
+  },
+  "result": {
+    "source_id": "real_009",
+    "source_type": "news",
+    "signals": [
+      {
+        "signal_id": "sig_1",
+        "signal_type": "team",
+        "signal_label": "网易互娱减少外包规模",
+        "description": "网易互娱在部分项目上减少了外包规模，但规模未达传言中的80%",
+        "evidence_text": "据多位知情人士透露，网易互娱确实在部分项目上减少了外包规模，但规模远未达到传言中的80%。",
+        "entities": [
+          "网易互娱"
+        ],
+        "intensity_score": 6,
+        "confidence_score": 7,
+        "timeliness_score": 8,
+        "source_ref": "real_009",
+        "extracted_at": "2025-03-14T00:00:00Z",
+        "logic_frame": {
+          "what_changed": "outsourcing_scale",
+          "change_direction": "decrease",
+          "affects": [
+            "outsourcing companies"
+          ]
+        },
+        "metadata": {
+          "audit": {
+            "audit_flags": [],
+            "raw_signal_type": "team",
+            "normalized_signal_type": "team"
+          }
+        }
+      },
+      {
+        "signal_id": "sig_2",
+        "signal_type": "technical",
+        "signal_label": "网易内部AI开发工具达到可用标准",
+        "description": "网易内部AI代码生成工具在测试岗位达到可用标准，AI美术辅助工具压缩原画外包需求",
+        "evidence_text": "网易内部已有AI代码生成工具在测试岗位上达到可用标准，AI美术辅助工具也在压缩原画外包需求。",
+        "entities": [
+          "网易",
+          "AI代码生成工具",
+          "AI美术辅助工具"
+        ],
+        "intensity_score": 7,
+        "confidence_score": 7,
+        "timeliness_score": 8,
+        "source_ref": "real_009",
+        "extracted_at": "2025-03-14T00:00:00Z",
+        "logic_frame": {
+          "what_changed": "ai_tool_capability",
+          "change_direction": "increase",
+          "affects": [
+            "game development workflow"
+          ]
+        },
+        "metadata": {
+          "audit": {
+            "audit_flags": [],
+            "raw_signal_type": "technical",
+            "normalized_signal_type": "technical"
+          }
+        }
+      }
+    ],
+    "summary": "检测到 2 个范式信号：团队信号 1 个、技术信号 1 个",
+    "decoder_version": "v2.1",
+    "processing_time_ms": 10321,
+    "warnings": null
+  },
+  "fixture_metadata": {
+    "saved_at": "2026-04-03T17:20:40",
+    "fast_decode": true,
+    "connect_timeout_seconds": 5,
+    "read_timeout_seconds": 15,
+    "max_retries": 1,
+    "decode_execution_mode": "inline"
+  }
+}

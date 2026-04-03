@@ -1,0 +1,63 @@
+{
+  "relative_path": "sample_004_technical_capcom_genai.json",
+  "source_id": "real_004",
+  "elapsed_seconds": 6.723,
+  "payload": {
+    "source_id": "real_004",
+    "source_type": "news",
+    "title": "Capcom says it will use generative AI to speed up production",
+    "content": "Capcom has announced it will incorporate generative AI into its development pipeline to accelerate production workflows. The company stated it will not use AI for asset creation, but rather for internal tooling and productivity improvements. This comes amid growing industry debate over AI usage in game development. Capcom's Resident Evil series developer emphasized that creative work will remain human-led, with AI serving as a support tool for repetitive tasks.",
+    "published_at": "2026-03-23T00:00:00Z",
+    "source_name": "Game Developer",
+    "language": "en",
+    "mode": "prompt_first"
+  },
+  "result": {
+    "source_id": "real_004",
+    "source_type": "news",
+    "signals": [
+      {
+        "signal_id": "sig_1",
+        "signal_type": "technical",
+        "signal_label": "Capcom 将生成式 AI 纳入开发管线",
+        "description": "Capcom 宣布将在其开发管线中整合生成式 AI，用于内部工具和生产力提升，以加速生产工作流。",
+        "evidence_text": "Capcom has announced it will incorporate generative AI into its development pipeline to accelerate production workflows. The company stated it will not use AI for asset creation, but rather for internal tooling and productivity improvements.",
+        "entities": [
+          "Capcom",
+          "generative AI"
+        ],
+        "intensity_score": 7,
+        "confidence_score": 10,
+        "timeliness_score": 9,
+        "source_ref": "real_004",
+        "extracted_at": "2024-06-04T00:00:00Z",
+        "logic_frame": {
+          "what_changed": "ai_tool_adoption",
+          "change_direction": "enter",
+          "affects": [
+            "game development workflows"
+          ]
+        },
+        "metadata": {
+          "audit": {
+            "audit_flags": [],
+            "raw_signal_type": "technical",
+            "normalized_signal_type": "technical"
+          }
+        }
+      }
+    ],
+    "summary": "检测到 1 个范式信号：技术信号 1 个",
+    "decoder_version": "v2.1",
+    "processing_time_ms": 6430,
+    "warnings": null
+  },
+  "fixture_metadata": {
+    "saved_at": "2026-04-03T17:57:15",
+    "fast_decode": true,
+    "connect_timeout_seconds": 5,
+    "read_timeout_seconds": 15,
+    "max_retries": 1,
+    "decode_execution_mode": "subprocess"
+  }
+}
