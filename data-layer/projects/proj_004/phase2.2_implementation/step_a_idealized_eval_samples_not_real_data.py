@@ -265,7 +265,6 @@ STEP_A_IDEALIZED_EVAL_SAMPLES_NOT_REAL_DATA = [
         ],
         "expected_step_a": {
             "min_scenarios": 2,
-            "max_scenarios": 3,
             "expected_core_signal_sets": [["a1", "a2", "a3"], ["b1", "b2", "b3"]],
             "forbidden_pairings": [["n1", "a1"], ["n2", "b1"], ["n3", "a2"]],
         },

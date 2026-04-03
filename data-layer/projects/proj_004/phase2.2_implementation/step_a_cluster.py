@@ -22,6 +22,8 @@ Phase 2.2 Step A — 批内信号软标注 + 逻辑场景识别
 import json
 import os
 import importlib.util
+import queue
+import threading
 from datetime import date
 from typing import List, Dict, Optional
 
@@ -224,6 +226,50 @@ class StepAResult:
         self.signal_groups: List[List[dict]] = []
 
 
+def _env_int(name: str, default: int) -> int:
+    value = os.environ.get(name)
+    if value is None:
+        return default
+    try:
+        return int(value)
+    except ValueError:
+        return default
+
+
+def _env_flag(name: str, default: bool = False) -> bool:
+    value = os.environ.get(name)
+    if value is None:
+        return default
+    return str(value).strip().lower() in {"1", "true", "yes", "on"}
+
+
+def _step_a_debug_log(message: str) -> None:
+    if _env_flag("STEP_A_DEBUG", False) or _env_flag("LLM_DEBUG", False):
+        print(f"[Step A] {message}", flush=True)
+
+
+def _run_with_timeout(func, timeout_seconds: int, *args, **kwargs):
+    result_queue = queue.Queue(maxsize=1)
+
+    def _target():
+        try:
+            result_queue.put(("ok", func(*args, **kwargs)))
+        except Exception as exc:
+            result_queue.put(("error", exc))
+
+    worker = threading.Thread(target=_target, daemon=True)
+    worker.start()
+    try:
+        status, value = result_queue.get(timeout=timeout_seconds)
+    except queue.Empty as exc:
+        raise TimeoutError(f"operation timed out after {timeout_seconds}s") from exc
+
+    if status == "error":
+        raise value
+    return value
+
+
+
 def run_step_a(
     enriched_signals: List[dict],
     llm_client=None,
@@ -247,9 +293,27 @@ def run_step_a(
         return StepAResult([], [], {})
 
     if llm_client:
+        step_a_timeout_seconds = max(1, _env_int("STEP_A_LLM_TIMEOUT_SECONDS", 45))
         try:
-            return _llm_annotate_and_identify_scenarios(enriched_signals, llm_client, model)
+            _step_a_debug_log(
+                f"llm_path_start signals={len(enriched_signals)} model={model} timeout={step_a_timeout_seconds}s"
+            )
+            result = _run_with_timeout(
+                _llm_annotate_and_identify_scenarios,
+                step_a_timeout_seconds,
+                enriched_signals,
+                llm_client,
+                model,
+            )
+            _step_a_debug_log(
+                f"llm_path_success logical_scenarios={len(result.logical_scenarios)} exploration={len(result.exploration_scenarios)}"
+            )
+            return result
+        except TimeoutError:
+            _step_a_debug_log(f"llm_path_timeout after {step_a_timeout_seconds}s; fallback to rules")
+            print(f"[Step A] LLM 调用超时（>{step_a_timeout_seconds}s），使用规则 fallback")
         except Exception as e:
+            _step_a_debug_log(f"llm_path_error error={e}")
             print(f"[Step A] LLM 调用失败，使用规则 fallback: {e}")
 
     return _rule_fallback(enriched_signals)
@@ -268,12 +332,16 @@ def _llm_annotate_and_identify_scenarios(
     signals_summary = _build_signals_summary(signals)
     prompt = _build_step_a_prompt(signals_summary)
 
+    _step_a_debug_log(
+        f"llm_request_prepared signal_lines={len(signals)} prompt_chars={len(prompt)} model={model}"
+    )
     raw = client.call(
         prompt=prompt,
         model=model,
         max_tokens=2048,
         temperature=0.2,
     )
+    _step_a_debug_log(f"llm_response_received chars={len(raw)}")
     return _parse_step_a_response(raw, signals)
 
 
@@ -312,7 +380,8 @@ def _build_step_a_prompt(signals_summary: str) -> str:
 
 ## 任务1：逻辑场景识别（软建议，非硬性分组）
 
-识别哪些信号可能组合成一个完整的机会论点，形成"逻辑场景"建议。注意：
+识别哪些信号已经可以被组合成一个可上送 `2.3` 的机会假设对象，形成"逻辑场景"建议。注意：
+- **Step A 做的是“能否组合成机会”的判断，不做“机会成熟度 / 优先级”判断**：只要信号之间已经形成清晰的逻辑互补结构，就可以上升为场景；不要替 `2.3` 判断这个机会值不值得做、优先级高不高
 - **这是建议，不是分组**：你识别出的场景只是给后续分析的参考，分析师可以自由突破场景边界
 - 组合依据是"逻辑互补"，不是"语义相似"（见下方典型案例）
 - 一个场景需要2条以上信号，核心信号2-4条，上下文信号0-3条
@@ -324,6 +393,7 @@ def _build_step_a_prompt(signals_summary: str) -> str:
 - **如果两个信号 what_changed 相近，但一个是 tighten / decrease，另一个是 loosen / increase，要判断它们是互补、对冲还是彼此否定，不要机械归为同类**
 - **同一篇原文里若已经被 2.1 拆成多条 Signal，视为多个独立变化单元进行组合，不要再强行合并回一个模糊大主题**
 - **只有在存在明确的逻辑链路时才能成场景**：例如因果链、供需互补、资源响应外部催化、时机信号与需求/资源形成闭环
+- **一旦已经形成可解释的机会骨架，就应上升为场景交给 `2.3`**：不要因为信息还不完美，就在 Step A 里提前做价值判断或优先级淘汰
 - **仅仅共享行业、主题、新闻类型、公司属性，不足以构成场景**：例如"都是游戏发布""都是融资新闻""都属于AI/游戏赛道"都不成立
 - **如果你拿不出清晰的逻辑链，而只能说它们像同一类新闻或同一行业趋势，请返回空列表 []**
 - **不确定时宁可少报或不报，也不要为了凑场景而分组**
@@ -484,7 +554,11 @@ def _finalize_step_a_result(
     edges = _build_candidate_edges(isolated)
     candidates = _assemble_scenario_candidates(edges, isolated)
     logical_scenarios = _merge_primary_scenarios(base_logical_scenarios, candidates, isolated)
-    exploration_scenarios = _select_exploration_scenarios(candidates, logical_scenarios, isolated)
+    exploration_scenarios = _select_exploration_scenarios(
+        candidates,
+        logical_scenarios,
+        isolated,
+    )
     emerging_links = _extract_emerging_links(edges)
 
     return StepAResult(
@@ -713,11 +787,18 @@ def _compute_novelty_score(signals: List[dict]) -> float:
     return round(min(1.0, len(unique_domains) / 4), 3)
 
 
+def _compute_cross_domain_bonus(signals: List[dict]) -> float:
+    unique_domains = sorted({d for s in signals for d in _get_domains(s)})
+    if len(unique_domains) <= 1:
+        return 0.0
+    return round(min(0.2, (len(unique_domains) - 1) * 0.1), 3)
+
+
 def _select_primary_scenarios(candidates: List[ScenarioCandidate], signals: List[dict]) -> List[LogicalScenario]:
     signal_map = {_get_signal_id(s): s for s in signals}
     scenarios: List[LogicalScenario] = []
     for candidate in candidates:
-        if candidate.state != "ready_for_step_c":
+        if candidate.state not in {"opportunity_assembled", "opportunity_partial"}:
             continue
         member_ids = [sid for sid in candidate.member_signal_ids if sid in signal_map]
         if len(member_ids) < 2:
@@ -747,7 +828,7 @@ def _select_exploration_scenarios(
     primary_keys = {_scenario_member_key(scenario) for scenario in primary_scenarios}
     exploration: List[LogicalScenario] = []
     for candidate in candidates:
-        if candidate.state == "ready_for_step_c":
+        if candidate.state != "link_emerging":
             continue
         if candidate.option_value_score < 0.55:
             continue
@@ -770,8 +851,6 @@ def _select_exploration_scenarios(
             continue
         primary_keys.add(key)
         exploration.append(scenario)
-        if len(exploration) >= 3:
-            break
     return exploration
 
 
@@ -798,9 +877,10 @@ def _merge_primary_scenarios(
             scenario.scenario_score = 0.8
         scenario.lane = scenario.lane or "primary"
         key = _scenario_member_key(scenario)
-        if key not in seen:
-            seen.add(key)
-            merged.append(scenario)
+        if key in seen:
+            continue
+        seen.add(key)
+        merged.append(scenario)
 
     for scenario in _select_primary_scenarios(candidates, signals):
         key = _scenario_member_key(scenario)
@@ -877,12 +957,12 @@ def _collect_component_affects(signals: List[dict]) -> List[str]:
 def _derive_candidate_state(promotion_score: float, option_value_score: float, covered_roles: List[str]) -> str:
     essential_count = len([r for r in ["catalyst", "demand_evidence", "resource_validation"] if r in covered_roles])
     if promotion_score >= 0.72 and essential_count >= 2:
-        return "ready_for_step_c"
+        return "opportunity_assembled"
     if promotion_score >= 0.58 or option_value_score >= 0.65:
-        return "developing"
+        return "opportunity_partial"
     if option_value_score >= 0.5:
-        return "emerging"
-    return "seed"
+        return "link_emerging"
+    return "link_seed"
 
 
 def _select_anchor_signal_ids(signals: List[dict]) -> List[str]:
