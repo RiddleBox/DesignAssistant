@@ -42,6 +42,8 @@
 | 2026-04-01 | 验证阶段 | **Step A 理想化评测 runner 已实现**：新增 `phase2.2_implementation/run_step_a_idealized_eval.py`，支持 `auto / llm / rules` 三种模式；已对齐真实主链路的 `<=15` 小批次直送语义，并完成 `rules` baseline 跑通（8/8 PASS） | 评测验收视角 |
 | 2026-04-01 | 收口阶段 | **Step A LLM 理想化样本评测收口**：`auto` 模式运行于 `runtime_mode=llm`；首轮全量结果为 7/8，随后针对 4 个失败 case 完成 prompt 收口与解析兜底修复，并逐个复跑确认全部 PASS；当前 8 个理想化样本已确认 8/8 通过 | 评测验收视角 |
 | 2026-04-01 | 规划阶段 | **后续关注点重排**：Step A 下一阶段重点转为指标基线沉淀（跨域互补召回 / 语义相似误场景率 / Step C 有效机会产出率）、`isolated_signals` 语义与文档说明同步、以及候选集收敛策略（Anchor-based Window）评估 | 总协调视角 |
+| 2026-04-02 | 验证阶段 | **Step B 理想化评测入口已落档并形成基线**：`run_step_b_idealized_eval.py` + `step_b_idealized_eval_samples_not_real_data.py` + `unit_tests_phase22.py::TestStepBIdealizedEvalRunner`；当前 `v0.3` 基线为 `5/5 PASS`，`top1_route_counts={step_c_ready:2, store_for_later:2, none:1}`，`top1_source_kind_counts={scenario_memory:2, emerging_link:1, signal_entry:1, none:1}` | 评测验收视角 |
+| 2026-04-02 | 优化阶段 | **方向 B 第一轮小收敛已启动并补齐排序边界样本**：先对 `step_b_retrieval.py` 中 `signal_entry` 排序分做轻微下调，再补 `step_b_scenario_beats_strong_signal_001` 作为新锚点，验证 richer `scenario_memory` 在与强 `signal_entry` 同时被召回时，前者在已形成机会、后者仍属机会前状态的情况下仍稳定领先 | 实现落地视角 |
 
 ---
 

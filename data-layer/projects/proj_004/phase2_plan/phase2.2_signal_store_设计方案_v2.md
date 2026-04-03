@@ -157,16 +157,31 @@ LLM（haiku）单次调用：
 
 ---
 
-### 2.5 Step B：历史信号检索（分层漏斗）
+### 2.5 Step B：历史信号检索 / 历史关系唤醒（分层漏斗）
 
-**目标**：为孤立信号在 Signal Store 中找到跨批次的互补伙伴，不遗漏长尾积累。
+**目标**：为孤立信号在 Signal Store 中找到跨批次的互补伙伴，同时优先激活"已经出现但尚未闭环"的半成品关系结构，不遗漏长尾积累。
 
-**四层漏斗设计**（DeepSeek 方案优化版）：
+**先拍板的职责边界**：
+- Step B 的主职责是**跨批次关系召回、补槽、激活旧场景**。
+- Step B 仍可使用 RAG / embedding 能力，但它们是**辅助支撑层**，不是主召回层。
+- 只有在已经形成候选场景后，才值得进一步拉取 RAG 证据补强；不建议对所有孤立信号做重型主动检索。
+
+**基础版处理顺序**：
+
+```
+B0: 新信号进入
+    → 先查 scenario_candidates 的 missing_slots（我是不是在补旧场景缺口？）
+    → 再查 emerging_links（我是不是能把旧关系升级成候选场景？）
+    → 最后才回到原始 pending signals（我能不能帮孤立旧信号找到伙伴？）
+```
+
+**四层漏斗设计**（当前工程主线，按"补槽优先"扩展）：
 
 ```
 L1: Tag 粗筛（O(1)，无 LLM）
-    → 条件：status=pending + needs 中包含当前信号的 role
-    → 作用：找出"需要我这种角色"的历史信号
+    → 查询对象：pending signals + scenario_candidates + emerging_links
+    → 条件：status=active/pending + needs 或 missing_slots 中包含当前信号的 role
+    → 作用：优先找出"正在等我这种角色 / 这种对象"的历史半成品
     → 输出：候选池（可能 10-50 条）
 
 L2: 规则硬过滤（O(n)，n=候选池，无 LLM）
@@ -174,18 +189,22 @@ L2: 规则硬过滤（O(n)，n=候选池，无 LLM）
     → 条件2：时间窗口兼容（写入时间差 ≤ 90 天，可配置）
     → 条件3：强度互补（高 intensity 信号不配低 intensity 伙伴，阈值可配置）
     → 条件4：排除已尝试过的相同组合（查 attempt_log）
+    → 条件5：若命中的是 scenario_candidate，则优先判断是否真的补上关键 missing_slot
     → 输出：精选池（5-15 条）
 
 L3: 语义精排（Top-K，复用 2.4 embedding）
-    → 用 waiting_for_text 的 embedding 在精选池上做余弦相似度排序
+    → 用 waiting_for_text / missing_slot_text 的 embedding 在精选池上做余弦相似度排序
     → 取 Top-3
     → 注意：这里是"精排"而非"检索"——输入已是 L2 过滤后的小集合，不依赖向量距离做召回
     → 输出：最终候选（0-3 条）
 
 L4: 轻量 LLM 确认（haiku，仅当 L3 有候选时触发）
-    → 输入：当前孤立信号 + Top-3 候选历史信号
-    → 问题："这些信号有没有能构成机会逻辑链的组合？"
-    → 输出：有组合 → 进 Step C；无组合 → 当前信号写入 Signal Store
+    → 输入：当前新信号 + Top-3 历史候选（可能是原始信号 / emerging_link / scenario_candidate）
+    → 问题："这些信号或半成品关系，是否已经形成值得验证的机会假说？"
+    → 输出：
+       - 已形成可验证假说 → 进 Step C
+       - 尚未形成完整假说，但值得继续长 → 回写 scenario_candidates / emerging_links
+       - 仍无价值 → 当前信号写入 Signal Store
 ```
 
 **效率估算**（基于 50 条孤立信号）：
@@ -196,8 +215,74 @@ L4: 轻量 LLM 确认（haiku，仅当 L3 有候选时触发）
 
 **L2 极端情况处理**：
 - 返回 0 条 → 跳过 L3/L4，当前信号直接写入 Signal Store
-- 返回 > 20 条 → 取时间最近的 20 条进入 L3（信号时效性优先）
+- 返回 > 20 条 → 取时间最近且补槽优先级最高的 20 条进入 L3
 - L3 Top-3 相似度均 < 0.4 → 视为"无有效匹配"，跳过 L4
+
+**分流规则（与 Relation Graph v1 对齐）**：
+- Step B 不做"单一总分淘汰"
+- 只要关系为真且具备补槽价值，即使当前不完整，也应保留到 `scenario_candidates / emerging_links`
+- 只有形成"可验证机会假说"时才送 Step C
+- 明显无关系或重复噪声时才丢弃
+
+**与探索通道的衔接（本轮新增拍板）**：
+- 对于 `promotion_score` 尚未达到主通道阈值、但 `option_value_score` 很高的候选，Step B 可将其标记为**探索通道候选**
+- 探索通道候选不应挤占主通道的主要容量，只保留少量上送名额
+- 若探索候选同时满足"补上关键 missing_slot"或"首次激活长期沉睡场景"，则优先级可上调
+
+**RAG 触发边界（必须拍稳）**：
+- Step B **不**对所有孤立信号主动发起重型 RAG 检索
+- Step B **只在以下场景**考虑主动补 RAG 支撑：
+  1. 已形成 `scenario_candidate`
+  2. 已命中探索通道、准备送 Step C
+  3. 需要补 `supporting_evidence / counter_evidence / similar case_record / mechanism explanation`
+- RAG 在 Step B 中的职责是**补强候选**，不是**负责召回候选**
+- 若当前只有单条孤立信号、且尚未形成关系候选，则不建议触发主动 RAG
+
+**当前工程内的最小交接入口（2026-04-02 补充）**：
+- 评测 runner：`phase2.2_implementation/run_step_b_idealized_eval.py`
+- 样本文件：`phase2.2_implementation/step_b_idealized_eval_samples_not_real_data.py`
+- 快照输出目录：`phase2.2_implementation/eval_outputs/step_b/`
+- 回归测试入口：`unit_tests_phase22.py` 中 `TestStepBIdealizedEvalRunner`
+
+**这个 runner 解决什么问题**：
+- 它不是生产效果评估器，而是 **Step B 排序 / 分流收敛器**
+- 用理想化样本稳定观测：
+  - `scenario_memory`、`emerging_link`、`signal_entry` 三类来源是否都能被正确召回
+  - `step_c_ready / store_for_later / none` 分流是否符合预期
+  - Top-1 候选是否落在预期来源和预期 route 上
+  - 每轮权重微调后，基线是否保持可对比、可回退
+
+**最常用运行方式**：
+- `python phase2.2_implementation/run_step_b_idealized_eval.py`
+- `python phase2.2_implementation/run_step_b_idealized_eval.py --json`
+- `python phase2.2_implementation/run_step_b_idealized_eval.py --json --save-report`
+- `python phase2.2_implementation/run_step_b_idealized_eval.py --case-id step_b_scenario_primary_001 --json`
+
+**输出判读建议（后续调 Step B 时优先看这几项）**：
+- `top1_route_counts`：Top-1 落在 `step_c_ready / store_for_later / none` 的分布
+- `top1_source_kind_counts`：Top-1 是 `scenario_memory / emerging_link / signal_entry / none` 的分布
+- `top1_rank_score_avg`：Top-1 平均排序分，观察整体排序抬升/塌缩
+- `candidate_rank_score_avg`：全部候选平均排序分，观察排序是否整体抬升或塌缩
+- `case_overview`：逐 case 看 `top_group_id / top_route / top_source_kind / top_rank_score`
+
+**当前基线（v0.3 理想化样本，2026-04-02）**：
+- `5/5 PASS`
+- `top1_route_counts = {step_c_ready: 2, store_for_later: 2, none: 1}`
+- `top1_source_kind_counts = {scenario_memory: 2, emerging_link: 1, signal_entry: 1, none: 1}`
+- 新增边界 case：`step_b_scenario_beats_strong_signal_001`
+  - 当前观测锚点：Top-1 仍为 `scenario_memory`
+  - 这个 case 的意义不是追求更高分，而是锁住一个关键排序边界：**当 richer scenario 已形成机会、强单条历史信号仍只是机会前状态时，前者应稳定排第一**
+- 现阶段推荐把 `step_c_ready > store_for_later` 的路由稳定性，以及 `scenario_memory > strong signal_entry` 的相对顺序，一起视为粗基线；后续微调优先保持这两个方向稳定，再追求更细的排序收敛
+
+**什么时候应该改 runner / 样本**：
+- 新增或调整 Step B 路由规则
+- 修改排序权重
+- 新增一种需要稳定观察的来源类型或边界 case
+
+**什么时候不该依赖它**：
+- 评估真实业务收益时
+- 代替端到端真实样本验证时
+- 推断 LLM 路径真实命中率时（当前 `runtime_mode=rules_only`）
 
 ---
 
@@ -205,12 +290,25 @@ L4: 轻量 LLM 确认（haiku，仅当 L3 有候选时触发）
 
 **不改动 prompt**，只扩展输入来源：
 - 原来：只有当次批次的信号
-- 现在：Step A/B 筛选出的信号组合（可能包含历史 Signal Store 中的信号）
+- 现在：Step A/B 筛选出的候选机会路径（可能包含历史 Signal Store 中的信号、`scenario_candidates` 激活结果、或探索通道候选）
+
+**进入 Step C 的条件重新拍稳**：
+- `2.2` 送入 Step C 的，不是"高分边"，而是已经形成**可验证假说**的候选路径
+- 即使候选仍不成熟，也可以送 Step C；成熟度判断仍属于 `2.3`
+- 未达到 Step C 条件、但具有明显期权价值的候选，继续留在 Signal Store 生长，而不是被淘汰
 
 **新增：反向信号强制检索**（Gemini 建议的 Negative Validator）：
 - 在 Step C 开始前，检索 Signal Store 中 `role:negative_validator` + domain 匹配的信号
 - 找到 → 注入 prompt 的 counter_evidence 区域
 - 防止系统只看到支持机会的信号，忽视反向证据
+
+**可选：候选形成后再补 RAG 支撑信息**：
+- 当 Step B 已形成较可信的 `scenario_candidate` 或 `logical_scenario` 时，可主动检索 2.4 RAG，补充：
+  - supporting_evidence
+  - counter_evidence
+  - similar case_record
+  - 术语 / 机制解释
+- 这些信息的作用是帮助 Step C 做更稳的判断，而不是替代 Step B 的关系召回
 
 **输出**：OpportunityObject（schema 不变），增加 `source_signals` 字段记录参与组合的所有信号 ID（含历史信号），方便追溯。
 
@@ -336,7 +434,194 @@ L2 过滤和 L3 精排时使用 effective_intensity 而非 original_intensity。
 
 ---
 
-## 六、开放问题（待拍板）
+## 六、Relation Graph / Scenario Memory 衔接设计（新增）
+
+> **定位**：本节用于承接 [step_a_optimization_design.md](f:\AIProjects\DesignAssistant\data-layer\projects\proj_004\docs\step_a_optimization_design.md) 中的 `Relation Graph v1`，定义哪些中间态需要进入 Signal Store 才能支持跨批次生长。
+> **边界说明**：本节仍属于纯 `2.2` 内部设计，不触碰 `2.3` 的成熟度判断与行动姿态。
+
+### 6.1 为什么要新增 Scenario Memory
+
+如果 Signal Store 只存原始信号，而不存"已经出现但尚未闭环"的关系结构，那么系统只能做：
+- 当前批次内连边
+- 当前批次内判断
+- 当前批次结束后等待下次重新从原始信号盲搜
+
+这不足以支持以下核心目标：
+- 多条信号分散在不同批次中，逐步长成一个机会
+- 三天前、三个月前、甚至更早的结构性信号，被今天的小信号重新激活
+- 信号量增大后，系统不是只"存得更多"，而是更会把旧关系重新串起来
+
+因此，Signal Store 需要从"信号仓库"升级为"信号 + 中间态关系记忆"。
+
+### 6.2 持久化什么：不是保存全图，而是保存高价值关系痕迹
+
+不建议把所有 pairwise 边都永久存储，否则规模会快速膨胀并污染检索。建议仅持久化以下 4 类对象：
+
+#### A. `emerging_links`
+已出现真实关系，但还不足以形成场景的边。
+
+```python
+class EmergingLink:
+    link_id: str
+    signal_ids: List[str]          # 通常 2 条
+    edge_type: str
+    strength_band: str             # emerging / strong
+    shared_affects: List[str]
+    missing_slots: List[str]
+    reasoning: str
+    last_validated_at: str
+    expires_at: str
+```
+
+#### B. `scenario_candidates`
+已经形成局部子图，但尚未准备送 Step C 的候选场景。
+
+```python
+class ScenarioCandidate:
+    candidate_id: str
+    signal_ids: List[str]
+    covered_roles: List[str]
+    missing_slots: List[str]
+    shared_affects: List[str]
+    state: str                     # seed / emerging / developing / ready_for_step_c
+    reasoning_path: str
+    activated_by: Optional[str]
+    last_activated_at: str
+    expires_at: str
+```
+
+#### C. `missing_slots`
+场景当前仍缺的拼图，不单独作为实体表，也可内嵌在 `emerging_links` / `scenario_candidates` 中。其意义是：新信号来时优先做"补槽"，而不是对全量历史信号重新暴力组合。
+
+#### D. `anchor_traces`
+记录哪些信号曾经是高价值锚点、拉出过哪些局部关系，供后续 `Anchor-based Window` 使用。
+
+### 6.3 新信号进入时的处理策略：补槽优先，非全局重算
+
+新信号进入 `2.2` 时，建议按以下顺序处理：
+
+1. **批内连边**：先与当批次信号生成 `RelationEdge`
+2. **补旧场景缺口**：查询 `scenario_candidates / emerging_links` 中哪些 `missing_slots` 可能被当前信号补上
+3. **激活旧关系**：若当前信号与旧 `emerging_links` 高匹配，则把边升级为新的 `scenario_candidate`
+4. **桥接两个半成品**（增强版目标，非 MVP）
+5. **仍无匹配**：将当前信号作为新的 pending 信号写入 Store
+
+这样可以把"重新扫描整个历史库"的代价收敛为"优先扫描等待我这种信号的半成品关系"。
+
+### 6.4 场景状态机（基础版即应支持）
+
+建议为 `scenario_candidates` 定义统一状态机：
+
+| 状态 | 含义 | 触发动作 |
+|------|------|---------|
+| `seed` | 刚形成 1 条有效边或 2 条初始互补信号 | 写入 Store，等待补槽 |
+| `emerging` | 已出现明确机会方向，但缺关键角色 | 优先参与后续新信号补槽 |
+| `developing` | 结构逐渐完整，已有 3-4 条互补信号 | 可进入锚点候选池 |
+| `ready_for_step_c` | 已形成当前值得验证的候选机会路径 | 送 Step C 做完整机会判断 |
+| `archived` | 长期未被激活或时效性消退 | 从主动检索中移除 |
+
+**重要说明**：这个状态机不是机会成熟度状态机，而是"关系结构是否值得继续生长"的状态机；仍属于 `2.2` 范围。
+
+### 6.5 时效策略：不是统一 90 天一刀切
+
+为了支持跨批次长链机会，又避免 Store 变成垃圾场，建议将"可激活寿命"按信号类型差异化处理：
+
+| 信号类型 | 可激活寿命倾向 | 说明 |
+|---------|---------------|------|
+| `regulatory` / 平台规则 / 基础设施变化 | 长 | 半年前的信号仍可能构成今天机会的上游约束 |
+| `capital` / `team` / 能力迁移 | 中 | 会衰减，但可能持续数月影响格局 |
+| `market` 热点 / 短期舆情 | 短 | 若长期无后续共振，应更快归档 |
+
+同时建议引入：
+- **被新信号激活即续命**：`last_activated_at` 更新时顺延有效期
+- **长期未激活则降级**：从 `developing` 回落为 `emerging` 或直接 `archived`
+
+### 6.6 对"6 个信号分散在不同批次中组成一个机会"的支持边界
+
+**基础版承诺**：
+- 支持 `2-4` 条信号的跨批次渐进组合
+- 支持部分 `5-6` 条机会链逐步长成，但不承诺完整覆盖所有长链弱信号场景
+- 支持旧场景被新信号重新激活，而不是每批次独立判断后永久遗忘
+
+**当前不承诺**：
+- 任意 6 条弱信号、跨很长时间、没有明显锚点和对象收敛时都能稳定被系统找出
+- 多跳桥接和复杂长链图搜索在 MVP 中可靠落地
+
+这类能力属于后续增强 / 高级版路线，见本节后续规划。
+
+### 6.7 与现有 Step B 漏斗的关系
+
+当前 Step B 的 L1-L4 漏斗仍然成立，但其查询对象会从"只查原始历史信号"逐步扩展到：
+- 原始 pending signals
+- `emerging_links`
+- `scenario_candidates`
+- （未来）`anchor_traces`
+
+也就是说，Step B 不再只是"帮孤立信号找伙伴"，而会逐步升级为"帮新信号补旧场景、激活旧关系"。
+
+### 6.7.1 查询职责拆分（避免后续实现混层）
+
+建议后续工程实现时直接拆成三类主查询：
+- **信号查询**：从原始 `pending signals` 中找互补伙伴
+- **关系查询**：从 `emerging_links` 中找可被激活的关系边
+- **场景查询**：从 `scenario_candidates` 中找可补槽的半成品场景
+
+以及一类可选辅助查询：
+- **RAG 支撑查询**：仅在候选已成形后，补拉 `supporting_evidence / counter_evidence / case_record`
+
+这样可以避免把"关系召回"和"知识支撑"混成一个模糊检索入口。
+
+### 6.8 分阶段路线（结合本轮拍板后的统一口径）
+
+#### 基础版（当前应实现的目标）
+
+**目标**：让机会结构可以跨批次"长出来"，而不是每批次独立判断后消失。
+
+**应覆盖能力**：
+- 原始信号写入 Signal Store
+- `emerging_links / scenario_candidates / missing_slots` 持久化
+- 新信号优先做补槽和激活旧场景
+- 场景状态机 `seed → emerging → developing → ready_for_step_c`
+- 支持 `2-4` 条跨批次信号稳定生长，并开始覆盖一部分 `5-6` 条长链机会
+- 保留少量探索通道名额，避免高期权价值候选长期被主通道压制
+
+#### 基础版实现顺序（本轮补充）
+
+建议按以下顺序落地，避免一次性把系统做重：
+1. 先支持 `scenario_candidates / emerging_links` 的持久化
+2. 再实现"补槽优先"的 Step B 查询顺序
+3. 再实现探索通道的受控上送
+4. 最后补候选形成后的 RAG 支撑检索
+
+这样可以保证：
+- 主召回层先稳定
+- 跨批次生长先成立
+- RAG 只在必要位置补强，而不会反客为主
+
+#### 增强版（下一阶段）
+
+**目标**：在中大批次中兼顾效率与跨域召回。
+
+**应覆盖能力**：
+- `Anchor-based Window` 正式落地
+- 锚点选择从"只看强度"升级为"强度 + 时效 + 结构杠杆 + 补槽价值"
+- Step B 查询从角色缺口扩展到关系痕迹和场景缺口
+- 预计算关系索引开始承担查询加速
+
+#### 高级版（后续研究方向）
+
+**目标**：更稳定地发现"6 条以上、分散在更长时间、且单条都不够强"的长链机会结构。
+
+**应覆盖能力**：
+- 桥接两个旧半成品场景
+- dormant scenario 唤醒
+- 多跳 / 长链关系搜索
+- Bottom-up 与 Top-down 假设驱动联动
+- 更强的观察报告与图索引维护机制
+
+---
+
+## 七、开放问题（待拍板）
 
 | # | 问题 | 当前倾向 | 状态 |
 |---|------|---------|------|
@@ -639,6 +924,165 @@ class HypothesisDimension:
 | 当前状态 | MVP 实现目标 | v2.0 规划 |
 
 两条路径都共享 Signal Store 的数据，Top-down 路径不新增存储，只新增假设管理逻辑和进度计算逻辑。
+
+---
+
+*文档维护：每次实现阶段完成后更新"执行进展"，不修改本设计文档。如设计有重大变更，创建 v3 版本文档。*
+
+---
+
+## 十、Signal Store / Step B Schema / 接口冻结稿（实现前对齐版）
+
+> **目的**：把本设计稿与当前 [signal_store.py](f:\AIProjects\DesignAssistant\data-layer\projects\proj_004\phase2.2_implementation\signal_store.py) 和 [step_b_retrieval.py](f:\AIProjects\DesignAssistant\data-layer\projects\proj_004\phase2.2_implementation\step_b_retrieval.py) 的现实代码入口对齐，冻结跨批次生长所需的第一版持久化对象与查询接口。
+
+### 10.1 与当前实现的对齐结论
+
+当前实现已经具备：
+- `SignalEntry`
+- `SignalStore`
+- `StepBResult`
+- `query_by_role()` / `query_pending()` / `query_negative_validators()`
+- `run_step_b()` 的 L1-L4 漏斗
+
+因此 v1 最稳的演进方式不是推倒重来，而是：
+- 在 `SignalEntry` 之上新增**关系层对象**
+- 让 `Step B` 从“查历史信号”扩展到“查历史信号 + 关系痕迹 + 半成品场景”
+- 保持现有 `run_step_b()` 的主流程骨架不变
+
+### 10.2 持久化对象冻结（v1）
+
+建议新增两类持久化对象：
+
+```python
+class EmergingLink:
+    link_id: str
+    left_signal_id: str
+    right_signal_id: str
+    edge_type: str
+    strength_band: str
+    bucket_scores: Dict[str, float]
+    final_score: float
+    shared_affects: List[str]
+    covered_roles: List[str]
+    missing_slots: List[str]
+    reasoning: str
+    created_at: str
+    last_seen_at: str
+    status: Literal["open", "promoted", "archived"]
+```
+
+```python
+class ScenarioMemory:
+    scenario_id: str
+    anchor_signal_ids: List[str]
+    member_signal_ids: List[str]
+    covered_roles: List[str]
+    missing_slots: List[str]
+    shared_affects: List[str]
+    promotion_score: float
+    option_value_score: float
+    state: Literal["seed", "emerging", "developing", "ready_for_step_c", "promoted", "archived"]
+    reasoning_path: str
+    activated_by: Optional[str]
+    activation_count: int
+    created_at: str
+    last_activated_at: Optional[str]
+```
+
+冻结原则：
+- `EmergingLink` 保存“关系为真但还不足成场景”的痕迹
+- `ScenarioMemory` 保存“场景已初步成形，但还未必当前送 Step C”的半成品
+- 两者都不替代原始 `SignalEntry`，而是与其并存
+
+### 10.3 `SignalEntry` 最小扩展建议
+
+当前 `SignalEntry` 已足够支撑 MVP。为兼容后续跨批次激活，建议只做最小扩展：
+
+```python
+last_activated_at: Optional[str]
+activation_count: int = 0
+linked_scenario_ids: List[str] = []
+linked_edge_ids: List[str] = []
+```
+
+作用：
+- 方便观察一个信号是否长期反复参与候选激活
+- 方便做后续“高杠杆锚点”统计
+- 不影响现有 `pending / matched / archived / converted` 状态机
+
+### 10.4 `SignalStore` 查询接口冻结建议
+
+建议在当前 `SignalStore` 上扩展以下接口：
+
+```python
+def save_emerging_links(self, links: List[EmergingLink]) -> List[str]: ...
+def save_scenario_memories(self, scenarios: List[ScenarioMemory]) -> List[str]: ...
+def query_matching_links(self, roles: List[str], domains: List[str], affects: List[str]) -> List[EmergingLink]: ...
+def query_matching_scenarios(self, roles: List[str], domains: List[str], affects: List[str]) -> List[ScenarioMemory]: ...
+def update_scenario_state(self, scenario_id: str, state: str, activated_by: Optional[str] = None): ...
+def mark_link_promoted(self, link_id: str): ...
+```
+
+匹配原则建议：
+- 先按 `missing_slots` / `covered_roles` 做轻量召回
+- 再按 `shared_affects` / `domains` 做二次收敛
+- 最后才进入 L4 LLM 轻量确认
+
+### 10.5 `StepBResult` 扩展冻结建议
+
+当前 `StepBResult` 只返回 `candidate_groups`。建议扩展为：
+
+```python
+class StepBResult:
+    candidate_groups: List[List[SignalEntry]]
+    matched_links: List[EmergingLink]
+    matched_scenarios: List[ScenarioMemory]
+    current_signal_id: str
+    matched: bool
+    fallback_used: bool = False
+```
+
+这样可以显式区分：
+- 是命中了原始历史信号
+- 还是命中了关系痕迹
+- 还是直接激活了半成品场景
+
+### 10.6 `step_b_retrieval.py` 函数边界冻结建议
+
+建议在现有 `run_step_b()` 基础上拆出以下函数：
+
+```python
+def _retrieve_pending_signal_candidates(...) -> List[SignalEntry]: ...
+def _retrieve_emerging_link_candidates(...) -> List[EmergingLink]: ...
+def _retrieve_scenario_memory_candidates(...) -> List[ScenarioMemory]: ...
+def _merge_and_rank_candidates(...) -> dict: ...
+def _maybe_fetch_rag_support(...) -> dict: ...
+```
+
+职责边界：
+- 前三者负责“关系召回”
+- `_merge_and_rank_candidates()` 负责统一排序与分流
+- `_maybe_fetch_rag_support()` 只在候选已成形、准备送 Step C 时触发
+
+### 10.7 RAG 边界冻结结论
+
+为了防止 Step B 变成“有问题就先去查知识库”，这里明确冻结：
+
+- **RAG 不是主召回层**
+- **RAG 不负责从单条孤立信号直接凭语义找机会**
+- **RAG 只在以下两类情况下触发**：
+  - 候选场景已形成，准备送 Step C 前补支持/反证
+  - 探索通道候选需要补一条高价值背景或案例支撑，避免纯弱结构裸上送
+
+### 10.8 本轮冻结结论
+
+本轮建议冻结为：
+- 原有 `SignalEntry / SignalStore / run_step_b()` 保持主骨架
+- 新增 `EmergingLink / ScenarioMemory` 作为跨批次关系层
+- Step B 从“找历史信号”升级为“找历史信号 + 找关系痕迹 + 找半成品场景”
+- RAG 严格留在候选形成后的支撑补强位置
+
+这样做可以在不把系统做得过重的前提下，先把“跨批次生长”能力建立起来。
 
 ---
 
