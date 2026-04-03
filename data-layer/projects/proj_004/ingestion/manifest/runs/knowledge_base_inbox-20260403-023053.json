@@ -1,0 +1,17 @@
+{
+  "run_id": "knowledge_base_inbox-20260403-023053",
+  "provider": "knowledge_base_inbox",
+  "mode": "export",
+  "date_processed": "2026-04-03",
+  "stats": {
+    "scanned": 84,
+    "parseable": 84,
+    "dedup_skipped": 84,
+    "quarantined": 0,
+    "schema_errors": 0,
+    "exported": 0
+  },
+  "exported_files": [],
+  "quarantine_file": "",
+  "timestamp": "2026-04-03T02:30:53Z"
+}

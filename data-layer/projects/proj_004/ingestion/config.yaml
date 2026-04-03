@@ -1,0 +1,12 @@
+providers:
+  knowledge_base:
+    inbox_root: "D:/AIproject/game-knowledge-base/00-Inbox"
+
+output:
+  incoming_dir: "D:/AIproject/DesignAssistant/background/real_intel_samples/incoming"
+
+ingestion:
+  default_mode: "prompt_first"
+  default_source_type: "news"
+  content_max_chars: 2000      # 摘要区截断上限，避免超长文本
+  dedup_index_path: "manifest/dedup_index.json"
