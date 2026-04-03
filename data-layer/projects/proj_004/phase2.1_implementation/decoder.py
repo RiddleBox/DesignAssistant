@@ -31,7 +31,10 @@ class IntelligenceDecoder:
                  screen_model: str = None,
                  enable_two_stage: bool = True,
                  provider: str = "anthropic",
-                 base_url: str = None):
+                 base_url: str = None,
+                 connect_timeout_seconds: int = 30,
+                 read_timeout_seconds: int = 180,
+                 max_retries: int = 3):
         """
         初始化解码器
 
@@ -40,19 +43,39 @@ class IntelligenceDecoder:
             model: 精筛模型
             screen_model: 粗筛模型；未指定时，Anthropic 默认用 Claude Haiku，其他 provider 复用主模型
             enable_two_stage: 是否启用两阶段筛选（默认开启）
-            provider: LLM provider（anthropic / openai / gemini / custom）
+            provider: LLM provider（anthropic / openai / deepseek / gemini / custom）
             base_url: 自定义 API 端点；未指定时按 provider 或环境变量兜底
+            connect_timeout_seconds: HTTP connect timeout（秒）
+            read_timeout_seconds: HTTP read timeout（秒）
+            max_retries: LLM 请求最大重试次数
         """
         self.api_key = api_key
         self.provider = str(provider or "anthropic").strip().lower()
-        env_base_url = os.environ.get("ANTHROPIC_BASE_URL") if self.provider == "anthropic" else ""
-        default_base_url = "https://api.anthropic.com" if self.provider == "anthropic" else ""
+        env_base_url_map = {
+            "anthropic": os.environ.get("ANTHROPIC_BASE_URL", ""),
+            "openai": os.environ.get("OPENAI_BASE_URL", ""),
+            "deepseek": os.environ.get("DEEPSEEK_BASE_URL", "") or os.environ.get("OPENAI_BASE_URL", ""),
+            "gemini": os.environ.get("GEMINI_BASE_URL", ""),
+            "custom": os.environ.get("CUSTOM_LLM_BASE_URL", ""),
+        }
+        default_base_url_map = {
+            "anthropic": "https://api.anthropic.com",
+            "openai": "https://api.openai.com/v1",
+            "deepseek": "https://api.deepseek.com",
+            "gemini": "https://generativelanguage.googleapis.com/v1beta/openai",
+            "custom": "",
+        }
+        env_base_url = env_base_url_map.get(self.provider, "")
+        default_base_url = default_base_url_map.get(self.provider, "")
         self.base_url = (base_url or env_base_url or default_base_url).rstrip("/")
         self.model = model
         self.screen_model = screen_model or (
             "claude-haiku-4-5-20251001" if self.provider == "anthropic" else model
         )
         self.enable_two_stage = enable_two_stage
+        self.connect_timeout_seconds = max(1, int(connect_timeout_seconds or 30))
+        self.read_timeout_seconds = max(1, int(read_timeout_seconds or 180))
+        self.max_retries = max(1, int(max_retries or 3))
         self.decoder_version = PROMPT_VERSION
         self.debug_enabled = os.environ.get("PHASE21_DEBUG", "").strip().lower() in {"1", "true", "yes", "on"}
         # Anthropic SDK client：只在走官方 Anthropic 端点时初始化；
@@ -229,23 +252,25 @@ class IntelligenceDecoder:
         text = text.strip()
         return text
 
-    def _call_llm(self, prompt: str, max_retries: int = 3,
+    def _call_llm(self, prompt: str, max_retries: int = None,
                   model_override: str = None, max_tokens: int = 4096) -> str:
         """
         调用 LLM（带重试机制）
 
         Args:
             prompt: 完整 Prompt
-            max_retries: 最大重试次数
+            max_retries: 最大重试次数（未指定时使用实例配置）
             model_override: 覆盖模型名（粗筛时传 screen_model）
             max_tokens: 最大输出 token 数（粗筛时传 80）
         """
         model = model_override or self.model
-        for attempt in range(max_retries):
+        retry_count = max(1, int(max_retries or self.max_retries))
+        timeout_tuple = (self.connect_timeout_seconds, self.read_timeout_seconds)
+        for attempt in range(retry_count):
             try:
                 if self.provider == "anthropic" and self.base_url == "https://api.anthropic.com":
                     self._debug(
-                        f"llm.request provider=anthropic sdk model={model} attempt={attempt + 1}/{max_retries} max_tokens={max_tokens}"
+                        f"llm.request provider=anthropic sdk model={model} attempt={attempt + 1}/{retry_count} max_tokens={max_tokens} timeout={timeout_tuple}"
                     )
                     # 官方 Anthropic 端点：使用 SDK（self.client 在 __init__ 中初始化）
                     message = self.client.messages.create(
@@ -256,7 +281,7 @@ class IntelligenceDecoder:
                     )
                     text = message.content[0].text
                     self._debug(
-                        f"llm.response provider=anthropic sdk model={model} attempt={attempt + 1}/{max_retries} response_len={len(text)}"
+                        f"llm.response provider=anthropic sdk model={model} attempt={attempt + 1}/{retry_count} response_len={len(text)}"
                     )
                     return text
 
@@ -275,11 +300,11 @@ class IntelligenceDecoder:
                         "messages": [{"role": "user", "content": prompt}],
                     }
                     self._debug(
-                        f"llm.request provider=anthropic proxy model={model} attempt={attempt + 1}/{max_retries} max_tokens={max_tokens} url={url}"
+                        f"llm.request provider=anthropic proxy model={model} attempt={attempt + 1}/{retry_count} max_tokens={max_tokens} timeout={timeout_tuple} url={url}"
                     )
-                    resp = _requests.post(url, headers=headers, json=payload, timeout=(30, 180))
+                    resp = _requests.post(url, headers=headers, json=payload, timeout=timeout_tuple)
                     self._debug(
-                        f"llm.http_response provider=anthropic proxy model={model} attempt={attempt + 1}/{max_retries} status={resp.status_code}"
+                        f"llm.http_response provider=anthropic proxy model={model} attempt={attempt + 1}/{retry_count} status={resp.status_code}"
                     )
                     resp.raise_for_status()
                     data = resp.json()
@@ -287,11 +312,11 @@ class IntelligenceDecoder:
                         if block.get("type") == "text":
                             text = block.get("text", "")
                             self._debug(
-                                f"llm.response provider=anthropic proxy model={model} attempt={attempt + 1}/{max_retries} response_len={len(text)}"
+                                f"llm.response provider=anthropic proxy model={model} attempt={attempt + 1}/{retry_count} response_len={len(text)}"
                             )
                             return text
                     self._debug(
-                        f"llm.response provider=anthropic proxy model={model} attempt={attempt + 1}/{max_retries} response_len=0"
+                        f"llm.response provider=anthropic proxy model={model} attempt={attempt + 1}/{retry_count} response_len=0"
                     )
                     return ""
 
@@ -308,11 +333,11 @@ class IntelligenceDecoder:
                     "messages": [{"role": "user", "content": prompt}],
                 }
                 self._debug(
-                    f"llm.request provider={self.provider} model={model} attempt={attempt + 1}/{max_retries} max_tokens={max_tokens} url={url}"
+                    f"llm.request provider={self.provider} model={model} attempt={attempt + 1}/{retry_count} max_tokens={max_tokens} timeout={timeout_tuple} url={url}"
                 )
-                resp = _requests.post(url, headers=headers, json=payload, timeout=(30, 180))
+                resp = _requests.post(url, headers=headers, json=payload, timeout=timeout_tuple)
                 self._debug(
-                    f"llm.http_response provider={self.provider} model={model} attempt={attempt + 1}/{max_retries} status={resp.status_code}"
+                    f"llm.http_response provider={self.provider} model={model} attempt={attempt + 1}/{retry_count} status={resp.status_code}"
                 )
                 resp.raise_for_status()
                 data = resp.json()
@@ -322,7 +347,7 @@ class IntelligenceDecoder:
                     content = message.get("content", "")
                     if isinstance(content, str):
                         self._debug(
-                            f"llm.response provider={self.provider} model={model} attempt={attempt + 1}/{max_retries} response_len={len(content)}"
+                            f"llm.response provider={self.provider} model={model} attempt={attempt + 1}/{retry_count} response_len={len(content)}"
                         )
                         return content
                     if isinstance(content, list):
@@ -332,19 +357,19 @@ class IntelligenceDecoder:
                                 text_parts.append(item.get("text", ""))
                         text = "".join(text_parts)
                         self._debug(
-                            f"llm.response provider={self.provider} model={model} attempt={attempt + 1}/{max_retries} response_len={len(text)}"
+                            f"llm.response provider={self.provider} model={model} attempt={attempt + 1}/{retry_count} response_len={len(text)}"
                         )
                         return text
                 self._debug(
-                    f"llm.response provider={self.provider} model={model} attempt={attempt + 1}/{max_retries} response_len=0"
+                    f"llm.response provider={self.provider} model={model} attempt={attempt + 1}/{retry_count} response_len=0"
                 )
                 return ""
 
             except Exception as e:
                 self._debug(
-                    f"llm.error provider={self.provider} model={model} attempt={attempt + 1}/{max_retries} error={type(e).__name__}: {str(e)}"
+                    f"llm.error provider={self.provider} model={model} attempt={attempt + 1}/{retry_count} error={type(e).__name__}: {str(e)}"
                 )
-                if attempt < max_retries - 1:
+                if attempt < retry_count - 1:
                     wait_time = 2 ** attempt
                     time.sleep(wait_time)
                 else:

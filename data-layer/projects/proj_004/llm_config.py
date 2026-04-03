@@ -58,6 +58,10 @@ def _provider_env_defaults(provider: str) -> dict:
             "api_key": os.environ.get("OPENAI_API_KEY", ""),
             "base_url": os.environ.get("OPENAI_BASE_URL", "https://api.openai.com/v1"),
         },
+        "deepseek": {
+            "api_key": os.environ.get("DEEPSEEK_API_KEY", "") or os.environ.get("OPENAI_API_KEY", ""),
+            "base_url": os.environ.get("DEEPSEEK_BASE_URL", "") or os.environ.get("OPENAI_BASE_URL", "https://api.deepseek.com"),
+        },
         "gemini": {
             "api_key": os.environ.get("GEMINI_API_KEY", ""),
             "base_url": os.environ.get("GEMINI_BASE_URL", "https://generativelanguage.googleapis.com/v1beta/openai"),
@@ -134,6 +138,9 @@ def get_llm_config(phase: str = None) -> dict:
         cfg["api_key"] = provider_env["api_key"]
     if not cfg["base_url"]:
         cfg["base_url"] = provider_env["base_url"]
+
+    if cfg["provider"] == "deepseek" and cfg["base_url"]:
+        cfg["base_url"] = cfg["base_url"].rstrip("/")
 
     return cfg
 

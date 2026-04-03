@@ -1,7 +1,7 @@
 """
 llm_client.py — 统一 LLM 调用客户端
 
-支持 Anthropic 原生 API 和中转代理（ANTHROPIC_BASE_URL）。
+支持 Anthropic 原生 API 和 OpenAI 兼容接口（OpenAI / Gemini / DeepSeek / 自定义中转）。
 2.2 / 2.3 动态加载本文件，通过 LLMClient 发起调用。
 
 注意：默认使用流式请求（stream=True），规避中转代理对非流式响应体的大小限制。
@@ -14,12 +14,13 @@ import requests
 
 
 class LLMClient:
-    """轻量 LLM 客户端，支持 Anthropic API 和 Bearer token 中转"""
+    """轻量 LLM 客户端，支持 Anthropic API 和 OpenAI 兼容接口"""
 
     # 各 provider 的默认 base_url
     _DEFAULT_BASE_URLS = {
         "anthropic": "https://api.anthropic.com",
         "openai":    "https://api.openai.com/v1",
+        "deepseek":  "https://api.deepseek.com",
         "gemini":    "https://generativelanguage.googleapis.com/v1beta/openai",
         "custom":    "",
     }
@@ -46,8 +47,8 @@ class LLMClient:
         return base
 
     def _is_openai_compat(self) -> bool:
-        """openai / gemini / deepseek 等 OpenAI 兼容格式"""
-        return self.provider in ("openai", "gemini", "custom")
+        """openai / deepseek / gemini / custom 等 OpenAI 兼容格式"""
+        return self.provider in ("openai", "deepseek", "gemini", "custom")
 
     @staticmethod
     def _env_flag(name: str, default: bool = False) -> bool:
@@ -71,9 +72,22 @@ class LLMClient:
         read_timeout = self._env_int("LLM_READ_TIMEOUT_SECONDS", 180)
         return (connect_timeout, read_timeout)
 
+    def _get_stream_wall_clock_timeout_seconds(self) -> int:
+        return self._env_int("LLM_STREAM_WALL_CLOCK_TIMEOUT_SECONDS", 0)
+
     def _debug_log(self, message: str) -> None:
         if self._env_flag("LLM_DEBUG", False):
             print(f"[LLMClient] {message}", flush=True)
+
+    def _ensure_stream_not_timed_out(self, started_at: float, stream_timeout_seconds: int) -> None:
+        if stream_timeout_seconds <= 0:
+            return
+        elapsed_seconds = time.monotonic() - started_at
+        if elapsed_seconds > stream_timeout_seconds:
+            raise TimeoutError(
+                f"LLM stream wall-clock timeout after {int(elapsed_seconds)}s "
+                f"(limit={stream_timeout_seconds}s)"
+            )
 
     def call(
         self,
@@ -103,6 +117,7 @@ class LLMClient:
         """
         headers = self._build_headers()
         timeouts = self._get_request_timeouts()
+        stream_timeout_seconds = self._get_stream_wall_clock_timeout_seconds()
 
         if self._is_openai_compat():
             # ── OpenAI 兼容格式（DeepSeek / Gemini / 自定义中转）──────────
@@ -137,17 +152,19 @@ class LLMClient:
                 started_at = time.time()
                 self._debug_log(
                     f"request_start provider={self.provider} model={model} attempt={attempt + 1}/{max_retries} "
-                    f"url={url} connect_timeout={timeouts[0]} read_timeout={timeouts[1]}"
+                    f"url={url} connect_timeout={timeouts[0]} read_timeout={timeouts[1]} "
+                    f"stream_wall_clock_timeout={stream_timeout_seconds or 'off'}"
                 )
                 resp = requests.post(url, headers=headers, json=payload, timeout=timeouts, stream=True)
                 resp.raise_for_status()
                 self._debug_log(
                     f"response_headers status={resp.status_code} elapsed_ms={int((time.time() - started_at) * 1000)}"
                 )
+                stream_started_at = time.monotonic()
                 if self._is_openai_compat():
-                    text = self._collect_stream_openai(resp)
+                    text = self._collect_stream_openai(resp, stream_started_at, stream_timeout_seconds)
                 else:
-                    text = self._collect_stream_anthropic(resp)
+                    text = self._collect_stream_anthropic(resp, stream_started_at, stream_timeout_seconds)
                 self._debug_log(
                     f"response_complete chars={len(text)} elapsed_ms={int((time.time() - started_at) * 1000)}"
                 )
@@ -161,10 +178,12 @@ class LLMClient:
                 else:
                     raise e
 
-    def _collect_stream_anthropic(self, resp) -> str:
+    def _collect_stream_anthropic(self, resp, started_at: float, stream_timeout_seconds: int) -> str:
         """消费 Anthropic SSE 流：content_block_delta / text_delta"""
         text_parts = []
+        first_chunk_logged = False
         for raw_line in resp.iter_lines():
+            self._ensure_stream_not_timed_out(started_at, stream_timeout_seconds)
             if not raw_line:
                 continue
             line = raw_line.decode("utf-8") if isinstance(raw_line, bytes) else raw_line
@@ -181,15 +200,24 @@ class LLMClient:
             if etype == "content_block_delta":
                 delta = event.get("delta", {})
                 if delta.get("type") == "text_delta":
-                    text_parts.append(delta.get("text", ""))
+                    text = delta.get("text", "")
+                    if text:
+                        text_parts.append(text)
+                        if not first_chunk_logged:
+                            self._debug_log(
+                                f"stream_first_chunk provider={self.provider} chars={len(text)} elapsed_ms={int((time.monotonic() - started_at) * 1000)}"
+                            )
+                            first_chunk_logged = True
             elif etype == "message_stop":
                 break
         return "".join(text_parts)
 
-    def _collect_stream_openai(self, resp) -> str:
+    def _collect_stream_openai(self, resp, started_at: float, stream_timeout_seconds: int) -> str:
         """消费 OpenAI 兼容 SSE 流：choices[0].delta.content"""
         text_parts = []
+        first_chunk_logged = False
         for raw_line in resp.iter_lines():
+            self._ensure_stream_not_timed_out(started_at, stream_timeout_seconds)
             if not raw_line:
                 continue
             line = raw_line.decode("utf-8") if isinstance(raw_line, bytes) else raw_line
@@ -208,8 +236,13 @@ class LLMClient:
                 content = delta.get("content")
                 if content:
                     text_parts.append(content)
+                    if not first_chunk_logged:
+                        self._debug_log(
+                            f"stream_first_chunk provider={self.provider} chars={len(content)} elapsed_ms={int((time.monotonic() - started_at) * 1000)}"
+                        )
+                        first_chunk_logged = True
         return "".join(text_parts)
 
     # 向后兼容别名
     def _collect_stream(self, resp) -> str:
-        return self._collect_stream_anthropic(resp)
+        return self._collect_stream_anthropic(resp, time.monotonic(), self._get_stream_wall_clock_timeout_seconds())

@@ -1,9 +1,9 @@
 providers:
   knowledge_base:
-    inbox_root: "D:/AIproject/game-knowledge-base/00-Inbox"
+    inbox_root: "F:/AIProjects/game-knowledge-base/00-Inbox"
 
 output:
-  incoming_dir: "D:/AIproject/DesignAssistant/background/real_intel_samples/incoming"
+  incoming_dir: "F:/AIProjects/DesignAssistant/background/real_intel_samples/incoming"
 
 ingestion:
   default_mode: "prompt_first"

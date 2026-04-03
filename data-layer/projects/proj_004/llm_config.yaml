@@ -6,9 +6,9 @@
 
 # ── 全局默认 ────────────────────────────────────────────────────────────────
 default:
-  provider: "anthropic"     # 提供方：anthropic | openai | gemini | custom
-  api_key: ""               # 留空则从环境变量 ANTHROPIC_API_KEY 读取
-  base_url: ""              # 留空则从环境变量 ANTHROPIC_BASE_URL 读取，再兜底 https://api.anthropic.com
+  provider: "anthropic"     # 提供方：anthropic | openai | deepseek | gemini | custom
+  api_key: ""               # 留空则从对应 provider 的环境变量读取
+  base_url: ""              # 留空则从对应 provider 的环境变量读取，再兜底该 provider 默认 base_url
   model: "claude-sonnet-4-6"
   max_tokens: 4096
   temperature: 0.0
@@ -17,18 +17,19 @@ default:
 # provider 可选值：
 #   anthropic → 加 anthropic-version header，兼容 Anthropic 原生 / 中转代理
 #   openai    → 标准 OpenAI 格式，仅 Authorization: Bearer
+#   deepseek  → DeepSeek 官方 OpenAI 兼容端点，默认 base_url=https://api.deepseek.com
 #   gemini    → Gemini OpenAI 兼容端点，仅 Authorization: Bearer
 #   custom    → 不附加任何额外 header，base_url 自行控制
 phases:
   "2.1":                    # 情报解码：追求稳定抽取，用中端模型省成本
-    provider: "openai"
+    provider: "deepseek"
     model: "deepseek-chat"
     base_url: ""
     api_key: ""
     max_tokens: 4096
 
   "2.2":                    # 机会判断：需要更强推理，可换高端模型
-    provider: "openai"
+    provider: "deepseek"
     model: "deepseek-chat"
     base_url: ""
     api_key: ""

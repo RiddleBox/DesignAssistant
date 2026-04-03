@@ -97,6 +97,7 @@ class Exporter:
             valid_records = normalized
 
         exported_files: list[str] = []
+        exportable_count = len(valid_records)
 
         if mode == 'export':
             for rec in valid_records:
@@ -135,6 +136,7 @@ class Exporter:
                 'quarantined': len(all_quarantined),
                 'schema_errors': len(schema_errors),
                 'exported': len(exported_files),
+                'exportable': exportable_count,
             },
             'exported_files': exported_files,
             'quarantine_file': quarantine_file,
@@ -155,16 +157,17 @@ class Exporter:
     def print_summary(self, summary: dict, mode: str):
         s = summary['stats']
         tag = f"[{mode.upper()}]"
+        exportable = s.get('exportable', s.get('exported', 0))
         print(f"\n{tag} Run: {summary['run_id']}")
         print(f"  日期: {summary['date_processed']}  Provider: {summary['provider']}")
         print(f"  扫描: {s['scanned']}  可解析: {s['parseable']}")
         print(f"  去重跳过: {s['dedup_skipped']}  隔离: {s['quarantined']}  Schema错误: {s['schema_errors']}")
         if mode == 'export':
-            print(f"  ✅ 导出: {s['exported']} 条 → incoming/")
+            print(f"  [OK] 导出: {s['exported']} 条 -> incoming/")
         elif mode == 'validate':
-            print(f"  ✅ 校验通过: {s['exported']} 条（未落盘）")
+            print(f"  [OK] 校验通过: {exportable} 条（未落盘）")
         else:
-            print(f"  ✅ 预计导出: {len(summary['exported_files']) + s['exported']} 条（未落盘）")
+            print(f"  [OK] 预计导出: {exportable} 条（未落盘）")
         if summary.get('quarantine_file'):
-            print(f"  ⚠️  隔离文件: quarantine/{summary['quarantine_file']}")
+            print(f"  [WARN] 隔离文件: quarantine/{summary['quarantine_file']}")
         print()

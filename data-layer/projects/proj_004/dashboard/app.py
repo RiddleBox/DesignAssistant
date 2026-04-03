@@ -96,29 +96,52 @@ def get_phase_cfg(cfg: dict, phase: str) -> dict:
 PROVIDER_DEFAULT_URLS = {
     "anthropic": "https://api.anthropic.com",
     "openai":    "https://api.openai.com/v1",
+    "deepseek":  "https://api.deepseek.com",
     "gemini":    "https://generativelanguage.googleapis.com/v1beta/openai",
     "custom":    "",
 }
-PROVIDERS = ["anthropic", "openai", "gemini", "custom"]
+PROVIDERS = ["anthropic", "openai", "deepseek", "gemini", "custom"]
 
 # ── 读取 .env ────────────────────────────────────────────────────
-def load_env_defaults():
+def load_env_defaults(provider: str = "anthropic"):
+    provider = (provider or "anthropic").strip().lower()
     defaults = {"api_key": "", "base_url": ""}
     env_file = os.path.join(DA_ROOT, ".env")
     if os.path.exists(env_file):
         for line in open(env_file, encoding="utf-8"):
             line = line.strip()
-            if line.startswith("ANTHROPIC_API_KEY="):
-                defaults["api_key"] = line.split("=", 1)[1].strip()
-            elif line.startswith("ANTHROPIC_BASE_URL="):
-                defaults["base_url"] = line.split("=", 1)[1].strip()
+            if provider == "anthropic":
+                if line.startswith("ANTHROPIC_API_KEY="):
+                    defaults["api_key"] = line.split("=", 1)[1].strip()
+                elif line.startswith("ANTHROPIC_BASE_URL="):
+                    defaults["base_url"] = line.split("=", 1)[1].strip()
+            elif provider == "openai":
+                if line.startswith("OPENAI_API_KEY="):
+                    defaults["api_key"] = line.split("=", 1)[1].strip()
+                elif line.startswith("OPENAI_BASE_URL="):
+                    defaults["base_url"] = line.split("=", 1)[1].strip()
+            elif provider == "deepseek":
+                if line.startswith("DEEPSEEK_API_KEY="):
+                    defaults["api_key"] = line.split("=", 1)[1].strip()
+                elif line.startswith("DEEPSEEK_BASE_URL="):
+                    defaults["base_url"] = line.split("=", 1)[1].strip()
+            elif provider == "gemini":
+                if line.startswith("GEMINI_API_KEY="):
+                    defaults["api_key"] = line.split("=", 1)[1].strip()
+                elif line.startswith("GEMINI_BASE_URL="):
+                    defaults["base_url"] = line.split("=", 1)[1].strip()
+            elif provider == "custom":
+                if line.startswith("CUSTOM_LLM_API_KEY="):
+                    defaults["api_key"] = line.split("=", 1)[1].strip()
+                elif line.startswith("CUSTOM_LLM_BASE_URL="):
+                    defaults["base_url"] = line.split("=", 1)[1].strip()
     return defaults
 
 # ── 顶部：配置区 ─────────────────────────────────────────────────
 st.title("🔬 DesignAssistant 链路观察面板")
 
-defaults = load_env_defaults()
 llm_cfg = load_llm_config()
+defaults = load_env_defaults(llm_cfg.get("default", {}).get("provider", "anthropic"))
 
 with st.container(border=True):
     st.caption("**全局默认配置**（各 Phase 未单独填写时使用）")
