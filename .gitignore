@@ -47,6 +47,8 @@ Thumbs.db
 data-layer/projects/proj_004/phase2.2_implementation/_tmp_*
 data-layer/projects/proj_004/phase2.2_implementation/_case_*_direct.json
 data-layer/projects/proj_004/phase2.2_implementation/auto_eval.json
+data-layer/projects/proj_004/phase2.2_implementation/eval_outputs/
+data-layer/projects/proj_004/phase2.4_implementation/rag_system/data/opportunity_store.pkl
 
 # Private local config with secrets
 data-layer/projects/proj_004/llm_config.local.yaml
