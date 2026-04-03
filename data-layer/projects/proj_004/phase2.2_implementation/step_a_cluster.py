@@ -53,6 +53,109 @@ ROLE_COMPLEMENTS = {
 }
 
 
+class RelationEdge:
+    """批内两条信号之间的关系边（内部对象）"""
+    def __init__(
+        self,
+        edge_id: str,
+        left_signal_id: str,
+        right_signal_id: str,
+        edge_type: str,
+        strength_band: str,
+        gate_passed: bool,
+        bucket_scores: Dict[str, float],
+        synergy_bonus: float,
+        concentration_penalty: float,
+        final_score: float,
+        reasoning: str,
+        shared_affects: Optional[List[str]] = None,
+    ):
+        self.edge_id = edge_id
+        self.left_signal_id = left_signal_id
+        self.right_signal_id = right_signal_id
+        self.edge_type = edge_type
+        self.strength_band = strength_band
+        self.gate_passed = gate_passed
+        self.bucket_scores = bucket_scores
+        self.synergy_bonus = synergy_bonus
+        self.concentration_penalty = concentration_penalty
+        self.final_score = final_score
+        self.reasoning = reasoning
+        self.shared_affects = shared_affects or []
+
+    def to_dict(self) -> dict:
+        return {
+            "edge_id": self.edge_id,
+            "left_signal_id": self.left_signal_id,
+            "right_signal_id": self.right_signal_id,
+            "edge_type": self.edge_type,
+            "strength_band": self.strength_band,
+            "gate_passed": self.gate_passed,
+            "bucket_scores": self.bucket_scores,
+            "synergy_bonus": self.synergy_bonus,
+            "concentration_penalty": self.concentration_penalty,
+            "final_score": self.final_score,
+            "reasoning": self.reasoning,
+            "shared_affects": self.shared_affects,
+        }
+
+
+class ScenarioCandidate:
+    """由多条相关边组装出的候选场景（内部对象）"""
+    def __init__(
+        self,
+        candidate_id: str,
+        anchor_signal_ids: List[str],
+        member_signal_ids: List[str],
+        covered_roles: List[str],
+        missing_slots: List[str],
+        shared_affects: List[str],
+        state: str,
+        promotion_score: float,
+        option_value_score: float,
+        novelty_score: float,
+        gap_fill_value: float,
+        cross_domain_bonus: float,
+        reasoning_path: str,
+        activated_by: Optional[str] = None,
+        last_activated_at: Optional[str] = None,
+    ):
+        self.candidate_id = candidate_id
+        self.anchor_signal_ids = anchor_signal_ids
+        self.member_signal_ids = member_signal_ids
+        self.covered_roles = covered_roles
+        self.missing_slots = missing_slots
+        self.shared_affects = shared_affects
+        self.state = state
+        self.promotion_score = promotion_score
+        self.option_value_score = option_value_score
+        self.novelty_score = novelty_score
+        self.gap_fill_value = gap_fill_value
+        self.cross_domain_bonus = cross_domain_bonus
+        self.reasoning_path = reasoning_path
+        self.activated_by = activated_by
+        self.last_activated_at = last_activated_at
+
+    def to_dict(self) -> dict:
+        return {
+            "candidate_id": self.candidate_id,
+            "anchor_signal_ids": self.anchor_signal_ids,
+            "member_signal_ids": self.member_signal_ids,
+            "covered_roles": self.covered_roles,
+            "missing_slots": self.missing_slots,
+            "shared_affects": self.shared_affects,
+            "state": self.state,
+            "promotion_score": self.promotion_score,
+            "option_value_score": self.option_value_score,
+            "novelty_score": self.novelty_score,
+            "gap_fill_value": self.gap_fill_value,
+            "cross_domain_bonus": self.cross_domain_bonus,
+            "reasoning_path": self.reasoning_path,
+            "activated_by": self.activated_by,
+            "last_activated_at": self.last_activated_at,
+        }
+
+
 class LogicalScenario:
     """
     Step A 的软性场景建议。
@@ -68,12 +171,20 @@ class LogicalScenario:
         context_signal_ids: List[str],    # 建议关注但非核心的信号（0-3条）
         reasoning: str,                   # 为什么认为这些信号有逻辑关联
         opportunity_direction: str,       # 可能指向的机会方向
+        reasoning_path: Optional[str] = None,
+        missing_slots: Optional[List[str]] = None,
+        scenario_score: Optional[float] = None,
+        lane: Optional[str] = None,
     ):
         self.scenario_id = scenario_id
         self.primary_signal_ids = primary_signal_ids
         self.context_signal_ids = context_signal_ids
         self.reasoning = reasoning
         self.opportunity_direction = opportunity_direction
+        self.reasoning_path = reasoning_path
+        self.missing_slots = missing_slots or []
+        self.scenario_score = scenario_score
+        self.lane = lane or "primary"
 
     def to_dict(self) -> dict:
         return {
@@ -82,15 +193,22 @@ class LogicalScenario:
             "context_signal_ids": self.context_signal_ids,
             "reasoning": self.reasoning,
             "opportunity_direction": self.opportunity_direction,
+            "reasoning_path": self.reasoning_path,
+            "missing_slots": self.missing_slots,
+            "scenario_score": self.scenario_score,
+            "lane": self.lane,
         }
 
 
 class StepAResult:
     def __init__(
         self,
-        logical_scenarios: List[LogicalScenario],  # 软性场景建议（替代原 signal_groups）
-        isolated_signals: List[dict],               # 孤立信号（含角色标注）
-        role_annotations: Dict[str, dict],          # signal_id → {roles, needs, domains, waiting_for_text}
+        logical_scenarios: List[LogicalScenario],  # 主通道场景建议
+        isolated_signals: List[dict],              # 含角色标注的全量信号
+        role_annotations: Dict[str, dict],         # signal_id → {roles, needs, domains, waiting_for_text}
+        exploration_scenarios: Optional[List[LogicalScenario]] = None,
+        emerging_links: Optional[List[dict]] = None,
+        scenario_candidates: Optional[List[dict]] = None,
         fallback_used: bool = False,
         # 向后兼容：保留 signal_groups 属性，值始终为空列表
         # judgment_engine 迁移完成后可移除
@@ -98,6 +216,9 @@ class StepAResult:
         self.logical_scenarios = logical_scenarios
         self.isolated_signals = isolated_signals
         self.role_annotations = role_annotations
+        self.exploration_scenarios = exploration_scenarios or []
+        self.emerging_links = emerging_links or []
+        self.scenario_candidates = scenario_candidates or []
         self.fallback_used = fallback_used
         # 兼容旧代码访问 signal_groups
         self.signal_groups: List[List[dict]] = []
@@ -332,22 +453,514 @@ def _parse_step_a_response(raw: str, signals: List[dict]) -> StepAResult:
                 opportunity_direction=sc.get("opportunity_direction", ""),
             ))
 
+    return _finalize_step_a_result(
+        signals=signals,
+        role_annotations=role_annotations,
+        base_logical_scenarios=logical_scenarios,
+        fallback_used=False,
+    )
+
+
+# ──────────────────────────────────────────────
+# Relation Graph v1（批内最小可运行版）
+# ──────────────────────────────────────────────
+
+def _finalize_step_a_result(
+    signals: List[dict],
+    role_annotations: Dict[str, dict],
+    base_logical_scenarios: List[LogicalScenario],
+    fallback_used: bool,
+) -> StepAResult:
     isolated = []
+    normalized_annotations: Dict[str, dict] = {}
     for s in signals:
         sid = _get_signal_id(s)
+        ann = role_annotations.get(sid) or _infer_roles_by_rule(s)
+        normalized_annotations[sid] = ann
         s_copy = dict(s)
-        if sid not in role_annotations:
-            ann = _infer_roles_by_rule(s)
-            role_annotations[sid] = ann
-        s_copy["_role_annotation"] = role_annotations[sid]
+        s_copy["_role_annotation"] = ann
         isolated.append(s_copy)
+
+    edges = _build_candidate_edges(isolated)
+    candidates = _assemble_scenario_candidates(edges, isolated)
+    logical_scenarios = _merge_primary_scenarios(base_logical_scenarios, candidates, isolated)
+    exploration_scenarios = _select_exploration_scenarios(candidates, logical_scenarios, isolated)
+    emerging_links = _extract_emerging_links(edges)
 
     return StepAResult(
         logical_scenarios=logical_scenarios,
         isolated_signals=isolated,
-        role_annotations=role_annotations,
-        fallback_used=False,
+        role_annotations=normalized_annotations,
+        exploration_scenarios=exploration_scenarios,
+        emerging_links=emerging_links,
+        scenario_candidates=[c.to_dict() for c in candidates],
+        fallback_used=fallback_used,
     )
+
+
+def _build_candidate_edges(signals: List[dict]) -> List[RelationEdge]:
+    edges: List[RelationEdge] = []
+    for i in range(len(signals)):
+        for j in range(i + 1, len(signals)):
+            left = signals[i]
+            right = signals[j]
+            bucket_scores = _score_edge_buckets(left, right)
+            synergy_bonus = _compute_synergy_bonus(left, right)
+            concentration_penalty = _compute_concentration_penalty(left, right)
+            edge_type = _infer_edge_type(left, right)
+            contradiction_penalty = 0.45 if edge_type == "contradictory" else 0.0
+            final_score = round(
+                bucket_scores["structural"]
+                + bucket_scores["role_fit"]
+                + bucket_scores["domain_fit"]
+                + bucket_scores["signal_strength"]
+                + synergy_bonus
+                - concentration_penalty
+                - contradiction_penalty,
+                3,
+            )
+            gate_passed = edge_type != "contradictory" and final_score >= 0.55
+            strength_band = _classify_edge_strength(final_score, gate_passed)
+            shared_affects = _shared_affects(left, right)
+            reasoning = _build_edge_reasoning(left, right, edge_type, shared_affects)
+            edges.append(RelationEdge(
+                edge_id=f"edge_{_get_signal_id(left)}_{_get_signal_id(right)}",
+                left_signal_id=_get_signal_id(left),
+                right_signal_id=_get_signal_id(right),
+                edge_type=edge_type,
+                strength_band=strength_band,
+                gate_passed=gate_passed,
+                bucket_scores=bucket_scores,
+                synergy_bonus=round(synergy_bonus, 3),
+                concentration_penalty=round(concentration_penalty, 3),
+                final_score=final_score,
+                reasoning=reasoning,
+                shared_affects=shared_affects,
+            ))
+    return edges
+
+
+def _score_edge_buckets(left: dict, right: dict) -> Dict[str, float]:
+    left_roles = set(_get_roles(left))
+    right_roles = set(_get_roles(right))
+    left_needs = set(_get_needs(left))
+    right_needs = set(_get_needs(right))
+    left_domains = set(_get_domains(left))
+    right_domains = set(_get_domains(right))
+
+    shared_affects = _shared_affects(left, right)
+    same_change = _same_what_changed(left, right)
+
+    structural = 0.0
+    if shared_affects:
+        structural += min(0.4, 0.2 * len(shared_affects))
+    if same_change:
+        structural += 0.15
+
+    role_fit = 0.0
+    if left_roles.intersection(right_needs) or right_roles.intersection(left_needs):
+        role_fit += 0.35
+    elif left_roles.intersection(right_roles):
+        role_fit += 0.15
+
+    domain_fit = 0.0
+    if left_domains.intersection(right_domains):
+        domain_fit += 0.15
+    if left.get("signal_type") != right.get("signal_type"):
+        domain_fit += 0.1
+
+    avg_intensity = (
+        int(left.get("intensity_score") or left.get("intensity") or 5)
+        + int(right.get("intensity_score") or right.get("intensity") or 5)
+    ) / 2
+    signal_strength = min(0.15, avg_intensity / 50)
+
+    return {
+        "structural": round(structural, 3),
+        "role_fit": round(role_fit, 3),
+        "domain_fit": round(domain_fit, 3),
+        "signal_strength": round(signal_strength, 3),
+    }
+
+
+def _infer_edge_type(left: dict, right: dict) -> str:
+    left_roles = set(_get_roles(left))
+    right_roles = set(_get_roles(right))
+
+    if _has_direction_conflict(left, right) and (_same_what_changed(left, right) or _shared_affects(left, right)):
+        return "contradictory"
+    if {"catalyst", "resource_validation"}.issubset(left_roles.union(right_roles)):
+        return "resource_enablement"
+    if {"catalyst", "demand_evidence"}.issubset(left_roles.union(right_roles)):
+        return "demand_validation"
+    if _is_constraint_release_pair(left, right):
+        return "constraint_release"
+    if _shared_affects(left, right) or _same_what_changed(left, right):
+        return "reinforcing"
+    return "complementary"
+
+
+def _classify_edge_strength(final_score: float, gate_passed: bool) -> str:
+    if not gate_passed:
+        return "weak"
+    if final_score >= 0.8:
+        return "strong"
+    if final_score >= 0.55:
+        return "emerging"
+    return "weak"
+
+
+def _assemble_scenario_candidates(edges: List[RelationEdge], signals: List[dict]) -> List[ScenarioCandidate]:
+    signal_map = {_get_signal_id(s): s for s in signals}
+    adjacency: Dict[str, set] = {}
+    edge_map: Dict[frozenset, RelationEdge] = {}
+
+    for edge in edges:
+        if not edge.gate_passed:
+            continue
+        pair_key = frozenset({edge.left_signal_id, edge.right_signal_id})
+        edge_map[pair_key] = edge
+        adjacency.setdefault(edge.left_signal_id, set()).add(edge.right_signal_id)
+        adjacency.setdefault(edge.right_signal_id, set()).add(edge.left_signal_id)
+
+    visited = set()
+    candidates: List[ScenarioCandidate] = []
+    for sid in adjacency:
+        if sid in visited:
+            continue
+        stack = [sid]
+        component = []
+        while stack:
+            node = stack.pop()
+            if node in visited:
+                continue
+            visited.add(node)
+            component.append(node)
+            stack.extend(list(adjacency.get(node, set()) - visited))
+
+        if len(component) < 2:
+            continue
+
+        component_signals = [signal_map[cid] for cid in component if cid in signal_map]
+        component_edges = []
+        for i in range(len(component)):
+            for j in range(i + 1, len(component)):
+                edge = edge_map.get(frozenset({component[i], component[j]}))
+                if edge:
+                    component_edges.append(edge)
+
+        covered_roles = sorted({
+            role
+            for signal in component_signals
+            for role in _get_roles(signal)
+            if role != "negative_validator"
+        })
+        missing_slots = [
+            role for role in ["catalyst", "demand_evidence", "resource_validation"]
+            if role not in covered_roles
+        ]
+        shared_affects = _collect_component_affects(component_signals)
+        promotion_score = _compute_promotion_score(component_edges, covered_roles, component_signals)
+        option_value_score = _compute_option_value_score(component_signals, shared_affects, missing_slots)
+        novelty_score = _compute_novelty_score(component_signals)
+        gap_fill_value = round(1 - (len(missing_slots) / 3), 3)
+        cross_domain_bonus = _compute_cross_domain_bonus(component_signals)
+        state = _derive_candidate_state(promotion_score, option_value_score, covered_roles)
+        anchors = _select_anchor_signal_ids(component_signals)
+        reasoning_path = _build_candidate_reasoning_path(component_signals, covered_roles, shared_affects, missing_slots)
+
+        candidates.append(ScenarioCandidate(
+            candidate_id=f"candidate_{len(candidates)+1}",
+            anchor_signal_ids=anchors,
+            member_signal_ids=sorted(component),
+            covered_roles=covered_roles,
+            missing_slots=missing_slots,
+            shared_affects=shared_affects,
+            state=state,
+            promotion_score=promotion_score,
+            option_value_score=option_value_score,
+            novelty_score=novelty_score,
+            gap_fill_value=gap_fill_value,
+            cross_domain_bonus=cross_domain_bonus,
+            reasoning_path=reasoning_path,
+        ))
+
+    candidates.sort(key=lambda c: (c.promotion_score, c.option_value_score), reverse=True)
+    return candidates
+
+
+def _compute_promotion_score(edges: List[RelationEdge], covered_roles: List[str], signals: List[dict]) -> float:
+    if edges:
+        avg_edge_score = sum(e.final_score for e in edges) / len(edges)
+    else:
+        avg_edge_score = 0.0
+    role_coverage = len([r for r in ["catalyst", "demand_evidence", "resource_validation"] if r in covered_roles]) / 3
+    cross_domain_bonus = _compute_cross_domain_bonus(signals)
+    return round(min(1.0, avg_edge_score * 0.6 + role_coverage * 0.25 + cross_domain_bonus * 0.5), 3)
+
+
+def _compute_option_value_score(signals: List[dict], shared_affects: List[str], missing_slots: List[str]) -> float:
+    if not signals:
+        return 0.0
+    max_intensity = max(int(s.get("intensity_score") or s.get("intensity") or 5) for s in signals) / 10
+    affect_bonus = 0.2 if shared_affects else 0.0
+    incompleteness_bonus = 0.2 if 0 < len(missing_slots) <= 2 else 0.05
+    return round(min(1.0, max_intensity * 0.55 + affect_bonus + incompleteness_bonus), 3)
+
+
+def _compute_novelty_score(signals: List[dict]) -> float:
+    unique_domains = sorted({d for s in signals for d in _get_domains(s)})
+    return round(min(1.0, len(unique_domains) / 4), 3)
+
+
+def _select_primary_scenarios(candidates: List[ScenarioCandidate], signals: List[dict]) -> List[LogicalScenario]:
+    signal_map = {_get_signal_id(s): s for s in signals}
+    scenarios: List[LogicalScenario] = []
+    for candidate in candidates:
+        if candidate.state != "ready_for_step_c":
+            continue
+        member_ids = [sid for sid in candidate.member_signal_ids if sid in signal_map]
+        if len(member_ids) < 2:
+            continue
+        primary_ids = member_ids[:3]
+        context_ids = member_ids[3:6]
+        scenarios.append(LogicalScenario(
+            scenario_id=candidate.candidate_id,
+            primary_signal_ids=primary_ids,
+            context_signal_ids=context_ids,
+            reasoning=candidate.reasoning_path,
+            opportunity_direction=_infer_opportunity_direction(candidate, signal_map),
+            reasoning_path=candidate.reasoning_path,
+            missing_slots=candidate.missing_slots,
+            scenario_score=candidate.promotion_score,
+            lane="primary",
+        ))
+    return scenarios
+
+
+def _select_exploration_scenarios(
+    candidates: List[ScenarioCandidate],
+    primary_scenarios: List[LogicalScenario],
+    signals: List[dict],
+) -> List[LogicalScenario]:
+    signal_map = {_get_signal_id(s): s for s in signals}
+    primary_keys = {_scenario_member_key(scenario) for scenario in primary_scenarios}
+    exploration: List[LogicalScenario] = []
+    for candidate in candidates:
+        if candidate.state == "ready_for_step_c":
+            continue
+        if candidate.option_value_score < 0.55:
+            continue
+        member_ids = [sid for sid in candidate.member_signal_ids if sid in signal_map]
+        if len(member_ids) < 2:
+            continue
+        scenario = LogicalScenario(
+            scenario_id=f"exp_{candidate.candidate_id}",
+            primary_signal_ids=member_ids[:2],
+            context_signal_ids=member_ids[2:5],
+            reasoning=f"探索通道：{candidate.reasoning_path}",
+            opportunity_direction=_infer_opportunity_direction(candidate, signal_map),
+            reasoning_path=candidate.reasoning_path,
+            missing_slots=candidate.missing_slots,
+            scenario_score=candidate.option_value_score,
+            lane="exploration",
+        )
+        key = _scenario_member_key(scenario)
+        if key in primary_keys:
+            continue
+        primary_keys.add(key)
+        exploration.append(scenario)
+        if len(exploration) >= 3:
+            break
+    return exploration
+
+
+def _extract_emerging_links(edges: List[RelationEdge]) -> List[dict]:
+    return [
+        edge.to_dict()
+        for edge in edges
+        if edge.gate_passed and edge.strength_band == "emerging"
+    ]
+
+
+def _merge_primary_scenarios(
+    base_logical_scenarios: List[LogicalScenario],
+    candidates: List[ScenarioCandidate],
+    signals: List[dict],
+) -> List[LogicalScenario]:
+    merged: List[LogicalScenario] = []
+    seen = set()
+
+    for scenario in base_logical_scenarios:
+        if not scenario.reasoning_path:
+            scenario.reasoning_path = scenario.reasoning
+        if scenario.scenario_score is None:
+            scenario.scenario_score = 0.8
+        scenario.lane = scenario.lane or "primary"
+        key = _scenario_member_key(scenario)
+        if key not in seen:
+            seen.add(key)
+            merged.append(scenario)
+
+    for scenario in _select_primary_scenarios(candidates, signals):
+        key = _scenario_member_key(scenario)
+        if key in seen:
+            continue
+        seen.add(key)
+        merged.append(scenario)
+
+    return merged
+
+
+def _compute_synergy_bonus(left: dict, right: dict) -> float:
+    roles = set(_get_roles(left)).union(_get_roles(right))
+    bonus = 0.0
+    if "catalyst" in roles and "resource_validation" in roles:
+        bonus += 0.08
+    if "catalyst" in roles and "demand_evidence" in roles:
+        bonus += 0.08
+    if len(_shared_affects(left, right)) >= 2:
+        bonus += 0.05
+    return min(0.2, bonus)
+
+
+def _compute_concentration_penalty(left: dict, right: dict) -> float:
+    penalty = 0.0
+    if left.get("signal_type") == right.get("signal_type"):
+        penalty += 0.06
+    if len(set(_get_domains(left)).union(_get_domains(right))) <= 1:
+        penalty += 0.04
+    return min(0.12, penalty)
+
+
+def _has_direction_conflict(left: dict, right: dict) -> bool:
+    left_direction = _normalize_text((_get_logic_frame(left).get("change_direction") or ""))
+    right_direction = _normalize_text((_get_logic_frame(right).get("change_direction") or ""))
+    if not left_direction or not right_direction:
+        return False
+    opposite_pairs = {
+        ("increase", "decrease"),
+        ("decrease", "increase"),
+        ("tighten", "loosen"),
+        ("loosen", "tighten"),
+        ("up", "down"),
+        ("down", "up"),
+    }
+    return (left_direction, right_direction) in opposite_pairs
+
+
+def _is_constraint_release_pair(left: dict, right: dict) -> bool:
+    directions = {
+        _normalize_text((_get_logic_frame(left).get("change_direction") or "")),
+        _normalize_text((_get_logic_frame(right).get("change_direction") or "")),
+    }
+    roles = set(_get_roles(left)).union(_get_roles(right))
+    return bool(directions.intersection({"loosen", "decrease"})) and "resource_validation" in roles
+
+
+def _build_edge_reasoning(left: dict, right: dict, edge_type: str, shared_affects: List[str]) -> str:
+    left_label = left.get("signal_label") or left.get("label") or _get_signal_id(left)
+    right_label = right.get("signal_label") or right.get("label") or _get_signal_id(right)
+    affect_text = f"，共同指向 {', '.join(shared_affects[:2])}" if shared_affects else ""
+    return f"{left_label} 与 {right_label} 形成 {edge_type} 关系{affect_text}"
+
+
+def _collect_component_affects(signals: List[dict]) -> List[str]:
+    counter: Dict[str, int] = {}
+    for signal in signals:
+        for affect in _get_affects(signal):
+            counter[affect] = counter.get(affect, 0) + 1
+    ranked = sorted(counter.items(), key=lambda item: (-item[1], item[0]))
+    return [name for name, count in ranked if count >= 2][:3] or [name for name, _ in ranked[:2]]
+
+
+def _derive_candidate_state(promotion_score: float, option_value_score: float, covered_roles: List[str]) -> str:
+    essential_count = len([r for r in ["catalyst", "demand_evidence", "resource_validation"] if r in covered_roles])
+    if promotion_score >= 0.72 and essential_count >= 2:
+        return "ready_for_step_c"
+    if promotion_score >= 0.58 or option_value_score >= 0.65:
+        return "developing"
+    if option_value_score >= 0.5:
+        return "emerging"
+    return "seed"
+
+
+def _select_anchor_signal_ids(signals: List[dict]) -> List[str]:
+    ranked = sorted(
+        signals,
+        key=lambda s: int(s.get("intensity_score") or s.get("intensity") or 5),
+        reverse=True,
+    )
+    return [_get_signal_id(s) for s in ranked[:2]]
+
+
+def _build_candidate_reasoning_path(
+    signals: List[dict],
+    covered_roles: List[str],
+    shared_affects: List[str],
+    missing_slots: List[str],
+) -> str:
+    labels = [s.get("signal_label") or s.get("label") or _get_signal_id(s) for s in signals[:3]]
+    affect_text = f"，共同影响 {', '.join(shared_affects[:2])}" if shared_affects else ""
+    missing_text = f"，仍缺 {_roles_to_text(missing_slots)}" if missing_slots else ""
+    return f"{' + '.join(labels)} 形成 {', '.join(covered_roles[:3])} 的互补结构{affect_text}{missing_text}"
+
+
+def _infer_opportunity_direction(candidate: ScenarioCandidate, signal_map: Dict[str, dict]) -> str:
+    if candidate.shared_affects:
+        return f"围绕 {candidate.shared_affects[0]} 的机会窗口"
+    domains = sorted({d for sid in candidate.member_signal_ids for d in _get_domains(signal_map.get(sid, {}))})
+    if domains:
+        return f"{domains[0]} 相关机会方向"
+    return "潜在机会方向待验证"
+
+
+def _scenario_member_key(scenario: LogicalScenario) -> str:
+    return "|".join(sorted(set(scenario.primary_signal_ids + scenario.context_signal_ids)))
+
+
+def _get_logic_frame(signal: dict) -> dict:
+    return signal.get("logic_frame") or {}
+
+
+def _get_roles(signal: dict) -> List[str]:
+    return list((signal.get("_role_annotation") or {}).get("roles", []))
+
+
+def _get_needs(signal: dict) -> List[str]:
+    return list((signal.get("_role_annotation") or {}).get("needs", []))
+
+
+def _get_domains(signal: dict) -> List[str]:
+    domains = list((signal.get("_role_annotation") or {}).get("domains", []))
+    return domains or ["gaming"]
+
+
+def _get_affects(signal: dict) -> List[str]:
+    affects = (_get_logic_frame(signal).get("affects") or [])
+    if isinstance(affects, str):
+        affects = [affects]
+    return [_normalize_text(v) for v in affects if _normalize_text(v)]
+
+
+def _shared_affects(left: dict, right: dict) -> List[str]:
+    return sorted(set(_get_affects(left)).intersection(_get_affects(right)))
+
+
+def _same_what_changed(left: dict, right: dict) -> bool:
+    left_value = _normalize_text((_get_logic_frame(left).get("what_changed") or ""))
+    right_value = _normalize_text((_get_logic_frame(right).get("what_changed") or ""))
+    return bool(left_value and left_value == right_value)
+
+
+def _normalize_text(value: str) -> str:
+    return str(value or "").strip().lower()
+
+
+def _roles_to_text(roles: List[str]) -> str:
+    if not roles:
+        return "无"
+    return ", ".join(_role_cn(role) for role in roles)
 
 
 # ──────────────────────────────────────────────
@@ -357,18 +970,13 @@ def _parse_step_a_response(raw: str, signals: List[dict]) -> StepAResult:
 def _rule_fallback(signals: List[dict]) -> StepAResult:
     """LLM 失败时：无 logical_scenarios，所有信号视为孤立，角色标注用规则推断"""
     role_annotations = {}
-    isolated = []
     for s in signals:
         sid = _get_signal_id(s)
-        ann = _infer_roles_by_rule(s)
-        role_annotations[sid] = ann
-        s_copy = dict(s)
-        s_copy["_role_annotation"] = ann
-        isolated.append(s_copy)
-    return StepAResult(
-        logical_scenarios=[],
-        isolated_signals=isolated,
+        role_annotations[sid] = _infer_roles_by_rule(s)
+    return _finalize_step_a_result(
+        signals=signals,
         role_annotations=role_annotations,
+        base_logical_scenarios=[],
         fallback_used=True,
     )
 

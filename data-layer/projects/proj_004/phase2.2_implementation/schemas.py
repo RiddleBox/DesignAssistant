@@ -243,6 +243,14 @@ class Diagnostics(BaseModel):
     opportunity_count: int = Field(..., description="识别出的机会对象数量")
     evidence_completeness: float = Field(..., description="平均证据完整度 (0-1)")
     boundary_warnings: List[str] = Field(default_factory=list, description="边界警告列表")
+    step_b_summary: Optional[Dict[str, Any]] = Field(
+        None,
+        description="Step B 历史关系唤醒的聚合诊断信息（v1.3 可观测性增强）"
+    )
+    step_b_trace: Optional[List[Dict[str, Any]]] = Field(
+        None,
+        description="Step B 针对每条孤立信号的检索与转化轨迹（v1.3 可观测性增强）"
+    )
 
 
 class ErrorInfo(BaseModel):
