@@ -1,0 +1,20 @@
+{
+  "source_id": "incoming_20260401_034",
+  "source_type": "news",
+  "title": "Is a blizzardy Skyrim return persuading me to retry Elder Scrolls Online? Not really, but naval combat and underwater exploration might",
+  "content": "I'll be honest right off the bat. As a single player Elder Scroller, the Elder Scrolls Online 's never managed to hook me for more than a few hours. I've given it a couple of goes, usually during periods when it's gone free to play, but have always bounced off its vast MMO iness. Might the slew of fresh additions coming across the next couple of years be able to change that and finally convince me to spend significant time with ESO in the same way I have Fallout 76 in the past few years? The ans",
+  "published_at": "2026-04-01T00:00:00Z",
+  "source_name": "Rock Paper Shotgun",
+  "source_url": "https://www.rockpapershotgun.com/is-a-blizzardy-skyrim-return-persuading-me-to-retry-elder-scrolls-online-not-really-but-naval-combat-and-underwater-exploration-might",
+  "language": "en",
+  "mode": "prompt_first",
+  "ingestion_meta": {
+    "provider": "knowledge_base_inbox",
+    "origin_file": "00-Inbox\\2026-04-02\\[tech] Is_a_blizzardy_Skyrim_return_persuading_me_to_retry_Elder_Sc.md",
+    "signal_type_hint": "technical",
+    "raw_tags": [
+      "inbox",
+      "technical"
+    ]
+  }
+}

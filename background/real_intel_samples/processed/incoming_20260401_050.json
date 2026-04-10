@@ -1,0 +1,20 @@
+{
+  "source_id": "incoming_20260401_050",
+  "source_type": "news",
+  "title": "Tomb Raider 1-3 Remastered patch sorts questionable outfit textures after fans dubbed Challenge Mode \"Slop Raider\"",
+  "content": "Aspyr has released a patch for Tomb Raider 1-3 Remastered that takes aim at the game's new outfit textures, which were widely criticised on their debut. Read more",
+  "published_at": "2026-04-01T00:00:00Z",
+  "source_name": "Eurogamer",
+  "source_url": "https://www.eurogamer.net/tomb-raider-1-3-remastered-patch-sorts-questionable-outfit-textures-after-fans-dubbed-challenge-mode-slop-raider",
+  "language": "en",
+  "mode": "prompt_first",
+  "ingestion_meta": {
+    "provider": "knowledge_base_inbox",
+    "origin_file": "00-Inbox\\2026-04-02\\[tech] Tomb_Raider_1-3_Remastered_patch_sorts_questionable_outfit_t.md",
+    "signal_type_hint": "technical",
+    "raw_tags": [
+      "inbox",
+      "technical"
+    ]
+  }
+}

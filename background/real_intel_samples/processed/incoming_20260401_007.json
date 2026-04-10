@@ -1,0 +1,20 @@
+{
+  "source_id": "incoming_20260401_007",
+  "source_type": "news",
+  "title": "Crimson Desert smashes another sales milestone, less than two weeks since its release",
+  "content": "Less than two weeks since Crimson Desert made its slightly rocky debut, developer Pearl Abyss has celebrated another impressive sales milestone. Read more",
+  "published_at": "2026-04-01T00:00:00Z",
+  "source_name": "Eurogamer",
+  "source_url": "https://www.eurogamer.net/crimson-desert-smashes-another-sales-milestone-less-than-two-weeks-since-its-release",
+  "language": "en",
+  "mode": "prompt_first",
+  "ingestion_meta": {
+    "provider": "knowledge_base_inbox",
+    "origin_file": "00-Inbox\\2026-04-02\\[market] Crimson_Desert_smashes_another_sales_milestone,_less_than_tw.md",
+    "signal_type_hint": "market",
+    "raw_tags": [
+      "inbox",
+      "market"
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "source_id": "incoming_20260401_036",
+  "source_type": "news",
+  "title": "Magic: The Gathering Reveal - Inside The Prismari Artistry Deck From Secrets of Strixhaven",
+  "content": "A first look at a bunch of new Commander cards from Magic's next set.",
+  "published_at": "2026-04-01T00:00:00Z",
+  "source_name": "IGN Game News",
+  "source_url": "https://www.ign.com/articles/magic-the-gathering-secrets-of-strixhaven-prismari-deck",
+  "language": "en",
+  "mode": "prompt_first",
+  "ingestion_meta": {
+    "provider": "knowledge_base_inbox",
+    "origin_file": "00-Inbox\\2026-04-02\\[tech] Magic_The_Gathering_Reveal_-_Inside_The_Prismari_Artistry_De.md",
+    "signal_type_hint": "technical",
+    "raw_tags": [
+      "inbox",
+      "technical"
+    ]
+  }
+}

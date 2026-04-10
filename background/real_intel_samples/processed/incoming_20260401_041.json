@@ -1,0 +1,20 @@
+{
+  "source_id": "incoming_20260401_041",
+  "source_type": "news",
+  "title": "Pokemon Go's April Fool's Surprise Is Real, And Fans Are Loving It",
+  "content": "One of the most-requested Pokemon is making their debut in Pokemon Go today, and it's not an April Fool's Day prank. Mimikyu has finally come to Pokemon Go, and dedicated players will be able to add them to their lineup starting today. The decision to debut the character on April 1 may be an unusual choice, but Mimikyu's silhouettes are already appearing in the game. Pokemon Go's Spotlight Hour--which starts tonight at 6pm local time--will feature multiple Mimikyu spawns, as well as Pikachu appe",
+  "published_at": "2026-04-01T00:00:00Z",
+  "source_name": "GameSpot",
+  "source_url": "https://www.gamespot.com/articles/pokemon-gos-april-fools-surprise-is-real-and-fans-are-loving-it/1100-6539156/?ftag=CAD-01-10abi2f",
+  "language": "en",
+  "mode": "prompt_first",
+  "ingestion_meta": {
+    "provider": "knowledge_base_inbox",
+    "origin_file": "00-Inbox\\2026-04-02\\[tech] Pokemon_Go's_April_Fool's_Surprise_Is_Real,_And_Fans_Are_Lov.md",
+    "signal_type_hint": "technical",
+    "raw_tags": [
+      "inbox",
+      "technical"
+    ]
+  }
+}

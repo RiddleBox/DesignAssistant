@@ -1,0 +1,20 @@
+{
+  "source_id": "incoming_20260401_004",
+  "source_type": "news",
+  "title": "The most baffling apostrophe in gaming history: a PC Gamer investigation",
+  "content": "The hard-hitting reporting no other gaming website would dare to publish.",
+  "published_at": "2026-04-01T00:00:00Z",
+  "source_name": "PC Gamer",
+  "source_url": "https://www.pcgamer.com/gaming-industry/the-most-baffling-apostrophe-in-gaming-history-a-pc-gamer-investigation/",
+  "language": "en",
+  "mode": "prompt_first",
+  "ingestion_meta": {
+    "provider": "knowledge_base_inbox",
+    "origin_file": "00-Inbox\\2026-04-02\\[capital] The_most_baffling_apostrophe_in_gaming_history_a_PC_Gamer_in.md",
+    "signal_type_hint": "capital",
+    "raw_tags": [
+      "inbox",
+      "capital"
+    ]
+  }
+}

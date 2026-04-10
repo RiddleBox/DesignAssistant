@@ -1,0 +1,20 @@
+{
+  "source_id": "incoming_20260401_045",
+  "source_type": "news",
+  "title": "Starcrafty strategy game Stormgate is about to lose its multiplayer modes, due to an AI company buying up Frost Giant's server provider",
+  "content": "Stormgate is set to go offline-only at the end of April, with developers Frost Giant Studios having announced that the server provider for the strategy game's multiplayer modes have decided they no longer want to be a server provider for online games. That's a byproduct of said provider, Hathora, having been taken over by an AI company who plan on using their latest purchase \"to work on compute orchestration for AI inference at scale\". Read more",
+  "published_at": "2026-04-01T00:00:00Z",
+  "source_name": "Rock Paper Shotgun",
+  "source_url": "https://www.rockpapershotgun.com/starcrafty-strategy-game-stormgate-is-about-to-lose-its-multiplayer-modes-due-to-an-ai-company-buying-up-frost-giants-server-provider",
+  "language": "en",
+  "mode": "prompt_first",
+  "ingestion_meta": {
+    "provider": "knowledge_base_inbox",
+    "origin_file": "00-Inbox\\2026-04-02\\[tech] Starcrafty_strategy_game_Stormgate_is_about_to_lose_its_mult.md",
+    "signal_type_hint": "technical",
+    "raw_tags": [
+      "inbox",
+      "technical"
+    ]
+  }
+}

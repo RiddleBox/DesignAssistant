@@ -1,0 +1,20 @@
+{
+  "source_id": "incoming_20260401_001",
+  "source_type": "news",
+  "title": "Crimson Desert Estimated to Have Made Over $200 Million Already — and PS5 Is a Big Contributor",
+  "content": "Official figures put Crimson Desert at 4 million sales in just under two weeks, but how much money has it made? One analyst believes they’ve worked it out.",
+  "published_at": "2026-04-01T00:00:00Z",
+  "source_name": "IGN Game News",
+  "source_url": "https://www.ign.com/articles/crimson-desert-estimated-to-have-made-over-200-million-already-and-ps5-is-a-big-contributor",
+  "language": "en",
+  "mode": "prompt_first",
+  "ingestion_meta": {
+    "provider": "knowledge_base_inbox",
+    "origin_file": "00-Inbox\\2026-04-02\\[capital] Crimson_Desert_Estimated_to_Have_Made_Over_$200_Million_Alre.md",
+    "signal_type_hint": "capital",
+    "raw_tags": [
+      "inbox",
+      "capital"
+    ]
+  }
+}

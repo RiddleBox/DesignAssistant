@@ -1,0 +1,20 @@
+{
+  "source_id": "incoming_20260401_026",
+  "source_type": "news",
+  "title": "Final Fantasy 7 Remake Intergrade for Nintendo Switch 2 Is Down to Just $30 at Walmart",
+  "content": "Final Fantasy 7 Remake Intergrade for Nintendo Switch 2 is on sale for $29.99 right now at Walmart, a $10 drop from its list price of $39.99.",
+  "published_at": "2026-04-01T00:00:00Z",
+  "source_name": "IGN Game News",
+  "source_url": "https://www.ign.com/articles/final-fantasy-7-remake-intergrade-for-nintendo-switch-2-is-down-to-just-30-at-walmart",
+  "language": "en",
+  "mode": "prompt_first",
+  "ingestion_meta": {
+    "provider": "knowledge_base_inbox",
+    "origin_file": "00-Inbox\\2026-04-02\\[tech] Final_Fantasy_7_Remake_Intergrade_for_Nintendo_Switch_2_Is_D.md",
+    "signal_type_hint": "technical",
+    "raw_tags": [
+      "inbox",
+      "technical"
+    ]
+  }
+}

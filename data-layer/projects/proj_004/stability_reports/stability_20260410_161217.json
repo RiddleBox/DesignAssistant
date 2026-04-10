@@ -1,0 +1,38 @@
+{
+  "generated_at": "2026-04-10T16:12:17",
+  "sample_size": 2,
+  "repeat_runs": 1,
+  "seed": 42,
+  "selected_files": [
+    "incoming_008_capital_savvy_moonton_acquisition.json",
+    "incoming_20260401_027.json"
+  ],
+  "title_variants": [
+    "沙特资本加速收购全球头部游戏资产"
+  ],
+  "posture_variants": [
+    "validate"
+  ],
+  "title_stable": true,
+  "posture_stable": true,
+  "runs": [
+    {
+      "run_index": 1,
+      "selected_files": [
+        "incoming_008_capital_savvy_moonton_acquisition.json",
+        "incoming_20260401_027.json"
+      ],
+      "source_ids": [
+        "incoming_008",
+        "incoming_20260401_027"
+      ],
+      "signal_count": 2,
+      "opportunity_title": "沙特资本加速收购全球头部游戏资产",
+      "priority_level": "deep_dive",
+      "action_posture": "validate",
+      "critical_findings": 0,
+      "phase3_priorities": 0,
+      "total_ms": 92721
+    }
+  ]
+}

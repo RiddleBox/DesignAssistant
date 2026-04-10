@@ -1,0 +1,20 @@
+{
+  "source_id": "incoming_20260401_046",
+  "source_type": "news",
+  "title": "The First Berserker: Khazan Adds Immortal Fury Set to Celebrate Anniversary",
+  "content": "The First Berserker: Khazan, the action RPG set in the Dungeon Fighter Online universe, is celebrating its one year anniversary",
+  "published_at": "2026-04-01T00:00:00Z",
+  "source_name": "IGN Game News",
+  "source_url": "https://www.ign.com/articles/the-first-berserker-khazan-adds-immortal-fury-set-to-celebrate-anniversary",
+  "language": "en",
+  "mode": "prompt_first",
+  "ingestion_meta": {
+    "provider": "knowledge_base_inbox",
+    "origin_file": "00-Inbox\\2026-04-02\\[tech] The_First_Berserker_Khazan_Adds_Immortal_Fury_Set_to_Celebra.md",
+    "signal_type_hint": "technical",
+    "raw_tags": [
+      "inbox",
+      "technical"
+    ]
+  }
+}

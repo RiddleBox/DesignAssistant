@@ -1,0 +1,6 @@
+{
+  "provider": "anthropic",
+  "model": "doubao-seed-2.0-lite",
+  "response_len": 934,
+  "raw_response": "{\n  \"signals\": [\n    {\n      \"signal_id\": \"sig_capcom_ai_001\",\n      \"signal_type\": \"technical\",\n      \"signal_label\": \"卡普空宣布将生成式AI纳入开发管线\",\n      \"description\": \"Capcom宣布将生成式AI加入开发管线用于内部工具与生产力提升，不用于资产创作，AI定位为人类创意工作的重复任务辅助工具\",\n      \"evidence_text\": \"Capcom has announced it will incorporate generative AI into its development pipeline to accelerate production workflows. The company stated it will not use AI for asset creation, but rather for internal tooling and productivity improvements.\",\n      \"entities\": [\"Capcom\", \"generative AI\", \"Resident Evil\"],\n      \"intensity_score\": 7,\n      \"confidence_score\": 10,\n      \"timeliness_score\": 9,\n      \"source_ref\": \"input_text\",\n      \"extracted_at\": \"2025-06-20T00:00:00Z\",\n      \"logic_frame\": {\n        \"what_changed\": \"game_development_tech_stack\",\n        \"change_direction\": \"enter\",\n        \"affects\": [\"internal game development workflows\", \"productivity\"]\n      }\n    }\n  ]\n}"
+}

@@ -1,0 +1,89 @@
+{
+  "generated_at": "2026-04-10T16:19:02",
+  "sample_size": 4,
+  "repeat_runs": 3,
+  "seed": 42,
+  "selected_files": [
+    "incoming_008_capital_savvy_moonton_acquisition.json",
+    "incoming_20260401_027.json",
+    "incoming_20260401_040.json",
+    "sample_001_capital_moonton_acquisition.json"
+  ],
+  "title_variants": [
+    "沙特资本加速收购全球头部游戏资产"
+  ],
+  "posture_variants": [
+    "pilot",
+    "validate"
+  ],
+  "title_stable": true,
+  "posture_stable": false,
+  "runs": [
+    {
+      "run_index": 1,
+      "selected_files": [
+        "incoming_008_capital_savvy_moonton_acquisition.json",
+        "incoming_20260401_027.json",
+        "incoming_20260401_040.json",
+        "sample_001_capital_moonton_acquisition.json"
+      ],
+      "source_ids": [
+        "incoming_008",
+        "incoming_20260401_027",
+        "incoming_20260401_040",
+        "real_001"
+      ],
+      "signal_count": 2,
+      "opportunity_title": "沙特资本加速收购全球头部游戏资产",
+      "priority_level": "deep_dive",
+      "action_posture": "validate",
+      "critical_findings": 0,
+      "phase3_priorities": 0,
+      "total_ms": 98515
+    },
+    {
+      "run_index": 2,
+      "selected_files": [
+        "incoming_008_capital_savvy_moonton_acquisition.json",
+        "incoming_20260401_027.json",
+        "incoming_20260401_040.json",
+        "sample_001_capital_moonton_acquisition.json"
+      ],
+      "source_ids": [
+        "incoming_008",
+        "incoming_20260401_027",
+        "incoming_20260401_040",
+        "real_001"
+      ],
+      "signal_count": 3,
+      "opportunity_title": "沙特资本加速收购全球头部游戏资产",
+      "priority_level": "deep_dive",
+      "action_posture": "validate",
+      "critical_findings": 0,
+      "phase3_priorities": 0,
+      "total_ms": 103829
+    },
+    {
+      "run_index": 3,
+      "selected_files": [
+        "incoming_008_capital_savvy_moonton_acquisition.json",
+        "incoming_20260401_027.json",
+        "incoming_20260401_040.json",
+        "sample_001_capital_moonton_acquisition.json"
+      ],
+      "source_ids": [
+        "incoming_008",
+        "incoming_20260401_027",
+        "incoming_20260401_040",
+        "real_001"
+      ],
+      "signal_count": 3,
+      "opportunity_title": "沙特资本加速收购全球头部游戏资产",
+      "priority_level": "deep_dive",
+      "action_posture": "pilot",
+      "critical_findings": 0,
+      "phase3_priorities": 0,
+      "total_ms": 101482
+    }
+  ]
+}

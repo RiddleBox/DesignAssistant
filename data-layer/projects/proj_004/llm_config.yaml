@@ -27,6 +27,12 @@ phases:
     base_url: ""
     api_key: ""
     max_tokens: 4096
+    connect_timeout_seconds: 20
+    read_timeout_seconds: 150
+    max_retries: 2
+    max_parallel_samples: 2
+    request_spacing_ms: 1000
+    step1_cooldown_seconds: 20
 
   "2.2":                    # 机会判断：需要更强推理，可换高端模型
     provider: "deepseek"

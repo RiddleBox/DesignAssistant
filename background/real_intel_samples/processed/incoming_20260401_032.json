@@ -1,0 +1,20 @@
+{
+  "source_id": "incoming_20260401_032",
+  "source_type": "news",
+  "title": "Garry's Mod successor s&box finally arrives on Steam on April 28",
+  "content": "Still waiting for a price, but at least we've got a date.",
+  "published_at": "2026-04-01T00:00:00Z",
+  "source_name": "PC Gamer",
+  "source_url": "https://www.pcgamer.com/games/garrys-mod-successor-s-and-box-finally-arrives-on-steam-on-april-28/",
+  "language": "en",
+  "mode": "prompt_first",
+  "ingestion_meta": {
+    "provider": "knowledge_base_inbox",
+    "origin_file": "00-Inbox\\2026-04-02\\[tech] Garry's_Mod_successor_s&box_finally_arrives_on_Steam_on_Apri.md",
+    "signal_type_hint": "technical",
+    "raw_tags": [
+      "inbox",
+      "technical"
+    ]
+  }
+}

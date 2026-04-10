@@ -1,0 +1,8 @@
+{
+  "provider": "doubao",
+  "model": "doubao-seed-2.0-lite",
+  "error_type": "HTTPError",
+  "error": "404 Client Error: Not Found for url: https://ark.cn-beijing.volces.com/api/v3/chat/completions",
+  "raw_response": "",
+  "text_len": 465
+}

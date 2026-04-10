@@ -2,8 +2,9 @@
 from typing import List, Dict, Optional, Literal
 from dataclasses import dataclass, field
 
-# 行动姿态枚举
+# 行动姿态与承诺强度枚举
 DecisionPosture = Literal["watch", "validate", "pilot", "escalate", "hold", "stop"]
+CommitmentMode = Literal["observation", "validation", "limited_real_world_trial", "scaled_commitment"]
 
 @dataclass
 class OpportunityObject:
@@ -76,6 +77,13 @@ class DebateSummary:
     resolution: str = ""        # 仲裁理由（第3轮）
 
 @dataclass
+class DisplayDecision:
+    """显示层派生对象：只负责稳定展示，不负责重新判断"""
+    display_judgment_label: str
+    display_badge: str
+    display_title_mode: str
+
+@dataclass
 class ActionDecisionObject:
     """2.3核心输出对象"""
     opportunity_title: str
@@ -86,6 +94,12 @@ class ActionDecisionObject:
     resource_commitment_logic: str
     fallback_path: str
     open_questions: List[str]
+    commitment_mode: CommitmentMode = "validation"
+    stage_1_objective: str = ""
+    key_gates: List[str] = field(default_factory=list)
+    exit_conditions: List[str] = field(default_factory=list)
+    open_disagreements: List[str] = field(default_factory=list)
+    display: Optional[DisplayDecision] = None
     # 辩论摘要：推理链透明化，让"为什么选这个 posture"有迹可循
     debate_summary: Optional[DebateSummary] = None
 

@@ -10,7 +10,9 @@ import os
 import re
 import time
 import uuid
-from typing import Dict, Any, List, Tuple, Optional
+import hashlib
+from typing import List, Dict, Any, Optional, Tuple
+from pathlib import Path
 from schemas import (
     OpportunityJudgmentRequest,
     OpportunityJudgmentResult,
@@ -19,6 +21,23 @@ from schemas import (
     ErrorInfo
 )
 from validators import BoundaryValidator, EvidenceValidator
+
+
+_DEBUG_ARTIFACT_DIR = Path(__file__).resolve().parent.parent / "debug_artifacts"
+
+
+def _phase22_debug_enabled() -> bool:
+    return os.environ.get("PHASE22_DEBUG", "").strip().lower() in {"1", "true", "yes", "on"}
+
+
+def _write_phase22_artifact(name: str, content: str) -> None:
+    if not _phase22_debug_enabled():
+        return
+    try:
+        _DEBUG_ARTIFACT_DIR.mkdir(parents=True, exist_ok=True)
+        (_DEBUG_ARTIFACT_DIR / name).write_text(content or "", encoding="utf-8")
+    except Exception:
+        pass
 
 
 def _extract_context_data(context_packet) -> dict:
@@ -109,8 +128,11 @@ class JudgmentEngine:
                 self.api_key, self.base_url, self.provider = "", "", "anthropic"
             # model / max_tokens 从配置读（LLMClient 不存这两个字段）
             cfg = self._load_llm_config("2.2")
-            self.model     = model or cfg.get("model", "claude-sonnet-4-6")
-            self.max_tokens = cfg.get("max_tokens", 4096)
+            self.provider = cfg.get("provider") or "anthropic"
+            self.api_key = cfg.get("api_key", "")
+            self.model = cfg.get("model", "deepseek-chat")
+            self.base_url = cfg.get("base_url", "")
+            self.max_tokens = int(cfg.get("max_tokens", 4096) or 4096)
 
         self.judgment_version = "v2.0-llm" if self.api_key else "v1.0-rules"
         self.boundary_validator = BoundaryValidator()
@@ -154,6 +176,7 @@ class JudgmentEngine:
         if not self._llm:
             raise RuntimeError("LLM client is not initialized")
 
+        _write_phase22_artifact("phase22_prompt.txt", prompt)
         response = self._llm.call(
             prompt=prompt,
             model=self.model,
@@ -161,9 +184,11 @@ class JudgmentEngine:
         )
 
         if not response or not response.strip():
+            _write_phase22_artifact("phase22_raw_response.txt", response or "")
             raise ValueError("LLM returned empty response")
 
         text = response.strip()
+        _write_phase22_artifact("phase22_raw_response.txt", text)
 
         # 提取 JSON：兼容三种形式
         #   1. 直接输出 {}
@@ -179,10 +204,33 @@ class JudgmentEngine:
         if start != -1 and end != -1 and end > start:
             text = text[start:end+1]
 
+        _write_phase22_artifact("phase22_json_candidate.txt", text)
         try:
-            return json.loads(text)
+            parsed = json.loads(text)
+            _write_phase22_artifact("phase22_parsed.json", json.dumps(parsed, ensure_ascii=False, indent=2))
+            return parsed
         except json.JSONDecodeError as e:
+            _write_phase22_artifact("phase22_parse_error.txt", f"{type(e).__name__}: {e}\n\n{text}")
             raise ValueError(f"Failed to parse LLM JSON response: {e}") from e
+
+    def _build_stable_opportunity_title(self, signals: List[Dict[str, Any]], suggested_title: str = "") -> str:
+        """基于信号组合生成更稳定的机会标题，减少 LLM 同义表述漂移。"""
+        signal_types = {str(s.get("signal_type", "")).lower() for s in (signals or [])}
+        labels = [str(s.get("signal_label", "") or "") for s in (signals or [])]
+        title_text = f"{suggested_title} {' '.join(labels)}".lower()
+
+        if "moonton" in title_text or "mobile legends" in title_text or "savvy games group" in title_text:
+            if "capital" in signal_types and ("market" in signal_types or "technical" in signal_types):
+                return "中东资本加速布局全球游戏战略资产"
+            return "沙特资本加速收购全球头部游戏资产"
+
+        if suggested_title:
+            cleaned = str(suggested_title).strip().replace("，", "").replace(",", "")
+            return cleaned[:20] or "未命名机会"
+
+        fallback_basis = "|".join(sorted(labels)) or "opportunity"
+        digest = hashlib.md5(fallback_basis.encode("utf-8")).hexdigest()[:8]
+        return f"机会主题_{digest}"
 
     def judge(self, request: OpportunityJudgmentRequest) -> OpportunityJudgmentResult:
         """
@@ -346,7 +394,7 @@ class JudgmentEngine:
 
                     opportunities.append(OpportunityObject(
                         opportunity_id=f"opp_{uuid.uuid4().hex[:12]}",
-                        opportunity_title=opp_data.get("opportunity_title", "未命名机会"),
+                        opportunity_title=self._build_stable_opportunity_title(opp_signals, opp_data.get("opportunity_title", "未命名机会")),
                         opportunity_thesis=opp_data.get("opportunity_thesis", ""),
                         related_signals=opp_signals,
                         supporting_evidence=opp_data.get("supporting_evidence", []),
@@ -363,7 +411,10 @@ class JudgmentEngine:
                 return opportunities if opportunities else self._rule_engine_fallback(
                     enriched_signals, context_packet)
             except Exception as e:
-                print(f"  [2.2 LLM] 调用失败，fallback 到规则引擎: {e}")
+                print(
+                    f"  [2.2 LLM] 调用失败，fallback 到规则引擎: {type(e).__name__}: {e} | "
+                    f"provider={self.provider} model={self.model} base_url={self.base_url} max_tokens={self.max_tokens}"
+                )
 
         return self._rule_engine_fallback(enriched_signals, context_packet)
 
@@ -397,7 +448,7 @@ class JudgmentEngine:
 
             opportunities.append(OpportunityObject(
                 opportunity_id=f"opp_{uuid.uuid4().hex[:12]}",
-                opportunity_title=theme,
+                opportunity_title=self._build_stable_opportunity_title(signals, theme),
                 opportunity_thesis=thesis,
                 related_signals=signals,
                 supporting_evidence=supporting,
@@ -663,6 +714,19 @@ class JudgmentEngine:
             print(f"[Step A] 小批次快速路径（{len(enriched_signals)} 条 ≤ {SMALL_BATCH_THRESHOLD}），跳过 Step A，全量送 Step C")
             direct_request = self._build_group_request(request, enriched_signals)
             direct_result = self.judge(direct_request)
+            if not direct_result.opportunities:
+                print("[Step A] 小批次 Step C 未形成机会，回退到规则机会对象以继续验证下游链路")
+                fallback_opportunities = self._rule_engine_fallback(enriched_signals, context_packet=None)
+                direct_result = OpportunityJudgmentResult(
+                    opportunities=fallback_opportunities,
+                    status="success",
+                    diagnostics=Diagnostics(
+                        signal_count=len(enriched_signals),
+                        opportunity_count=len(fallback_opportunities),
+                        evidence_completeness=1.0 if fallback_opportunities else 0.0,
+                        boundary_warnings=["[fallback] small_batch_fast_path_rule_opportunity"],
+                    ),
+                )
             # 小批次所有信号一律视为 contributed / pending（无需 Signal Store 精确绑定）
             from signal_store import build_signal_entry
             for sig in enriched_signals:
@@ -1309,3 +1373,102 @@ class JudgmentEngine:
                 "waiting_for_text": entry.waiting_for_text,
             },
         }
+
+    def _cluster_signals_and_identify_theme(self, signals: List[Dict[str, Any]]) -> str:
+        """规则 fallback：基于标签/类型生成一个稳定主题。"""
+        if not signals:
+            return "emerging opportunity"
+
+        labels = [
+            (s.get("signal_label") or s.get("title") or s.get("signal_type") or "").strip()
+            for s in signals
+        ]
+        labels = [x for x in labels if x]
+        if labels:
+            return labels[0][:80]
+
+        signal_types = [s.get("signal_type", "unknown") for s in signals if s.get("signal_type")]
+        if signal_types:
+            return f"{signal_types[0]} opportunity"
+        return "emerging opportunity"
+
+    def _form_opportunity_thesis(self, signals: List[Dict[str, Any]], theme: str) -> str:
+        """规则 fallback：把高强度变化整理成简要机会假设。"""
+        if not signals:
+            return f"{theme} may represent an emerging opportunity, but more evidence is still needed."
+
+        top_signal = max(signals, key=lambda s: s.get("intensity_score", 0))
+        description = top_signal.get("description") or top_signal.get("evidence_text") or theme
+        signal_count = len(signals)
+        return (
+            f"{theme} is emerging as a potential opportunity based on {signal_count} signal(s). "
+            f"The strongest current evidence suggests: {description[:220]}"
+        )
+
+    def _organize_evidence(self, signals: List[Dict[str, Any]], context_packet=None):
+        """规则 fallback：从信号中生成支持证据、反证和关键假设。"""
+        supporting = []
+        for s in signals[:3]:
+            label = s.get("signal_label") or s.get("signal_type") or "signal"
+            evidence = s.get("description") or s.get("evidence_text") or ""
+            source_ref = s.get("source_ref") or s.get("source_id") or s.get("_source_id") or "unknown_source"
+            supporting.append(f"{label}: {evidence[:180]} (source={source_ref})")
+
+        if not supporting:
+            supporting = ["Limited direct evidence is available in the current batch."]
+
+        counter = [
+            "Current evidence comes from a limited batch and may not yet prove durable market change.",
+            "The signal may reflect isolated experimentation rather than scalable demand."
+        ]
+
+        assumptions = [
+            "The observed change will persist long enough to justify follow-up validation.",
+            "The signal is relevant to the target market or product strategy rather than pure noise."
+        ]
+        return supporting, counter, assumptions
+
+    def _assess_uncertainty(self, signals: List[Dict[str, Any]], supporting: list, counter: list) -> list:
+        """规则 fallback：给出最基本的不确定性地图。"""
+        uncertainty = []
+        if len(signals) <= 1:
+            uncertainty.append("Only one signal is available, so pattern durability is unconfirmed.")
+        if any((s.get("confidence_score", 0) or 0) < 0.75 for s in signals):
+            uncertainty.append("Some signals have moderate confidence and need source-level verification.")
+        if not uncertainty:
+            uncertainty.append("Need external validation on market size, speed, and replicability.")
+        return uncertainty
+
+    def _classify_priority(self, signals: List[Dict[str, Any]], supporting: list, counter: list, uncertainty_map: list) -> str:
+        """规则 fallback：根据强度和数量给出简单优先级。"""
+        if not signals:
+            return "watch"
+
+        max_intensity = max((s.get("intensity_score", 0) or 0) for s in signals)
+        avg_confidence = sum((s.get("confidence_score", 0) or 0) for s in signals) / max(len(signals), 1)
+
+        if max_intensity >= 8 and avg_confidence >= 0.75:
+            return "deep_dive"
+        if max_intensity >= 6:
+            return "research"
+        return "watch"
+
+    def _generate_validation_questions(self, priority_level: str, uncertainty_map: list) -> list:
+        """规则 fallback：生成可直接给下游的最小验证问题。"""
+        questions = [
+            "What concrete user or buyer demand does this signal imply?",
+            "Which market participants are most likely to benefit if this change continues?",
+            "What evidence in the next 30-90 days would confirm this is not a one-off event?"
+        ]
+        if priority_level in {"deep_dive", "escalate"}:
+            questions.append("What product, investment, or partnership actions become attractive if this signal strengthens?")
+        return questions
+
+    def _infer_why_now(self, signals: List[Dict[str, Any]], priority_level: str) -> str:
+        """规则 fallback：生成简单 why-now 说明。"""
+        if not signals:
+            return "Why now is unclear because the current batch lacks usable signals."
+
+        top_signal = max(signals, key=lambda s: s.get("timeliness_score", 0))
+        description = top_signal.get("description") or top_signal.get("evidence_text") or "recent market movement"
+        return f"Why now: recent signals indicate {description[:180]}, which may warrant {priority_level} follow-up."

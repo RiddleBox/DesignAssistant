@@ -1,0 +1,20 @@
+{
+  "source_id": "incoming_20260401_009",
+  "source_type": "news",
+  "title": "The first new Heroes of Might and Magic strategy game in over 10 years will launch this month",
+  "content": "Heroes of Might and Magic: Olden Era will release in PC early access on April 30th, Hooded Horse and Ubisoft have announced. The new strategy RPG from developers Unfrozen is the first freshly baked HOMM game in over a decade, and will launch with a mixture of familiar and new modes, spanning singleplayer and multiplayer. If you're new to the series – there is the faint but horrifying possibility that you were not yet born, when the last one came out - it's a turn-based, empire-building affair, w",
+  "published_at": "2026-04-01T00:00:00Z",
+  "source_name": "Rock Paper Shotgun",
+  "source_url": "https://www.rockpapershotgun.com/the-first-new-heroes-of-might-and-magic-strategy-game-in-over-10-years-will-launch-this-month",
+  "language": "en",
+  "mode": "prompt_first",
+  "ingestion_meta": {
+    "provider": "knowledge_base_inbox",
+    "origin_file": "00-Inbox\\2026-04-02\\[market] The_first_new_Heroes_of_Might_and_Magic_strategy_game_in_ove.md",
+    "signal_type_hint": "market",
+    "raw_tags": [
+      "inbox",
+      "market"
+    ]
+  }
+}

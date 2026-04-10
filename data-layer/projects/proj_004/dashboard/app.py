@@ -63,18 +63,60 @@ def _render_list(items: list):
         else:
             st.markdown(f"- {str(item)[:200]}")
 
+
+def _render_phase21_sample_digest(samples: list, empty_message: str):
+    if not samples:
+        st.caption(empty_message)
+        return
+    for index, sample in enumerate(samples, 1):
+        source_id = sample.get("source_id", "")
+        title = sample.get("raw_title") or "（无标题）"
+        source_name = sample.get("raw_source_name") or ""
+        decode_status = sample.get("decode_status", "unknown")
+        processing_time_ms = sample.get("processing_time_ms", 0)
+        signal_count = sample.get("signal_count", 0)
+        warning_count = sample.get("warning_count", 0)
+        error_type = sample.get("error_type", "")
+        error_message = sample.get("error_message", "")
+
+        header = f"{index}. {source_id} | {processing_time_ms}ms | status={decode_status}"
+        with st.expander(header, expanded=(index == 1)):
+            st.markdown(f"**标题**：{title[:160]}")
+            if source_name:
+                st.caption(f"来源：{source_name}")
+            meta_col1, meta_col2, meta_col3 = st.columns(3)
+            meta_col1.caption(f"信号数：{signal_count}")
+            meta_col2.caption(f"warnings：{warning_count}")
+            meta_col3.caption(f"状态：{decode_status}")
+            if error_type or error_message:
+                st.error(f"{error_type or 'Error'}: {error_message or '未知错误'}")
+
 import yaml as _yaml
 
 # ── 读取配置：优先本地私有文件，其次可提交模板 ─────────────────────
 LLM_TEMPLATE_CONFIG_PATH = os.path.join(PROJ_DIR, "llm_config.yaml")
 LLM_LOCAL_CONFIG_PATH = os.path.join(PROJ_DIR, "llm_config.local.yaml")
 
+
+def _deep_merge_dict(base: dict, override: dict) -> dict:
+    """递归合并字典：override 覆盖 base，同名子字典继续深合并"""
+    result = dict(base or {})
+    for key, value in (override or {}).items():
+        if isinstance(value, dict) and isinstance(result.get(key), dict):
+            result[key] = _deep_merge_dict(result[key], value)
+        else:
+            result[key] = value
+    return result
+
+
 def load_llm_config() -> dict:
-    config_path = LLM_LOCAL_CONFIG_PATH if os.path.exists(LLM_LOCAL_CONFIG_PATH) else LLM_TEMPLATE_CONFIG_PATH
-    if os.path.exists(config_path):
-        with open(config_path, encoding="utf-8") as f:
-            return _yaml.safe_load(f) or {}
-    return {}
+    merged = {}
+    for config_path in [LLM_TEMPLATE_CONFIG_PATH, LLM_LOCAL_CONFIG_PATH]:
+        if os.path.exists(config_path):
+            with open(config_path, encoding="utf-8") as f:
+                merged = _deep_merge_dict(merged, _yaml.safe_load(f) or {})
+    return merged
+
 
 def save_llm_config(cfg: dict):
     with open(LLM_LOCAL_CONFIG_PATH, "w", encoding="utf-8") as f:
@@ -90,6 +132,12 @@ def get_phase_cfg(cfg: dict, phase: str) -> dict:
         "api_key":    phase_raw.get("api_key")    or default.get("api_key", ""),
         "base_url":   phase_raw.get("base_url")   or default.get("base_url", ""),
         "max_tokens": phase_raw.get("max_tokens") or default.get("max_tokens", 4096),
+        "connect_timeout_seconds": phase_raw.get("connect_timeout_seconds", default.get("connect_timeout_seconds", 30)),
+        "read_timeout_seconds": phase_raw.get("read_timeout_seconds", default.get("read_timeout_seconds", 180)),
+        "max_retries": phase_raw.get("max_retries", default.get("max_retries", 3)),
+        "max_parallel_samples": phase_raw.get("max_parallel_samples", default.get("max_parallel_samples", 1)),
+        "request_spacing_ms": phase_raw.get("request_spacing_ms", default.get("request_spacing_ms", 0)),
+        "step1_cooldown_seconds": phase_raw.get("step1_cooldown_seconds", default.get("step1_cooldown_seconds", 0)),
     }
 
 # Provider 对应的默认 base_url（供 UI 自动填充）
@@ -188,7 +236,41 @@ with st.container(border=True):
                 url = st.text_input("Base URL（留空继承全局）", value=pcfg["base_url"],
                                     placeholder=PROVIDER_DEFAULT_URLS.get(prov, ""),
                                     key=f"url_{phase}")
-            phase_inputs[phase] = {"provider": prov, "model": mdl, "api_key": key, "base_url": url}
+
+            extra_phase_cfg = {}
+            if phase == "2.1":
+                xc1, xc2, xc3 = st.columns(3)
+                with xc1:
+                    connect_timeout = st.number_input("Connect timeout (s)", min_value=1, max_value=600,
+                                                      value=int(pcfg["connect_timeout_seconds"]), step=1,
+                                                      key=f"connect_timeout_{phase}")
+                    max_parallel = st.number_input("Max parallel samples", min_value=1, max_value=16,
+                                                   value=int(pcfg["max_parallel_samples"]), step=1,
+                                                   key=f"parallel_{phase}")
+                with xc2:
+                    read_timeout = st.number_input("Read timeout (s)", min_value=1, max_value=1800,
+                                                   value=int(pcfg["read_timeout_seconds"]), step=1,
+                                                   key=f"read_timeout_{phase}")
+                    request_spacing = st.number_input("Request spacing (ms)", min_value=0, max_value=30000,
+                                                      value=int(pcfg["request_spacing_ms"]), step=100,
+                                                      key=f"spacing_{phase}")
+                with xc3:
+                    max_retries = st.number_input("Max retries", min_value=1, max_value=10,
+                                                  value=int(pcfg["max_retries"]), step=1,
+                                                  key=f"retries_{phase}")
+                    cooldown_seconds = st.number_input("Step1 cooldown (s)", min_value=0, max_value=1800,
+                                                       value=int(pcfg["step1_cooldown_seconds"]), step=1,
+                                                       key=f"cooldown_{phase}")
+                extra_phase_cfg = {
+                    "connect_timeout_seconds": int(connect_timeout),
+                    "read_timeout_seconds": int(read_timeout),
+                    "max_retries": int(max_retries),
+                    "max_parallel_samples": int(max_parallel),
+                    "request_spacing_ms": int(request_spacing),
+                    "step1_cooldown_seconds": int(cooldown_seconds),
+                }
+
+            phase_inputs[phase] = {"provider": prov, "model": mdl, "api_key": key, "base_url": url, **extra_phase_cfg}
 
     save_col, stat_col = st.columns([1, 4])
     with save_col:
@@ -217,6 +299,13 @@ with st.container(border=True):
                     llm_cfg["phases"][phase]["base_url"] = vals["base_url"]
                 elif "base_url" in llm_cfg["phases"][phase]:
                     del llm_cfg["phases"][phase]["base_url"]
+                if phase == "2.1":
+                    llm_cfg["phases"][phase]["connect_timeout_seconds"] = vals["connect_timeout_seconds"]
+                    llm_cfg["phases"][phase]["read_timeout_seconds"] = vals["read_timeout_seconds"]
+                    llm_cfg["phases"][phase]["max_retries"] = vals["max_retries"]
+                    llm_cfg["phases"][phase]["max_parallel_samples"] = vals["max_parallel_samples"]
+                    llm_cfg["phases"][phase]["request_spacing_ms"] = vals["request_spacing_ms"]
+                    llm_cfg["phases"][phase]["step1_cooldown_seconds"] = vals["step1_cooldown_seconds"]
 
             save_llm_config(llm_cfg)
             st.success("已保存到 llm_config.local.yaml（本地私有，不入库）")
@@ -350,16 +439,111 @@ else:
             c1.metric("输入样本", len(d21.get("samples", [])))
             c2.metric("提取信号", d21.get("signal_total", 0))
             c3.metric("噪音样本", d21.get("noise_count", 0))
+            c4, c5, c6 = st.columns(3)
+            c4.metric("并发样本数", d21.get("max_parallel_samples", 1))
+            c5.metric("解码失败", d21.get("decode_error_count", 0))
+            c6.metric("平均单样本耗时(ms)", d21.get("avg_processing_time_ms", 0))
+            c7, c8, c9 = st.columns(3)
+            c7.metric("有 warning 的样本", d21.get("warning_sample_count", 0))
+            c8.metric("最慢样本耗时(ms)", d21.get("max_processing_time_ms", 0))
+            c9.metric("成功解码", d21.get("decode_success_count", 0))
+            if d21.get("request_spacing_ms", 0):
+                st.caption(f"请求错峰间隔：{d21.get('request_spacing_ms', 0)}ms")
 
-            for s in d21.get("samples", []):
+            diagnostics = d21.get("diagnostics", {})
+            if diagnostics:
+                st.markdown("#### 2.1 瓶颈样本诊断")
+                dp1, dp2, dp3, dp4 = st.columns(4)
+                dp1.metric("P50(ms)", diagnostics.get("p50_processing_time_ms", 0))
+                dp2.metric("P90(ms)", diagnostics.get("p90_processing_time_ms", 0))
+                dp3.metric("P95(ms)", diagnostics.get("p95_processing_time_ms", 0))
+                dp4.metric("拖尾样本数", diagnostics.get("slow_sample_count", 0))
+
+                threshold_ms = diagnostics.get("slow_sample_threshold_ms", 0)
+                if threshold_ms > 0:
+                    st.caption(f"拖尾样本定义：耗时 ≥ {threshold_ms}ms（按本批次 P90 阈值）")
+
+                tail_tabs = st.tabs(["最慢前10", "warning高发前10", "失败样本", "怎么看这些数据"])
+                with tail_tabs[0]:
+                    _render_phase21_sample_digest(
+                        diagnostics.get("top_slowest_samples", []),
+                        "本批次暂无可展示的慢样本。",
+                    )
+                with tail_tabs[1]:
+                    _render_phase21_sample_digest(
+                        diagnostics.get("top_warning_samples", []),
+                        "本批次没有 warning 样本。",
+                    )
+                with tail_tabs[2]:
+                    _render_phase21_sample_digest(
+                        diagnostics.get("failed_samples", []),
+                        "本批次没有失败样本。",
+                    )
+                with tail_tabs[3]:
+                    st.markdown("- **如果 `P90 / P95` 明显高于 `P50`**：说明不是整体都慢，而是少数拖尾样本在拉长整批耗时。")
+                    st.markdown("- **如果最慢样本同时 warning 多**：优先看这些样本是否存在超长原文、脏文本、来源异常或重试迹象。")
+                    st.markdown("- **如果失败样本集中在同类来源/同类错误**：优先做超时、重试或样本预处理治理，而不是盲目继续加并发。")
+                    st.markdown("- **如果最慢样本大多无 warning 且普遍都慢**：更像是 provider 吞吐或并发参数瓶颈，应继续调 `max_parallel_samples`、`request_spacing_ms`、timeout。")
+
+            filter_col1, filter_col2 = st.columns([2, 2])
+            with filter_col1:
+                status_filter = st.selectbox(
+                    "样本状态筛选",
+                    ["全部", "仅有信号", "仅噪音", "仅失败", "仅有 warning"],
+                    key="phase21_status_filter",
+                )
+            with filter_col2:
+                sort_key = st.selectbox(
+                    "排序方式",
+                    ["按输入顺序", "按耗时降序", "按信号数降序", "按 warning 数降序"],
+                    key="phase21_sort_key",
+                )
+
+            filtered_samples = list(d21.get("samples", []))
+            if status_filter == "仅有信号":
+                filtered_samples = [s for s in filtered_samples if s.get("decode_status") == "signal"]
+            elif status_filter == "仅噪音":
+                filtered_samples = [s for s in filtered_samples if s.get("decode_status") == "noise"]
+            elif status_filter == "仅失败":
+                filtered_samples = [s for s in filtered_samples if s.get("decode_status") == "failed"]
+            elif status_filter == "仅有 warning":
+                filtered_samples = [s for s in filtered_samples if s.get("warning_count", 0) > 0]
+
+            if sort_key == "按耗时降序":
+                filtered_samples.sort(key=lambda s: s.get("processing_time_ms", 0), reverse=True)
+            elif sort_key == "按信号数降序":
+                filtered_samples.sort(key=lambda s: s.get("signal_count", 0), reverse=True)
+            elif sort_key == "按 warning 数降序":
+                filtered_samples.sort(key=lambda s: s.get("warning_count", 0), reverse=True)
+
+            st.caption(f"当前展示 {len(filtered_samples)} / {len(d21.get('samples', []))} 个样本")
+
+            for s in filtered_samples:
                 is_noise = s.get("is_noise", False)
-                tag = "🔇 噪音" if is_noise else f"✅ {s.get('signal_count',0)} 个信号"
+                if s.get("decode_status") == "failed":
+                    tag = f"❌ 失败 | {s.get('error_type') or 'Error'}"
+                elif is_noise:
+                    tag = "🔇 噪音"
+                else:
+                    tag = f"✅ {s.get('signal_count',0)} 个信号"
                 raw_title = s.get("raw_title") or s["source_id"]
-                with st.expander(f"{'🔇' if is_noise else '📄'} {s['source_id']}  —  {tag}  |  {raw_title[:60]}", expanded=not is_noise):
-                    tab_labels = ["原文", "解码信号"] if not is_noise else ["原文"]
+                with st.expander(f"{'❌' if s.get('decode_status') == 'failed' else ('🔇' if is_noise else '📄')} {s['source_id']}  —  {tag}  |  {raw_title[:60]}", expanded=not is_noise and s.get("decode_status") != "failed"):
+                    meta1, meta2, meta3 = st.columns(3)
+                    meta1.caption(f"耗时：{s.get('processing_time_ms', 0)}ms")
+                    meta2.caption(f"warnings：{s.get('warning_count', 0)}")
+                    meta3.caption(f"状态：{s.get('decode_status', 'unknown')}")
+                    if s.get("started_at") or s.get("finished_at"):
+                        st.caption(f"开始：{s.get('started_at', '-') }  |  结束：{s.get('finished_at', '-')}")
+                    if s.get("error_message"):
+                        st.error(f"{s.get('error_type') or 'Error'}: {s['error_message']}")
+                    if s.get("warnings"):
+                        for w in s.get("warnings", []):
+                            st.warning(w)
+
+                    tab_labels = ["原文", "解码信号"] if not is_noise and s.get("decode_status") != "failed" else ["原文"]
                     tabs = st.tabs(tab_labels)
 
-                    # ── 原文 tab（噪音/信号均显示）
+                    # ── 原文 tab（噪音/信号/失败均显示）
                     with tabs[0]:
                         if s.get("raw_title"):
                             st.markdown(f"**{s['raw_title']}**")
@@ -376,11 +560,11 @@ else:
                             st.markdown(s["raw_content"])
                         else:
                             st.caption("（原文内容为空）")
-                        if is_noise:
+                        if is_noise and s.get("decode_status") != "failed":
                             st.info("该样本未提取到有效信号（噪音）")
 
-                    # ── 解码信号 tab（仅非噪音）
-                    if not is_noise:
+                    # ── 解码信号 tab（仅非噪音且未失败）
+                    if not is_noise and s.get("decode_status") != "failed":
                         with tabs[1]:
                             for sig in s.get("signals", []):
                                 sig_type = sig.get("signal_type", "?")
@@ -446,11 +630,24 @@ else:
         else:
             act = d23.get("action", {})
             llm_tag = "✅ LLM三路辩论" if act.get("llm_used") else "⚠️ 规则引擎 fallback"
-            st.markdown(f"**行动姿态：`{act.get('posture','')}`**  &nbsp; {llm_tag}", unsafe_allow_html=True)
+            display_badge = act.get("display_badge") or act.get("posture", "")
+            display_label = act.get("display_judgment_label", "")
+            commitment_mode = act.get("commitment_mode", "")
+            stage_1_objective = act.get("stage_1_objective", "")
+            st.markdown(f"**行动姿态：`{display_badge}`**  &nbsp; {llm_tag}", unsafe_allow_html=True)
+            if display_label:
+                st.caption(display_label)
             if act.get("why"):
                 st.caption(act["why"][:200])
+            if commitment_mode:
+                st.markdown(f"**承诺模式**：`{commitment_mode}`")
+            if stage_1_objective:
+                st.markdown(f"**第一阶段目标**：{stage_1_objective}")
+            if act.get("key_gates"):
+                st.markdown("**关键推进闸门**")
+                _render_list(act.get("key_gates", []))
 
-            tabs = st.tabs(["辩论过程", "分阶段计划", "主要风险", "退出条件"])
+            tabs = st.tabs(["辩论过程", "分阶段计划", "主要风险", "退出条件", "保留分歧"])
 
             with tabs[0]:
                 debate = act.get("debate_summary", {})
@@ -458,18 +655,34 @@ else:
                     st.caption("LLM 未跑通，无辩论记录")
                 else:
                     st.markdown("**🦅 鹰派（激进）**")
-                    st.write(debate.get("hawk_position", ""))
+                    st.write(debate.get("hawk_stance") or debate.get("hawk_position", ""))
                     st.markdown("**🕊️ 鸽派（保守）**")
-                    st.write(debate.get("dove_position", ""))
+                    st.write(debate.get("dove_stance") or debate.get("dove_position", ""))
+                    st.markdown("**🛠️ 执行者（可行性）**")
+                    st.write(debate.get("executor_stance", ""))
+                    if debate.get("dove_rebuttal"):
+                        st.markdown("**↩️ 鸽派反驳**")
+                        st.write(debate.get("dove_rebuttal", ""))
+                    if debate.get("executor_rebuttal"):
+                        st.markdown("**🔧 执行回应**")
+                        st.write(debate.get("executor_rebuttal", ""))
                     st.markdown("**⚖️ 仲裁结论**")
-                    st.write(debate.get("arbitrator_verdict", ""))
-                    st.caption(f"共识程度：{debate.get('consensus_level','')}")
+                    st.write(debate.get("resolution") or debate.get("arbitrator_verdict", ""))
+                    consensus = debate.get("consensus_level", "")
+                    if consensus:
+                        st.caption(f"收敛状态：{consensus}")
             with tabs[1]:
                 _render_list(act.get("phases", []))
             with tabs[2]:
                 _render_list(act.get("top_risks", []))
             with tabs[3]:
                 _render_list(act.get("exit_conditions", []))
+            with tabs[4]:
+                disagreements = act.get("open_disagreements", [])
+                if disagreements:
+                    _render_list(disagreements)
+                else:
+                    st.caption("当前无显式保留分歧")
 
     # ── 2.5 ─────────────────────────────────────────────────────
     d25 = result.get("step_25")

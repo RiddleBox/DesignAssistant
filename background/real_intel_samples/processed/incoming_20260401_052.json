@@ -1,0 +1,20 @@
+{
+  "source_id": "incoming_20260401_052",
+  "source_type": "news",
+  "title": "World Of Warcraft Is Getting A Fantastic New Transmog Option Soon",
+  "content": "Anyone who plays World of Warcraft knows the real endgame is looking cool , and Blizzard is giving players another way to do just that with a new transmog feature coming in patch 12.0.5. As revealed in the latest 12.0.5 public test realm development notes , players will soon be able to choose how to sheath their one handed weapons using the game's transmog system. Those options include sheathing weapons on the back, hip, or whether to be hidden entirely. For those classes or specializations that",
+  "published_at": "2026-04-01T00:00:00Z",
+  "source_name": "GameSpot",
+  "source_url": "https://www.gamespot.com/articles/world-of-warcraft-is-getting-a-fantastic-new-transmog-option-soon/1100-6539163/?ftag=CAD-01-10abi2f",
+  "language": "en",
+  "mode": "prompt_first",
+  "ingestion_meta": {
+    "provider": "knowledge_base_inbox",
+    "origin_file": "00-Inbox\\2026-04-02\\[tech] World_Of_Warcraft_Is_Getting_A_Fantastic_New_Transmog_Option.md",
+    "signal_type_hint": "technical",
+    "raw_tags": [
+      "inbox",
+      "technical"
+    ]
+  }
+}

@@ -142,11 +142,15 @@
 
 > **结构化行动决策对象至少要包含哪些字段。**
 
-当前建议作为 MVP 主骨架进入输出契约的字段包括：
+结合当前实现现状和最新契约，当前 MVP 更合理的主骨架应明确为两层：
+
+#### 第一层：`2.3` 行动判断收敛对象
 
 - `opportunity_title`
 - `decision_posture`
+- `commitment_mode`
 - `why_this_posture`
+- `stage_1_objective`
 - `phased_plan`
   - `stage`
   - `objective`
@@ -157,8 +161,26 @@
   - `go_no_go_criteria`
   - `exit_conditions`
 - `top_risks`
+- `key_gates`
+- `exit_conditions`
 - `resource_commitment_logic`
 - `fallback_path`
+- `open_questions`
+- `open_disagreements`
+- `debate_summary`
+
+#### 第二层：显示派生对象
+
+- `display_judgment_label`
+- `display_badge`
+- `display_title_mode`
+
+这里需要特别强调：
+
+- `decision_posture` 是**多 agent 收敛后的正式行动判断**；
+- `commitment_mode` 用来补足“当前承诺强度”这一维度，避免只靠 posture 单字段表达过多语义；
+- `stage_1_objective`、`key_gates` 与 `exit_conditions` 是最小行动闭环的硬骨架；
+- `display_*` 字段不属于新的判断层，而属于从 `2.3` 收敛字段派生出来的展示层对象。
 
 自然语言建议文档可以存在，但更适合作为结构化对象的派生视图，而不是当前 MVP 的唯一主产物。
 
@@ -323,20 +345,35 @@
 
 ### L. 多 Agent 化的行动设计编排
 
-`2.3` 当然也存在多 Agent 的合理想象空间，比如：
+`2.3` 当前已经存在一定的多 Agent 雏形，例如：
 
-- 路径推进视角 Agent
-- 风险约束视角 Agent
-- 资源现实性视角 Agent
-- 管理层拍板视角 Agent
+- 推进 / 鹰派视角
+- 审慎 / 鸽派视角
+- 执行可行性视角
+- 仲裁收敛视角
 
-但当前不建议把它并入 `2.3 MVP` 硬需求。
+因此这里更准确的说法不应是“多 Agent 不进入 MVP”，而应是：
 
-原因不是它没有价值，而是：
+> **多 Agent 可以作为当前实现机制存在，但它不是 `2.3 MVP` 的主验收目标；当前真正的 MVP 验收重点，仍然是结构化行动收敛对象是否稳定成立。**
 
-- `2.3` 当前最大的缺口不是“缺少多角色辩论”，而是“缺少最小行动对象与承诺结构”；
-- 在对象和边界未稳定前引入多 Agent，会进一步提高编排复杂度和调试成本；
-- 多 Agent 更适合在行动骨架稳定后，作为“提高方案稳健性和反方约束覆盖”的增强机制引入。
+也就是说，当前阶段可以接受：
+
+- 用多方辩论提升 posture 判断稳健性；
+- 用仲裁器把多视角收敛成统一行动对象；
+- 在输出中保留适度推理透明度，例如 `debate_summary` 或 `open_disagreements`。
+
+但当前阶段不应把以下内容作为硬性范围前提：
+
+- 复杂的多 agent 编排框架
+- 深度角色树与多轮博弈系统
+- 高度场景化的 agent 编队策略
+- 为了“像多智能体系统”而额外堆叠复杂度
+
+换句话说，当前阶段的原则应当是：
+
+- **允许多 agent 作为实现手段存在**；
+- **不把多 agent 复杂度本身当作 MVP 成功标准**；
+- **所有多 agent 设计都必须服务于收敛对象质量，而不是反过来喧宾夺主。**
 
 ---
 
@@ -566,8 +603,96 @@
 5. **选择少量真实机会对象完成首轮轻量验证**
 6. **根据验证结果决定是否进入 `2.3` 增强项，或把更复杂的协作编排放到 `2.5` 的整合阶段实现**
 
+## 十三、建议的最小 Schema 草案（供 `models.py` / Prompt / 报告层对齐）
+
+为了避免文档、Prompt、模型定义和报告展示各自演化，当前阶段建议把 `2.3` 的最小契约进一步显式写成以下草案：
+
+```json
+{
+  "opportunity_title": "string",
+  "decision_posture": "watch | validate | pilot | escalate | hold | stop",
+  "commitment_mode": "observation | validation | limited_real_world_trial | scaled_commitment",
+  "why_this_posture": "string",
+  "stage_1_objective": "string",
+  "key_gates": ["string"],
+  "exit_conditions": ["string"],
+  "phased_plan": [
+    {
+      "stage": "string",
+      "objective": "string",
+      "key_assumptions_to_test": ["string"],
+      "actions": ["string"],
+      "resources": {
+        "people": "string",
+        "budget": "string",
+        "time": "string",
+        "resource_rationale": "string"
+      },
+      "milestones": ["string"],
+      "go_no_go_criteria": ["string"],
+      "exit_conditions": ["string"]
+    }
+  ],
+  "top_risks": [
+    {
+      "risk": "string",
+      "impact_on_plan": "string",
+      "mitigation": "string",
+      "blocks_stage": "string"
+    }
+  ],
+  "resource_commitment_logic": "string",
+  "fallback_path": "string",
+  "open_questions": ["string"],
+  "open_disagreements": ["string"],
+  "debate_summary": {
+    "hawk_stance": "string",
+    "dove_stance": "string",
+    "executor_stance": "string",
+    "dove_rebuttal": "string",
+    "executor_rebuttal": "string",
+    "resolution": "string"
+  },
+  "display": {
+    "display_judgment_label": "string",
+    "display_badge": "string",
+    "display_title_mode": "string"
+  }
+}
+```
+
+当前实现中尚未全部具备这些字段是可以接受的，但后续应把它视为统一收敛方向，而不是让每层接口自由生长。
+
+## 十四、显示派生最小映射原则
+
+为了把“显示层不是仲裁层，而是派生层”落成工程约束，当前阶段建议先明确以下最小映射原则：
+
+- **`display_badge`**：直接映射 `decision_posture`
+  - `watch -> watch`
+  - `validate -> validate`
+  - `pilot -> pilot`
+  - `escalate -> escalate`
+  - `hold -> hold`
+  - `stop -> stop`
+- **`display_title_mode`**：由 `decision_posture + commitment_mode` 联合决定
+  - `watch + observation -> watch-oriented`
+  - `validate + validation -> validation-oriented`
+  - `pilot + limited_real_world_trial -> pilot-oriented`
+  - `escalate + scaled_commitment -> escalation-oriented`
+- **`display_judgment_label`**：由 posture + 承诺逻辑派生，而不是自由改判
+  - `watch -> 建议持续观察`
+  - `validate -> 建议先验证`
+  - `pilot -> 建议小范围试点`
+  - `escalate -> 建议升级投入`
+  - `hold -> 建议暂缓推进`
+  - `stop -> 建议停止`
+
+如果后续标题、文件名、摘要与 badge 出现冲突，应优先以结构化收敛字段为准，而不是以自然语言生成结果为准。
+
+这条原则对当前系统尤其重要，因为现有报告文件名、稳定性汇总、dashboard 展示都已经在消费 `opportunity_title` 与 `decision_posture`；若不提前收紧派生关系，就会继续放大“标题波动 / posture 漂移 / 同主题多报告看起来像不同结论”的问题。
+
 ---
 
 **文档状态**: ✅ 已完成  
 **版本**: v0.1 Draft  
-**建议下次更新时机**: 当 `2.3` 的输入 / 输出协议拍板完成、首轮案例验证跑完，或是否把更细资源模型 / 更强建议视图 / 多 Agent 编排纳入 `2.3 P1` 需要重新决策时
+**建议下次更新时机**: 当 `2.3` 的输入 / 输出协议拍板完成、首轮案例验证跑完，或 `models.py` / `action_designer.py` / `report_writer.py` 开始正式接入 `commitment_mode`、`display` 派生字段时

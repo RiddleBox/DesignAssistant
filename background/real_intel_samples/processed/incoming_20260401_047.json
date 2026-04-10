@@ -1,0 +1,20 @@
+{
+  "source_id": "incoming_20260401_047",
+  "source_type": "news",
+  "title": "The Incredible And Unlikely Story Of How Glen Powell Became Fox In The Super Mario Galaxy Movie",
+  "content": "The Super Mario Galaxy Movie introduces Fox McCloud and other characters not seen in the 2023 movie, but getting him in the movie was not Nintendo's idea. Not only that, but adding Fox required Nintendo to break its rules about mixing IPs. And when it came to finding a voice actor, it turned out that Glen Powell had already pitched himself, not knowing Illumination and Nintendo were planning to put Fox in the movie. Speaking to Forbes , Nintendo legend Shigeru Miyamoto said it was Illumination b",
+  "published_at": "2026-04-01T00:00:00Z",
+  "source_name": "GameSpot",
+  "source_url": "https://www.gamespot.com/articles/the-incredible-and-unlikely-story-of-how-glen-powell-became-fox-in-the-super-mario-galaxy-movie/1100-6539159/?ftag=CAD-01-10abi2f",
+  "language": "en",
+  "mode": "prompt_first",
+  "ingestion_meta": {
+    "provider": "knowledge_base_inbox",
+    "origin_file": "00-Inbox\\2026-04-02\\[tech] The_Incredible_And_Unlikely_Story_Of_How_Glen_Powell_Became_.md",
+    "signal_type_hint": "technical",
+    "raw_tags": [
+      "inbox",
+      "technical"
+    ]
+  }
+}

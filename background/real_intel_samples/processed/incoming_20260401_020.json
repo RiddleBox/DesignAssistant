@@ -1,0 +1,20 @@
+{
+  "source_id": "incoming_20260401_020",
+  "source_type": "news",
+  "title": "Bungie has ripped Marathon's most busted movement trick out of the game, and brought back a lucrative loot opportunity",
+  "content": "Marathon has seen significant changes as part of its latest balance patch, including the outright removal of its most busted movement technique, the re-opening of a controversial shortcut in The Outpost map, and made the loot (and challenge) of The Outpost's central region harder. Read more",
+  "published_at": "2026-04-01T00:00:00Z",
+  "source_name": "Eurogamer",
+  "source_url": "https://www.eurogamer.net/bungie-has-ripped-marathons-most-busted-movement-trick-out-of-the-game-and-brought-back-a-lucrative-loot-opportunity",
+  "language": "en",
+  "mode": "prompt_first",
+  "ingestion_meta": {
+    "provider": "knowledge_base_inbox",
+    "origin_file": "00-Inbox\\2026-04-02\\[tech] Bungie_has_ripped_Marathon's_most_busted_movement_trick_out_.md",
+    "signal_type_hint": "technical",
+    "raw_tags": [
+      "inbox",
+      "technical"
+    ]
+  }
+}

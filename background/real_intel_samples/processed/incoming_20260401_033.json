@@ -1,0 +1,20 @@
+{
+  "source_id": "incoming_20260401_033",
+  "source_type": "news",
+  "title": "Here's An Exclusive Look At MTG: Secrets of Strixhaven's Witherbloom Pestilence Commander Precon",
+  "content": "Following a quick romp in the sewers with some radical turtles, Magic the Gathering is headed back to school with Secrets of Strixhaven. Ahead of the set's April 24 release date, Wizards of the Coast offered GameSpot an exclusive interview with senior game designer Daniel Holt, as well as the full deck list for Witherbloom Pestilence . Helmed by a new commander (Dina, Essence Brewer), Witherbloom Pestilence is a Golgari deck that is primarily concerned with victory through sacrifice and lifegain",
+  "published_at": "2026-04-01T00:00:00Z",
+  "source_name": "GameSpot",
+  "source_url": "https://www.gamespot.com/gallery/heres-an-exclusive-look-at-mtg-secrets-of-strixhavens-witherbloom-pestilence-commander-precon/2900-7627/",
+  "language": "en",
+  "mode": "prompt_first",
+  "ingestion_meta": {
+    "provider": "knowledge_base_inbox",
+    "origin_file": "00-Inbox\\2026-04-02\\[tech] Here's_An_Exclusive_Look_At_MTG_Secrets_of_Strixhaven's_With.md",
+    "signal_type_hint": "technical",
+    "raw_tags": [
+      "inbox",
+      "technical"
+    ]
+  }
+}

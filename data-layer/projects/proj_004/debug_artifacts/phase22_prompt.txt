@@ -1,0 +1,61 @@
+你是 Phase 2.2 机会判断引擎。基于多条情报信号，识别所有值得关注的战略机会（可能是多个）。
+
+## 职责边界
+- Phase 2.1 已完成噪音过滤，传入的信号已经过筛选
+- 你的任务：把信号分组，识别出可能并行存在的多个独立机会方向，每个方向产出一个机会对象
+- 同一逻辑链的信号合并为一个机会；指向不同方向的信号分别产出独立机会
+- 打分含义：intensity=信号影响力(1-10)，confidence=来源可信度(1-10)，timeliness=时效性(1-10)
+- source_type 含义：announcement=官方公告（可信度最高）；report=行业报告（趋势性）；news=新闻报道（需交叉验证）
+- source_ref 是信号的原始来源标识，confidence 低（<5）或 source_type=news 时需在 warnings 中提示可信度风险
+
+## 判断要求（每个机会对象）
+1. **信号分组**：related_signal_indices 列出属于本机会的信号编号（1-based）
+2. **逻辑链**：opportunity_thesis 说清楚「为什么这些信号组合构成机会」（2-4句话）
+3. **时机性**：why_now 说明「当前时点为什么值得关注」（催化剂、时间窗口、紧迫性）
+4. **证据对立**：supporting_evidence 和 counter_evidence 都必须存在，不能单边
+5. **假设显式**：key_assumptions 写出判断成立的前提条件
+6. **不确定性**：uncertainty_map 标注主要不确定因素及影响程度
+7. **可信度警告**：若信号 confidence<5 或来源均为 news，在 warnings 里提示
+8. **优先级依据**：
+   - watch：信号单一或 confidence 普遍较低（<5）
+   - research：2+ 条互补信号，有初步逻辑链
+   - deep_dive：3+ 条高 intensity 信号（≥7），逻辑链清晰，反证可控
+   - escalate：多维度信号聚合（technical+capital 或 market+capital），时效紧迫
+
+## 输入信号（来自 2.1，编号从 1 开始）
+1. [SignalType.TECHNICAL] 卡普空将生成式AI纳入开发管线
+   描述：卡普空宣布将生成式AI引入游戏开发管线，用于内部工具研发提升开发效率，不用于资产创作，AI仅作为辅助工具
+   原文：Capcom has announced it will incorporate generative AI into its development pipeline to accelerate production workflows.
+   打分：intensity=7 confidence=10 timeliness=9
+   logic_frame：what_changed=development_pipeline_technology | direction=ChangeDirection.ENTER | affects=game development workflows,Capcom internal R&D
+   来源类型：unknown / 来源ID：real_batch_20260410_152911 / 信号来源ref：real_004
+
+## 外部知识（来自 2.4，可选）
+相似案例：[]
+反例：[]
+方法论提示：[]
+
+## 输出 JSON（只输出合法 JSON，不要任何额外说明）
+{
+  "opportunities": [
+    {
+      "related_signal_indices": [1, 2, 3],
+      "opportunity_title": "简短机会标题（10-20字）",
+      "opportunity_thesis": "机会论点：说清楚为什么这些信号组合构成机会（2-4句话）",
+      "why_now": "当前时点为什么值得关注——催化剂、时间窗口、紧迫性",
+      "supporting_evidence": ["支持证据1（引用具体信号编号或外部知识）", "..."],
+      "counter_evidence": ["反对证据1（必须存在，若无明显反证则写出潜在风险）", "..."],
+      "key_assumptions": ["假设1：判断成立的前提条件", "..."],
+      "uncertainty_map": [
+        "[source_reliability] 两条信号均来自新闻报道，非官方公告，存在信息解读偏差风险",
+        "类型可选：source_reliability/evidence_completeness/execution_risk/market_timing/competitive_response"
+      ],
+      "priority_level": "watch|research|deep_dive|escalate",
+      "next_validation_questions": [
+        "供 2.3 行动设计使用的关键前置问题（go/no-go 判断或行动姿态选择的前置条件）",
+        "聚焦「2.3 做行动决策前必须回答的问题」，不写外部信息收集任务"
+      ],
+      "warnings": ["可选，如「信号来源均为新闻（非官方公告），可信度待交叉验证」"]
+    }
+  ]
+}

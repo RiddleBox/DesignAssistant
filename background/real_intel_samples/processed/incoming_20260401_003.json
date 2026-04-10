@@ -1,0 +1,20 @@
+{
+  "source_id": "incoming_20260401_003",
+  "source_type": "news",
+  "title": "Stellar Blade developer acquires Resident Evil creator Shinji Mikami's new studio, Unbound",
+  "content": "Stellar Blade developer Shift Up has acquired Unbound, the studio set up by Resident Evil creator Shinji Mikami following his departure from Tango Gameworks in 2023 . Read more",
+  "published_at": "2026-04-01T00:00:00Z",
+  "source_name": "Eurogamer",
+  "source_url": "https://www.eurogamer.net/stellar-blade-developer-acquires-resident-evil-creator-shinji-mikamis-new-studio-unbound",
+  "language": "en",
+  "mode": "prompt_first",
+  "ingestion_meta": {
+    "provider": "knowledge_base_inbox",
+    "origin_file": "00-Inbox\\2026-04-02\\[capital] Stellar_Blade_developer_acquires_Resident_Evil_creator_Shinj.md",
+    "signal_type_hint": "capital",
+    "raw_tags": [
+      "inbox",
+      "capital"
+    ]
+  }
+}

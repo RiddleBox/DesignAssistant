@@ -1,0 +1,20 @@
+{
+  "source_id": "incoming_20260401_002",
+  "source_type": "news",
+  "title": "Resident Evil director Shinji Mikami partners with Stellar Blade devs Shift Up to make \"smaller, experimental titles alongside a large-scale flagship\"",
+  "content": "Resident Evil director, Devil May Cry producer and former Tango Gameworks boss Shinji Mikami is now making games for Shift Up, developers of Stellar Blade . You know, the one with the shiny bums and quite good hack-and-slash mechanics. The one that has a DLC version of 2B off've Nier Automata (pictured). Shift Up have acquired Mikami's new company Unbound, which he founded in 2022 after leaving Tango. Read more",
+  "published_at": "2026-04-01T00:00:00Z",
+  "source_name": "Rock Paper Shotgun",
+  "source_url": "https://www.rockpapershotgun.com/resident-evil-director-shinji-mikami-partners-with-stellar-blade-devs-shift-up-to-make-smaller-experimental-titles-alongside-a-large-scale-flagship",
+  "language": "en",
+  "mode": "prompt_first",
+  "ingestion_meta": {
+    "provider": "knowledge_base_inbox",
+    "origin_file": "00-Inbox\\2026-04-02\\[capital] Resident_Evil_director_Shinji_Mikami_partners_with_Stellar_B.md",
+    "signal_type_hint": "capital",
+    "raw_tags": [
+      "inbox",
+      "capital"
+    ]
+  }
+}

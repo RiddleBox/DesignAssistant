@@ -1,0 +1,20 @@
+{
+  "source_id": "incoming_20260331_006",
+  "source_type": "news",
+  "title": "This ergonomic gaming mouse has plunged down to $60 on the final day of the Amazon Spring Sale",
+  "content": "Traditionally, the words 'ergonomic' and 'gaming mouse' haven't really gone together, although Keychron sought to bring them together with its M5 mouse. It's a vertical mouse that brings your hand into a more natural position, while retaining the beefy internals to make this a suitable mouse for gaming workloads. Currently, it's down to just $60 from Amazon USA on the final day of the Spring Sale, marking out a new low price, which is always nice. Read more",
+  "published_at": "2026-03-31T00:00:00Z",
+  "source_name": "Rock Paper Shotgun",
+  "source_url": "https://www.rockpapershotgun.com/this-ergonomic-gaming-mouse-has-plunged-down-to-60-on-the-final-day-of-the-amazon-spring-sale",
+  "language": "en",
+  "mode": "prompt_first",
+  "ingestion_meta": {
+    "provider": "knowledge_base_inbox",
+    "origin_file": "00-Inbox\\2026-04-02\\[tech] This_ergonomic_gaming_mouse_has_plunged_down_to_$60_on_the_f.md",
+    "signal_type_hint": "technical",
+    "raw_tags": [
+      "inbox",
+      "technical"
+    ]
+  }
+}

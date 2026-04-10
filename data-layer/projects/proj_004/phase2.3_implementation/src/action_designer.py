@@ -2,24 +2,42 @@
 import importlib.util
 import json
 import os
+from pathlib import Path
 from typing import List
 from models import (
     ActionDesignRequest, ActionDecisionObject, ActionDesignResult,
     PhasedPlanStage, PhaseResources, TopRisk, DecisionPosture,
-    DebateSummary
+    CommitmentMode, DebateSummary, DisplayDecision
 )
 
+
+_DEBUG_ARTIFACT_DIR = Path(__file__).resolve().parents[2] / "debug_artifacts"
+
+
+def _phase23_debug_enabled() -> bool:
+    return os.environ.get("PHASE23_DEBUG", "").strip().lower() in {"1", "true", "yes", "on"}
+
+
+def _write_phase23_artifact(name: str, content: str) -> None:
+    if not _phase23_debug_enabled():
+        return
+    try:
+        _DEBUG_ARTIFACT_DIR.mkdir(parents=True, exist_ok=True)
+        (_DEBUG_ARTIFACT_DIR / name).write_text(content or "", encoding="utf-8")
+    except Exception:
+        pass
 class ActionDesigner:
     """行动设计器 - LLM 判断模式（规则引擎 fallback）"""
 
-    def __init__(self, api_key: str = None, model: str = None):
-        # 从统一配置加载（优先使用传入参数）
+    def __init__(self, api_key: str = None, model: str = None, base_url: str = None, provider: str = None):
+        # 从统一配置加载（优先使用非空传入参数，避免不同 phase 的配置混用）
         cfg = self._load_llm_config("2.3")
         _raw_api_key = api_key  # 保留原始传入值，用于判断是否强制规则引擎
-        self.api_key   = api_key or cfg.get("api_key", "") or os.environ.get("ANTHROPIC_API_KEY", "")
+        self.provider  = provider or cfg.get("provider") or "anthropic"
+        self.api_key   = api_key if api_key not in (None, "") else (cfg.get("api_key", "") or os.environ.get("ANTHROPIC_API_KEY", ""))
         self._force_rules = (_raw_api_key == '')  # api_key='' 时强制走规则引擎（测试用）
-        self.model     = model   or cfg.get("model", "claude-sonnet-4-6")
-        self.base_url  = cfg.get("base_url", "https://api.anthropic.com")
+        self.model     = model if model not in (None, "") else cfg.get("model", "claude-sonnet-4-6")
+        self.base_url  = base_url if base_url not in (None, "") else cfg.get("base_url", "https://api.anthropic.com")
         self.max_tokens = cfg.get("max_tokens", 4096)
         self._llm = self._load_llm_client()
 
@@ -47,7 +65,7 @@ class ActionDesigner:
             spec = importlib.util.spec_from_file_location("llm_client", path)
             mod = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(mod)
-            return mod.LLMClient(api_key=self.api_key, base_url=self.base_url)
+            return mod.LLMClient(api_key=self.api_key, base_url=self.base_url, provider=self.provider)
         except Exception:
             return None
 
@@ -55,21 +73,117 @@ class ActionDesigner:
         """调用统一 LLM 客户端并解析 JSON 响应"""
         if not self._llm:
             raise RuntimeError("LLM client is not initialized")
+        _write_phase23_artifact("phase23_arbitrator_prompt.txt", prompt)
         response = self._llm.call(prompt=prompt, model=self.model, max_tokens=self.max_tokens)
         if not response or not response.strip():
+            _write_phase23_artifact("phase23_arbitrator_raw_response.txt", response or "")
             raise ValueError("LLM returned empty response")
         text = response.strip()
-        if text.startswith("```"):
-            lines = text.splitlines()
-            lines = lines[1:] if lines and lines[0].startswith("```") else lines
-            lines = lines[:-1] if lines and lines[-1].strip() == "```" else lines
-            text = "\n".join(lines).strip()
-            if text.startswith("json"):
-                text = text[4:].strip()
+        _write_phase23_artifact("phase23_arbitrator_raw_response.txt", text)
+        if "```" in text:
+            start_fence = text.find("```")
+            end_fence = text.rfind("```")
+            if start_fence != -1 and end_fence != -1 and end_fence > start_fence:
+                fenced = text[start_fence + 3:end_fence].strip()
+                if fenced.lower().startswith("json"):
+                    fenced = fenced[4:].strip()
+                text = fenced
+        start = text.find("{")
+        end = text.rfind("}")
+        if start != -1 and end != -1 and end > start:
+            text = text[start:end + 1]
+        _write_phase23_artifact("phase23_arbitrator_json_candidate.txt", text)
         try:
-            return json.loads(text)
+            parsed = json.loads(text)
+            _write_phase23_artifact("phase23_arbitrator_parsed.json", json.dumps(parsed, ensure_ascii=False, indent=2))
+            return parsed
         except json.JSONDecodeError as e:
-            raise ValueError(f"Failed to parse LLM JSON: {e}") from e
+            preview = text[:300].replace("\n", " ")
+            _write_phase23_artifact("phase23_arbitrator_parse_error.txt", f"{type(e).__name__}: {e}\n\n{text}")
+            raise ValueError(f"Failed to parse LLM JSON: {e}; preview={preview}") from e
+
+    def _derive_commitment_mode(self, posture: DecisionPosture) -> CommitmentMode:
+        mapping = {
+            "watch": "observation",
+            "validate": "validation",
+            "pilot": "limited_real_world_trial",
+            "escalate": "scaled_commitment",
+            "hold": "observation",
+            "stop": "observation",
+        }
+        return mapping.get(posture, "validation")
+
+    def _derive_display(self, posture: DecisionPosture, commitment_mode: CommitmentMode) -> DisplayDecision:
+        label_map = {
+            "watch": "建议持续观察",
+            "validate": "建议先验证",
+            "pilot": "建议小范围试点",
+            "escalate": "建议升级投入",
+            "hold": "建议暂缓推进",
+            "stop": "建议停止",
+        }
+        title_mode_map = {
+            ("watch", "observation"): "watch-oriented",
+            ("validate", "validation"): "validation-oriented",
+            ("pilot", "limited_real_world_trial"): "pilot-oriented",
+            ("escalate", "scaled_commitment"): "escalation-oriented",
+        }
+        return DisplayDecision(
+            display_judgment_label=label_map.get(posture, "建议先验证"),
+            display_badge=posture,
+            display_title_mode=title_mode_map.get((posture, commitment_mode), f"{posture}-oriented"),
+        )
+
+    def _collect_key_gates(self, phased_plan: List[PhasedPlanStage]) -> List[str]:
+        gates = []
+        for stage in phased_plan:
+            for item in getattr(stage, "go_no_go_criteria", []) or []:
+                if item and item not in gates:
+                    gates.append(item)
+        return gates
+
+    def _collect_exit_conditions(self, phased_plan: List[PhasedPlanStage]) -> List[str]:
+        exit_conditions = []
+        for stage in phased_plan:
+            for item in getattr(stage, "exit_conditions", []) or []:
+                if item and item not in exit_conditions:
+                    exit_conditions.append(item)
+        return exit_conditions
+
+    def _infer_stage_1_objective(self, phased_plan: List[PhasedPlanStage]) -> str:
+        if not phased_plan:
+            return ""
+        return getattr(phased_plan[0], "objective", "") or ""
+
+    def _ensure_action_contract_fields(self, payload: dict) -> dict:
+        posture = payload.get("decision_posture")
+        if posture not in {"watch", "validate", "pilot", "escalate", "hold", "stop"}:
+            posture = "validate"
+        payload["decision_posture"] = posture
+
+        commitment_mode = payload.get("commitment_mode")
+        if commitment_mode not in {"observation", "validation", "limited_real_world_trial", "scaled_commitment"}:
+            commitment_mode = self._derive_commitment_mode(posture)
+        payload["commitment_mode"] = commitment_mode
+
+        for key in ["why_this_posture", "resource_commitment_logic", "fallback_path"]:
+            if not payload.get(key):
+                payload[key] = "待补充"
+        for key in ["phased_plan", "top_risks", "open_questions", "key_gates", "exit_conditions", "open_disagreements"]:
+            if not isinstance(payload.get(key), list):
+                payload[key] = []
+        if not isinstance(payload.get("debate_summary"), dict):
+            payload["debate_summary"] = {}
+        if not payload.get("stage_1_objective") and payload["phased_plan"]:
+            payload["stage_1_objective"] = payload["phased_plan"][0].get("objective", "")
+        if not payload.get("display"):
+            display = self._derive_display(posture, commitment_mode)
+            payload["display"] = {
+                "display_judgment_label": display.display_judgment_label,
+                "display_badge": display.display_badge,
+                "display_title_mode": display.display_title_mode,
+            }
+        return payload
 
     def _llm_design(self, opp) -> dict:
         """多 Agent 辩论（方案C）：
@@ -94,37 +208,46 @@ class ActionDesigner:
 2.3前置问题（next_validation_questions）：{json.dumps(opp.next_validation_questions or [], ensure_ascii=False)}"""
 
         # ── 第1轮：三方独立陈述 ──────────────────────────────────────────
-        hawk_view = self._llm.call(
-            prompt=f"""你是激进派战略顾问，倾向于抓住机会、快速行动、接受风险。
+        hawk_prompt = f"""你是激进派战略顾问，倾向于抓住机会、快速行动、接受风险。
 基于以下机会，给出你的行动建议（纯文字，不超过150字）：
 
 {opp_context}
 
-重点：放大支持证据，论证为何应立即推进，提出激进的行动姿态。""",
+重点：放大支持证据，论证为何应立即推进，提出激进的行动姿态。"""
+        _write_phase23_artifact("phase23_hawk_prompt.txt", hawk_prompt)
+        hawk_view = self._llm.call(
+            prompt=hawk_prompt,
             model=self.model, max_tokens=500)
+        _write_phase23_artifact("phase23_hawk_response.txt", (hawk_view or "").strip())
         if not hawk_view:
             raise ValueError("Hawk agent returned empty response")
 
-        dove_view = self._llm.call(
-            prompt=f"""你是保守派风险顾问，倾向于审慎验证、降低风险、分阶段承诺。
+        dove_prompt = f"""你是保守派风险顾问，倾向于审慎验证、降低风险、分阶段承诺。
 基于以下机会，给出你的行动建议（纯文字，不超过150字）：
 
 {opp_context}
 
-重点：放大反对证据和不确定性，论证为何应谨慎，指出激进行动的潜在风险。""",
+重点：放大反对证据和不确定性，论证为何应谨慎，指出激进行动的潜在风险。"""
+        _write_phase23_artifact("phase23_dove_prompt.txt", dove_prompt)
+        dove_view = self._llm.call(
+            prompt=dove_prompt,
             model=self.model, max_tokens=500)
+        _write_phase23_artifact("phase23_dove_response.txt", (dove_view or "").strip())
         if not dove_view:
             raise ValueError("Dove agent returned empty response")
 
-        executor_view = self._llm.call(
-            prompt=f"""你是落地执行专家，只关注"这个方案现实中能不能做"。
+        executor_prompt = f"""你是落地执行专家，只关注"这个方案现实中能不能做"。
 不讨论机会是否值得，专注评估执行可行性：谁来做、需要什么资源、最大卡点在哪里、第一步能否在30天内启动。
 基于以下机会，给出你的可行性评估（纯文字，不超过150字）：
 
 {opp_context}
 
-重点：指出资源、能力、时间的现实约束，评估第一阶段能否真正落地。""",
+重点：指出资源、能力、时间的现实约束，评估第一阶段能否真正落地。"""
+        _write_phase23_artifact("phase23_executor_prompt.txt", executor_prompt)
+        executor_view = self._llm.call(
+            prompt=executor_prompt,
             model=self.model, max_tokens=500)
+        _write_phase23_artifact("phase23_executor_response.txt", (executor_view or "").strip())
         if not executor_view:
             raise ValueError("Executor agent returned empty response")
 
@@ -170,7 +293,12 @@ class ActionDesigner:
 输出 JSON schema：
 {{
   "decision_posture": "watch|validate|pilot|escalate",
+  "commitment_mode": "observation|validation|limited_real_world_trial|scaled_commitment",
   "why_this_posture": "string（综合三方观点，100字以内）",
+  "stage_1_objective": "string（第一阶段最核心目标，30字以内）",
+  "key_gates": ["string（关键推进闸门，20字以内，1-2条）"],
+  "exit_conditions": ["string（全局退出条件，20字以内，1-2条）"],
+  "open_disagreements": ["string（仍保留的分歧，20字以内，0-2条）"],
   "debate_summary": {{
     "hawk_stance": "string（鹰派核心论点，40字以内）",
     "dove_stance": "string（鸽派核心论点，40字以内）",
@@ -211,27 +339,21 @@ class ActionDesigner:
 
 要求：
 1. decision_posture 必须是 watch/validate/pilot/escalate 之一。
-2. phased_plan 1-2 个阶段（watch 只需1个），严格遵守每个字段的字数上限。
-3. top_risks 2 条，每条必须填写 blocks_stage。
-4. resource_rationale 必须说明资源与假设验证的绑定关系（50字以内）。
-5. **执行者视角**：phased_plan 的 actions 和第一阶段 objective 必须体现执行者指出的可行性约束。
-6. **时机判断（why_now）**：若 why_now 有内容，必须在 why_this_posture 中体现，并影响第一阶段节奏。
-7. **前置问题（next_validation_questions）**：必须映射到 key_assumptions_to_test 或 go_no_go_criteria 中。
-8. 只输出合法 JSON，不要任何额外说明。
-9. 禁止在 JSON 字符串值内使用中文引号（""「」），只允许使用半角双引号。
-10. 总 JSON 输出必须控制在 3000 字以内。"""
+2. commitment_mode 必须与 decision_posture 匹配：watch→observation，validate→validation，pilot→limited_real_world_trial，escalate→scaled_commitment。
+3. phased_plan 1-2 个阶段（watch 只需1个），严格遵守每个字段的字数上限。
+4. top_risks 2 条，每条必须填写 blocks_stage。
+5. resource_rationale 必须说明资源与假设验证的绑定关系（50字以内）。
+6. **执行者视角**：phased_plan 的 actions 和第一阶段 objective 必须体现执行者指出的可行性约束。
+7. **时机判断（why_now）**：若 why_now 有内容，必须在 why_this_posture 中体现，并影响第一阶段节奏。
+8. **前置问题（next_validation_questions）**：必须映射到 key_assumptions_to_test 或 go_no_go_criteria 中。
+9. stage_1_objective 应与 phased_plan[0].objective 保持一致或高度一致。
+10. key_gates 应是跨阶段最关键的推进闸门，不要简单重复所有 go_no_go_criteria。
+11. 只输出合法 JSON，不要任何额外说明。
+12. 禁止在 JSON 字符串值内使用中文引号（""「」），只允许使用半角双引号。
+13. 总 JSON 输出必须控制在 3000 字以内。"""
 
         result = self._call_llm(arbitrator_prompt)
-
-        # 校验
-        if result.get("decision_posture") not in {"watch", "validate", "pilot", "escalate"}:
-            result["decision_posture"] = "validate"
-        for key in ["why_this_posture", "resource_commitment_logic", "fallback_path"]:
-            if not result.get(key):
-                result[key] = "待补充"
-        for key in ["phased_plan", "top_risks", "open_questions"]:
-            if not isinstance(result.get(key), list) or not result[key]:
-                result[key] = []
+        result = self._ensure_action_contract_fields(result)
 
         # 把第2轮辩论结果注入 debate_summary
         ds = result.get("debate_summary", {})
@@ -287,6 +409,13 @@ class ActionDesigner:
                     executor_rebuttal=debate_raw.get("executor_rebuttal", ""),
                     resolution=debate_raw.get("resolution", ""),
                 ) if debate_raw else None
+                commitment_mode = llm_result.get("commitment_mode") or self._derive_commitment_mode(llm_result["decision_posture"])
+                display_raw = llm_result.get("display") or {}
+                display = DisplayDecision(
+                    display_judgment_label=display_raw.get("display_judgment_label", self._derive_display(llm_result["decision_posture"], commitment_mode).display_judgment_label),
+                    display_badge=display_raw.get("display_badge", self._derive_display(llm_result["decision_posture"], commitment_mode).display_badge),
+                    display_title_mode=display_raw.get("display_title_mode", self._derive_display(llm_result["decision_posture"], commitment_mode).display_title_mode),
+                )
                 action_decision = ActionDecisionObject(
                     opportunity_title=opp.opportunity_title,
                     decision_posture=llm_result["decision_posture"],
@@ -296,20 +425,29 @@ class ActionDesigner:
                     resource_commitment_logic=llm_result["resource_commitment_logic"],
                     fallback_path=llm_result["fallback_path"],
                     open_questions=llm_result.get("open_questions", []),
+                    commitment_mode=commitment_mode,
+                    stage_1_objective=llm_result.get("stage_1_objective") or self._infer_stage_1_objective(phased_plan),
+                    key_gates=llm_result.get("key_gates") or self._collect_key_gates(phased_plan),
+                    exit_conditions=llm_result.get("exit_conditions") or self._collect_exit_conditions(phased_plan),
+                    open_disagreements=llm_result.get("open_disagreements", []),
+                    display=display,
                     debate_summary=debate_summary,
                 )
                 # global_summary：从辩论结果提炼一句话摘要
-                posture_label = llm_result["decision_posture"]
+                posture_label = display.display_badge
                 why_short = llm_result["why_this_posture"][:60] if llm_result.get("why_this_posture") else ""
                 global_summary = f"[{posture_label}] {opp.opportunity_title}——{why_short}"
                 return ActionDesignResult(
                     request_id=request.request_id,
                     action_decision=action_decision,
                     global_summary=global_summary,
-                    designer_version="v1.0-llm",
+                    designer_version="v1.1-llm-contract",
                 )
             except Exception as e:
-                print(f"  [2.3 LLM] 调用失败，fallback 到规则引擎: {e}")
+                print(
+                    f"  [2.3 LLM] 调用失败，fallback 到规则引擎: {type(e).__name__}: {e} | "
+                    f"provider={self.provider} model={self.model} base_url={self.base_url} max_tokens={self.max_tokens}"
+                )
 
         # 规则引擎 fallback
         posture = self._determine_posture(opp)
@@ -318,23 +456,31 @@ class ActionDesigner:
         resource_logic = self._generate_resource_commitment_logic(phased_plan, posture)
         fallback = self._design_fallback_path(opp, posture)
         open_questions = self._collect_open_questions(opp)
+        commitment_mode = self._derive_commitment_mode(posture)
+        display = self._derive_display(posture, commitment_mode)
 
         action_decision = ActionDecisionObject(
             opportunity_title=opp.opportunity_title,
             decision_posture=posture,
-            why_this_posture=self._explain_posture(opp, posture),
+            why_this_posture=f"[fallback] {self._explain_posture(opp, posture)}",
             phased_plan=phased_plan,
             top_risks=top_risks,
             resource_commitment_logic=resource_logic,
             fallback_path=fallback,
-            open_questions=open_questions
+            open_questions=open_questions,
+            commitment_mode=commitment_mode,
+            stage_1_objective=self._infer_stage_1_objective(phased_plan),
+            key_gates=self._collect_key_gates(phased_plan),
+            exit_conditions=self._collect_exit_conditions(phased_plan),
+            open_disagreements=[],
+            display=display
         )
 
         return ActionDesignResult(
             request_id=request.request_id,
             action_decision=action_decision,
-            global_summary=f"[{posture}] {opp.opportunity_title}——{self._explain_posture(opp, posture)[:60]}",
-            designer_version="v1.0-rules",
+            global_summary=f"[{display.display_badge}] {opp.opportunity_title}——{self._explain_posture(opp, posture)[:60]}",
+            designer_version="v1.1-rules-contract",
         )
 
     def _determine_posture(self, opp) -> DecisionPosture:
@@ -505,4 +651,3 @@ class ActionDesigner:
             questions.append(f"{key}的具体情况如何？")
         
         return questions[:5]  # 最多5个开放问题
-

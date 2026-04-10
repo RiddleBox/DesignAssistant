@@ -1,0 +1,20 @@
+{
+  "source_id": "incoming_20260401_035",
+  "source_type": "news",
+  "title": "It looks like Intel might ditch regular E-cores for its upcoming Core 300 laptop chips",
+  "content": "The upcoming low-power processors might not make for the best gaming chips.",
+  "published_at": "2026-04-01T00:00:00Z",
+  "source_name": "PC Gamer",
+  "source_url": "https://www.pcgamer.com/hardware/processors/it-looks-like-intel-might-ditch-regular-e-cores-for-its-upcoming-core-300-laptop-chips/",
+  "language": "en",
+  "mode": "prompt_first",
+  "ingestion_meta": {
+    "provider": "knowledge_base_inbox",
+    "origin_file": "00-Inbox\\2026-04-02\\[tech] It_looks_like_Intel_might_ditch_regular_E-cores_for_its_upco.md",
+    "signal_type_hint": "technical",
+    "raw_tags": [
+      "inbox",
+      "technical"
+    ]
+  }
+}

@@ -18,6 +18,7 @@ import json
 import time
 import shutil
 import importlib.util
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 from datetime import datetime
 
@@ -38,6 +39,38 @@ LLM_CONFIG_PATH = os.path.join(BASE, "llm_config.py")
 SAMPLES_ROOT = os.path.join(BASE, "..", "..", "..", "background", "real_intel_samples")
 INCOMING_DIR = os.path.join(SAMPLES_ROOT, "incoming")
 PROCESSED_DIR = os.path.join(SAMPLES_ROOT, "processed")
+RUN_SUMMARY_PATH = os.path.join(BASE, "run_summary.json")
+KEEP_INPUTS = os.environ.get("PHASE21_KEEP_INPUTS", "").strip().lower() in {"1", "true", "yes", "on"}
+PHASE22_ONLY = os.environ.get("PHASE22_ONLY", "").strip().lower() in {"1", "true", "yes", "on"}
+PHASE23_ONLY = os.environ.get("PHASE23_ONLY", "").strip().lower() in {"1", "true", "yes", "on"}
+
+
+def write_run_summary(summary: dict):
+    payload = dict(summary or {})
+    payload.setdefault("written_at", datetime.now().isoformat(timespec='seconds'))
+    with open(RUN_SUMMARY_PATH, 'w', encoding='utf-8') as f:
+        json.dump(payload, f, ensure_ascii=False, indent=2)
+
+
+def read_run_summary() -> dict:
+    if not os.path.exists(RUN_SUMMARY_PATH):
+        return {}
+    try:
+        with open(RUN_SUMMARY_PATH, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        return data if isinstance(data, dict) else {}
+    except Exception:
+        return {}
+
+
+def preserve_success_summary_on_no_input() -> bool:
+    existing = read_run_summary()
+    if existing.get("stage") == "done" and existing.get("status") == "success":
+        existing["last_no_input_at"] = datetime.now().isoformat(timespec='seconds')
+        existing["last_no_input_note"] = "incoming 目录为空，本次未执行；保留最近一次成功运行摘要"
+        write_run_summary(existing)
+        return True
+    return False
 
 
 def _load_env_file(path):
@@ -142,13 +175,8 @@ def load_samples(file_paths):
 
 
 def run_step1_decode(samples, llm_config_21):
-    decoder = IntelligenceDecoder(
-        api_key=llm_config_21.get("api_key", ""),
-        model=llm_config_21.get("model", "claude-opus-4-6"),
-        provider=llm_config_21.get("provider", "anthropic"),
-        base_url=llm_config_21.get("base_url", ""),
-    )
-    patch_decoder(decoder)
+    max_parallel_samples = max(1, int(llm_config_21.get("max_parallel_samples", 1) or 1))
+    request_spacing_ms = max(0, int(llm_config_21.get("request_spacing_ms", 0) or 0))
 
     all_signals = []
     decode_results = []
@@ -156,10 +184,24 @@ def run_step1_decode(samples, llm_config_21):
 
     print(f"\n{'='*60}")
     print("Step 1: 2.1 情报解码（批量真实样本）")
+    print(f"  并发样本数: {max_parallel_samples}")
+    if request_spacing_ms > 0:
+        print(f"  提交错峰间隔: {request_spacing_ms}ms")
     print(f"{'='*60}")
 
-    for item in samples:
+    def _decode_single(item, order_index):
         p = item['payload']
+        decoder = IntelligenceDecoder(
+            api_key=llm_config_21.get("api_key", ""),
+            model=llm_config_21.get("model", "claude-opus-4-6"),
+            provider=llm_config_21.get("provider", "anthropic"),
+            base_url=llm_config_21.get("base_url", ""),
+            connect_timeout_seconds=llm_config_21.get("connect_timeout_seconds", 30),
+            read_timeout_seconds=llm_config_21.get("read_timeout_seconds", 180),
+            max_retries=llm_config_21.get("max_retries", 3),
+        )
+        patch_decoder(decoder)
+
         req = IntelligenceDecodeRequest(
             source_id=p['source_id'],
             source_type=p['source_type'],
@@ -171,47 +213,87 @@ def run_step1_decode(samples, llm_config_21):
             mode=p.get('mode', 'prompt_first'),
         )
 
+        started_at = time.time()
         print(f"\n  [{p['source_id']}] 解码中... ({item['file_name']})")
         try:
             result = decoder.decode(req)
+            sig_count = len(result.signals)
+            print(f"  [{p['source_id']}] 提取信号 {sig_count} 个，耗时 {result.processing_time_ms}ms")
+            if result.warnings:
+                for w in result.warnings:
+                    print(f"    ! warning: {w}")
+            for sig in result.signals:
+                print(f"    - [{sig.signal_type.value}] {sig.signal_label} (强度={sig.intensity_score}, 置信={sig.confidence_score})")
+
+            return {
+                'order_index': order_index,
+                'source_id': p['source_id'],
+                'result': result,
+                'signals_dump': [sig.model_dump() for sig in result.signals],
+                'stat': {
+                    'source_id': p['source_id'],
+                    'file_name': item['file_name'],
+                    'signal_count': sig_count,
+                    'processing_time_ms': result.processing_time_ms,
+                    'is_noise_like': sig_count == 0,
+                    'warning_count': len(result.warnings or []),
+                    'warnings': [str(w) for w in (result.warnings or [])],
+                    'started_at': datetime.fromtimestamp(started_at).isoformat(timespec='seconds'),
+                    'finished_at': datetime.now().isoformat(timespec='seconds'),
+                },
+            }
         except Exception as e:
             print(f"  [{p['source_id']}] ⚠️  解码失败，跳过：{e}")
-            per_sample_stats.append({
+            return {
+                'order_index': order_index,
                 'source_id': p['source_id'],
-                'file_name': item['file_name'],
-                'signal_count': 0,
-                'processing_time_ms': 0,
-                'is_noise_like': True,
-                'error': str(e),
-            })
+                'result': None,
+                'signals_dump': [],
+                'stat': {
+                    'source_id': p['source_id'],
+                    'file_name': item['file_name'],
+                    'signal_count': 0,
+                    'processing_time_ms': int((time.time() - started_at) * 1000),
+                    'is_noise_like': True,
+                    'warning_count': 0,
+                    'warnings': [],
+                    'error_type': type(e).__name__,
+                    'error': str(e),
+                    'started_at': datetime.fromtimestamp(started_at).isoformat(timespec='seconds'),
+                    'finished_at': datetime.now().isoformat(timespec='seconds'),
+                },
+            }
+
+    future_to_index = {}
+    ordered_outputs = [None] * len(samples)
+    with ThreadPoolExecutor(max_workers=max_parallel_samples) as executor:
+        for idx, item in enumerate(samples):
+            future = executor.submit(_decode_single, item, idx)
+            future_to_index[future] = idx
+            if request_spacing_ms > 0 and idx < len(samples) - 1:
+                time.sleep(request_spacing_ms / 1000.0)
+
+        for future in as_completed(future_to_index):
+            output = future.result()
+            ordered_outputs[output['order_index']] = output
+
+    for output in ordered_outputs:
+        if not output:
             continue
-
-        sig_count = len(result.signals)
-        print(f"  [{p['source_id']}] 提取信号 {sig_count} 个，耗时 {result.processing_time_ms}ms")
-        if result.warnings:
-            for w in result.warnings:
-                print(f"    ! warning: {w}")
-
-        for sig in result.signals:
-            print(f"    - [{sig.signal_type.value}] {sig.signal_label} (强度={sig.intensity_score}, 置信={sig.confidence_score})")
-            all_signals.append(sig.model_dump())
-
-        decode_results.append(result)
-        per_sample_stats.append({
-            'source_id': p['source_id'],
-            'file_name': item['file_name'],
-            'signal_count': sig_count,
-            'processing_time_ms': result.processing_time_ms,
-            'is_noise_like': sig_count == 0,
-        })
+        if output['result'] is not None:
+            decode_results.append(output['result'])
+            all_signals.extend(output['signals_dump'])
+        per_sample_stats.append(output['stat'])
 
     total = len(samples)
     with_signals = sum(1 for s in per_sample_stats if s['signal_count'] > 0)
     no_signals = total - with_signals
+    error_count = sum(1 for s in per_sample_stats if s.get('error'))
 
     print(f"\n  >>> 样本总数: {total}")
     print(f"  >>> 有信号样本: {with_signals}")
     print(f"  >>> 无信号样本(噪音候选): {no_signals}")
+    print(f"  >>> 解码失败样本: {error_count}")
     print(f"  >>> 信号池合计: {len(all_signals)}")
 
     return all_signals, decode_results, per_sample_stats
@@ -356,6 +438,24 @@ def run_step2_judgment(all_signals, sample_count, rag_retriever=None, api_key=No
     except Exception as _e:
         print(f"  [warn] judge_with_signal_store 失败，退化为 judge(): {_e}")
         result = engine.judge(req)
+
+    if getattr(result, 'status', '') == 'error':
+        print("  [warn] judge_with_signal_store 返回 error，退化为 judge()")
+        result = engine.judge(req)
+
+    if (not getattr(result, 'opportunities', None)) and sample_count <= 1:
+        print("  [warn] 2.2 在单样本验证批次未形成机会，使用规则 fallback 继续验证下游链路")
+        fallback_opportunities = engine._rule_engine_fallback(all_signals, context_packet=None)
+        result = judgment_mod.OpportunityJudgmentResult(
+            opportunities=fallback_opportunities,
+            status="success" if fallback_opportunities else "insufficient_evidence",
+            diagnostics=judgment_mod.Diagnostics(
+                signal_count=len(all_signals),
+                opportunity_count=len(fallback_opportunities),
+                evidence_completeness=1.0 if fallback_opportunities else 0.0,
+                boundary_warnings=["[fallback] run_batch_real_single_sample_rule_opportunity"],
+            ),
+        )
     elapsed = int((time.time() - t0) * 1000)
 
     # pending_signals：全为孤立信号，已写入 Signal Store，无机会产出
@@ -394,6 +494,9 @@ def run_step3_action(judgment_result, api_key=None):
         supporting_evidence=opp22.supporting_evidence,
         counter_evidence=opp22.counter_evidence,
         uncertainty_map={u: "不确定" for u in opp22.uncertainty_map},
+        why_now=getattr(opp22, "why_now", None),
+        warnings=getattr(opp22, "warnings", None),
+        next_validation_questions=getattr(opp22, "next_validation_questions", None),
     )
 
     designer = ActionDesigner(api_key=api_key)
@@ -423,18 +526,84 @@ def _collect_run_errors(judgment_result, action_result) -> list:
                     errors.append({"module": "2.2", "type": "llm_fallback", "detail": str(w)})
     if action_result:
         act = getattr(action_result, "action_decision", None)
-        if act and getattr(act, "debate_summary", None) is None:
+        why_this_posture = str(getattr(act, "why_this_posture", "") or "") if act else ""
+        if act and (("[fallback]" in why_this_posture) or getattr(act, "debate_summary", None) is None):
             errors.append({"module": "2.3", "type": "llm_fallback", "detail": "[fallback] 2.3 LLM 未跑通，由规则引擎生成"})
     return errors
 
 
-def run_step4_retro(judgment_result, action_result, decode_results, per_sample_stats, rag_retriever=None, t_start=None):
+def build_run_summary(*, stage: str, status: str, sample_count: int, signal_count: int = 0,
+                      judgment_result=None, action_result=None, retro_result=None,
+                      moved_count: int = 0, total_ms: int = 0, report_path: str = None,
+                      note: str = "", error: str = "", run_id: str = "", source_ids: list = None) -> dict:
+    summary = {
+        "stage": stage,
+        "status": status,
+        "sample_count": sample_count,
+        "signal_count": signal_count,
+        "moved_count": moved_count,
+        "total_ms": total_ms,
+        "report_path": report_path,
+        "note": note,
+        "error": error,
+    }
+
+    if run_id:
+        summary["run_id"] = run_id
+    if source_ids:
+        summary["source_ids"] = list(source_ids)
+
+    if judgment_result is not None:
+        summary["judgment_status"] = getattr(judgment_result, "status", "unknown")
+        diag = getattr(judgment_result, "diagnostics", None)
+        if diag is not None:
+            summary["judgment_signal_count"] = getattr(diag, "signal_count", signal_count)
+            summary["judgment_opportunity_count"] = getattr(diag, "opportunity_count", 0)
+        if getattr(judgment_result, "opportunities", None):
+            opp = judgment_result.opportunities[0]
+            warnings = [str(w) for w in (getattr(opp, "warnings", []) or [])]
+            summary["opportunity"] = {
+                "title": getattr(opp, "opportunity_title", ""),
+                "priority_level": str(getattr(opp, "priority_level", "")),
+                "warnings": warnings,
+                "llm_used": not any("[fallback]" in w for w in warnings),
+            }
+
+    if action_result is not None:
+        act = getattr(action_result, "action_decision", None)
+        if act is not None:
+            why_this_posture = str(getattr(act, "why_this_posture", "") or "")
+            summary["action"] = {
+                "posture": str(getattr(act, "decision_posture", "")),
+                "llm_used": ("[fallback]" not in why_this_posture) and (getattr(act, "debate_summary", None) is not None),
+            }
+
+    if retro_result is not None and getattr(retro_result, "retrospective", None) is not None:
+        retro = retro_result.retrospective
+        summary["retrospective"] = {
+            "critical_findings": len(getattr(retro, "critical_findings", []) or []),
+            "phase3_priorities": len(getattr(retro, "phase3_priorities", []) or []),
+        }
+
+    return summary
+
+
+def attach_per_sample_stats(summary: dict, per_sample_stats: list) -> dict:
+    payload = dict(summary or {})
+    payload["per_sample_stats"] = list(per_sample_stats or [])
+    payload["keep_inputs"] = KEEP_INPUTS
+    return payload
+
+
+def run_step4_retro(judgment_result, action_result, decode_results, per_sample_stats, rag_retriever=None, t_start=None,
+                   run_id: str = ""):
     print(f"\n{'='*60}")
     print("Step 4: 2.5 整合复盘（LLM 语义归因）")
     print(f"{'='*60}")
 
     opp = judgment_result.opportunities[0]
     ad = action_result.action_decision
+    workflow_run_id = run_id or f"real_batch_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
 
     # ── phase2_1：完整信号列表（decoded_intelligences 字段名对齐）
     all_signals_dump = []
@@ -515,7 +684,7 @@ def run_step4_retro(judgment_result, action_result, decode_results, per_sample_s
         request_id=f"real_batch_retro_{datetime.now().strftime('%Y%m%d_%H%M%S')}",
         case_id="real_intel_batch",
         workflow_run_record={
-            "run_id": f"real_batch_{datetime.now().strftime('%Y%m%d_%H%M%S')}",
+            "run_id": workflow_run_id,
             "case_description": "真实样本批量运行（incoming -> 2.1 -> 2.2 -> 2.3）",
             "modules_executed": ["2.1", "2.2", "2.3"],
             "sample_count": len(per_sample_stats),
@@ -523,6 +692,7 @@ def run_step4_retro(judgment_result, action_result, decode_results, per_sample_s
             "noise_like_count": sum(1 for s in per_sample_stats if s.get('signal_count', 0) == 0),
             "processing_time_ms": int((time.time() - t_start) * 1000) if t_start else 0,
             "errors": _collect_run_errors(judgment_result, action_result),
+            "source_ids": [r.source_id for r in decode_results],
         },
         upstream_outputs={
             "phase2_1": phase2_1_payload,
@@ -547,6 +717,10 @@ def run_step4_retro(judgment_result, action_result, decode_results, per_sample_s
 
 
 def move_to_processed(samples):
+    if KEEP_INPUTS:
+        print("  [debug] PHASE21_KEEP_INPUTS 已开启，保留 incoming/ 样本不搬运")
+        return 0
+
     moved = 0
     skipped = 0
     for item in samples:
@@ -578,72 +752,204 @@ def main():
     if not incoming_files:
         print(f"INFO: incoming 目录无待处理样本: {INCOMING_DIR}")
         print("      请将 openclaw 输出的 JSON 放入 incoming/ 后再运行。")
+        if preserve_success_summary_on_no_input():
+            print("      已保留最近一次成功运行摘要，未覆盖为 no_input。")
+        else:
+            write_run_summary(attach_per_sample_stats(build_run_summary(
+                stage="init",
+                status="no_input",
+                sample_count=0,
+                note="incoming 目录为空，无待处理样本",
+            ), per_sample_stats=[]))
         return
 
     print(f"2.1 provider: {llm_config_21.get('provider', 'anthropic')}")
     print(f"incoming 样本数: {len(incoming_files)}")
 
     t_total = time.time()
-
     samples = load_samples(incoming_files)
-    all_signals, decode_results, per_sample_stats = run_step1_decode(samples, llm_config_21)
+    current_run_id = f"real_batch_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+    all_signals = []
+    decode_results = []
+    per_sample_stats = []
+    judgment_result = None
+    action_result = None
+    retro_result = None
+    report_path = None
+    moved_count = 0
+    source_ids = [str(s.get('payload', {}).get('source_id', s.get('file_name', ''))) for s in samples]
 
-    # api123.icu 限流缓解：2.1 批量调用完后等待，避免 2.2/2.3 撞上限流窗口
-    cooldown = 15 * len(samples)
-    print(f"\n[冷却] 等待 {cooldown}s 让中转代理限流窗口重置...")
-    time.sleep(cooldown)
-
-    rag_retriever = build_rag_retriever()
-    judgment_result = run_step2_judgment(all_signals, len(samples), rag_retriever, llm_config_21.get("api_key"))
-    if judgment_result is None:
-        moved_count = move_to_processed(samples)
-        print(f"\n全部样本无信号，已移动 {moved_count} 个文件到 processed/")
-        return
-
-    if not judgment_result.opportunities:
-        # pending_signals：信号存在但全为孤立信号，已写入 Signal Store 等待后续批次补全
-        status = getattr(judgment_result, 'status', 'unknown')
-        sig_count = judgment_result.diagnostics.signal_count if judgment_result.diagnostics else len(all_signals)
-        print(f"\n[本批次] 状态: {status}")
-        print(f"  {sig_count} 条信号已写入 Signal Store，等待后续批次补全组合条件")
-        print(f"  跳过 2.3 行动设计 / 2.5 复盘")
-        moved_count = move_to_processed(samples)
-        print(f"  样本已移动: {moved_count} 个 -> processed/")
-        return
-
-    action_result = run_step3_action(judgment_result, api_key=llm_config_21.get("api_key"))
-    retro_result = run_step4_retro(judgment_result, action_result, decode_results, per_sample_stats, rag_retriever=rag_retriever, t_start=t_total)
-
-    moved_count = move_to_processed(samples)
-    total_ms = int((time.time() - t_total) * 1000)
-
-    # 生成 Markdown 报告
     try:
-        from report_writer import generate_report
-        report_path = generate_report(
+        all_signals, decode_results, per_sample_stats = run_step1_decode(samples, llm_config_21)
+
+        # api123.icu 限流缓解：2.1 批量调用完后等待，避免 2.2/2.3 撞上限流窗口
+        cooldown = llm_config_21.get("step1_cooldown_seconds")
+        if cooldown is None or cooldown == "":
+            cooldown = 15 * len(samples)
+        cooldown = max(0, int(cooldown))
+        print(f"\n[冷却] 等待 {cooldown}s 让中转代理限流窗口重置...")
+        time.sleep(cooldown)
+
+        rag_retriever = build_rag_retriever()
+        judgment_result = run_step2_judgment(all_signals, len(samples), rag_retriever, llm_config_21.get("api_key"))
+        if judgment_result is None:
+            moved_count = move_to_processed(samples)
+            print(f"\n全部样本无信号，已移动 {moved_count} 个文件到 processed/")
+            write_run_summary(attach_per_sample_stats(build_run_summary(
+                stage="2.1",
+                status="no_signals",
+                sample_count=len(samples),
+                signal_count=len(all_signals),
+                moved_count=moved_count,
+                total_ms=int((time.time() - t_total) * 1000),
+                note="2.1 未产出可用信号，跳过 2.2/2.3/2.5",
+                run_id=current_run_id,
+                source_ids=source_ids,
+            ), per_sample_stats))
+            return
+
+        if not judgment_result.opportunities:
+            # pending_signals：信号存在但全为孤立信号，已写入 Signal Store 等待后续批次补全
+            status = getattr(judgment_result, 'status', 'unknown')
+            sig_count = judgment_result.diagnostics.signal_count if judgment_result.diagnostics else len(all_signals)
+            print(f"\n[本批次] 状态: {status}")
+            print(f"  {sig_count} 条信号已写入 Signal Store，等待后续批次补全组合条件")
+            print(f"  跳过 2.3 行动设计 / 2.5 复盘")
+            moved_count = move_to_processed(samples)
+            print(f"  样本已移动: {moved_count} 个 -> processed/")
+            write_run_summary(attach_per_sample_stats(build_run_summary(
+                stage="2.2",
+                status=status,
+                sample_count=len(samples),
+                signal_count=len(all_signals),
+                judgment_result=judgment_result,
+                moved_count=moved_count,
+                total_ms=int((time.time() - t_total) * 1000),
+                note="2.2 未形成机会对象，已提前结束",
+                run_id=current_run_id,
+                source_ids=source_ids,
+            ), per_sample_stats))
+            return
+
+        if PHASE22_ONLY:
+            total_ms = int((time.time() - t_total) * 1000)
+            print("\n[debug] PHASE22_ONLY 已开启，2.2 完成后提前结束")
+            write_run_summary(attach_per_sample_stats(build_run_summary(
+                stage="2.2",
+                status="success",
+                sample_count=len(samples),
+                signal_count=len(all_signals),
+                judgment_result=judgment_result,
+                moved_count=0,
+                total_ms=total_ms,
+                note="PHASE22_ONLY 调试模式：仅运行到 2.2",
+                run_id=current_run_id,
+                source_ids=source_ids,
+            ), per_sample_stats))
+            return
+
+        action_result = run_step3_action(judgment_result)
+        if PHASE23_ONLY:
+            total_ms = int((time.time() - t_total) * 1000)
+            print("\n[debug] PHASE23_ONLY 已开启，2.3 完成后提前结束")
+            write_run_summary(attach_per_sample_stats(build_run_summary(
+                stage="2.3",
+                status="success",
+                sample_count=len(samples),
+                signal_count=len(all_signals),
+                judgment_result=judgment_result,
+                action_result=action_result,
+                moved_count=0,
+                total_ms=total_ms,
+                note="PHASE23_ONLY 调试模式：仅运行到 2.3",
+                run_id=current_run_id,
+                source_ids=source_ids,
+            ), per_sample_stats))
+            return
+        retro_result = run_step4_retro(judgment_result, action_result, decode_results, per_sample_stats, rag_retriever=rag_retriever, t_start=t_total, run_id=current_run_id)
+
+        moved_count = move_to_processed(samples)
+        total_ms = int((time.time() - t_total) * 1000)
+
+        # 生成 Markdown 报告
+        try:
+            from report_writer import generate_report
+            report_path = generate_report(
+                judgment_result=judgment_result,
+                action_result=action_result,
+                retro_result=retro_result,
+                decode_results=decode_results,
+                sample_count=len(samples),
+                signal_count=len(all_signals),
+                total_ms=total_ms,
+                run_timestamp=datetime.now(),
+                run_id=current_run_id,
+                source_ids=source_ids,
+            )
+            print(f"  报告已生成:    {report_path}")
+        except Exception as e:
+            print(f"  报告生成失败:  {e}")
+            write_run_summary(attach_per_sample_stats(build_run_summary(
+                stage="report",
+                status="report_failed",
+                sample_count=len(samples),
+                signal_count=len(all_signals),
+                judgment_result=judgment_result,
+                action_result=action_result,
+                retro_result=retro_result,
+                moved_count=moved_count,
+                total_ms=total_ms,
+                note="主流程成功，但报告生成失败",
+                error=str(e),
+                run_id=current_run_id,
+                source_ids=source_ids,
+            ), per_sample_stats))
+            raise
+
+        print(f"\n{'#'*60}")
+        print(f"Iteration 1 批量运行完成，总耗时 {total_ms}ms")
+        print(f"  样本数:        {len(samples)}")
+        print(f"  信号池:        {len(all_signals)}")
+        print(f"  机会判断:      {judgment_result.opportunities[0].priority_level} / {judgment_result.opportunities[0].opportunity_title}")
+        print(f"  行动姿态:      {action_result.action_decision.decision_posture}")
+        print(f"  复盘输出:      findings={len(retro_result.retrospective.critical_findings)}, priorities={len(retro_result.retrospective.phase3_priorities)}")
+        print(f"  文件移动:      {moved_count} -> processed/")
+        print(f"{'#'*60}")
+        write_run_summary(attach_per_sample_stats(build_run_summary(
+            stage="done",
+            status="success",
+            sample_count=len(samples),
+            signal_count=len(all_signals),
             judgment_result=judgment_result,
             action_result=action_result,
             retro_result=retro_result,
-            decode_results=decode_results,
+            moved_count=moved_count,
+            total_ms=total_ms,
+            report_path=report_path,
+            note="全链路运行完成",
+            run_id=current_run_id,
+            source_ids=source_ids,
+        ), per_sample_stats))
+        show_token_summary()
+    except Exception as e:
+        total_ms = int((time.time() - t_total) * 1000)
+        write_run_summary(attach_per_sample_stats(build_run_summary(
+            stage="exception",
+            status="failed",
             sample_count=len(samples),
             signal_count=len(all_signals),
+            judgment_result=judgment_result,
+            action_result=action_result,
+            retro_result=retro_result,
+            moved_count=moved_count,
             total_ms=total_ms,
-            run_timestamp=datetime.now(),
-        )
-        print(f"  报告已生成:    {report_path}")
-    except Exception as e:
-        print(f"  报告生成失败:  {e}")
-
-    print(f"\n{'#'*60}")
-    print(f"Iteration 1 批量运行完成，总耗时 {total_ms}ms")
-    print(f"  样本数:        {len(samples)}")
-    print(f"  信号池:        {len(all_signals)}")
-    print(f"  机会判断:      {judgment_result.opportunities[0].priority_level} / {judgment_result.opportunities[0].opportunity_title}")
-    print(f"  行动姿态:      {action_result.action_decision.decision_posture}")
-    print(f"  复盘输出:      findings={len(retro_result.retrospective.critical_findings)}, priorities={len(retro_result.retrospective.phase3_priorities)}")
-    print(f"  文件移动:      {moved_count} -> processed/")
-    print(f"{'#'*60}")
-    show_token_summary()
+            report_path=report_path,
+            note="运行过程中发生未捕获异常",
+            error=f"{type(e).__name__}: {e}",
+            run_id=current_run_id,
+            source_ids=source_ids,
+        ), per_sample_stats))
+        raise
 
 
 if __name__ == "__main__":

@@ -19,7 +19,52 @@ def _slug(text: str, max_len: int = 30) -> str:
     text = re.sub(r"[^\w\u4e00-\u9fff\s]", "", text)
     text = text.strip()[:max_len]
     text = re.sub(r"\s+", "_", text)
-    return text
+    return text or "untitled"
+
+
+def _safe_token(text: str, max_len: int = 40) -> str:
+    text = re.sub(r"[^\w\u4e00-\u9fff\-]", "_", str(text or ""))
+    text = re.sub(r"_+", "_", text).strip("_")
+    return text[:max_len] or "na"
+
+
+def _source_signature(source_ids: list[str]) -> str:
+    source_ids = [str(s).strip() for s in (source_ids or []) if str(s).strip()]
+    if not source_ids:
+        return "no_source"
+    ordered = sorted(set(source_ids))
+    if len(ordered) == 1:
+        return _safe_token(ordered[0], max_len=24)
+    return f"{_safe_token(ordered[0], max_len=16)}_plus{len(ordered)-1}"
+
+
+def _extract_run_id(retro_result=None, retrospective=None, run_id: Optional[str] = None) -> str:
+    if run_id:
+        return str(run_id)
+    retro_obj = retrospective
+    if retro_obj is None and retro_result is not None:
+        retro_obj = getattr(retro_result, "retrospective", retro_result)
+    workflow = getattr(retro_obj, "workflow_run_record", None) if retro_obj is not None else None
+    if isinstance(workflow, dict):
+        val = workflow.get("run_id")
+        if val:
+            return str(val)
+    if workflow is not None:
+        val = getattr(workflow, "run_id", None)
+        if val:
+            return str(val)
+    return "unknown_run"
+
+
+def _extract_source_ids(decode_results=None, source_ids: Optional[list[str]] = None) -> list[str]:
+    if source_ids:
+        return [str(s) for s in source_ids if str(s).strip()]
+    result = []
+    for dr in (decode_results or []):
+        sid = getattr(dr, "source_id", None)
+        if sid:
+            result.append(str(sid))
+    return result
 
 
 def _pct(val) -> str:
@@ -35,32 +80,47 @@ def _list_items(items, indent="  ") -> str:
 
 
 def generate_report(
-    judgment_result,
-    action_result,
-    retro_result,
-    decode_results: list,
-    sample_count: int,
-    signal_count: int,
-    total_ms: int,
+    judgment_result=None,
+    action_result=None,
+    retro_result=None,
+    decode_results: Optional[list] = None,
+    sample_count: int = 0,
+    signal_count: int = 0,
+    total_ms: int = 0,
     run_timestamp: Optional[datetime] = None,
+    run_id: Optional[str] = None,
+    source_ids: Optional[list[str]] = None,
+    opportunity=None,
+    action=None,
+    retrospective=None,
 ) -> str:
-    """生成完整 Markdown 报告，返回文件路径"""
+    """生成完整 Markdown 报告，返回文件路径。兼容 batch runner 与 dashboard 两种调用方式。"""
     os.makedirs(REPORTS_DIR, exist_ok=True)
 
     ts = run_timestamp or datetime.now()
     ts_str = ts.strftime("%Y-%m-%d %H:%M")
     ts_file = ts.strftime("%Y-%m-%d_%H%M")
 
-    opp = judgment_result.opportunities[0]
-    act = action_result.action_decision
-    retro = retro_result.retrospective
+    opp = opportunity or (judgment_result.opportunities[0] if judgment_result and judgment_result.opportunities else None)
+    act = action or (getattr(action_result, "action_decision", None) if action_result is not None else None)
+    retro = retrospective or (getattr(retro_result, "retrospective", None) if retro_result is not None else None)
+
+    if opp is None or act is None or retro is None:
+        raise ValueError("generate_report requires opportunity/action/retrospective data")
 
     posture = str(act.decision_posture.value if hasattr(act.decision_posture, "value") else act.decision_posture)
-    title = opp.opportunity_title or "未命名机会"
+    display = getattr(act, "display", None)
+    display_badge = getattr(display, "display_badge", posture) if display else posture
+    display_label = getattr(display, "display_judgment_label", "") if display else ""
+    display_title_mode = getattr(display, "display_title_mode", "") if display else ""
+    title = getattr(opp, "opportunity_title", None) or "未命名机会"
     priority = str(opp.priority_level.value if hasattr(opp.priority_level, "value") else opp.priority_level)
+    report_run_id = _extract_run_id(retro_result=retro_result, retrospective=retro, run_id=run_id)
+    report_source_ids = _extract_source_ids(decode_results=decode_results, source_ids=source_ids)
+    source_signature = _source_signature(report_source_ids)
 
-    # 文件名
-    fname = f"{ts_file}_{posture}_{_slug(title)}.md"
+    # 文件名：保留可读标题，但加入 run_id/source signature 降低同主题冲突和追踪成本
+    fname = f"{ts_file}_{display_badge}_{_safe_token(report_run_id, 28)}_{source_signature}_{_slug(title)}.md"
     fpath = os.path.join(REPORTS_DIR, fname)
 
     lines = []
@@ -68,10 +128,20 @@ def generate_report(
     lines.append(f"> 生成时间：{ts_str}　｜　样本数：{sample_count}　｜　信号池：{signal_count}　｜　耗时：{total_ms/1000:.1f}s\n")
     lines.append("\n---\n")
 
+    lines.append("## 零、运行与追踪信息\n\n")
+    lines.append(f"- **run_id**：`{report_run_id}`\n")
+    lines.append(f"- **source_signature**：`{source_signature}`\n")
+    lines.append(f"- **source_ids**：{', '.join(f'`{sid}`' for sid in report_source_ids) if report_source_ids else '（无）'}\n")
+    lines.append(f"- **report_file**：`{os.path.basename(fpath)}`\n\n")
+
     # ── 一、机会概览 ─────────────────────────────────────────
     lines.append("## 一、机会概览\n\n")
     lines.append(f"**标题**：{title}\n\n")
-    lines.append(f"**优先级**：`{priority}`　　**行动姿态**：`{posture}`\n\n")
+    lines.append(f"**优先级**：`{priority}`　　**行动姿态**：`{display_badge}`\n\n")
+    if display_label:
+        lines.append(f"**显示判断**：{display_label}\n\n")
+    if display_title_mode:
+        lines.append(f"**显示模式**：`{display_title_mode}`\n\n")
 
     thesis = getattr(opp, "opportunity_thesis", None) or getattr(opp, "thesis", None)
     if thesis:
@@ -143,11 +213,25 @@ def generate_report(
     is_act_fallback = debate is None
     act_source_tag = " ⚠️ `规则引擎生成，LLM 未跑通`" if is_act_fallback else " ✅ `LLM生成`"
     lines.append(f"\n## 四、行动设计（Phase 2.3）{act_source_tag}\n\n")
-    lines.append(f"**行动姿态**：`{posture}`\n\n")
+    lines.append(f"**行动姿态**：`{display_badge}`\n\n")
 
     why = getattr(act, "why_this_posture", None)
     if why:
         lines.append(f"**选择理由**：{why}\n\n")
+
+    commitment_mode = getattr(act, "commitment_mode", None)
+    if commitment_mode:
+        lines.append(f"**承诺模式**：`{commitment_mode}`\n\n")
+
+    stage_1_objective = getattr(act, "stage_1_objective", None)
+    if stage_1_objective:
+        lines.append(f"**第一阶段目标**：{stage_1_objective}\n\n")
+
+    key_gates = getattr(act, "key_gates", []) or []
+    if key_gates:
+        lines.append("### 关键推进闸门\n\n")
+        lines.append(_list_items(key_gates))
+        lines.append("\n")
 
     # debate_summary — dataclass 或 dict 均兼容
     debate = getattr(act, "debate_summary", None)
@@ -155,13 +239,22 @@ def generate_report(
         # 支持 DebateSummary dataclass 和旧版 dict 两种形式
         hawk  = getattr(debate, "hawk_stance",  None) or (debate.get("hawk_stance")  if isinstance(debate, dict) else None)
         dove  = getattr(debate, "dove_stance",  None) or (debate.get("dove_stance")  if isinstance(debate, dict) else None)
+        executor = getattr(debate, "executor_stance", None) or (debate.get("executor_stance") if isinstance(debate, dict) else None)
+        dove_rebuttal = getattr(debate, "dove_rebuttal", None) or (debate.get("dove_rebuttal") if isinstance(debate, dict) else None)
+        executor_rebuttal = getattr(debate, "executor_rebuttal", None) or (debate.get("executor_rebuttal") if isinstance(debate, dict) else None)
         resol = getattr(debate, "resolution",   None) or (debate.get("resolution")   if isinstance(debate, dict) else None)
-        if hawk or dove or resol:
+        if hawk or dove or executor or dove_rebuttal or executor_rebuttal or resol:
             lines.append("### 辩论摘要\n\n")
             if hawk:
                 lines.append(f"- 🦅 **鹰派**：{hawk}\n")
             if dove:
                 lines.append(f"- 🕊️ **鸽派**：{dove}\n")
+            if executor:
+                lines.append(f"- 🛠️ **执行者**：{executor}\n")
+            if dove_rebuttal:
+                lines.append(f"- ↩️ **鸽派反驳**：{dove_rebuttal}\n")
+            if executor_rebuttal:
+                lines.append(f"- 🔧 **执行回应**：{executor_rebuttal}\n")
             if resol:
                 lines.append(f"- ⚖️ **仲裁**：{resol}\n")
             lines.append("\n")
@@ -256,6 +349,12 @@ def generate_report(
         lines.append(_list_items(open_q))
         lines.append("\n")
 
+    open_disagreements = getattr(act, "open_disagreements", []) or []
+    if open_disagreements:
+        lines.append("### 保留分歧\n\n")
+        lines.append(_list_items(open_disagreements))
+        lines.append("\n")
+
     # ── 五、复盘摘要（2.5） ───────────────────────────────────
     lines.append("## 五、复盘摘要（Phase 2.5）\n\n")
 
@@ -347,7 +446,7 @@ def generate_report(
         lines.append("\n")
 
     lines.append("\n---\n")
-    lines.append(f"*本报告由 proj_004 workflow 自动生成 · {ts_str}*\n")
+    lines.append(f"*本报告由 proj_004 workflow 自动生成 · {ts_str} · run_id={report_run_id}*\n")
 
     with open(fpath, "w", encoding="utf-8") as f:
         f.writelines(lines)

@@ -1,0 +1,20 @@
+{
+  "source_id": "incoming_20260331_008",
+  "source_type": "news",
+  "title": "Ubisoft sued for shutting down The Crew's servers by major French consumer group backed by Stop Killing Games",
+  "content": "A major French consumers group is taking Ubisoft to court over the publisher's ending of online support for The Crew in March 2024, rendering the notionally singleplayer-friendly open world racer unplayable. They're acting with the backing of the Stop Killing Games movement, who want publishers at large to stop yanking servers and taking games offline. Read more",
+  "published_at": "2026-03-31T00:00:00Z",
+  "source_name": "Rock Paper Shotgun",
+  "source_url": "https://www.rockpapershotgun.com/major-french-consumer-group-sue-ubisoft-over-always-online-game-shutdowns-with-the-backing-of-stop-killing-games",
+  "language": "en",
+  "mode": "prompt_first",
+  "ingestion_meta": {
+    "provider": "knowledge_base_inbox",
+    "origin_file": "00-Inbox\\2026-04-02\\[tech] Ubisoft_sued_for_shutting_down_The_Crew's_servers_by_major_F.md",
+    "signal_type_hint": "technical",
+    "raw_tags": [
+      "inbox",
+      "technical"
+    ]
+  }
+}

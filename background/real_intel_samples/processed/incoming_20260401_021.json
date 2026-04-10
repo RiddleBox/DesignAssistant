@@ -1,0 +1,20 @@
+{
+  "source_id": "incoming_20260401_021",
+  "source_type": "news",
+  "title": "Call Of Duty's April Fools Joke Brings The Franchise's Smallest Map And A Dead Meme",
+  "content": "Call of Duty has featured famously small maps like Shipment before, but Black Ops 7 takes things further for April Fools' Day, adding a hilariously tiny map in a limited-time game mode. Developer Treyarch shared what looked like the layout of a small map on social media , and you can play on it right now. The game mode called \"GRWM\" (an acronym for \"get ready with me\") puts you in a free-for-all match with a max of eight players in what appears to be a walk-in closet or changing room, the most i",
+  "published_at": "2026-04-01T00:00:00Z",
+  "source_name": "GameSpot",
+  "source_url": "https://www.gamespot.com/articles/call-of-dutys-april-fools-joke-brings-the-franchises-smallest-map-and-a-dead-meme/1100-6539166/?ftag=CAD-01-10abi2f",
+  "language": "en",
+  "mode": "prompt_first",
+  "ingestion_meta": {
+    "provider": "knowledge_base_inbox",
+    "origin_file": "00-Inbox\\2026-04-02\\[tech] Call_Of_Duty's_April_Fools_Joke_Brings_The_Franchise's_Small.md",
+    "signal_type_hint": "technical",
+    "raw_tags": [
+      "inbox",
+      "technical"
+    ]
+  }
+}

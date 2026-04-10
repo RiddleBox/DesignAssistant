@@ -1,0 +1,20 @@
+{
+  "source_id": "incoming_20260331_002",
+  "source_type": "news",
+  "title": "The discourse machine whirs to life as Zero Parades: For Dead Spies gets a May release date",
+  "content": "If you're looking to fit in a break from social media discourse in the near future, it's looking like May is going to be a good time for it. That's because ZA/UM's followup to Disco Elysium , Zero Parades: For Dead Spies , is launching around then. And what better a game to post about than one which has a studio embroiled in a whole heap of mess . Read more",
+  "published_at": "2026-03-31T00:00:00Z",
+  "source_name": "Rock Paper Shotgun",
+  "source_url": "https://www.rockpapershotgun.com/the-discourse-machine-whirs-to-life-as-zero-parades-for-dead-spies-gets-a-may-release-date",
+  "language": "en",
+  "mode": "prompt_first",
+  "ingestion_meta": {
+    "provider": "knowledge_base_inbox",
+    "origin_file": "00-Inbox\\2026-04-02\\[market] The_discourse_machine_whirs_to_life_as_Zero_Parades_For_Dead.md",
+    "signal_type_hint": "market",
+    "raw_tags": [
+      "inbox",
+      "market"
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "source_id": "incoming_20260331_004",
+  "source_type": "news",
+  "title": "Indirectly build your empire by paying heroes to do the work you don't want to in the RTS city-builder Crown of Greed, out today",
+  "content": "There is no such thing as a free lunch. Or, so the saying goes, but I'm pretty sure the ham sandwich I had at my friend's house when I was seven didn't cost me a penny. Still, in Crown of Greed, a fantasy real-time strategy game inspired by the likes of Majesty, the old adage certainly holds true. And with its release today, it can even be put into the test! Read more",
+  "published_at": "2026-03-31T00:00:00Z",
+  "source_name": "Rock Paper Shotgun",
+  "source_url": "https://www.rockpapershotgun.com/indirectly-build-your-empire-by-paying-heroes-to-do-the-work-you-dont-want-to-in-the-rts-city-builder-crown-of-greed-out-today",
+  "language": "en",
+  "mode": "prompt_first",
+  "ingestion_meta": {
+    "provider": "knowledge_base_inbox",
+    "origin_file": "00-Inbox\\2026-04-02\\[tech] Indirectly_build_your_empire_by_paying_heroes_to_do_the_work.md",
+    "signal_type_hint": "technical",
+    "raw_tags": [
+      "inbox",
+      "technical"
+    ]
+  }
+}

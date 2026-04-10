@@ -1,0 +1,20 @@
+{
+  "source_id": "incoming_20260401_042",
+  "source_type": "news",
+  "title": "Pokémon Pokopia Players Are 'Shiny Hunting' for Rare Variants of Certain Items",
+  "content": "There are no shiny Pokémon in Pokopia. But players have managed to find another rare \"variant\" to hunt down; this time, it's furniture.",
+  "published_at": "2026-04-01T00:00:00Z",
+  "source_name": "IGN Game News",
+  "source_url": "https://www.ign.com/articles/pokemon-pokopia-players-are-shiny-hunting-for-rare-variants-of-certain-items",
+  "language": "en",
+  "mode": "prompt_first",
+  "ingestion_meta": {
+    "provider": "knowledge_base_inbox",
+    "origin_file": "00-Inbox\\2026-04-02\\[tech] Pokémon_Pokopia_Players_Are_'Shiny_Hunting'_for_Rare_Variant.md",
+    "signal_type_hint": "technical",
+    "raw_tags": [
+      "inbox",
+      "technical"
+    ]
+  }
+}

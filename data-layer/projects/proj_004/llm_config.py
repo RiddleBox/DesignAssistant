@@ -26,13 +26,26 @@ _LOCAL_CONFIG_PATH = os.path.join(_THIS_DIR, "llm_config.local.yaml")
 _TEMPLATE_CONFIG_PATH = os.path.join(_THIS_DIR, "llm_config.yaml")
 
 
-def _get_active_config_path():
-    """优先使用本地私有配置，否则回退到可提交模板配置"""
-    if os.path.exists(_LOCAL_CONFIG_PATH):
-        return _LOCAL_CONFIG_PATH
+def _get_existing_config_paths():
+    """按优先级返回存在的配置文件路径：模板在前，本地覆盖在后"""
+    paths = []
     if os.path.exists(_TEMPLATE_CONFIG_PATH):
-        return _TEMPLATE_CONFIG_PATH
-    return None
+        paths.append(_TEMPLATE_CONFIG_PATH)
+    if os.path.exists(_LOCAL_CONFIG_PATH):
+        paths.append(_LOCAL_CONFIG_PATH)
+    return paths
+
+
+def _deep_merge_dict(base: dict, override: dict) -> dict:
+    """递归合并字典：override 覆盖 base，同名子字典继续深合并"""
+    result = dict(base or {})
+    for key, value in (override or {}).items():
+        if isinstance(value, dict) and isinstance(result.get(key), dict):
+            result[key] = _deep_merge_dict(result[key], value)
+        else:
+            result[key] = value
+    return result
+
 
 # .env 搜索顺序：当前目录 → 上1级 → 上2级 → 上3级（项目根）
 def _find_env_path():
@@ -66,6 +79,10 @@ def _provider_env_defaults(provider: str) -> dict:
             "api_key": os.environ.get("GEMINI_API_KEY", ""),
             "base_url": os.environ.get("GEMINI_BASE_URL", "https://generativelanguage.googleapis.com/v1beta/openai"),
         },
+        "doubao": {
+            "api_key": os.environ.get("DOUBAO_API_KEY", "") or os.environ.get("ARK_API_KEY", "") or os.environ.get("OPENAI_API_KEY", ""),
+            "base_url": os.environ.get("DOUBAO_BASE_URL", "") or os.environ.get("ARK_BASE_URL", "https://ark.cn-beijing.volces.com/api/v3") or os.environ.get("OPENAI_BASE_URL", ""),
+        },
         "custom": {
             "api_key": os.environ.get("CUSTOM_LLM_API_KEY", ""),
             "base_url": os.environ.get("CUSTOM_LLM_BASE_URL", ""),
@@ -88,16 +105,19 @@ def _load_env():
 
 
 def _load_yaml_config() -> dict:
-    """优先加载本地私有配置，其次加载可提交模板配置"""
+    """先加载模板默认值，再叠加本地私有覆盖"""
     if not _has_yaml:
         return {}
 
-    config_path = _get_active_config_path()
-    if not config_path:
+    config_paths = _get_existing_config_paths()
+    if not config_paths:
         return {}
 
-    with open(config_path, encoding="utf-8") as f:
-        return yaml.safe_load(f) or {}
+    merged = {}
+    for config_path in config_paths:
+        with open(config_path, encoding="utf-8") as f:
+            merged = _deep_merge_dict(merged, yaml.safe_load(f) or {})
+    return merged
 
 
 def get_llm_config(phase: str = None) -> dict:
@@ -108,7 +128,9 @@ def get_llm_config(phase: str = None) -> dict:
         phase: "2.1" / "2.2" / "2.3" / "2.4" / "2.5"，None 时只用 default
 
     Returns:
-        dict with keys: provider, api_key, base_url, model, max_tokens, temperature
+        dict with keys: provider, api_key, base_url, model, max_tokens, temperature,
+        connect_timeout_seconds, read_timeout_seconds, max_retries,
+        max_parallel_samples, request_spacing_ms, step1_cooldown_seconds
     """
     _load_env()
     raw = _load_yaml_config()
@@ -116,19 +138,25 @@ def get_llm_config(phase: str = None) -> dict:
     # 1. 全局 default
     default = raw.get("default", {})
     cfg = {
-        "provider":    default.get("provider", "anthropic"),
-        "api_key":     default.get("api_key", ""),
-        "base_url":    default.get("base_url", ""),
-        "model":       default.get("model", "claude-sonnet-4-6"),
-        "max_tokens":  default.get("max_tokens", 4096),
-        "temperature": default.get("temperature", 0.0),
+        "provider":               default.get("provider", "anthropic"),
+        "api_key":                default.get("api_key", ""),
+        "base_url":               default.get("base_url", ""),
+        "model":                  default.get("model", "claude-sonnet-4-6"),
+        "max_tokens":             default.get("max_tokens", 4096),
+        "temperature":            default.get("temperature", 0.0),
+        "connect_timeout_seconds": default.get("connect_timeout_seconds", 30),
+        "read_timeout_seconds":    default.get("read_timeout_seconds", 180),
+        "max_retries":             default.get("max_retries", 3),
+        "max_parallel_samples":    default.get("max_parallel_samples", 1),
+        "request_spacing_ms":      default.get("request_spacing_ms", 0),
+        "step1_cooldown_seconds":  default.get("step1_cooldown_seconds", 0),
     }
 
     # 2. 阶段覆盖
     if phase:
         phase_cfg = raw.get("phases", {}).get(str(phase), {})
         for k, v in phase_cfg.items():
-            if v:  # 非空才覆盖
+            if v is not None and v != "":
                 cfg[k] = v
 
     provider_env = _provider_env_defaults(cfg["provider"])
@@ -139,7 +167,7 @@ def get_llm_config(phase: str = None) -> dict:
     if not cfg["base_url"]:
         cfg["base_url"] = provider_env["base_url"]
 
-    if cfg["provider"] == "deepseek" and cfg["base_url"]:
+    if cfg["provider"] in {"deepseek", "doubao"} and cfg["base_url"]:
         cfg["base_url"] = cfg["base_url"].rstrip("/")
 
     return cfg
@@ -173,8 +201,11 @@ def print_config_summary():
     """打印各阶段配置摘要（调试用）"""
     _load_env()
     print("LLM 配置摘要:")
-    active_path = _get_active_config_path()
-    print(f"  配置文件: {os.path.basename(active_path) if active_path else '不存在，使用环境变量'}")
+    active_paths = _get_existing_config_paths()
+    if active_paths:
+        print(f"  配置文件: {' + '.join(os.path.basename(path) for path in active_paths)}")
+    else:
+        print("  配置文件: 不存在，使用环境变量")
     for phase in [None, "2.1", "2.2", "2.3", "2.4", "2.5"]:
         cfg = get_llm_config(phase)
         key_hint = cfg['api_key'][:12] + "..." if cfg['api_key'] else "(未设置)"

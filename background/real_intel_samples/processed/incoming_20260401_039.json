@@ -1,0 +1,20 @@
+{
+  "source_id": "incoming_20260401_039",
+  "source_type": "news",
+  "title": "Our cozy games of April list is looking so chilled out that there isn't even a single farm sim on it",
+  "content": "Don't get a spring in your step just yet because this month's cozy game launches are all so cozy you might want to stay bundled up.",
+  "published_at": "2026-04-01T00:00:00Z",
+  "source_name": "PC Gamer",
+  "source_url": "https://www.pcgamer.com/games/new-cozy-games-april-2026/",
+  "language": "en",
+  "mode": "prompt_first",
+  "ingestion_meta": {
+    "provider": "knowledge_base_inbox",
+    "origin_file": "00-Inbox\\2026-04-02\\[tech] Our_cozy_games_of_April_list_is_looking_so_chilled_out_that_.md",
+    "signal_type_hint": "technical",
+    "raw_tags": [
+      "inbox",
+      "technical"
+    ]
+  }
+}

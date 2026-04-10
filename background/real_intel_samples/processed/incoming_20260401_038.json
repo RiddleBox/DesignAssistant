@@ -1,0 +1,20 @@
+{
+  "source_id": "incoming_20260401_038",
+  "source_type": "news",
+  "title": "Minecraft Hacks Away A Major Chunk Of The Game With New Playable April Fools' Joke",
+  "content": "Like lots of games, Minecraft is celebrating April Fools' Day with a good, old-fashioned joke. But rather than simply making a silly social media post, developer Mojang is fully committed to the bit, and this year's joke comes in the form of a playable game update. The Herdcraft Update is live now, and gets rid of the inventory system entirely, leaving players' inventory items to follow them around the in-game world like sheep. \"Herdcraft is a completely new (and very permanent) way to play Mine",
+  "published_at": "2026-04-01T00:00:00Z",
+  "source_name": "GameSpot",
+  "source_url": "https://www.gamespot.com/articles/minecraft-hacks-away-a-major-chunk-of-the-game-with-new-playable-april-fools-joke/1100-6539169/?ftag=CAD-01-10abi2f",
+  "language": "en",
+  "mode": "prompt_first",
+  "ingestion_meta": {
+    "provider": "knowledge_base_inbox",
+    "origin_file": "00-Inbox\\2026-04-02\\[tech] Minecraft_Hacks_Away_A_Major_Chunk_Of_The_Game_With_New_Play.md",
+    "signal_type_hint": "technical",
+    "raw_tags": [
+      "inbox",
+      "technical"
+    ]
+  }
+}

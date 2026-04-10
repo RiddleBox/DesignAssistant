@@ -1,0 +1,20 @@
+{
+  "source_id": "incoming_20260401_013",
+  "source_type": "news",
+  "title": "Instead of making a joke, Valve celebrates April Fool's Day by rolling out a Steam storefront 'refresh' that makes it look much nicer",
+  "content": "They're not joking (and neither am I).",
+  "published_at": "2026-04-01T00:00:00Z",
+  "source_name": "PC Gamer",
+  "source_url": "https://www.pcgamer.com/games/instead-of-making-a-joke-valve-celebrates-april-fools-day-by-rolling-out-a-steam-storefront-refresh-that-makes-it-look-much-nicer/",
+  "language": "en",
+  "mode": "prompt_first",
+  "ingestion_meta": {
+    "provider": "knowledge_base_inbox",
+    "origin_file": "00-Inbox\\2026-04-02\\[team] Instead_of_making_a_joke,_Valve_celebrates_April_Fool's_Day_.md",
+    "signal_type_hint": "team",
+    "raw_tags": [
+      "inbox",
+      "team"
+    ]
+  }
+}

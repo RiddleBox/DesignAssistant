@@ -1,0 +1,7 @@
+{
+  "provider": "anthropic",
+  "model": "claude-haiku-4-5-20251001",
+  "response_len": 48,
+  "raw_response": "{\"has_signal\":true,\"signal_types\":[\"technical\"]}",
+  "text_len": 465
+}

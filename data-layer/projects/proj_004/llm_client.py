@@ -22,6 +22,7 @@ class LLMClient:
         "openai":    "https://api.openai.com/v1",
         "deepseek":  "https://api.deepseek.com",
         "gemini":    "https://generativelanguage.googleapis.com/v1beta/openai",
+        "doubao":    "https://ark.cn-beijing.volces.com/api/v3",
         "custom":    "",
     }
 
@@ -47,8 +48,8 @@ class LLMClient:
         return base
 
     def _is_openai_compat(self) -> bool:
-        """openai / deepseek / gemini / custom 等 OpenAI 兼容格式"""
-        return self.provider in ("openai", "deepseek", "gemini", "custom")
+        """openai / deepseek / gemini / doubao / custom 等 OpenAI 兼容格式"""
+        return self.provider in ("openai", "deepseek", "gemini", "doubao", "custom")
 
     @staticmethod
     def _env_flag(name: str, default: bool = False) -> bool:
@@ -121,7 +122,7 @@ class LLMClient:
 
         if self._is_openai_compat():
             # ── OpenAI 兼容格式（DeepSeek / Gemini / 自定义中转）──────────
-            url = self.base_url + "/chat/completions"
+            urls = [self.base_url + "/chat/completions"]
             messages = []
             if system:
                 messages.append({"role": "system", "content": system})
@@ -135,7 +136,7 @@ class LLMClient:
             }
         else:
             # ── Anthropic 原生 / 中转代理格式 ────────────────────────────
-            url = self.base_url + "/messages"
+            urls = [self.base_url + "/messages", self.base_url + "/v1/messages"]
             messages = [{"role": "user", "content": prompt}]
             payload = {
                 "model":       model,
@@ -147,36 +148,41 @@ class LLMClient:
             if system:
                 payload["system"] = system
 
+        last_error = None
         for attempt in range(max_retries):
-            try:
-                started_at = time.time()
-                self._debug_log(
-                    f"request_start provider={self.provider} model={model} attempt={attempt + 1}/{max_retries} "
-                    f"url={url} connect_timeout={timeouts[0]} read_timeout={timeouts[1]} "
-                    f"stream_wall_clock_timeout={stream_timeout_seconds or 'off'}"
-                )
-                resp = requests.post(url, headers=headers, json=payload, timeout=timeouts, stream=True)
-                resp.raise_for_status()
-                self._debug_log(
-                    f"response_headers status={resp.status_code} elapsed_ms={int((time.time() - started_at) * 1000)}"
-                )
-                stream_started_at = time.monotonic()
-                if self._is_openai_compat():
-                    text = self._collect_stream_openai(resp, stream_started_at, stream_timeout_seconds)
-                else:
-                    text = self._collect_stream_anthropic(resp, stream_started_at, stream_timeout_seconds)
-                self._debug_log(
-                    f"response_complete chars={len(text)} elapsed_ms={int((time.time() - started_at) * 1000)}"
-                )
-                return text
-            except Exception as e:
-                self._debug_log(
-                    f"request_error provider={self.provider} model={model} attempt={attempt + 1}/{max_retries} error={e}"
-                )
-                if attempt < max_retries - 1:
-                    time.sleep(2 ** attempt)
-                else:
-                    raise e
+            for url in urls:
+                try:
+                    started_at = time.time()
+                    self._debug_log(
+                        f"request_start provider={self.provider} model={model} attempt={attempt + 1}/{max_retries} "
+                        f"url={url} connect_timeout={timeouts[0]} read_timeout={timeouts[1]} "
+                        f"stream_wall_clock_timeout={stream_timeout_seconds or 'off'}"
+                    )
+                    resp = requests.post(url, headers=headers, json=payload, timeout=timeouts, stream=True)
+                    resp.raise_for_status()
+                    self._debug_log(
+                        f"response_headers status={resp.status_code} elapsed_ms={int((time.time() - started_at) * 1000)}"
+                    )
+                    stream_started_at = time.monotonic()
+                    if self._is_openai_compat():
+                        text = self._collect_stream_openai(resp, stream_started_at, stream_timeout_seconds)
+                    else:
+                        text = self._collect_stream_anthropic(resp, stream_started_at, stream_timeout_seconds)
+                    self._debug_log(
+                        f"response_complete chars={len(text)} elapsed_ms={int((time.time() - started_at) * 1000)}"
+                    )
+                    return text
+                except Exception as e:
+                    last_error = e
+                    self._debug_log(
+                        f"request_error provider={self.provider} model={model} attempt={attempt + 1}/{max_retries} url={url} error={e}"
+                    )
+                    is_last_candidate = (url == urls[-1])
+                    if not is_last_candidate:
+                        continue
+            if attempt < max_retries - 1:
+                time.sleep(2 ** attempt)
+        raise last_error
 
     def _collect_stream_anthropic(self, resp, started_at: float, stream_timeout_seconds: int) -> str:
         """消费 Anthropic SSE 流：content_block_delta / text_delta"""

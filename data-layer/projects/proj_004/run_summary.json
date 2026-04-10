@@ -1,0 +1,14 @@
+{
+  "stage": "init",
+  "status": "no_input",
+  "sample_count": 0,
+  "signal_count": 0,
+  "moved_count": 0,
+  "total_ms": 0,
+  "report_path": null,
+  "note": "incoming 目录为空，无待处理样本",
+  "error": "",
+  "per_sample_stats": [],
+  "keep_inputs": true,
+  "written_at": "2026-04-10T15:50:39"
+}

@@ -1,0 +1,20 @@
+{
+  "source_id": "incoming_20260331_007",
+  "source_type": "news",
+  "title": "Turn your Steam library into a cosy room of physical games with a special shelf for dodgy sale purchases in Boxroom, which has a demo out",
+  "content": "If you've ever longed for your Steam library to be a bunch of shelves littered with physical games you can touch, sniff, and agonise about having to shift if you move house, let me introduce you to Boxroom. It takes all of the games you've either bought for pennies in a sale and never got around to playing or paid through the nose for on release and have put 1000 hours into out of sheer sunk-cost fallacy. It sticks their front covers onto boxes you can use to fill a cosy customisable computer ro",
+  "published_at": "2026-03-31T00:00:00Z",
+  "source_name": "Rock Paper Shotgun",
+  "source_url": "https://www.rockpapershotgun.com/turn-your-steam-library-into-a-cosy-room-of-physical-games-with-a-special-shelf-for-dodgy-sale-purchases-in-boxroom-which-has-a-demo-out",
+  "language": "en",
+  "mode": "prompt_first",
+  "ingestion_meta": {
+    "provider": "knowledge_base_inbox",
+    "origin_file": "00-Inbox\\2026-04-02\\[tech] Turn_your_Steam_library_into_a_cosy_room_of_physical_games_w.md",
+    "signal_type_hint": "technical",
+    "raw_tags": [
+      "inbox",
+      "technical"
+    ]
+  }
+}

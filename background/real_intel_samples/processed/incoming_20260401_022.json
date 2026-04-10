@@ -1,0 +1,20 @@
+{
+  "source_id": "incoming_20260401_022",
+  "source_type": "news",
+  "title": "Crimson Desert Modder Restores What They Believe to Be 'A Fully Designed Food Consequence System That Pearl Abyss Built but Never Activated'",
+  "content": "As Crimson Desert approaches two weeks on sale, modders are unearthing more of its secrets. One of these appears to be a fleshed out food risk system, which has all the ingredients to give eating in the game some genuine consequence.",
+  "published_at": "2026-04-01T00:00:00Z",
+  "source_name": "IGN Game News",
+  "source_url": "https://www.ign.com/articles/crimson-desert-modder-restores-what-they-believe-to-be-a-fully-designed-food-consequence-system-that-pearl-abyss-built-but-never-activated",
+  "language": "en",
+  "mode": "prompt_first",
+  "ingestion_meta": {
+    "provider": "knowledge_base_inbox",
+    "origin_file": "00-Inbox\\2026-04-02\\[tech] Crimson_Desert_Modder_Restores_What_They_Believe_to_Be_'A_Fu.md",
+    "signal_type_hint": "technical",
+    "raw_tags": [
+      "inbox",
+      "technical"
+    ]
+  }
+}

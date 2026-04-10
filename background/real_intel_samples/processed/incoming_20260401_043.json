@@ -1,0 +1,20 @@
+{
+  "source_id": "incoming_20260401_043",
+  "source_type": "news",
+  "title": "Shigeru Miyamoto Says Nintendo Had a 'Vague Idea' of Peach and Rosalina's Relationship in Super Mario Galaxy, to Which the Movie Finally Gives 'Some Meat'",
+  "content": "Nintendo legend Shigeru Miyamoto has discussed having a \"vague idea\" for Peach and Rosalina's true relationship while making the original Super Mario Galaxy — something the new Super Mario Galaxy Movie finally gives \"some meat\" to.",
+  "published_at": "2026-04-01T00:00:00Z",
+  "source_name": "IGN Game News",
+  "source_url": "https://www.ign.com/articles/shigeru-miyamoto-says-nintendo-had-a-vague-idea-of-peach-and-rosalinas-relationship-in-super-mario-galaxy-to-which-the-movie-finally-gives-some-meat",
+  "language": "en",
+  "mode": "prompt_first",
+  "ingestion_meta": {
+    "provider": "knowledge_base_inbox",
+    "origin_file": "00-Inbox\\2026-04-02\\[tech] Shigeru_Miyamoto_Says_Nintendo_Had_a_'Vague_Idea'_of_Peach_a.md",
+    "signal_type_hint": "technical",
+    "raw_tags": [
+      "inbox",
+      "technical"
+    ]
+  }
+}

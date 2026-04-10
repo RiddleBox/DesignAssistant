@@ -1,0 +1,20 @@
+{
+  "source_id": "incoming_20260331_001",
+  "source_type": "news",
+  "title": "Vultures - Scavengers Of Death is a turn-based, extraction take on Resident Evil, and it's out next month",
+  "content": "As pretty ( and ugly ) as the Resident Evil games have become over the years, there is a quality to the original PS1 entries that lingers on in the hearts of many. That'll likely be partially down to the permanently raised heart rates of kids playing them too young everywhere. But I think the thing that endures in the ever popular PS1 aesthetic in the indie horror scene is that nasty griminess that just feels so at home. And Vultures - Scavengers of Death, a turn-based, extractiony take on Resid",
+  "published_at": "2026-03-31T00:00:00Z",
+  "source_name": "Rock Paper Shotgun",
+  "source_url": "https://www.rockpapershotgun.com/vultures-scavengers-of-death-is-a-turn-based-extraction-take-on-resident-evil-and-its-out-next-month",
+  "language": "en",
+  "mode": "prompt_first",
+  "ingestion_meta": {
+    "provider": "knowledge_base_inbox",
+    "origin_file": "00-Inbox\\2026-04-02\\[capital] Vultures_-_Scavengers_Of_Death_is_a_turn-based,_extraction_t.md",
+    "signal_type_hint": "capital",
+    "raw_tags": [
+      "inbox",
+      "capital"
+    ]
+  }
+}

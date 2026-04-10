@@ -1,0 +1,20 @@
+{
+  "source_id": "incoming_20260401_051",
+  "source_type": "news",
+  "title": "We Build LEGO Super Mario: Mario Kart – Luigi & Mach 8",
+  "content": "The newest LEGO Super Mario: Mario Kart adult set, available exclusively at the LEGO Store, features Luigi in a Mach 8, which made its video game debut in Mario Kart 8.",
+  "published_at": "2026-04-01T00:00:00Z",
+  "source_name": "IGN Game News",
+  "source_url": "https://www.ign.com/articles/we-build-lego-super-mario-mario-kart-luigi-mach-8-set-72050",
+  "language": "en",
+  "mode": "prompt_first",
+  "ingestion_meta": {
+    "provider": "knowledge_base_inbox",
+    "origin_file": "00-Inbox\\2026-04-02\\[tech] We_Build_LEGO_Super_Mario_Mario_Kart_–_Luigi_&_Mach_8.md",
+    "signal_type_hint": "technical",
+    "raw_tags": [
+      "inbox",
+      "technical"
+    ]
+  }
+}

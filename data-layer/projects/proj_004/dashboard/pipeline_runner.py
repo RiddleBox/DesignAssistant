@@ -36,6 +36,68 @@ def _event(type_, step, message, data=None):
     return {"type": type_, "step": step, "message": message, "data": data or {}}
 
 
+def _compute_phase21_diagnostics(samples_data: list, elapsed_ms: int) -> dict:
+    processing_values = sorted(
+        int(sample.get("processing_time_ms", 0) or 0)
+        for sample in samples_data
+    )
+
+    def _percentile(sorted_values: list[int], ratio: float) -> int:
+        if not sorted_values:
+            return 0
+        index = max(0, min(len(sorted_values) - 1, int(round((len(sorted_values) - 1) * ratio))))
+        return int(sorted_values[index])
+
+    def _sample_digest(sample: dict) -> dict:
+        return {
+            "source_id": sample.get("source_id", ""),
+            "raw_title": sample.get("raw_title", ""),
+            "raw_source_name": sample.get("raw_source_name", ""),
+            "decode_status": sample.get("decode_status", "unknown"),
+            "processing_time_ms": int(sample.get("processing_time_ms", 0) or 0),
+            "signal_count": int(sample.get("signal_count", 0) or 0),
+            "warning_count": int(sample.get("warning_count", 0) or 0),
+            "error_type": sample.get("error_type", ""),
+            "error_message": sample.get("error_message", ""),
+        }
+
+    sorted_by_slow = sorted(
+        samples_data,
+        key=lambda sample: int(sample.get("processing_time_ms", 0) or 0),
+        reverse=True,
+    )
+    sorted_by_warning = sorted(
+        [sample for sample in samples_data if int(sample.get("warning_count", 0) or 0) > 0],
+        key=lambda sample: (
+            int(sample.get("warning_count", 0) or 0),
+            int(sample.get("processing_time_ms", 0) or 0),
+        ),
+        reverse=True,
+    )
+    failed_samples = [sample for sample in samples_data if sample.get("decode_status") == "failed"]
+
+    p50_ms = _percentile(processing_values, 0.50)
+    p90_ms = _percentile(processing_values, 0.90)
+    p95_ms = _percentile(processing_values, 0.95)
+    slow_sample_threshold_ms = p90_ms if p90_ms > 0 else 0
+    slow_sample_count = sum(
+        1 for sample in samples_data
+        if int(sample.get("processing_time_ms", 0) or 0) >= slow_sample_threshold_ms and slow_sample_threshold_ms > 0
+    )
+
+    return {
+        "elapsed_ms": int(elapsed_ms or 0),
+        "p50_processing_time_ms": p50_ms,
+        "p90_processing_time_ms": p90_ms,
+        "p95_processing_time_ms": p95_ms,
+        "slow_sample_threshold_ms": slow_sample_threshold_ms,
+        "slow_sample_count": slow_sample_count,
+        "top_slowest_samples": [_sample_digest(sample) for sample in sorted_by_slow[:10]],
+        "top_warning_samples": [_sample_digest(sample) for sample in sorted_by_warning[:10]],
+        "failed_samples": [_sample_digest(sample) for sample in failed_samples[:10]],
+    }
+
+
 def run_pipeline(api_key: str, base_url: str) -> Generator[dict, None, None]:
     """
     主 generator：按顺序执行各 step，每步完成后 yield 事件。
@@ -64,6 +126,7 @@ def run_pipeline(api_key: str, base_url: str) -> Generator[dict, None, None]:
             run_step4_retro,
             build_rag_retriever,
             move_to_processed,
+            load_llm_config,
         )
         import glob, json as _json
 
@@ -74,6 +137,7 @@ def run_pipeline(api_key: str, base_url: str) -> Generator[dict, None, None]:
 
         yield _event("log", None, f"发现 {len(incoming_files)} 个样本文件")
         samples = load_samples(incoming_files)
+        llm_config_21 = load_llm_config("2.1")
     except Exception as e:
         yield _event("error", None, f"初始化失败：{e}", {"traceback": traceback.format_exc()})
         return
@@ -82,7 +146,7 @@ def run_pipeline(api_key: str, base_url: str) -> Generator[dict, None, None]:
     yield _event("step_start", "2.1", "2.1 情报解码 开始…")
     t1 = time.time()
     try:
-        all_signals, decode_results, per_sample_stats = run_step1_decode(samples, api_key)
+        all_signals, decode_results, per_sample_stats = run_step1_decode(samples, llm_config_21)
 
         # 组装展示数据
         # decode_results 是 IntelligenceDecodeResult 对象列表（非 dict）
@@ -118,6 +182,14 @@ def run_pipeline(api_key: str, base_url: str) -> Generator[dict, None, None]:
                 "signal_count": sig_count,
                 "signals": signals_detail,
                 "is_noise": sig_count == 0,
+                "processing_time_ms": stat.get("processing_time_ms", 0),
+                "warning_count": stat.get("warning_count", 0),
+                "warnings": stat.get("warnings", []),
+                "error_message": stat.get("error", ""),
+                "error_type": stat.get("error_type", ""),
+                "decode_status": "failed" if stat.get("error") else ("noise" if sig_count == 0 else "signal"),
+                "started_at": stat.get("started_at", ""),
+                "finished_at": stat.get("finished_at", ""),
                 # 原文字段
                 "raw_title":       raw.get("title", ""),
                 "raw_content":     raw.get("content", ""),
@@ -127,10 +199,23 @@ def run_pipeline(api_key: str, base_url: str) -> Generator[dict, None, None]:
             })
 
         elapsed = int((time.time() - t1) * 1000)
+        decode_error_count = sum(1 for s in per_sample_stats if s.get("error"))
+        decode_success_count = len(samples_data) - decode_error_count
+        avg_processing_time_ms = int(sum(s.get("processing_time_ms", 0) for s in per_sample_stats) / len(per_sample_stats)) if per_sample_stats else 0
+        warning_sample_count = sum(1 for s in per_sample_stats if s.get("warning_count", 0) > 0)
+        max_processing_time_ms = max((s.get("processing_time_ms", 0) for s in per_sample_stats), default=0)
         yield _event("step_done", "2.1", f"2.1 完成：{len(all_signals)} 个信号，耗时 {elapsed}ms", {
             "samples": samples_data,
             "signal_total": len(all_signals),
             "noise_count": sum(1 for s in samples_data if s["is_noise"]),
+            "decode_error_count": decode_error_count,
+            "decode_success_count": decode_success_count,
+            "avg_processing_time_ms": avg_processing_time_ms,
+            "warning_sample_count": warning_sample_count,
+            "max_processing_time_ms": max_processing_time_ms,
+            "max_parallel_samples": llm_config_21.get("max_parallel_samples", 1),
+            "request_spacing_ms": llm_config_21.get("request_spacing_ms", 0),
+            "diagnostics": _compute_phase21_diagnostics(samples_data, elapsed),
             "elapsed_ms": elapsed,
         })
     except Exception as e:
@@ -138,7 +223,10 @@ def run_pipeline(api_key: str, base_url: str) -> Generator[dict, None, None]:
         return
 
     # 冷却
-    cooldown = 15 * len(samples)
+    cooldown = llm_config_21.get("step1_cooldown_seconds")
+    if cooldown is None or cooldown == "":
+        cooldown = 15 * len(samples)
+    cooldown = max(0, int(cooldown))
     yield _event("log", None, f"限流冷却 {cooldown}s…")
     time.sleep(cooldown)
 
@@ -252,7 +340,7 @@ def run_pipeline(api_key: str, base_url: str) -> Generator[dict, None, None]:
     yield _event("step_start", "2.3", "2.3 行动设计 开始…")
     t3 = time.time()
     try:
-        action_result = run_step3_action(judgment_result, api_key=api_key)
+        action_result = run_step3_action(judgment_result)
         elapsed3 = int((time.time() - t3) * 1000)
 
         act = getattr(action_result, "action_decision", None)
@@ -260,15 +348,22 @@ def run_pipeline(api_key: str, base_url: str) -> Generator[dict, None, None]:
         if act:
             debate = getattr(act, "debate_summary", None)
             llm_used = debate is not None
+            display = getattr(act, "display", None)
             act_data = {
                 "posture": str(getattr(act, "decision_posture", "")),
-                "why": getattr(act, "why_this_posture", ""),      # 实际字段名 why_this_posture
+                "commitment_mode": str(getattr(act, "commitment_mode", "")),
+                "display_judgment_label": getattr(display, "display_judgment_label", "") if display else "",
+                "display_badge": getattr(display, "display_badge", "") if display else str(getattr(act, "decision_posture", "")),
+                "display_title_mode": getattr(display, "display_title_mode", "") if display else "",
+                "stage_1_objective": getattr(act, "stage_1_objective", ""),
+                "key_gates": _serialize_list(getattr(act, "key_gates", [])),
+                "why": getattr(act, "why_this_posture", ""),
                 "llm_used": llm_used,
                 "debate_summary": _serialize_debate(debate),
                 "phases": _serialize_list(getattr(act, "phased_plan", [])),
                 "top_risks": _serialize_list(getattr(act, "top_risks", [])),
                 "exit_conditions": _serialize_list(getattr(act, "exit_conditions", [])),
-                "go_no_go_criteria": _serialize_list(getattr(act, "go_no_go_criteria", [])),
+                "open_disagreements": _serialize_list(getattr(act, "open_disagreements", [])),
             }
 
         yield _event("step_done", "2.3", f"2.3 完成：姿态={act_data.get('posture','')}，耗时 {elapsed3}ms", {
@@ -318,10 +413,16 @@ def run_pipeline(api_key: str, base_url: str) -> Generator[dict, None, None]:
         from report_writer import generate_report
         opp_obj = judgment_result.opportunities[0] if judgment_result.opportunities else None
         act_obj = getattr(action_result, "action_decision", None)
+        source_ids = [str(sample.get("payload", {}).get("source_id", sample.get("file_name", ""))) for sample in samples]
         report_path = generate_report(
             opportunity=opp_obj,
             action=act_obj,
             retrospective=retro_result.retrospective,
+            decode_results=decode_results,
+            sample_count=len(samples),
+            signal_count=len(all_signals),
+            run_id=f"dashboard_batch_{datetime.now().strftime('%Y%m%d_%H%M%S')}",
+            source_ids=source_ids,
             run_timestamp=datetime.now(),
             total_ms=int((time.time() - t_total) * 1000),
         )
@@ -376,11 +477,23 @@ def _serialize_findings(findings) -> list:
 def _serialize_debate(debate) -> dict:
     if debate is None:
         return {}
+    hawk_stance = getattr(debate, "hawk_stance", "")
+    dove_stance = getattr(debate, "dove_stance", "")
+    executor_stance = getattr(debate, "executor_stance", "")
+    dove_rebuttal = getattr(debate, "dove_rebuttal", "")
+    executor_rebuttal = getattr(debate, "executor_rebuttal", "")
+    resolution = getattr(debate, "resolution", "")
     return {
-        "hawk_position": getattr(debate, "hawk_position", ""),
-        "dove_position": getattr(debate, "dove_position", ""),
-        "arbitrator_verdict": getattr(debate, "arbitrator_verdict", ""),
-        "consensus_level": str(getattr(debate, "consensus_level", "")),
+        "hawk_stance": hawk_stance,
+        "dove_stance": dove_stance,
+        "executor_stance": executor_stance,
+        "dove_rebuttal": dove_rebuttal,
+        "executor_rebuttal": executor_rebuttal,
+        "resolution": resolution,
+        "hawk_position": hawk_stance,
+        "dove_position": dove_stance,
+        "arbitrator_verdict": resolution,
+        "consensus_level": "multi-agent-converged" if resolution else "",
     }
 
 

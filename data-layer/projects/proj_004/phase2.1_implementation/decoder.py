@@ -22,6 +22,7 @@ from schemas import (
     SourceType
 )
 from prompt_templates import build_prompt, build_screen_prompt, PROMPT_VERSION
+from llm_client import LLMClient
 
 
 class IntelligenceDecoder:
@@ -56,6 +57,7 @@ class IntelligenceDecoder:
             "openai": os.environ.get("OPENAI_BASE_URL", ""),
             "deepseek": os.environ.get("DEEPSEEK_BASE_URL", "") or os.environ.get("OPENAI_BASE_URL", ""),
             "gemini": os.environ.get("GEMINI_BASE_URL", ""),
+            "doubao": os.environ.get("DOUBAO_BASE_URL", "") or os.environ.get("ARK_BASE_URL", "") or os.environ.get("OPENAI_BASE_URL", ""),
             "custom": os.environ.get("CUSTOM_LLM_BASE_URL", ""),
         }
         default_base_url_map = {
@@ -63,6 +65,7 @@ class IntelligenceDecoder:
             "openai": "https://api.openai.com/v1",
             "deepseek": "https://api.deepseek.com",
             "gemini": "https://generativelanguage.googleapis.com/v1beta/openai",
+            "doubao": "https://ark.cn-beijing.volces.com/api/v3",
             "custom": "",
         }
         env_base_url = env_base_url_map.get(self.provider, "")
@@ -92,11 +95,31 @@ class IntelligenceDecoder:
                     "  2) 改用兼容 API 并提供 base_url"
                 )
         else:
-            self.client = None
+            self.client = LLMClient(
+                api_key=api_key,
+                base_url=self.base_url,
+                provider=self.provider,
+            )
 
     def _debug(self, message: str) -> None:
         if self.debug_enabled:
             print(f"[decoder-debug] {message}", flush=True)
+
+    def _write_debug_artifact(self, source_id: str, stage: str, payload: Dict[str, Any]) -> None:
+        if not self.debug_enabled:
+            return
+        try:
+            debug_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "debug_artifacts", "phase2.1")
+            os.makedirs(debug_dir, exist_ok=True)
+            safe_source_id = re.sub(r'[^A-Za-z0-9._-]+', '_', str(source_id or 'unknown'))
+            safe_stage = re.sub(r'[^A-Za-z0-9._-]+', '_', str(stage or 'stage'))
+            ts = datetime.now().strftime('%Y%m%d_%H%M%S_%f')
+            path = os.path.join(debug_dir, f"{ts}_{safe_source_id}_{safe_stage}.json")
+            with open(path, 'w', encoding='utf-8') as f:
+                json.dump(payload, f, ensure_ascii=False, indent=2)
+            self._debug(f"artifact.written stage={stage} path={path}")
+        except Exception as e:
+            self._debug(f"artifact.write_failed stage={stage} error={type(e).__name__}: {e}")
 
     def decode(self, request: IntelligenceDecodeRequest) -> DecodedIntelligence:
         """
@@ -149,6 +172,12 @@ class IntelligenceDecoder:
             self._debug(f"decode.before_main_llm source_id={request.source_id} model={self.model}")
             response = self._call_llm(prompt)
             self._debug(f"decode.after_main_llm source_id={request.source_id} response_len={len(response)}")
+            self._write_debug_artifact(request.source_id, "main_response", {
+                "provider": self.provider,
+                "model": self.model,
+                "response_len": len(response),
+                "raw_response": response,
+            })
 
             # [4] 后处理与规范化
             signals = self._post_process(response, request.source_id, warnings)
@@ -221,6 +250,13 @@ class IntelligenceDecoder:
             self._debug(f"screen.before_llm model={self.screen_model} text_len={len(text)}")
             raw = self._call_llm(screen_prompt, model_override=self.screen_model, max_tokens=80)
             self._debug(f"screen.after_llm model={self.screen_model} response_len={len(raw)}")
+            self._write_debug_artifact("screen", "screen_response", {
+                "provider": self.provider,
+                "model": self.screen_model,
+                "response_len": len(raw),
+                "raw_response": raw,
+                "text_len": len(text),
+            })
             # 解析 JSON
             json_match = re.search(r'\{.*?\}', raw, re.DOTALL)
             if json_match:
@@ -231,6 +267,14 @@ class IntelligenceDecoder:
                     warnings.append(f"LLM粗筛（{self.screen_model}）：判定无范式信号，跳过精筛")
                 return {"has_signal": has_signal, "signal_types": signal_types, "screen_method": "llm"}
         except Exception as e:
+            self._write_debug_artifact("screen", "screen_parse_error", {
+                "provider": self.provider,
+                "model": self.screen_model,
+                "error_type": type(e).__name__,
+                "error": str(e),
+                "raw_response": raw if 'raw' in locals() else "",
+                "text_len": len(text),
+            })
             # 粗筛失败不阻塞：放行进入精筛
             warnings.append(f"粗筛失败（{e}），放行进入精筛")
 
@@ -286,8 +330,11 @@ class IntelligenceDecoder:
                     return text
 
                 if self.provider == "anthropic":
-                    # Anthropic 中转代理：仍走 /v1/messages 协议
-                    url = self.base_url.rstrip("/") + "/v1/messages"
+                    # Anthropic 中转代理：优先尝试 /messages，失败时回退到 /v1/messages
+                    candidate_urls = [
+                        self.base_url.rstrip("/") + "/messages",
+                        self.base_url.rstrip("/") + "/v1/messages",
+                    ]
                     headers = {
                         "Authorization": f"Bearer {self.api_key}",
                         "anthropic-version": "2023-06-01",
@@ -299,71 +346,50 @@ class IntelligenceDecoder:
                         "temperature": 0.0,
                         "messages": [{"role": "user", "content": prompt}],
                     }
-                    self._debug(
-                        f"llm.request provider=anthropic proxy model={model} attempt={attempt + 1}/{retry_count} max_tokens={max_tokens} timeout={timeout_tuple} url={url}"
-                    )
-                    resp = _requests.post(url, headers=headers, json=payload, timeout=timeout_tuple)
-                    self._debug(
-                        f"llm.http_response provider=anthropic proxy model={model} attempt={attempt + 1}/{retry_count} status={resp.status_code}"
-                    )
-                    resp.raise_for_status()
-                    data = resp.json()
-                    for block in data.get("content", []):
-                        if block.get("type") == "text":
-                            text = block.get("text", "")
+                    last_error = None
+                    for candidate_url in candidate_urls:
+                        try:
                             self._debug(
-                                f"llm.response provider=anthropic proxy model={model} attempt={attempt + 1}/{retry_count} response_len={len(text)}"
+                                f"llm.request provider=anthropic proxy model={model} attempt={attempt + 1}/{retry_count} max_tokens={max_tokens} timeout={timeout_tuple} url={candidate_url}"
                             )
-                            return text
-                    self._debug(
-                        f"llm.response provider=anthropic proxy model={model} attempt={attempt + 1}/{retry_count} response_len=0"
-                    )
-                    return ""
+                            resp = _requests.post(candidate_url, headers=headers, json=payload, timeout=timeout_tuple)
+                            self._debug(
+                                f"llm.http_response provider=anthropic proxy model={model} attempt={attempt + 1}/{retry_count} status={resp.status_code} url={candidate_url}"
+                            )
+                            resp.raise_for_status()
+                            data = resp.json()
+                            for block in data.get("content", []):
+                                if block.get("type") == "text":
+                                    text = block.get("text", "")
+                                    self._debug(
+                                        f"llm.response provider=anthropic proxy model={model} attempt={attempt + 1}/{retry_count} response_len={len(text)} url={candidate_url}"
+                                    )
+                                    return text
+                            self._debug(
+                                f"llm.response provider=anthropic proxy model={model} attempt={attempt + 1}/{retry_count} response_len=0 url={candidate_url}"
+                            )
+                            return ""
+                        except Exception as proxy_error:
+                            last_error = proxy_error
+                            self._debug(
+                                f"llm.proxy_candidate_error provider=anthropic model={model} attempt={attempt + 1}/{retry_count} url={candidate_url} error={type(proxy_error).__name__}: {proxy_error}"
+                            )
+                    raise last_error
 
-                # openai / gemini / custom / deepseek 等 OpenAI 兼容协议
-                url = self.base_url.rstrip("/") + "/chat/completions"
-                headers = {
-                    "Authorization": f"Bearer {self.api_key}",
-                    "content-type": "application/json",
-                }
-                payload = {
-                    "model": model,
-                    "max_tokens": max_tokens,
-                    "temperature": 0.0,
-                    "messages": [{"role": "user", "content": prompt}],
-                }
                 self._debug(
-                    f"llm.request provider={self.provider} model={model} attempt={attempt + 1}/{retry_count} max_tokens={max_tokens} timeout={timeout_tuple} url={url}"
+                    f"llm.request provider={self.provider} shared_client model={model} attempt={attempt + 1}/{retry_count} max_tokens={max_tokens} timeout={timeout_tuple}"
                 )
-                resp = _requests.post(url, headers=headers, json=payload, timeout=timeout_tuple)
+                text = self.client.call(
+                    prompt=prompt,
+                    model=model,
+                    max_tokens=max_tokens,
+                    temperature=0.0,
+                    max_retries=1,
+                )
                 self._debug(
-                    f"llm.http_response provider={self.provider} model={model} attempt={attempt + 1}/{retry_count} status={resp.status_code}"
+                    f"llm.response provider={self.provider} shared_client model={model} attempt={attempt + 1}/{retry_count} response_len={len(text)}"
                 )
-                resp.raise_for_status()
-                data = resp.json()
-                choices = data.get("choices", [])
-                if choices:
-                    message = choices[0].get("message", {})
-                    content = message.get("content", "")
-                    if isinstance(content, str):
-                        self._debug(
-                            f"llm.response provider={self.provider} model={model} attempt={attempt + 1}/{retry_count} response_len={len(content)}"
-                        )
-                        return content
-                    if isinstance(content, list):
-                        text_parts = []
-                        for item in content:
-                            if isinstance(item, dict) and item.get("type") == "text":
-                                text_parts.append(item.get("text", ""))
-                        text = "".join(text_parts)
-                        self._debug(
-                            f"llm.response provider={self.provider} model={model} attempt={attempt + 1}/{retry_count} response_len={len(text)}"
-                        )
-                        return text
-                self._debug(
-                    f"llm.response provider={self.provider} model={model} attempt={attempt + 1}/{retry_count} response_len=0"
-                )
-                return ""
+                return text
 
             except Exception as e:
                 self._debug(
@@ -451,9 +477,23 @@ class IntelligenceDecoder:
             return unique_signals
 
         except json.JSONDecodeError as e:
+            self._write_debug_artifact(source_id, "main_parse_error", {
+                "provider": self.provider,
+                "model": self.model,
+                "error_type": type(e).__name__,
+                "error": str(e),
+                "raw_response": response,
+            })
             warnings.append(f"JSON 解析失败: {str(e)}")
             return []
         except Exception as e:
+            self._write_debug_artifact(source_id, "main_post_process_error", {
+                "provider": self.provider,
+                "model": self.model,
+                "error_type": type(e).__name__,
+                "error": str(e),
+                "raw_response": response,
+            })
             warnings.append(f"后处理失败: {str(e)}")
             return []
 

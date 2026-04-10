@@ -1,0 +1,20 @@
+{
+  "source_id": "incoming_20260401_024",
+  "source_type": "news",
+  "title": "Cyberpunk TCG Is Off to a Great Start, but Can It Truly Survive Beyond Its Kickstarter Success?",
+  "content": "Cyberpunk TCG is off to a strong start after a record-breaking $15 million Kickstarter, but can it sustain momentum beyond launch and survive in an increasingly crowded market? We take a look at the challenges it’s already facing, and how it can address them.",
+  "published_at": "2026-04-01T00:00:00Z",
+  "source_name": "IGN Game News",
+  "source_url": "https://www.ign.com/articles/cyberpunk-tcg-is-off-to-a-great-start-but-can-it-truly-survive-beyond-its-kickstarter-success",
+  "language": "en",
+  "mode": "prompt_first",
+  "ingestion_meta": {
+    "provider": "knowledge_base_inbox",
+    "origin_file": "00-Inbox\\2026-04-02\\[tech] Cyberpunk_TCG_Is_Off_to_a_Great_Start,_but_Can_It_Truly_Surv.md",
+    "signal_type_hint": "technical",
+    "raw_tags": [
+      "inbox",
+      "technical"
+    ]
+  }
+}

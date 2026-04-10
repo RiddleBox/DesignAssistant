@@ -1,0 +1,20 @@
+{
+  "source_id": "incoming_20260401_044",
+  "source_type": "news",
+  "title": "Sony Confirms PlayStation Plus Monthly Games for April 2026",
+  "content": "Sony has announced the PlayStation Plus Monthly games lineup for April 2026, confirming earlier leaks that spilled some — but not all — of the games.",
+  "published_at": "2026-04-01T00:00:00Z",
+  "source_name": "IGN Game News",
+  "source_url": "https://www.ign.com/articles/sony-confirms-playstation-plus-monthly-games-for-april-2026",
+  "language": "en",
+  "mode": "prompt_first",
+  "ingestion_meta": {
+    "provider": "knowledge_base_inbox",
+    "origin_file": "00-Inbox\\2026-04-02\\[tech] Sony_Confirms_PlayStation_Plus_Monthly_Games_for_April_2026.md",
+    "signal_type_hint": "technical",
+    "raw_tags": [
+      "inbox",
+      "technical"
+    ]
+  }
+}

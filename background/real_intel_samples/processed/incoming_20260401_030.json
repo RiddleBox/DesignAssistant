@@ -1,0 +1,20 @@
+{
+  "source_id": "incoming_20260401_030",
+  "source_type": "news",
+  "title": "France's leading consumer association has filed a lawsuit against Ubisoft over The Crew's online shutdown",
+  "content": "It's been two years since The Crew was shut down , which prompted a fast and negative response from the majority of players and people concerned about the games industry's poor game preservation efforts, especially when it comes to always-online games. While some fans moved on, others worked to revive it through modding and some people even filed lawsuits against publisher Ubisoft. Now, more legal battles are set to happen in France. Read more",
+  "published_at": "2026-04-01T00:00:00Z",
+  "source_name": "Eurogamer",
+  "source_url": "https://www.eurogamer.net/new-lawsuit-filed-in-france-against-ubisoft-over-the-crew-shutdown",
+  "language": "en",
+  "mode": "prompt_first",
+  "ingestion_meta": {
+    "provider": "knowledge_base_inbox",
+    "origin_file": "00-Inbox\\2026-04-02\\[tech] France's_leading_consumer_association_has_filed_a_lawsuit_ag.md",
+    "signal_type_hint": "technical",
+    "raw_tags": [
+      "inbox",
+      "technical"
+    ]
+  }
+}

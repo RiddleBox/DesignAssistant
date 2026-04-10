@@ -1,0 +1,20 @@
+{
+  "source_id": "incoming_20260401_049",
+  "source_type": "news",
+  "title": "The Super Mario Galaxy Movie review",
+  "content": "Weird as this sounds, I think The Super Mario Galaxy Movie has the same basic problems as Love Story, Hulu's glancing exploration of the doomed romance between Carolyn Bessett and JFK Jr. Both film and TV show have a handful of decent performances and a thrillingly bright eye for visual detailing. But both suffer from the fact that, for most of the running time, there's actually very little at stake. Sure, one is more likely to have a clever joke about sadistic Mario Maker levels, but the other",
+  "published_at": "2026-04-01T00:00:00Z",
+  "source_name": "Eurogamer",
+  "source_url": "https://www.eurogamer.net/the-super-mario-galaxy-movie-review",
+  "language": "en",
+  "mode": "prompt_first",
+  "ingestion_meta": {
+    "provider": "knowledge_base_inbox",
+    "origin_file": "00-Inbox\\2026-04-02\\[tech] The_Super_Mario_Galaxy_Movie_review.md",
+    "signal_type_hint": "technical",
+    "raw_tags": [
+      "inbox",
+      "technical"
+    ]
+  }
+}

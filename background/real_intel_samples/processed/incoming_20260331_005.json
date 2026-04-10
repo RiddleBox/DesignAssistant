@@ -1,0 +1,20 @@
+{
+  "source_id": "incoming_20260331_005",
+  "source_type": "news",
+  "title": "The Long Dark comes to an end today, except it's not \"the end\" only \"an end\"",
+  "content": "Well, the time has finally come. After releasing almost a decade ago, The Long Dark finally wraps things up today with today's release of Wintermute's fifth and final episode, The Light at the End of All Things. It's been a long time coming (the free episode update was originally slated for the end of 2025 ), but it marks the end of a tough, cold journey. Sorry, what's that? It's \"not the end, but also an end\"? Oh, my mistake! Read more",
+  "published_at": "2026-03-31T00:00:00Z",
+  "source_name": "Rock Paper Shotgun",
+  "source_url": "https://www.rockpapershotgun.com/the-long-dark-comes-to-an-end-today-except-its-not-the-end-only-an-end",
+  "language": "en",
+  "mode": "prompt_first",
+  "ingestion_meta": {
+    "provider": "knowledge_base_inbox",
+    "origin_file": "00-Inbox\\2026-04-02\\[tech] The_Long_Dark_comes_to_an_end_today,_except_it's_not_the_end.md",
+    "signal_type_hint": "technical",
+    "raw_tags": [
+      "inbox",
+      "technical"
+    ]
+  }
+}

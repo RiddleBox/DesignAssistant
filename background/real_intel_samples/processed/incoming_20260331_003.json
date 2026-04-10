@@ -1,0 +1,20 @@
+{
+  "source_id": "incoming_20260331_003",
+  "source_type": "news",
+  "title": "Bungie have killed off a speedy movement exploit in Marathon's latest update, and they'll do it again if they have to",
+  "content": "There is always a risk with a live service game, or any game with only competitive elements, that it enters the Cool For Some Zone. This is a space that exists within a given game and also around it, a place where you can pull off Sick Tricks as a result of movement tech not purposefully included in the game, but born as an incidental result of mashing buttons in just the right way. And until today, Marathon found itself in said zone, but Bungie have made the call to patch out the offending issu",
+  "published_at": "2026-03-31T00:00:00Z",
+  "source_name": "Rock Paper Shotgun",
+  "source_url": "https://www.rockpapershotgun.com/bungie-have-killed-off-a-speedy-movement-exploit-in-marathons-latest-update-and-theyll-do-it-again-if-they-have-to",
+  "language": "en",
+  "mode": "prompt_first",
+  "ingestion_meta": {
+    "provider": "knowledge_base_inbox",
+    "origin_file": "00-Inbox\\2026-04-02\\[tech] Bungie_have_killed_off_a_speedy_movement_exploit_in_Marathon.md",
+    "signal_type_hint": "technical",
+    "raw_tags": [
+      "inbox",
+      "technical"
+    ]
+  }
+}

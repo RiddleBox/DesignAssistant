@@ -1,0 +1,20 @@
+{
+  "source_id": "incoming_20260401_008",
+  "source_type": "news",
+  "title": "Stormgate, the StarCraft-like RTS that launched last summer, is losing online multiplayer support because its server partner was bought by an AI company",
+  "content": "Frost Giant Studios says it will patch Stormgate so it can be played offline, but its online modes will be gone at the end of April.",
+  "published_at": "2026-04-01T00:00:00Z",
+  "source_name": "PC Gamer",
+  "source_url": "https://www.pcgamer.com/games/rts/stormgate-the-starcraft-like-rts-that-launched-last-summer-is-losing-online-multiplayer-support-because-its-server-partner-was-bought-by-an-ai-company/",
+  "language": "en",
+  "mode": "prompt_first",
+  "ingestion_meta": {
+    "provider": "knowledge_base_inbox",
+    "origin_file": "00-Inbox\\2026-04-02\\[market] Stormgate,_the_StarCraft-like_RTS_that_launched_last_summer,.md",
+    "signal_type_hint": "market",
+    "raw_tags": [
+      "inbox",
+      "market"
+    ]
+  }
+}

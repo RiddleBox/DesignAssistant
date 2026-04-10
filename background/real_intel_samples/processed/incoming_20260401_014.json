@@ -1,0 +1,20 @@
+{
+  "source_id": "incoming_20260401_014",
+  "source_type": "news",
+  "title": "MindsEye's new mission will feature \"evidence of the sabotage\" the studio have faced, CEO claims - I double-checked and the quotes came before April Fools",
+  "content": "Well, that's certainly a bold strategy. Mark Gerhard, CEO of MindsEye developers Build a Rocket Boy, has said that the studio are indeed planning to add a new mission to the game which will \"share some of the evidence of the sabotage\". That'd be the sabotage from a malevolent third party which the exec's been alleging MindsEye faced around launch for a while now, with Gerhard also claiming that an investigation into it is currently in the hands of \"authorities\" in the UK and US. Read more",
+  "published_at": "2026-04-01T00:00:00Z",
+  "source_name": "Rock Paper Shotgun",
+  "source_url": "https://www.rockpapershotgun.com/mindseyes-new-mission-will-feature-evidence-of-the-sabotage-the-studio-have-faced-ceo-claims-i-double-checked-and-the-quotes-came-before-april-fools",
+  "language": "en",
+  "mode": "prompt_first",
+  "ingestion_meta": {
+    "provider": "knowledge_base_inbox",
+    "origin_file": "00-Inbox\\2026-04-02\\[team] MindsEye's_new_mission_will_feature_evidence_of_the_sabotage.md",
+    "signal_type_hint": "team",
+    "raw_tags": [
+      "inbox",
+      "team"
+    ]
+  }
+}

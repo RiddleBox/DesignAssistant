@@ -1,0 +1,20 @@
+{
+  "source_id": "incoming_20260401_012",
+  "source_type": "news",
+  "title": "Gabe Newell stepped back from game design during Portal 2's development, because 'he always wanted to be part of the team, but being Gabe and being in his position, that never really worked'",
+  "content": "Portal 2 project lead Josh Weier says Newell didn't want to impose his ideas on designers, but being one of them wasn't an option.",
+  "published_at": "2026-04-01T00:00:00Z",
+  "source_name": "PC Gamer",
+  "source_url": "https://www.pcgamer.com/gaming-industry/game-development/gabe-newell-stepped-back-from-game-design-during-portal-2s-development-because-he-always-wanted-to-be-part-of-the-team-but-being-gabe-and-being-in-his-position-that-never-really-worked/",
+  "language": "en",
+  "mode": "prompt_first",
+  "ingestion_meta": {
+    "provider": "knowledge_base_inbox",
+    "origin_file": "00-Inbox\\2026-04-02\\[team] Gabe_Newell_stepped_back_from_game_design_during_Portal_2's_.md",
+    "signal_type_hint": "team",
+    "raw_tags": [
+      "inbox",
+      "team"
+    ]
+  }
+}

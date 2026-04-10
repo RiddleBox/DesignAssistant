@@ -1,0 +1,20 @@
+{
+  "source_id": "incoming_20260401_037",
+  "source_type": "news",
+  "title": "Marathon has made everyone's favourite loot spot harder to access but even more rewarding, and it's got solo players raising pitchforks",
+  "content": "I hope you like Assassins piggybacking.",
+  "published_at": "2026-04-01T00:00:00Z",
+  "source_name": "PC Gamer",
+  "source_url": "https://www.pcgamer.com/games/fps/marathon-has-made-everyones-favourite-loot-spot-harder-to-access-but-even-more-rewarding-and-its-got-solo-players-raising-pitchforks/",
+  "language": "en",
+  "mode": "prompt_first",
+  "ingestion_meta": {
+    "provider": "knowledge_base_inbox",
+    "origin_file": "00-Inbox\\2026-04-02\\[tech] Marathon_has_made_everyone's_favourite_loot_spot_harder_to_a.md",
+    "signal_type_hint": "technical",
+    "raw_tags": [
+      "inbox",
+      "technical"
+    ]
+  }
+}

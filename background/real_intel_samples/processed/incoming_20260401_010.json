@@ -1,0 +1,20 @@
+{
+  "source_id": "incoming_20260401_010",
+  "source_type": "news",
+  "title": "The Hero's Edition of The Legend of Zelda: Tears of the Kingdom - Secrets of the Zonai Launches on Amazon at a Discount",
+  "content": "Revealed yesterday exclusively on IGN, Dark Horse's newest art book centered around The Legend of Zelda is available for preorder on Amazon as of today.",
+  "published_at": "2026-04-01T00:00:00Z",
+  "source_name": "IGN Game News",
+  "source_url": "https://www.ign.com/articles/the-legend-of-zelda-tears-of-the-kingdom-secrets-of-the-zonai-heros-edition-book-where-to-buy",
+  "language": "en",
+  "mode": "prompt_first",
+  "ingestion_meta": {
+    "provider": "knowledge_base_inbox",
+    "origin_file": "00-Inbox\\2026-04-02\\[market] The_Hero's_Edition_of_The_Legend_of_Zelda_Tears_of_the_Kingd.md",
+    "signal_type_hint": "market",
+    "raw_tags": [
+      "inbox",
+      "market"
+    ]
+  }
+}

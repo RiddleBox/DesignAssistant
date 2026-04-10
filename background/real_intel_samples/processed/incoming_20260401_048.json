@@ -1,0 +1,20 @@
+{
+  "source_id": "incoming_20260401_048",
+  "source_type": "news",
+  "title": "The Super Mario Galaxy Movie Is Either A Triumph Or A Trainwreck, Depending On Who You Ask",
+  "content": "The Super Mario Galaxy Movie is now in cinemas, and while it's expected to be a commercial hit , it's not doing so well on the critical front currently. Early reviews for the sequel to The Super Mario Bros. Movie have gone live, and on GameSpot's sister site Metacritic , The Super Mario Galaxy Movie currently holds a \"generally unfavorable\" metascore of 37. That's even lower than 2022's Mario movie (46) and just two points better than the 1993 live-action Super Mario Bros. movie, but there's mor",
+  "published_at": "2026-04-01T00:00:00Z",
+  "source_name": "GameSpot",
+  "source_url": "https://www.gamespot.com/articles/the-super-mario-galaxy-movie-is-either-a-triumph-or-a-trainwreck-depending-on-who-you-ask/1100-6539157/?ftag=CAD-01-10abi2f",
+  "language": "en",
+  "mode": "prompt_first",
+  "ingestion_meta": {
+    "provider": "knowledge_base_inbox",
+    "origin_file": "00-Inbox\\2026-04-02\\[tech] The_Super_Mario_Galaxy_Movie_Is_Either_A_Triumph_Or_A_Trainw.md",
+    "signal_type_hint": "technical",
+    "raw_tags": [
+      "inbox",
+      "technical"
+    ]
+  }
+}

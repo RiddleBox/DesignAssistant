@@ -1,0 +1,20 @@
+{
+  "source_id": "incoming_20260401_015",
+  "source_type": "news",
+  "title": "April Fools’ Day 2026: All of This Year's Best Video Game Jokes",
+  "content": "It’s April Fools’ Day 2026, and that means it’s once again time to comb through another round of the best jokes and pranks the gaming industry has to offer.",
+  "published_at": "2026-04-01T00:00:00Z",
+  "source_name": "IGN Game News",
+  "source_url": "https://www.ign.com/articles/april-fools-day-2026-all-of-this-years-best-video-game-jokes-so-far",
+  "language": "en",
+  "mode": "prompt_first",
+  "ingestion_meta": {
+    "provider": "knowledge_base_inbox",
+    "origin_file": "00-Inbox\\2026-04-02\\[tech] April_Fools’_Day_2026_All_of_This_Year's_Best_Video_Game_Jok.md",
+    "signal_type_hint": "technical",
+    "raw_tags": [
+      "inbox",
+      "technical"
+    ]
+  }
+}

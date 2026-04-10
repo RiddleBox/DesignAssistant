@@ -1,0 +1,20 @@
+{
+  "source_id": "incoming_20260401_011",
+  "source_type": "news",
+  "title": "Fortnite's First Update Since Layoffs Adds Finger Guns Weapon, Big Heads and Shoulder Riding — All Just for 24 Hours",
+  "content": "Fortnite has released its first major update since last month's devastating layoffs, which left more than 1,000 staff at Epic Games out of work. Today's additions to battle royale gameplay are comedic yet sizable — and will only last 24 hours.",
+  "published_at": "2026-04-01T00:00:00Z",
+  "source_name": "IGN Game News",
+  "source_url": "https://www.ign.com/articles/fortnites-first-update-since-layoffs-adds-finger-guns-weapon-big-heads-and-shoulder-riding-all-just-for-24-hours",
+  "language": "en",
+  "mode": "prompt_first",
+  "ingestion_meta": {
+    "provider": "knowledge_base_inbox",
+    "origin_file": "00-Inbox\\2026-04-02\\[team] Fortnite's_First_Update_Since_Layoffs_Adds_Finger_Guns_Weapo.md",
+    "signal_type_hint": "team",
+    "raw_tags": [
+      "inbox",
+      "team"
+    ]
+  }
+}
