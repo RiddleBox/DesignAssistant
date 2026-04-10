@@ -1,0 +1,146 @@
+{
+  "generated_at": "2026-04-10T17:35:52",
+  "sample_size": 4,
+  "repeat_runs": 3,
+  "seed": 42,
+  "selected_files": [
+    "incoming_008_capital_savvy_moonton_acquisition.json",
+    "incoming_20260401_027.json",
+    "incoming_20260401_040.json",
+    "sample_001_capital_moonton_acquisition.json"
+  ],
+  "title_variants": [
+    "沙特资本加速收购全球头部游戏资产"
+  ],
+  "posture_variants": [
+    "validate"
+  ],
+  "display_badge_variants": [
+    "validate"
+  ],
+  "display_label_variants": [
+    "建议先验证"
+  ],
+  "title_stable": true,
+  "posture_stable": true,
+  "display_badge_stable": true,
+  "display_label_stable": true,
+  "runs": [
+    {
+      "run_index": 1,
+      "selected_files": [
+        "incoming_008_capital_savvy_moonton_acquisition.json",
+        "incoming_20260401_027.json",
+        "incoming_20260401_040.json",
+        "sample_001_capital_moonton_acquisition.json"
+      ],
+      "source_ids": [
+        "incoming_008",
+        "incoming_20260401_027",
+        "incoming_20260401_040",
+        "real_001"
+      ],
+      "signal_count": 3,
+      "opportunity_title": "沙特资本加速收购全球头部游戏资产",
+      "priority_level": "deep_dive",
+      "action_posture": "validate",
+      "commitment_mode": "validation",
+      "display_badge": "validate",
+      "display_judgment_label": "建议先验证",
+      "display_title_mode": "validation-oriented",
+      "stage_1_objective": "获取PIF/Savvy内部投资逻辑与近期标准，评估跟进可行性。",
+      "key_gates": [
+        "获得PIF/Savvy近期真实投资评估标准"
+      ],
+      "exit_conditions": [
+        "确认Savvy收购为孤立事件，无后续计划",
+        "我方无匹配其标准的资产或能力"
+      ],
+      "open_disagreements": [
+        "对跟进节奏的快慢分歧",
+        "对资本热度转化为市场机会的评估分歧"
+      ],
+      "critical_findings": 0,
+      "phase3_priorities": 0,
+      "total_ms": 102461
+    },
+    {
+      "run_index": 2,
+      "selected_files": [
+        "incoming_008_capital_savvy_moonton_acquisition.json",
+        "incoming_20260401_027.json",
+        "incoming_20260401_040.json",
+        "sample_001_capital_moonton_acquisition.json"
+      ],
+      "source_ids": [
+        "incoming_008",
+        "incoming_20260401_027",
+        "incoming_20260401_040",
+        "real_001"
+      ],
+      "signal_count": 3,
+      "opportunity_title": "沙特资本加速收购全球头部游戏资产",
+      "priority_level": "deep_dive",
+      "action_posture": "validate",
+      "commitment_mode": "validation",
+      "display_badge": "validate",
+      "display_judgment_label": "建议先验证",
+      "display_title_mode": "validation-oriented",
+      "stage_1_objective": "系统验证交易性质、后续意图及监管红线",
+      "key_gates": [
+        "沙特PIF明确中国战略意图",
+        "中国监管非正式反馈积极"
+      ],
+      "exit_conditions": [
+        "验证证实中东资本无系统化布局意图",
+        "监管明确释放禁止信号"
+      ],
+      "open_disagreements": [
+        "验证期应主动引导市场还是被动观察",
+        "监管风险是否可通过非正式沟通化解"
+      ],
+      "critical_findings": 0,
+      "phase3_priorities": 0,
+      "total_ms": 100264
+    },
+    {
+      "run_index": 3,
+      "selected_files": [
+        "incoming_008_capital_savvy_moonton_acquisition.json",
+        "incoming_20260401_027.json",
+        "incoming_20260401_040.json",
+        "sample_001_capital_moonton_acquisition.json"
+      ],
+      "source_ids": [
+        "incoming_008",
+        "incoming_20260401_027",
+        "incoming_20260401_040",
+        "real_001"
+      ],
+      "signal_count": 3,
+      "opportunity_title": "沙特资本加速收购全球头部游戏资产",
+      "priority_level": "deep_dive",
+      "action_posture": "validate",
+      "commitment_mode": "validation",
+      "display_badge": "validate",
+      "display_judgment_label": "建议先验证",
+      "display_title_mode": "validation-oriented",
+      "stage_1_objective": "验证沙特资本后续投资意向及沐瞳交易整合模式",
+      "key_gates": [
+        "确认沙特方在华持续投资意愿",
+        "沐瞳交易整合进展评估"
+      ],
+      "exit_conditions": [
+        "沙特资本明确停止在华投资",
+        "监管政策明确禁止此类交易"
+      ],
+      "open_disagreements": [
+        "单一信号是否足以启动系统性行动",
+        "中型资产包对沙特资本的吸引力"
+      ],
+      "critical_findings": 0,
+      "phase3_priorities": 0,
+      "total_ms": 100384
+    }
+  ]
+}

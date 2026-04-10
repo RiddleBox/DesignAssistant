@@ -1,0 +1,146 @@
+{
+  "generated_at": "2026-04-10T17:35:16",
+  "sample_size": 4,
+  "repeat_runs": 3,
+  "seed": 42,
+  "selected_files": [
+    "incoming_008_capital_savvy_moonton_acquisition.json",
+    "incoming_20260401_027.json",
+    "incoming_20260401_040.json",
+    "sample_001_capital_moonton_acquisition.json"
+  ],
+  "title_variants": [
+    "沙特资本加速收购全球头部游戏资产"
+  ],
+  "posture_variants": [
+    "validate"
+  ],
+  "display_badge_variants": [
+    "validate"
+  ],
+  "display_label_variants": [
+    "建议先验证"
+  ],
+  "title_stable": true,
+  "posture_stable": true,
+  "display_badge_stable": true,
+  "display_label_stable": true,
+  "runs": [
+    {
+      "run_index": 1,
+      "selected_files": [
+        "incoming_008_capital_savvy_moonton_acquisition.json",
+        "incoming_20260401_027.json",
+        "incoming_20260401_040.json",
+        "sample_001_capital_moonton_acquisition.json"
+      ],
+      "source_ids": [
+        "incoming_008",
+        "incoming_20260401_027",
+        "incoming_20260401_040",
+        "real_001"
+      ],
+      "signal_count": 3,
+      "opportunity_title": "沙特资本加速收购全球头部游戏资产",
+      "priority_level": "deep_dive",
+      "action_posture": "validate",
+      "commitment_mode": "validation",
+      "display_badge": "validate",
+      "display_judgment_label": "建议先验证",
+      "display_title_mode": "validation-oriented",
+      "stage_1_objective": "通过中介建立高层对话，获取Savvy真实战略意图与决策流程",
+      "key_gates": [
+        "能否获取Savvy未来3-5年投资路线图",
+        "Savvy是否具备持续专业团队"
+      ],
+      "exit_conditions": [
+        "Savvy明确表示无后续系统性投资计划",
+        "整合失败致其战略收缩"
+      ],
+      "open_disagreements": [
+        "窗口期紧迫性是否足以支撑验证期",
+        "估值调整期是机会还是风险"
+      ],
+      "critical_findings": 0,
+      "phase3_priorities": 0,
+      "total_ms": 105346
+    },
+    {
+      "run_index": 2,
+      "selected_files": [
+        "incoming_008_capital_savvy_moonton_acquisition.json",
+        "incoming_20260401_027.json",
+        "incoming_20260401_040.json",
+        "sample_001_capital_moonton_acquisition.json"
+      ],
+      "source_ids": [
+        "incoming_008",
+        "incoming_20260401_027",
+        "incoming_20260401_040",
+        "real_001"
+      ],
+      "signal_count": 3,
+      "opportunity_title": "沙特资本加速收购全球头部游戏资产",
+      "priority_level": "deep_dive",
+      "action_posture": "validate",
+      "commitment_mode": "validation",
+      "display_badge": "validate",
+      "display_judgment_label": "建议先验证",
+      "display_title_mode": "validation-oriented",
+      "stage_1_objective": "通过情报收集与分析，验证沙特资本后续投资趋势的关键假设。",
+      "key_gates": [
+        "验证沙特资本系统投资意向",
+        "发现其他潜在合作迹象"
+      ],
+      "exit_conditions": [
+        "沙特资本明确无后续计划",
+        "地缘政治风险显著升级"
+      ],
+      "open_disagreements": [
+        "窗口期长短与竞争紧迫性",
+        "主动接触策略的价值与风险"
+      ],
+      "critical_findings": 0,
+      "phase3_priorities": 0,
+      "total_ms": 96398
+    },
+    {
+      "run_index": 3,
+      "selected_files": [
+        "incoming_008_capital_savvy_moonton_acquisition.json",
+        "incoming_20260401_027.json",
+        "incoming_20260401_040.json",
+        "sample_001_capital_moonton_acquisition.json"
+      ],
+      "source_ids": [
+        "incoming_008",
+        "incoming_20260401_027",
+        "incoming_20260401_040",
+        "real_001"
+      ],
+      "signal_count": 3,
+      "opportunity_title": "沙特资本加速收购全球头部游戏资产",
+      "priority_level": "deep_dive",
+      "action_posture": "validate",
+      "commitment_mode": "validation",
+      "display_badge": "validate",
+      "display_judgment_label": "建议先验证",
+      "display_title_mode": "validation-oriented",
+      "stage_1_objective": "低成本侦察沙特资本对华游戏资产后续战略意图",
+      "key_gates": [
+        "确认沙特方有后续收购或平台化意图"
+      ],
+      "exit_conditions": [
+        "确认此为孤立个案，无后续计划",
+        "关键人才大量流失，整合显著失败"
+      ],
+      "open_disagreements": [
+        "窗口期是机遇还是风险陷阱",
+        "速度应领先还是等待"
+      ],
+      "critical_findings": 1,
+      "phase3_priorities": 1,
+      "total_ms": 121932
+    }
+  ]
+}

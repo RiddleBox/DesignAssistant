@@ -132,6 +132,8 @@ def build_upstream_outputs(decoded, opp22, result23) -> dict:
             "resources": asdict(stage.resources),
         })
 
+    posture_basis = getattr(decision, "posture_basis", None)
+
     return {
         "phase2_1": {
             "signals": [s.model_dump() for s in decoded.signals],
@@ -149,6 +151,17 @@ def build_upstream_outputs(decoded, opp22, result23) -> dict:
         },
         "phase2_3": {
             "decision_posture": decision.decision_posture,
+            "commitment_mode": getattr(decision, "commitment_mode", ""),
+            "display_badge": getattr(getattr(decision, "display", None), "display_badge", ""),
+            "stage_1_objective": getattr(decision, "stage_1_objective", ""),
+            "posture_basis": {
+                "evidence_readiness_consensus": getattr(posture_basis, "evidence_readiness_consensus", "") if posture_basis else "",
+                "critical_unknowns_blocking_real_world_action": getattr(posture_basis, "critical_unknowns_blocking_real_world_action", "") if posture_basis else "",
+                "commitment_ceiling_consensus": getattr(posture_basis, "commitment_ceiling_consensus", "") if posture_basis else "",
+                "reversibility_consensus": getattr(posture_basis, "reversibility_consensus", "") if posture_basis else "",
+                "cost_of_delay_consensus": getattr(posture_basis, "cost_of_delay_consensus", "") if posture_basis else "",
+                "cost_of_wrong_commitment_consensus": getattr(posture_basis, "cost_of_wrong_commitment_consensus", "") if posture_basis else "",
+            },
             "why_this_posture": decision.why_this_posture,
             "phased_plan": phased_plan,
             "go_no_go_criteria": {
@@ -220,7 +233,18 @@ def run_e2e(case_id: str, raw_text: str, source_type, llm_config_21: dict):
         req23 = ActionDesignRequest(request_id=f"{case_id}_{opp22.priority_level}", opportunity_object=opp23)
         result23 = designer.design_action(req23)
         decision = result23.action_decision
-        print(f"  [{opp22.opportunity_title[:30]}] 姿态: {decision.decision_posture}, 阶段数: {len(decision.phased_plan)}")
+        posture_basis = getattr(decision, "posture_basis", None)
+        print(f"  [{opp22.opportunity_title[:30]}] 姿态: {decision.decision_posture}, 承诺: {getattr(decision, 'commitment_mode', '')}, 阶段数: {len(decision.phased_plan)}")
+        if posture_basis:
+            print(
+                "    posture_basis="
+                f"evidence={posture_basis.evidence_readiness_consensus}, "
+                f"blocking={posture_basis.critical_unknowns_blocking_real_world_action}, "
+                f"ceiling={posture_basis.commitment_ceiling_consensus}, "
+                f"reversibility={posture_basis.reversibility_consensus}, "
+                f"delay_cost={posture_basis.cost_of_delay_consensus}, "
+                f"wrong_commitment_cost={posture_basis.cost_of_wrong_commitment_consensus}"
+            )
         results23.append((opp22, result23))
 
     # 取第一个机会用于 2.5 复盘（主要机会）

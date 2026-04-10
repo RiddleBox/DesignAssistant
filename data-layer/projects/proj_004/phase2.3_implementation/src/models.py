@@ -5,6 +5,9 @@ from dataclasses import dataclass, field
 # 行动姿态与承诺强度枚举
 DecisionPosture = Literal["watch", "validate", "pilot", "escalate", "hold", "stop"]
 CommitmentMode = Literal["observation", "validation", "limited_real_world_trial", "scaled_commitment"]
+EvidenceReadiness = Literal["weak", "partial", "sufficient", "strong"]
+ReversibilityLevel = Literal["high", "medium", "low"]
+CostLevel = Literal["low", "medium", "high"]
 
 @dataclass
 class OpportunityObject:
@@ -84,6 +87,16 @@ class DisplayDecision:
     display_title_mode: str
 
 @dataclass
+class PostureBasis:
+    """2.3 姿态仲裁基础槽位：用于显式承载 posture 的上游判定依据"""
+    evidence_readiness_consensus: EvidenceReadiness = "partial"
+    critical_unknowns_blocking_real_world_action: bool = True
+    commitment_ceiling_consensus: CommitmentMode = "validation"
+    reversibility_consensus: ReversibilityLevel = "medium"
+    cost_of_delay_consensus: CostLevel = "medium"
+    cost_of_wrong_commitment_consensus: CostLevel = "medium"
+
+@dataclass
 class ActionDecisionObject:
     """2.3核心输出对象"""
     opportunity_title: str
@@ -100,6 +113,7 @@ class ActionDecisionObject:
     exit_conditions: List[str] = field(default_factory=list)
     open_disagreements: List[str] = field(default_factory=list)
     display: Optional[DisplayDecision] = None
+    posture_basis: Optional[PostureBasis] = None
     # 辩论摘要：推理链透明化，让"为什么选这个 posture"有迹可循
     debate_summary: Optional[DebateSummary] = None
 

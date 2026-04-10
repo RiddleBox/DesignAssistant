@@ -53,6 +53,7 @@ def _serialize_summary(run_index: int, selected_files: list[str], all_signals, d
     act = getattr(action_result, "action_decision", None) if action_result else None
     retro = getattr(retro_result, "retrospective", None) if retro_result else None
     display = getattr(act, "display", None) if act else None
+    posture_basis = getattr(act, "posture_basis", None) if act else None
     return {
         "run_index": run_index,
         "selected_files": [os.path.basename(p) for p in selected_files],
@@ -65,6 +66,14 @@ def _serialize_summary(run_index: int, selected_files: list[str], all_signals, d
         "display_badge": getattr(display, "display_badge", "") if display else "",
         "display_judgment_label": getattr(display, "display_judgment_label", "") if display else "",
         "display_title_mode": getattr(display, "display_title_mode", "") if display else "",
+        "posture_basis": {
+            "evidence_readiness_consensus": getattr(posture_basis, "evidence_readiness_consensus", "") if posture_basis else "",
+            "critical_unknowns_blocking_real_world_action": getattr(posture_basis, "critical_unknowns_blocking_real_world_action", "") if posture_basis else "",
+            "commitment_ceiling_consensus": getattr(posture_basis, "commitment_ceiling_consensus", "") if posture_basis else "",
+            "reversibility_consensus": getattr(posture_basis, "reversibility_consensus", "") if posture_basis else "",
+            "cost_of_delay_consensus": getattr(posture_basis, "cost_of_delay_consensus", "") if posture_basis else "",
+            "cost_of_wrong_commitment_consensus": getattr(posture_basis, "cost_of_wrong_commitment_consensus", "") if posture_basis else "",
+        },
         "stage_1_objective": getattr(act, "stage_1_objective", "") if act else "",
         "key_gates": list(getattr(act, "key_gates", []) or []) if act else [],
         "exit_conditions": list(getattr(act, "exit_conditions", []) or []) if act else [],
@@ -128,6 +137,12 @@ def main():
     posture_set = sorted({r["action_posture"] for r in runs if r.get("action_posture")})
     display_badge_set = sorted({r["display_badge"] for r in runs if r.get("display_badge")})
     display_label_set = sorted({r["display_judgment_label"] for r in runs if r.get("display_judgment_label")})
+    evidence_readiness_set = sorted({str((r.get("posture_basis") or {}).get("evidence_readiness_consensus", "")) for r in runs if (r.get("posture_basis") or {}).get("evidence_readiness_consensus", "") != ""})
+    blocking_unknowns_set = sorted({str((r.get("posture_basis") or {}).get("critical_unknowns_blocking_real_world_action", "")) for r in runs if (r.get("posture_basis") or {}).get("critical_unknowns_blocking_real_world_action", "") != ""})
+    commitment_ceiling_set = sorted({str((r.get("posture_basis") or {}).get("commitment_ceiling_consensus", "")) for r in runs if (r.get("posture_basis") or {}).get("commitment_ceiling_consensus", "") != ""})
+    reversibility_set = sorted({str((r.get("posture_basis") or {}).get("reversibility_consensus", "")) for r in runs if (r.get("posture_basis") or {}).get("reversibility_consensus", "") != ""})
+    delay_cost_set = sorted({str((r.get("posture_basis") or {}).get("cost_of_delay_consensus", "")) for r in runs if (r.get("posture_basis") or {}).get("cost_of_delay_consensus", "") != ""})
+    wrong_commitment_cost_set = sorted({str((r.get("posture_basis") or {}).get("cost_of_wrong_commitment_consensus", "")) for r in runs if (r.get("posture_basis") or {}).get("cost_of_wrong_commitment_consensus", "") != ""})
     summary = {
         "generated_at": datetime.now().isoformat(timespec="seconds"),
         "sample_size": sample_size,
@@ -138,10 +153,19 @@ def main():
         "posture_variants": posture_set,
         "display_badge_variants": display_badge_set,
         "display_label_variants": display_label_set,
+        "posture_basis_variants": {
+            "evidence_readiness_consensus": evidence_readiness_set,
+            "critical_unknowns_blocking_real_world_action": blocking_unknowns_set,
+            "commitment_ceiling_consensus": commitment_ceiling_set,
+            "reversibility_consensus": reversibility_set,
+            "cost_of_delay_consensus": delay_cost_set,
+            "cost_of_wrong_commitment_consensus": wrong_commitment_cost_set,
+        },
         "title_stable": len(title_set) <= 1,
         "posture_stable": len(posture_set) <= 1,
         "display_badge_stable": len(display_badge_set) <= 1,
         "display_label_stable": len(display_label_set) <= 1,
+        "posture_basis_stable": len(evidence_readiness_set) <= 1 and len(blocking_unknowns_set) <= 1 and len(commitment_ceiling_set) <= 1 and len(reversibility_set) <= 1 and len(delay_cost_set) <= 1 and len(wrong_commitment_cost_set) <= 1,
         "runs": runs,
     }
 
@@ -155,10 +179,19 @@ def main():
         "posture_variants": posture_set,
         "display_badge_variants": display_badge_set,
         "display_label_variants": display_label_set,
+        "posture_basis_variants": {
+            "evidence_readiness_consensus": evidence_readiness_set,
+            "critical_unknowns_blocking_real_world_action": blocking_unknowns_set,
+            "commitment_ceiling_consensus": commitment_ceiling_set,
+            "reversibility_consensus": reversibility_set,
+            "cost_of_delay_consensus": delay_cost_set,
+            "cost_of_wrong_commitment_consensus": wrong_commitment_cost_set,
+        },
         "title_stable": len(title_set) <= 1,
         "posture_stable": len(posture_set) <= 1,
         "display_badge_stable": len(display_badge_set) <= 1,
         "display_label_stable": len(display_label_set) <= 1,
+        "posture_basis_stable": len(evidence_readiness_set) <= 1 and len(blocking_unknowns_set) <= 1 and len(commitment_ceiling_set) <= 1 and len(reversibility_set) <= 1 and len(delay_cost_set) <= 1 and len(wrong_commitment_cost_set) <= 1,
     }, ensure_ascii=False, indent=2))
 
 

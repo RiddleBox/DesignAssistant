@@ -349,12 +349,14 @@ def run_pipeline(api_key: str, base_url: str) -> Generator[dict, None, None]:
             debate = getattr(act, "debate_summary", None)
             llm_used = debate is not None
             display = getattr(act, "display", None)
+            posture_basis = getattr(act, "posture_basis", None)
             act_data = {
                 "posture": str(getattr(act, "decision_posture", "")),
                 "commitment_mode": str(getattr(act, "commitment_mode", "")),
                 "display_judgment_label": getattr(display, "display_judgment_label", "") if display else "",
                 "display_badge": getattr(display, "display_badge", "") if display else str(getattr(act, "decision_posture", "")),
                 "display_title_mode": getattr(display, "display_title_mode", "") if display else "",
+                "posture_basis": _serialize_posture_basis(posture_basis),
                 "stage_1_objective": getattr(act, "stage_1_objective", ""),
                 "key_gates": _serialize_list(getattr(act, "key_gates", [])),
                 "why": getattr(act, "why_this_posture", ""),
@@ -495,6 +497,16 @@ def _serialize_debate(debate) -> dict:
         "arbitrator_verdict": resolution,
         "consensus_level": "multi-agent-converged" if resolution else "",
     }
+
+
+def _serialize_posture_basis(posture_basis) -> dict:
+    if posture_basis is None:
+        return {}
+    if hasattr(posture_basis, "__dict__"):
+        return dict(posture_basis.__dict__)
+    if isinstance(posture_basis, dict):
+        return dict(posture_basis)
+    return {}
 
 
 def _serialize_rag_packets(rag_context) -> list:

@@ -1,0 +1,43 @@
+{
+  "generated_at": "2026-04-10T17:32:53",
+  "sample_size": 1,
+  "repeat_runs": 1,
+  "seed": 42,
+  "selected_files": [
+    "incoming_20260401_027.json"
+  ],
+  "title_variants": [],
+  "posture_variants": [],
+  "display_badge_variants": [],
+  "display_label_variants": [],
+  "title_stable": true,
+  "posture_stable": true,
+  "display_badge_stable": true,
+  "display_label_stable": true,
+  "runs": [
+    {
+      "run_index": 1,
+      "selected_files": [
+        "incoming_20260401_027.json"
+      ],
+      "source_ids": [
+        "incoming_20260401_027"
+      ],
+      "signal_count": 0,
+      "opportunity_title": "",
+      "priority_level": "",
+      "action_posture": "",
+      "commitment_mode": "",
+      "display_badge": "",
+      "display_judgment_label": "",
+      "display_title_mode": "",
+      "stage_1_objective": "",
+      "key_gates": [],
+      "exit_conditions": [],
+      "open_disagreements": [],
+      "critical_findings": 0,
+      "phase3_priorities": 0,
+      "total_ms": 1554
+    }
+  ]
+}

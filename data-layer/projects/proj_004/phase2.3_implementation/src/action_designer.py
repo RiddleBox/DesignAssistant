@@ -7,7 +7,7 @@ from typing import List
 from models import (
     ActionDesignRequest, ActionDecisionObject, ActionDesignResult,
     PhasedPlanStage, PhaseResources, TopRisk, DecisionPosture,
-    CommitmentMode, DebateSummary, DisplayDecision
+    CommitmentMode, DebateSummary, DisplayDecision, PostureBasis
 )
 
 
@@ -113,6 +113,198 @@ class ActionDesigner:
         }
         return mapping.get(posture, "validation")
 
+    def _normalize_evidence_readiness(self, value) -> str:
+        return value if value in {"weak", "partial", "sufficient", "strong"} else "partial"
+
+    def _normalize_commitment_ceiling(self, value) -> CommitmentMode:
+        return value if value in {"observation", "validation", "limited_real_world_trial", "scaled_commitment"} else "validation"
+
+    def _normalize_reversibility(self, value) -> str:
+        return value if value in {"high", "medium", "low"} else "medium"
+
+    def _normalize_cost_level(self, value) -> str:
+        return value if value in {"low", "medium", "high"} else "medium"
+
+    def _infer_cost_of_delay_from_opportunity(self, opp) -> str:
+        priority = (getattr(opp, "priority_level", "") or "").lower()
+
+        if priority in {"watch", "low"} or "观察" in priority:
+            return "low"
+        if priority in {"escalate", "critical"}:
+            return "high"
+        if priority in {"deep_dive", "high"}:
+            return "medium"
+        return "medium"
+
+    def _infer_cost_of_wrong_commitment_from_basis(self, basis: PostureBasis) -> str:
+        if basis.commitment_ceiling_consensus == "observation":
+            return "low"
+        if basis.commitment_ceiling_consensus == "validation":
+            return "high" if basis.critical_unknowns_blocking_real_world_action or basis.evidence_readiness_consensus in {"weak", "partial"} else "medium"
+        if basis.commitment_ceiling_consensus == "limited_real_world_trial":
+            return "medium" if basis.reversibility_consensus in {"high", "medium"} else "high"
+        if basis.commitment_ceiling_consensus == "scaled_commitment":
+            return "medium" if basis.evidence_readiness_consensus in {"sufficient", "strong"} else "high"
+        return "medium"
+
+    def _stabilize_posture_basis_for_opportunity(self, opp, basis: PostureBasis) -> PostureBasis:
+        if opp is None:
+            return basis
+        stabilized_delay_cost = self._infer_cost_of_delay_from_opportunity(opp)
+        pre_stabilized_basis = PostureBasis(
+            evidence_readiness_consensus=basis.evidence_readiness_consensus,
+            critical_unknowns_blocking_real_world_action=basis.critical_unknowns_blocking_real_world_action,
+            commitment_ceiling_consensus=basis.commitment_ceiling_consensus,
+            reversibility_consensus=basis.reversibility_consensus,
+            cost_of_delay_consensus=stabilized_delay_cost,
+            cost_of_wrong_commitment_consensus=basis.cost_of_wrong_commitment_consensus,
+        )
+        return PostureBasis(
+            evidence_readiness_consensus=pre_stabilized_basis.evidence_readiness_consensus,
+            critical_unknowns_blocking_real_world_action=pre_stabilized_basis.critical_unknowns_blocking_real_world_action,
+            commitment_ceiling_consensus=pre_stabilized_basis.commitment_ceiling_consensus,
+            reversibility_consensus=pre_stabilized_basis.reversibility_consensus,
+            cost_of_delay_consensus=pre_stabilized_basis.cost_of_delay_consensus,
+            cost_of_wrong_commitment_consensus=self._infer_cost_of_wrong_commitment_from_basis(pre_stabilized_basis),
+        )
+
+    def _default_posture_basis_from_posture(self, posture: DecisionPosture) -> PostureBasis:
+        mapping = {
+            "watch": PostureBasis(
+                evidence_readiness_consensus="weak",
+                critical_unknowns_blocking_real_world_action=True,
+                commitment_ceiling_consensus="observation",
+                reversibility_consensus="high",
+                cost_of_delay_consensus="low",
+                cost_of_wrong_commitment_consensus="low",
+            ),
+            "validate": PostureBasis(
+                evidence_readiness_consensus="partial",
+                critical_unknowns_blocking_real_world_action=True,
+                commitment_ceiling_consensus="validation",
+                reversibility_consensus="high",
+                cost_of_delay_consensus="medium",
+                cost_of_wrong_commitment_consensus="medium",
+            ),
+            "pilot": PostureBasis(
+                evidence_readiness_consensus="sufficient",
+                critical_unknowns_blocking_real_world_action=False,
+                commitment_ceiling_consensus="limited_real_world_trial",
+                reversibility_consensus="medium",
+                cost_of_delay_consensus="medium",
+                cost_of_wrong_commitment_consensus="medium",
+            ),
+            "escalate": PostureBasis(
+                evidence_readiness_consensus="strong",
+                critical_unknowns_blocking_real_world_action=False,
+                commitment_ceiling_consensus="scaled_commitment",
+                reversibility_consensus="low",
+                cost_of_delay_consensus="high",
+                cost_of_wrong_commitment_consensus="medium",
+            ),
+            "hold": PostureBasis(
+                evidence_readiness_consensus="partial",
+                critical_unknowns_blocking_real_world_action=True,
+                commitment_ceiling_consensus="observation",
+                reversibility_consensus="high",
+                cost_of_delay_consensus="low",
+                cost_of_wrong_commitment_consensus="medium",
+            ),
+            "stop": PostureBasis(
+                evidence_readiness_consensus="weak",
+                critical_unknowns_blocking_real_world_action=True,
+                commitment_ceiling_consensus="observation",
+                reversibility_consensus="high",
+                cost_of_delay_consensus="low",
+                cost_of_wrong_commitment_consensus="high",
+            ),
+        }
+        return mapping.get(posture, mapping["validate"])
+
+    def _coerce_posture_basis(self, raw_basis: dict, fallback_posture: DecisionPosture = "validate") -> PostureBasis:
+        fallback = self._default_posture_basis_from_posture(fallback_posture)
+        raw_basis = raw_basis if isinstance(raw_basis, dict) else {}
+        return PostureBasis(
+            evidence_readiness_consensus=self._normalize_evidence_readiness(raw_basis.get("evidence_readiness_consensus", fallback.evidence_readiness_consensus)),
+            critical_unknowns_blocking_real_world_action=bool(raw_basis.get("critical_unknowns_blocking_real_world_action", fallback.critical_unknowns_blocking_real_world_action)),
+            commitment_ceiling_consensus=self._normalize_commitment_ceiling(raw_basis.get("commitment_ceiling_consensus", fallback.commitment_ceiling_consensus)),
+            reversibility_consensus=self._normalize_reversibility(raw_basis.get("reversibility_consensus", fallback.reversibility_consensus)),
+            cost_of_delay_consensus=self._normalize_cost_level(raw_basis.get("cost_of_delay_consensus", fallback.cost_of_delay_consensus)),
+            cost_of_wrong_commitment_consensus=self._normalize_cost_level(raw_basis.get("cost_of_wrong_commitment_consensus", fallback.cost_of_wrong_commitment_consensus)),
+        )
+
+    def _derive_decision_posture_from_basis(self, basis: PostureBasis) -> DecisionPosture:
+        if basis.evidence_readiness_consensus == "weak":
+            if basis.cost_of_delay_consensus == "high" and basis.cost_of_wrong_commitment_consensus == "low":
+                return "validate"
+            return "watch"
+
+        if basis.critical_unknowns_blocking_real_world_action:
+            return "validate"
+
+        if basis.commitment_ceiling_consensus == "observation":
+            return "watch"
+        if basis.commitment_ceiling_consensus == "validation":
+            return "validate"
+        if basis.commitment_ceiling_consensus == "limited_real_world_trial":
+            if basis.reversibility_consensus == "low" and basis.cost_of_wrong_commitment_consensus != "low":
+                return "validate"
+            if basis.cost_of_wrong_commitment_consensus == "high" and basis.cost_of_delay_consensus != "high":
+                return "validate"
+            return "pilot"
+        if basis.commitment_ceiling_consensus == "scaled_commitment":
+            if basis.cost_of_wrong_commitment_consensus == "high" and basis.cost_of_delay_consensus != "high":
+                return "pilot"
+            return "escalate"
+
+        return "validate"
+
+    def _infer_posture_basis_from_opportunity(self, opp) -> PostureBasis:
+        priority = (getattr(opp, "priority_level", "") or "").lower()
+        assumption_count = len(getattr(opp, "key_assumptions", []) or [])
+        counter_count = len(getattr(opp, "counter_evidence", []) or [])
+        delay_cost = self._infer_cost_of_delay_from_opportunity(opp)
+
+        if priority in {"watch", "low"} or "观察" in priority:
+            evidence = "weak"
+            ceiling = "observation"
+            blocking = True
+        elif priority in {"escalate", "critical"}:
+            evidence = "strong" if assumption_count <= 1 else "sufficient"
+            ceiling = "scaled_commitment" if assumption_count <= 1 and counter_count == 0 else "limited_real_world_trial"
+            blocking = False if ceiling != "validation" else True
+        elif priority in {"deep_dive", "high"}:
+            evidence = "sufficient" if assumption_count <= 2 else "partial"
+            ceiling = "limited_real_world_trial" if assumption_count <= 2 else "validation"
+            blocking = assumption_count > 2
+        else:
+            evidence = "partial"
+            ceiling = "validation"
+            blocking = True
+
+        if counter_count >= 2 or assumption_count >= 4:
+            wrong_commitment = "high"
+        elif counter_count >= 1 or assumption_count >= 2:
+            wrong_commitment = "medium"
+        else:
+            wrong_commitment = "low"
+
+        reversibility = {
+            "observation": "high",
+            "validation": "high",
+            "limited_real_world_trial": "medium",
+            "scaled_commitment": "low",
+        }.get(ceiling, "medium")
+
+        return PostureBasis(
+            evidence_readiness_consensus=evidence,
+            critical_unknowns_blocking_real_world_action=blocking,
+            commitment_ceiling_consensus=ceiling,
+            reversibility_consensus=reversibility,
+            cost_of_delay_consensus=delay_cost,
+            cost_of_wrong_commitment_consensus=wrong_commitment,
+        )
+
     def _derive_display(self, posture: DecisionPosture, commitment_mode: CommitmentMode) -> DisplayDecision:
         label_map = {
             "watch": "建议持续观察",
@@ -155,15 +347,25 @@ class ActionDesigner:
             return ""
         return getattr(phased_plan[0], "objective", "") or ""
 
-    def _ensure_action_contract_fields(self, payload: dict) -> dict:
-        posture = payload.get("decision_posture")
-        if posture not in {"watch", "validate", "pilot", "escalate", "hold", "stop"}:
-            posture = "validate"
-        payload["decision_posture"] = posture
+    def _ensure_action_contract_fields(self, payload: dict, opp=None) -> dict:
+        raw_posture = payload.get("decision_posture")
+        if raw_posture not in {"watch", "validate", "pilot", "escalate", "hold", "stop"}:
+            raw_posture = "validate"
 
-        commitment_mode = payload.get("commitment_mode")
-        if commitment_mode not in {"observation", "validation", "limited_real_world_trial", "scaled_commitment"}:
-            commitment_mode = self._derive_commitment_mode(posture)
+        posture_basis = self._coerce_posture_basis(payload.get("posture_basis"), fallback_posture=raw_posture)
+        posture_basis = self._stabilize_posture_basis_for_opportunity(opp, posture_basis)
+        posture = raw_posture if raw_posture in {"hold", "stop"} else self._derive_decision_posture_from_basis(posture_basis)
+        payload["decision_posture"] = posture
+        payload["posture_basis"] = {
+            "evidence_readiness_consensus": posture_basis.evidence_readiness_consensus,
+            "critical_unknowns_blocking_real_world_action": posture_basis.critical_unknowns_blocking_real_world_action,
+            "commitment_ceiling_consensus": posture_basis.commitment_ceiling_consensus,
+            "reversibility_consensus": posture_basis.reversibility_consensus,
+            "cost_of_delay_consensus": posture_basis.cost_of_delay_consensus,
+            "cost_of_wrong_commitment_consensus": posture_basis.cost_of_wrong_commitment_consensus,
+        }
+
+        commitment_mode = self._derive_commitment_mode(posture)
         payload["commitment_mode"] = commitment_mode
 
         for key in ["why_this_posture", "resource_commitment_logic", "fallback_path"]:
@@ -292,6 +494,14 @@ class ActionDesigner:
 
 输出 JSON schema：
 {{
+  "posture_basis": {{
+    "evidence_readiness_consensus": "weak|partial|sufficient|strong",
+    "critical_unknowns_blocking_real_world_action": true,
+    "commitment_ceiling_consensus": "observation|validation|limited_real_world_trial|scaled_commitment",
+    "reversibility_consensus": "high|medium|low",
+    "cost_of_delay_consensus": "low|medium|high",
+    "cost_of_wrong_commitment_consensus": "low|medium|high"
+  }},
   "decision_posture": "watch|validate|pilot|escalate",
   "commitment_mode": "observation|validation|limited_real_world_trial|scaled_commitment",
   "why_this_posture": "string（综合三方观点，100字以内）",
@@ -338,22 +548,23 @@ class ActionDesigner:
 }}
 
 要求：
-1. decision_posture 必须是 watch/validate/pilot/escalate 之一。
-2. commitment_mode 必须与 decision_posture 匹配：watch→observation，validate→validation，pilot→limited_real_world_trial，escalate→scaled_commitment。
-3. phased_plan 1-2 个阶段（watch 只需1个），严格遵守每个字段的字数上限。
-4. top_risks 2 条，每条必须填写 blocks_stage。
-5. resource_rationale 必须说明资源与假设验证的绑定关系（50字以内）。
-6. **执行者视角**：phased_plan 的 actions 和第一阶段 objective 必须体现执行者指出的可行性约束。
-7. **时机判断（why_now）**：若 why_now 有内容，必须在 why_this_posture 中体现，并影响第一阶段节奏。
-8. **前置问题（next_validation_questions）**：必须映射到 key_assumptions_to_test 或 go_no_go_criteria 中。
-9. stage_1_objective 应与 phased_plan[0].objective 保持一致或高度一致。
-10. key_gates 应是跨阶段最关键的推进闸门，不要简单重复所有 go_no_go_criteria。
-11. 只输出合法 JSON，不要任何额外说明。
-12. 禁止在 JSON 字符串值内使用中文引号（""「」），只允许使用半角双引号。
-13. 总 JSON 输出必须控制在 3000 字以内。"""
+1. 先判断 `posture_basis` 六个槽位，再给出最终行动设计；如果 `posture_basis` 与 `decision_posture` 不一致，以 `posture_basis` 可归约出的 posture 为准。
+2. decision_posture 必须是 watch/validate/pilot/escalate 之一。
+3. commitment_mode 必须与 decision_posture 匹配：watch→observation，validate→validation，pilot→limited_real_world_trial，escalate→scaled_commitment。
+4. phased_plan 1-2 个阶段（watch 只需1个），严格遵守每个字段的字数上限。
+5. top_risks 2 条，每条必须填写 blocks_stage。
+6. resource_rationale 必须说明资源与假设验证的绑定关系（50字以内）。
+7. **执行者视角**：phased_plan 的 actions 和第一阶段 objective 必须体现执行者指出的可行性约束。
+8. **时机判断（why_now）**：若 why_now 有内容，必须在 why_this_posture 中体现，并影响第一阶段节奏。
+9. **前置问题（next_validation_questions）**：必须映射到 key_assumptions_to_test 或 go_no_go_criteria 中。
+10. stage_1_objective 应与 phased_plan[0].objective 保持一致或高度一致。
+11. key_gates 应是跨阶段最关键的推进闸门，不要简单重复所有 go_no_go_criteria。
+12. 只输出合法 JSON，不要任何额外说明。
+13. 禁止在 JSON 字符串值内使用中文引号（""「」），只允许使用半角双引号。
+14. 总 JSON 输出必须控制在 3000 字以内。"""
 
         result = self._call_llm(arbitrator_prompt)
-        result = self._ensure_action_contract_fields(result)
+        result = self._ensure_action_contract_fields(result, opp)
 
         # 把第2轮辩论结果注入 debate_summary
         ds = result.get("debate_summary", {})
@@ -416,6 +627,8 @@ class ActionDesigner:
                     display_badge=display_raw.get("display_badge", self._derive_display(llm_result["decision_posture"], commitment_mode).display_badge),
                     display_title_mode=display_raw.get("display_title_mode", self._derive_display(llm_result["decision_posture"], commitment_mode).display_title_mode),
                 )
+                posture_basis_raw = llm_result.get("posture_basis") or {}
+                posture_basis = self._coerce_posture_basis(posture_basis_raw, fallback_posture=llm_result["decision_posture"])
                 action_decision = ActionDecisionObject(
                     opportunity_title=opp.opportunity_title,
                     decision_posture=llm_result["decision_posture"],
@@ -431,6 +644,7 @@ class ActionDesigner:
                     exit_conditions=llm_result.get("exit_conditions") or self._collect_exit_conditions(phased_plan),
                     open_disagreements=llm_result.get("open_disagreements", []),
                     display=display,
+                    posture_basis=posture_basis,
                     debate_summary=debate_summary,
                 )
                 # global_summary：从辩论结果提炼一句话摘要
@@ -450,7 +664,9 @@ class ActionDesigner:
                 )
 
         # 规则引擎 fallback
-        posture = self._determine_posture(opp)
+        posture_basis = self._infer_posture_basis_from_opportunity(opp)
+        posture_basis = self._stabilize_posture_basis_for_opportunity(opp, posture_basis)
+        posture = self._derive_decision_posture_from_basis(posture_basis)
         phased_plan = self._design_phased_plan(opp, posture)
         top_risks = self._identify_top_risks(opp)
         resource_logic = self._generate_resource_commitment_logic(phased_plan, posture)
@@ -473,7 +689,8 @@ class ActionDesigner:
             key_gates=self._collect_key_gates(phased_plan),
             exit_conditions=self._collect_exit_conditions(phased_plan),
             open_disagreements=[],
-            display=display
+            display=display,
+            posture_basis=posture_basis
         )
 
         return ActionDesignResult(
@@ -485,21 +702,7 @@ class ActionDesigner:
 
     def _determine_posture(self, opp) -> DecisionPosture:
         """判断行动姿态"""
-        # 简化规则：基于优先级和假设数量
-        priority = opp.priority_level.lower()
-        assumption_count = len(opp.key_assumptions)
-
-        # 兼容 2.2 的 priority_level 值（watch/research/deep_dive/escalate）
-        if priority == "watch" or priority == "low" or "观察" in priority:
-            return "watch"
-        elif priority == "escalate" or priority == "critical":
-            return "escalate"
-        elif priority == "deep_dive" or (priority == "high" and assumption_count <= 2):
-            return "pilot"
-        elif priority == "research" or (assumption_count > 3 and priority == "medium"):
-            return "validate"
-        else:
-            return "validate"
+        return self._derive_decision_posture_from_basis(self._infer_posture_basis_from_opportunity(opp))
 
     def _explain_posture(self, opp, posture: DecisionPosture) -> str:
         """解释姿态选择"""
