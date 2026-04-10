@@ -800,8 +800,10 @@ class OpportunitySnapshot:
         priority_level: str,
         source_signal_ids: set,
         signal_ids: List[str] = None,
+        opportunity_key: Optional[str] = None,
     ):
         self.opportunity_id = opportunity_id
+        self.opportunity_key = opportunity_key or ""
         self.opportunity_title = opportunity_title
         self.priority_level = priority_level
         self.source_signal_ids: set = set(source_signal_ids)   # 用于复用判断
@@ -810,18 +812,23 @@ class OpportunitySnapshot:
         self.last_updated: str = self.first_seen
         self.follow_up_signals: List[str] = []                 # 后续批次追加的 source_id
 
-    def update(self, new_source_ids: set, new_signal_ids: List[str], priority_level: str):
+    def update(self, new_source_ids: set, new_signal_ids: List[str], priority_level: str, opportunity_title: Optional[str] = None, opportunity_key: Optional[str] = None):
         """追加新批次信号，更新优先级和时间"""
         added = new_source_ids - self.source_signal_ids
         self.source_signal_ids.update(new_source_ids)
         self.signal_ids.extend(new_signal_ids)
         self.follow_up_signals.extend(list(added))
         self.priority_level = priority_level
+        if opportunity_title:
+            self.opportunity_title = opportunity_title
+        if opportunity_key:
+            self.opportunity_key = opportunity_key
         self.last_updated = datetime.now(timezone.utc).isoformat()
 
     def to_dict(self) -> dict:
         return {
             "opportunity_id": self.opportunity_id,
+            "opportunity_key": self.opportunity_key,
             "opportunity_title": self.opportunity_title,
             "priority_level": self.priority_level,
             "source_signal_ids": list(self.source_signal_ids),
@@ -867,19 +874,37 @@ class OpportunityStore:
         signal_ids: List[str],
     ) -> str:
         """
-        核心方法：根据 source_id 重叠判断是否复用历史 opportunity_id。
+        核心方法：优先根据 opportunity_key 复用历史 ID，其次回退到 source_id 重叠判断。
 
         Returns:
             str: 最终使用的 opportunity_id（复用或新建）
         """
-        # 找有 source_id 重叠的历史机会
+        current_key = getattr(opportunity, "opportunity_key", "") or ""
+        current_title = getattr(opportunity, "opportunity_title", "")
+        current_priority = getattr(opportunity, "priority_level", "watch")
+
+        if current_key:
+            for snap in self._store.values():
+                if getattr(snap, "opportunity_key", "") == current_key:
+                    snap.update(
+                        new_source_ids=source_signal_ids,
+                        new_signal_ids=signal_ids,
+                        priority_level=current_priority,
+                        opportunity_title=current_title,
+                        opportunity_key=current_key,
+                    )
+                    self._save()
+                    return snap.opportunity_id
+
+        # 回退：找有 source_id 重叠的历史机会
         for snap in self._store.values():
             if snap.source_signal_ids.intersection(source_signal_ids):
-                # 复用：追加新信号，更新优先级
                 snap.update(
                     new_source_ids=source_signal_ids,
                     new_signal_ids=signal_ids,
-                    priority_level=getattr(opportunity, "priority_level", snap.priority_level),
+                    priority_level=current_priority,
+                    opportunity_title=current_title,
+                    opportunity_key=current_key or getattr(snap, "opportunity_key", ""),
                 )
                 self._save()
                 return snap.opportunity_id
@@ -888,10 +913,11 @@ class OpportunityStore:
         new_id = getattr(opportunity, "opportunity_id", None) or str(uuid.uuid4())
         snap = OpportunitySnapshot(
             opportunity_id=new_id,
-            opportunity_title=getattr(opportunity, "opportunity_title", ""),
-            priority_level=getattr(opportunity, "priority_level", "watch"),
+            opportunity_title=current_title,
+            priority_level=current_priority,
             source_signal_ids=source_signal_ids,
             signal_ids=signal_ids,
+            opportunity_key=current_key,
         )
         self._store[new_id] = snap
         self._save()

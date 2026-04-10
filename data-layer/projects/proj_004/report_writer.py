@@ -114,13 +114,15 @@ def generate_report(
     display_label = getattr(display, "display_judgment_label", "") if display else ""
     display_title_mode = getattr(display, "display_title_mode", "") if display else ""
     title = getattr(opp, "opportunity_title", None) or "未命名机会"
+    opportunity_key = getattr(opp, "opportunity_key", None) or ""
     priority = str(opp.priority_level.value if hasattr(opp.priority_level, "value") else opp.priority_level)
     report_run_id = _extract_run_id(retro_result=retro_result, retrospective=retro, run_id=run_id)
     report_source_ids = _extract_source_ids(decode_results=decode_results, source_ids=source_ids)
     source_signature = _source_signature(report_source_ids)
+    report_identity = _safe_token(opportunity_key, 28) if opportunity_key else _safe_token(source_signature, 28)
 
-    # 文件名：保留可读标题，但加入 run_id/source signature 降低同主题冲突和追踪成本
-    fname = f"{ts_file}_{display_badge}_{_safe_token(report_run_id, 28)}_{source_signature}_{_slug(title)}.md"
+    # 文件名：优先使用 opportunity_key 表示机会身份，同时保留可读标题便于人工浏览
+    fname = f"{ts_file}_{display_badge}_{report_identity}_{_slug(title)}.md"
     fpath = os.path.join(REPORTS_DIR, fname)
 
     lines = []
@@ -130,6 +132,8 @@ def generate_report(
 
     lines.append("## 零、运行与追踪信息\n\n")
     lines.append(f"- **run_id**：`{report_run_id}`\n")
+    lines.append(f"- **opportunity_key**：`{opportunity_key or '（无）'}`\n")
+    lines.append(f"- **report_identity**：`{report_identity}`\n")
     lines.append(f"- **source_signature**：`{source_signature}`\n")
     lines.append(f"- **source_ids**：{', '.join(f'`{sid}`' for sid in report_source_ids) if report_source_ids else '（无）'}\n")
     lines.append(f"- **report_file**：`{os.path.basename(fpath)}`\n\n")

@@ -59,6 +59,7 @@ def _serialize_summary(run_index: int, selected_files: list[str], all_signals, d
         "selected_files": [os.path.basename(p) for p in selected_files],
         "source_ids": [getattr(dr, "source_id", "") for dr in decode_results],
         "signal_count": len(all_signals),
+        "opportunity_key": getattr(opp, "opportunity_key", "") if opp else "",
         "opportunity_title": getattr(opp, "opportunity_title", "") if opp else "",
         "priority_level": str(getattr(opp, "priority_level", "")) if opp else "",
         "action_posture": str(getattr(act, "decision_posture", "")) if act else "",
@@ -133,6 +134,7 @@ def main():
             total_ms=int((time.time() - t0) * 1000),
         ))
 
+    opportunity_key_set = sorted({r["opportunity_key"] for r in runs if r.get("opportunity_key")})
     title_set = sorted({r["opportunity_title"] for r in runs if r.get("opportunity_title")})
     posture_set = sorted({r["action_posture"] for r in runs if r.get("action_posture")})
     display_badge_set = sorted({r["display_badge"] for r in runs if r.get("display_badge")})
@@ -149,6 +151,7 @@ def main():
         "repeat_runs": repeat_runs,
         "seed": seed,
         "selected_files": [os.path.basename(p) for p in selected_files],
+        "opportunity_key_variants": opportunity_key_set,
         "title_variants": title_set,
         "posture_variants": posture_set,
         "display_badge_variants": display_badge_set,
@@ -161,6 +164,7 @@ def main():
             "cost_of_delay_consensus": delay_cost_set,
             "cost_of_wrong_commitment_consensus": wrong_commitment_cost_set,
         },
+        "opportunity_key_stable": len(opportunity_key_set) <= 1,
         "title_stable": len(title_set) <= 1,
         "posture_stable": len(posture_set) <= 1,
         "display_badge_stable": len(display_badge_set) <= 1,
@@ -175,6 +179,7 @@ def main():
 
     print(json.dumps({
         "out_path": out_path,
+        "opportunity_key_variants": opportunity_key_set,
         "title_variants": title_set,
         "posture_variants": posture_set,
         "display_badge_variants": display_badge_set,
@@ -187,6 +192,7 @@ def main():
             "cost_of_delay_consensus": delay_cost_set,
             "cost_of_wrong_commitment_consensus": wrong_commitment_cost_set,
         },
+        "opportunity_key_stable": len(opportunity_key_set) <= 1,
         "title_stable": len(title_set) <= 1,
         "posture_stable": len(posture_set) <= 1,
         "display_badge_stable": len(display_badge_set) <= 1,

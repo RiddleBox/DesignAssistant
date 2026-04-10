@@ -2,8 +2,8 @@
 
 > **文档类型**：执行进度跟踪文档
 > **适用模块**：Phase 3 真实数据管道 + 螺旋质量迭代
-> **状态**：执行中（Iteration 4 已完成主体，Iteration 5 待规划）
-> **最后更新**：2026-03-29
+> **状态**：执行中（Iteration 4~5 之间插入机会身份稳定性收口）
+> **最后更新**：2026-04-10
 
 ---
 
@@ -226,6 +226,31 @@ Phase 2 证明的是「链路能跑通」。Phase 3 要证明的是「链路能�
 5. **background 文档重分类评估**
    - 62 条文档中 32 条 content_type=background，2.2 不请求此类型
    - RAG 实际有效文档只有 30/62，评估重分类后能否提升命中质量
+
+---
+
+### Iteration 4.5 — 机会身份稳定性收口（2026-04-10）
+
+**目标**：解决“同一组信号/同一机会因标题漂移而表现成不同机会、不同报告”的问题，把机会身份从可读标题中剥离出来。
+
+**状态**：✅ 已完成
+
+**本次完成项**：
+- [x] 2.2 机会对象引入 `opportunity_key`，以主题/论点/关键信号组合作为 canonical identity
+- [x] 批内 canonical 去重：同一批次中多个相同机会只保留一个，避免重复机会进入 2.3 / 2.5
+- [x] 跨批次 identity 复用：Signal Store 优先按 `opportunity_key` 复用 `opportunity_id`，而不是依赖漂移较大的 `opportunity_title`
+- [x] 报告命名稳定化：[report_writer.py](../report_writer.py) 改为 `opportunity_key` 优先命名，同时保留可读标题 slug
+- [x] 稳定性观测升级：[batch_stability_runner.py](../batch_stability_runner.py) 新增 `opportunity_key_variants` / `opportunity_key_stable`，区分“标题漂移”和“身份漂移”
+- [x] 报告追踪字段补充：报告正文新增 `opportunity_key` 与 `report_identity`
+
+**当前结论**：
+- Phase 3 的“机会去重”不再依赖标题完全一致
+- 报告文件名稳定性从“标题稳定”升级为“身份稳定”
+- 后续若仍出现重复机会，优先检查 `opportunity_key` 生成逻辑，而不是标题命名逻辑
+
+**仍待验证**：
+- 需要在真实稳定性批跑中确认 `opportunity_key_stable` 是否持续为 `true`
+- 若 key 仍漂移，下一步应收紧 2.2 的 canonical key 生成规则，而不是继续修标题
 
 ---
 

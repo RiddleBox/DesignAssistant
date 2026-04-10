@@ -232,6 +232,131 @@ class JudgmentEngine:
         digest = hashlib.md5(fallback_basis.encode("utf-8")).hexdigest()[:8]
         return f"机会主题_{digest}"
 
+    def _normalize_text_token(self, value: Any) -> str:
+        text = str(value or "").strip().lower()
+        text = re.sub(r"\s+", " ", text)
+        text = re.sub(r"[^\w\u4e00-\u9fff\- ]+", "", text)
+        return text.strip()
+
+    def _extract_signal_identity_tokens(self, signals: List[Dict[str, Any]]) -> List[str]:
+        tokens = set()
+        for sig in (signals or []):
+            if not isinstance(sig, dict):
+                continue
+            for raw in [
+                sig.get("source_ref"),
+                sig.get("source_id"),
+                sig.get("_source_id"),
+                sig.get("signal_id"),
+                sig.get("signal_label"),
+            ]:
+                normalized = self._normalize_text_token(raw)
+                if normalized:
+                    tokens.add(normalized)
+        return sorted(tokens)
+
+    def _build_opportunity_key(self, signals: List[Dict[str, Any]], opportunity_title: str = "", opportunity_thesis: str = "", priority_level: str = "") -> str:
+        signal_types = sorted({
+            self._normalize_text_token(s.get("signal_type", ""))
+            for s in (signals or [])
+            if isinstance(s, dict) and self._normalize_text_token(s.get("signal_type", ""))
+        })
+        identity_tokens = self._extract_signal_identity_tokens(signals)
+        normalized_title = self._normalize_text_token(opportunity_title)
+        normalized_thesis = self._normalize_text_token(opportunity_thesis)
+        normalized_priority = self._normalize_text_token(priority_level)
+
+        key_payload = {
+            "signal_types": signal_types,
+            "signal_identity_tokens": identity_tokens,
+            "title": normalized_title,
+            "thesis": normalized_thesis,
+            "priority": normalized_priority,
+        }
+        digest = hashlib.md5(
+            json.dumps(key_payload, ensure_ascii=False, sort_keys=True).encode("utf-8")
+        ).hexdigest()[:16]
+        return f"oppkey_{digest}"
+
+    def _merge_opportunity_objects(self, primary: OpportunityObject, duplicate: OpportunityObject) -> OpportunityObject:
+        primary_signal_count = len(primary.related_signals or [])
+        duplicate_signal_count = len(duplicate.related_signals or [])
+        primary.related_signals = list(primary.related_signals or []) + list(duplicate.related_signals or [])
+
+        def _merge_unique_str_list(left, right):
+            merged = []
+            seen = set()
+            for item in list(left or []) + list(right or []):
+                key = str(item).strip()
+                if not key or key in seen:
+                    continue
+                seen.add(key)
+                merged.append(item)
+            return merged
+
+        primary.supporting_evidence = _merge_unique_str_list(primary.supporting_evidence, duplicate.supporting_evidence)
+        primary.counter_evidence = _merge_unique_str_list(primary.counter_evidence, duplicate.counter_evidence)
+        primary.key_assumptions = _merge_unique_str_list(primary.key_assumptions, duplicate.key_assumptions)
+        primary.uncertainty_map = _merge_unique_str_list(primary.uncertainty_map, duplicate.uncertainty_map)
+        primary.next_validation_questions = _merge_unique_str_list(primary.next_validation_questions, duplicate.next_validation_questions)
+        primary.warnings = _merge_unique_str_list(primary.warnings, duplicate.warnings)
+
+        if duplicate_signal_count > primary_signal_count:
+            primary.opportunity_title = duplicate.opportunity_title
+        if not primary.opportunity_thesis and duplicate.opportunity_thesis:
+            primary.opportunity_thesis = duplicate.opportunity_thesis
+        if not primary.why_now and duplicate.why_now:
+            primary.why_now = duplicate.why_now
+
+        priority_order = {"watch": 0, "research": 1, "deep_dive": 2, "escalate": 3}
+        primary_rank = priority_order.get(primary.priority_level, -1)
+        duplicate_rank = priority_order.get(duplicate.priority_level, -1)
+        if duplicate_rank > primary_rank:
+            primary.priority_level = duplicate.priority_level
+
+        if duplicate.processing_time_ms > primary.processing_time_ms:
+            primary.processing_time_ms = duplicate.processing_time_ms
+
+        return primary
+
+    def _dedupe_opportunities_within_batch(self, opportunities: List[OpportunityObject], source_signal_map: Dict[str, List[Any]]) -> Tuple[List[OpportunityObject], Dict[str, List[Any]]]:
+        deduped = []
+        merged_source_map = {}
+        seen_by_key = {}
+
+        for opp in opportunities or []:
+            opportunity_key = getattr(opp, "opportunity_key", None) or self._build_opportunity_key(
+                signals=opp.related_signals,
+                opportunity_title=opp.opportunity_title,
+                opportunity_thesis=opp.opportunity_thesis,
+                priority_level=opp.priority_level,
+            )
+            opp.opportunity_key = opportunity_key
+            src_entries = list(source_signal_map.get(opp.opportunity_id, []) or [])
+
+            if opportunity_key in seen_by_key:
+                kept = seen_by_key[opportunity_key]
+                self._merge_opportunity_objects(kept, opp)
+                existing_entries = merged_source_map.setdefault(kept.opportunity_id, [])
+                existing_signal_ids = {
+                    getattr(e, "signal_id", None) for e in existing_entries if hasattr(e, "signal_id")
+                }
+                for entry in src_entries:
+                    signal_id = getattr(entry, "signal_id", None)
+                    if signal_id and signal_id in existing_signal_ids:
+                        continue
+                    existing_entries.append(entry)
+                    if signal_id:
+                        existing_signal_ids.add(signal_id)
+                print(f"[Opportunity Dedupe] 合并重复机会: key={opportunity_key} title='{opp.opportunity_title}' -> '{kept.opportunity_title}'")
+                continue
+
+            seen_by_key[opportunity_key] = opp
+            deduped.append(opp)
+            merged_source_map[opp.opportunity_id] = src_entries
+
+        return deduped, merged_source_map
+
     def judge(self, request: OpportunityJudgmentRequest) -> OpportunityJudgmentResult:
         """
         执行机会判断
@@ -392,16 +517,28 @@ class JudgmentEngine:
                     else:
                         opp_signals = enriched_signals  # fallback：全部信号
 
+                    stable_title = self._build_stable_opportunity_title(
+                        opp_signals,
+                        opp_data.get("opportunity_title", "未命名机会")
+                    )
+                    opp_thesis = opp_data.get("opportunity_thesis", "")
+                    opp_priority = opp_data.get("priority_level", "watch")
                     opportunities.append(OpportunityObject(
                         opportunity_id=f"opp_{uuid.uuid4().hex[:12]}",
-                        opportunity_title=self._build_stable_opportunity_title(opp_signals, opp_data.get("opportunity_title", "未命名机会")),
-                        opportunity_thesis=opp_data.get("opportunity_thesis", ""),
+                        opportunity_key=self._build_opportunity_key(
+                            signals=opp_signals,
+                            opportunity_title=stable_title,
+                            opportunity_thesis=opp_thesis,
+                            priority_level=opp_priority,
+                        ),
+                        opportunity_title=stable_title,
+                        opportunity_thesis=opp_thesis,
                         related_signals=opp_signals,
                         supporting_evidence=opp_data.get("supporting_evidence", []),
                         counter_evidence=opp_data.get("counter_evidence", []),
                         key_assumptions=opp_data.get("key_assumptions", []),
                         uncertainty_map=opp_data.get("uncertainty_map", []),
-                        priority_level=opp_data.get("priority_level", "watch"),
+                        priority_level=opp_priority,
                         why_now=opp_data.get("why_now"),
                         next_validation_questions=opp_data.get("next_validation_questions", []),
                         warnings=opp_data.get("warnings"),
@@ -446,9 +583,16 @@ class JudgmentEngine:
             priority_level  = self._classify_priority(signals, supporting, counter, uncertainty_map)
             validation_qs   = self._generate_validation_questions(priority_level, uncertainty_map)
 
+            stable_title = self._build_stable_opportunity_title(signals, theme)
             opportunities.append(OpportunityObject(
                 opportunity_id=f"opp_{uuid.uuid4().hex[:12]}",
-                opportunity_title=self._build_stable_opportunity_title(signals, theme),
+                opportunity_key=self._build_opportunity_key(
+                    signals=signals,
+                    opportunity_title=stable_title,
+                    opportunity_thesis=thesis,
+                    priority_level=priority_level,
+                ),
+                opportunity_title=stable_title,
                 opportunity_thesis=thesis,
                 related_signals=signals,
                 supporting_evidence=supporting,
@@ -1045,6 +1189,11 @@ class JudgmentEngine:
                 entries.append(entry)
             signal_store.add_batch(entries)
             print(f"[Signal Store] 写入 {len(entries)} 条待组合信号")
+
+        all_opportunities, source_signal_map = self._dedupe_opportunities_within_batch(
+            all_opportunities,
+            source_signal_map,
+        )
 
         # ── 黄金模板写回（已成机会 → 2.4 RAG）───────────────
         # ── 机会 ID 持久化（跨批次复用 opportunity_id）────────

@@ -40,6 +40,7 @@ class OpportunityObject(BaseModel):
 
     # 基础标识
     opportunity_id: str = Field(..., description="机会对象唯一标识")
+    opportunity_key: Optional[str] = Field(None, description="机会规范化身份键（用于同批/跨批去重，不依赖标题）")
     opportunity_title: str = Field(..., description="机会标题（简短描述）")
     opportunity_thesis: str = Field(..., description="机会论点（核心判断，2-4句话说清楚为什么这些信号构成机会）")
 
