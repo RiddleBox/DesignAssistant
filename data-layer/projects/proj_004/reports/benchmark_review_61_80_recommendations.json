@@ -1,0 +1,369 @@
+{
+  "source_queue": "F:\\AIProjects\\DesignAssistant\\data-layer\\projects\\proj_004\\reports\\benchmark_review_queue_batch1.json",
+  "source_benchmark": "F:\\AIProjects\\DesignAssistant\\data-layer\\projects\\proj_004\\phase2.1_implementation\\data\\benchmark_samples_batch1_draft.json",
+  "range": "61-80",
+  "generated_for": "assisted second-pass review",
+  "items": [
+    {
+      "rank": 61,
+      "sample_id": "B1D049",
+      "title": "Fortnite Rocket Racing and more are being sunsetted amidst layoffs",
+      "source_name": "Game Developer",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_url": "https://www.gamedeveloper.com/business/fortnite-rocket-racing-and-more-are-being-sunsetted-amidst-layoffs",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "team"
+      ],
+      "recommended_bucket": "signal",
+      "recommended_signal_types": [
+        "team",
+        "market"
+      ],
+      "review_focus": "type",
+      "suggestion_confidence": "high",
+      "one_line_reason": "Sunsetting Fortnite modes amid layoffs is both a workforce contraction signal and a product-portfolio retrenchment signal.",
+      "review_note": "Keep as signal. This is stronger as team plus market, not team alone."
+    },
+    {
+      "rank": 62,
+      "sample_id": "B1D058",
+      "title": "Hades 2 trailer teases a new steamy scene that will be added with 'bonus content and quality-of-life improvements' in an update next month",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/action/hades-2-trailer-teases-a-new-steamy-scene-that-will-be-added-with-bonus-content-and-quality-of-life-improvements-in-an-update-next-month/",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "recommended_bucket": "noise",
+      "recommended_signal_types": [],
+      "review_focus": "confirm",
+      "suggestion_confidence": "high",
+      "one_line_reason": "Trailer tease plus bonus content or quality-of-life update is routine promotional coverage, not a structural signal.",
+      "review_note": "Keep as noise."
+    },
+    {
+      "rank": 63,
+      "sample_id": "B1D062",
+      "title": "The latest Star Wars Zero Company details tease Mass Effect DNA, hardcore turn-based tactics, permadeath, and new Clone Wars lore",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/new-star-wars-zero-company-details-emerge",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "recommended_bucket": "noise",
+      "recommended_signal_types": [],
+      "review_focus": "confirm",
+      "suggestion_confidence": "high",
+      "one_line_reason": "Game details and design teases remain feature or preview coverage, not a structural industry signal.",
+      "review_note": "Keep as noise."
+    },
+    {
+      "rank": 64,
+      "sample_id": "B1D063",
+      "title": "The Nex Playground is getting a price hike because of the memory crisis",
+      "source_name": "Game Developer",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_url": "https://www.gamedeveloper.com/business/nex-playground-increases-its-price-due-to-ongoing-memory-crisis",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "recommended_bucket": "signal",
+      "recommended_signal_types": [
+        "technical",
+        "market"
+      ],
+      "review_focus": "type",
+      "suggestion_confidence": "high",
+      "one_line_reason": "AI infrastructure causing component shortages and hardware price hikes is a direct technical-to-market spillover signal.",
+      "review_note": "Keep as signal. This is a strong AI infrastructure externality signal and should include market impact."
+    },
+    {
+      "rank": 65,
+      "sample_id": "B1D075",
+      "title": "Owlcat Games is using generative AI to 'iterate faster' on The Expanse",
+      "source_name": "Game Developer",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_url": "https://www.gamedeveloper.com/business/owlcat-games-is-using-gen-ai-to-iterate-faster-on-the-expanse",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "recommended_bucket": "signal",
+      "recommended_signal_types": [
+        "technical"
+      ],
+      "review_focus": "confirm",
+      "suggestion_confidence": "high",
+      "one_line_reason": "Use of generative AI for prototyping and placeholder iteration is still a meaningful production-pipeline signal even if final assets are replaced.",
+      "review_note": "Keep as signal. This is a clean AI-in-production workflow signal."
+    },
+    {
+      "rank": 66,
+      "sample_id": "B1D076",
+      "title": "Path of Exile's richest player and item trading kingpin gets banned and pleads with Grinding Gear Games to restore 'more than 1,500 items, some of which can't ever be recreated': 'This is the worst day of my life'",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/rpg/path-of-exiles-richest-player-and-item-trading-kingpin-gets-banned-and-pleads-with-grinding-gear-games-to-restore-more-than-1-500-items-some-of-which-cant-ever-be-recreated-this-is-the-worst-day-of-my-life/",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "recommended_bucket": "noise",
+      "recommended_signal_types": [],
+      "review_focus": "bucket",
+      "suggestion_confidence": "medium-high",
+      "one_line_reason": "A single player ban and trading-drama story reads more like community incident coverage than a structural technical signal.",
+      "review_note": "Downgrade to noise unless you explicitly want platform-governance micro-incidents in scope."
+    },
+    {
+      "rank": 67,
+      "sample_id": "B1D077",
+      "title": "Pearl Abyss boss admits the studio \"could have done a better job\" with Crimson Desert's totally underwhelming story",
+      "source_name": "Rock Paper Shotgun",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_url": "https://www.rockpapershotgun.com/pearl-abyss-boss-admits-the-studio-could-have-done-a-better-job-with-crimson-deserts-totally-underwhelming-story",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "recommended_bucket": "noise",
+      "recommended_signal_types": [],
+      "review_focus": "bucket",
+      "suggestion_confidence": "medium-high",
+      "one_line_reason": "This is mostly quality or narrative criticism, not a structural technical or business signal.",
+      "review_note": "Downgrade to noise unless the article is being kept specifically as a reverse-signal around AI overproduction and product quality collapse."
+    },
+    {
+      "rank": 68,
+      "sample_id": "B1D080",
+      "title": "The PS5 Price Hike Was Inevitable, But What Comes Next?",
+      "source_name": "GameSpot",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_url": "https://www.gamespot.com/articles/the-ps5-price-hike-was-inevitable-but-what-comes-next/1100-6539077/?ftag=CAD-01-10abi2f",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "recommended_bucket": "signal",
+      "recommended_signal_types": [
+        "market"
+      ],
+      "review_focus": "type",
+      "suggestion_confidence": "high",
+      "one_line_reason": "A major console price hike is a clear market signal and should not be typed as technical.",
+      "review_note": "Keep as signal, but retag to market. This is hardware pricing pressure, not a technical shift."
+    },
+    {
+      "rank": 69,
+      "sample_id": "B1D084",
+      "title": "Developer of cozy tea shop adventure Wanderstop is shutting down: 'It's a particularly tough time for raising game funds'",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-28T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/gaming-industry/developer-of-cozy-tea-shop-adventure-wanderstop-is-shutting-down-its-a-particularly-tough-time-for-raising-game-funds/",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "recommended_bucket": "signal",
+      "recommended_signal_types": [
+        "team",
+        "capital"
+      ],
+      "review_focus": "type",
+      "suggestion_confidence": "high",
+      "one_line_reason": "Studio shutdown due to inability to raise funds is both a workforce loss signal and a capital squeeze signal.",
+      "review_note": "Keep as signal. This should be tagged team plus capital."
+    },
+    {
+      "rank": 70,
+      "sample_id": "B1D088",
+      "title": "Crimson Desert Is Doing Something Very Uncommon For RPGs",
+      "source_name": "GameSpot",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_url": "https://www.gamespot.com/articles/crimson-desert-is-doing-something-very-uncommon-for-rpgs/1100-6539097/?ftag=CAD-01-10abi2f",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "market"
+      ],
+      "recommended_bucket": "signal",
+      "recommended_signal_types": [
+        "market"
+      ],
+      "review_focus": "confirm",
+      "suggestion_confidence": "medium-high",
+      "one_line_reason": "If the article is grounded in concrete player-count performance, it can remain a market signal rather than pure feature coverage.",
+      "review_note": "Keep as signal if you want strong product-demand evidence in scope."
+    },
+    {
+      "rank": 71,
+      "sample_id": "B1D089",
+      "title": "Deus Ex Dev Eidos-Montreal Conducts Mass Layoffs Affecting 124 People",
+      "source_name": "GameSpot",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_url": "https://www.gamespot.com/articles/deus-ex-dev-eidos-montreal-conducts-mass-layoffs-affecting-124-people/1100-6539106/?ftag=CAD-01-10abi2f",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "team"
+      ],
+      "recommended_bucket": "signal",
+      "recommended_signal_types": [
+        "team"
+      ],
+      "review_focus": "confirm",
+      "suggestion_confidence": "high",
+      "one_line_reason": "Mass layoffs affecting 124 people are a direct and unambiguous workforce contraction signal.",
+      "review_note": "Keep as signal."
+    },
+    {
+      "rank": 72,
+      "sample_id": "B1D091",
+      "title": "Arc Raiders' Flashpoint update finally streamlines crafting—oh, and you can also supercharge Scrappy using food because that just makes sense",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/third-person-shooter/arc-raiders-flashpoint-update/",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "recommended_bucket": "noise",
+      "recommended_signal_types": [],
+      "review_focus": "confirm",
+      "suggestion_confidence": "high",
+      "one_line_reason": "Crafting streamlining and feature additions are routine game-update coverage, not structural signal material.",
+      "review_note": "Keep as noise."
+    },
+    {
+      "rank": 73,
+      "sample_id": "B1D094",
+      "title": "Crimson Desert Update Seemingly Replaces AI Artwork",
+      "source_name": "GameSpot",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_url": "https://www.gamespot.com/articles/crimson-desert-update-seemingly-replaces-ai-artwork/1100-6539094/?ftag=CAD-01-10abi2f",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "recommended_bucket": "signal",
+      "recommended_signal_types": [
+        "technical"
+      ],
+      "review_focus": "confirm",
+      "suggestion_confidence": "high",
+      "one_line_reason": "Replacing detected AI artwork after backlash is a strong technical-governance and reverse-paradigm signal.",
+      "review_note": "Keep as signal. This clearly fits your reverse-paradigm logic."
+    },
+    {
+      "rank": 74,
+      "sample_id": "B1D098",
+      "title": "Not Even Crimson Desert's Main Character VA Understood The Game's Story",
+      "source_name": "GameSpot",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_url": "https://www.gamespot.com/articles/not-even-crimson-deserts-main-character-va-understood-the-games-story/1100-6539099/?ftag=CAD-01-10abi2f",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "recommended_bucket": "noise",
+      "recommended_signal_types": [],
+      "review_focus": "bucket",
+      "suggestion_confidence": "medium-high",
+      "one_line_reason": "This mostly reads as criticism of story quality rather than a structural technical signal, despite adjacent AI context.",
+      "review_note": "Downgrade to noise unless you are intentionally collecting quality-collapse companion samples around Crimson Desert."
+    },
+    {
+      "rank": 75,
+      "sample_id": "B1D100",
+      "title": "Thermaltake View 380 WS ARGB review",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/hardware/pc-cases/thermaltake-view-380-ws-argb-review/",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "recommended_bucket": "noise",
+      "recommended_signal_types": [],
+      "review_focus": "confirm",
+      "suggestion_confidence": "high",
+      "one_line_reason": "Hardware review coverage should remain a clean negative sample.",
+      "review_note": "Keep as noise."
+    },
+    {
+      "rank": 76,
+      "sample_id": "B1D101",
+      "title": "Evercade unveils its next-gen retro gaming handheld Nexus, with analogue sticks and Banjo-Kazooie 1&2 bundled in",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/evercade-next-gen-retro-gaming-handheld-evercade-nexus",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "recommended_bucket": "noise",
+      "recommended_signal_types": [],
+      "review_focus": "confirm",
+      "suggestion_confidence": "high",
+      "one_line_reason": "New handheld unveiling is standard product announcement coverage, not a structural signal.",
+      "review_note": "Keep as noise."
+    },
+    {
+      "rank": 77,
+      "sample_id": "B1D103",
+      "title": "Aether & Iron review",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/rpg/aether-and-iron-review/",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "recommended_bucket": "noise",
+      "recommended_signal_types": [],
+      "review_focus": "confirm",
+      "suggestion_confidence": "high",
+      "one_line_reason": "Review content should remain a negative benchmark sample.",
+      "review_note": "Keep as noise."
+    },
+    {
+      "rank": 78,
+      "sample_id": "B1D105",
+      "title": "Everything you need to know for Final Fantasy 14's Moogle Treasure Trove event, including what to do with all of those tomestones when you already have everything",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/final-fantasy/ffxiv-moogle-treasure-trove/",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "recommended_bucket": "noise",
+      "recommended_signal_types": [],
+      "review_focus": "confirm",
+      "suggestion_confidence": "high",
+      "one_line_reason": "Live-event tips and tomestone guidance are routine player-help content, not structural signals.",
+      "review_note": "Keep as noise."
+    },
+    {
+      "rank": 79,
+      "sample_id": "B1D106",
+      "title": "GTA Online's first-of-its-kind community showcase offers a glimpse of what's to come in GTA 6—and might just answer a big question facing the multiplayer offshoot",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/grand-theft-auto/gta-onlines-first-of-its-kind-community-showcase-offers-a-glimpse-of-whats-to-come-in-gta-6-and-might-just-answer-a-big-question-facing-the-multiplayer-offshoot/",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "recommended_bucket": "noise",
+      "recommended_signal_types": [],
+      "review_focus": "confirm",
+      "suggestion_confidence": "medium-high",
+      "one_line_reason": "Community showcase speculation about GTA 6 remains feature or preview-style content rather than a confirmed structural signal.",
+      "review_note": "Keep as noise."
+    },
+    {
+      "rank": 80,
+      "sample_id": "B1D004",
+      "title": "RPS Verdict: Anime racer Screamer slides sideways into success with its colourful, characterful driving",
+      "source_name": "Rock Paper Shotgun",
+      "published_at": "2026-03-22T00:00:00Z",
+      "source_url": "https://www.rockpapershotgun.com/rps-verdict-screamer-review",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "recommended_bucket": "noise",
+      "recommended_signal_types": [],
+      "review_focus": "confirm",
+      "suggestion_confidence": "high",
+      "one_line_reason": "Review content should remain a clean negative sample.",
+      "review_note": "Keep as noise."
+    }
+  ]
+}

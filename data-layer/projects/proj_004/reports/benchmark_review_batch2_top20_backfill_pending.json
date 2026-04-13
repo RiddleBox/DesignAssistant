@@ -1,0 +1,914 @@
+{
+  "generated_at": "2026-04-13T12:03:50Z",
+  "source_recommendations": "f:\\AIProjects\\DesignAssistant\\data-layer\\projects\\proj_004\\reports\\benchmark_review_batch2_top20_recommendations.json",
+  "source_benchmark": "f:\\AIProjects\\DesignAssistant\\data-layer\\projects\\proj_004\\phase2.1_implementation\\data\\benchmark_samples_batch2_draft.json",
+  "purpose": "Reviewer confirmation backfill draft for `batch2_top20` derived from `priority_shortlist`.",
+  "instructions_for_reviewer": {
+    "how_to_use": [
+      "Check each row's suggested human_review fields.",
+      "Change human_review.decision from `suggested` to `accepted` if you agree.",
+      "If you disagree, keep decision as `modified` or `rejected` and edit corrected_bucket / corrected_signal_types / corrected_expected_signals / review_notes.",
+      "After confirmation, merge only accepted or modified rows back into the formal benchmark draft."
+    ],
+    "decision_meaning": {
+      "suggested": "AI-prepared recommendation, not yet confirmed by human.",
+      "accepted": "Human confirmed the suggestion as final.",
+      "modified": "Human changed one or more suggested fields.",
+      "rejected": "Human rejected the suggestion and plans to keep original draft labeling."
+    }
+  },
+  "summary": {
+    "selected_total": 20,
+    "range_label": "batch2_top20",
+    "suggestion_list": "priority_shortlist",
+    "start_rank": 1
+  },
+  "samples": [
+    {
+      "sample_id": "B2D056",
+      "source_type": "news",
+      "title": "Meta And YouTube Lose Social-Media Addiction Lawsuit",
+      "content": "California jurors have found YouTube and Meta--the latter of which owns social apps like Instagram and Threads--liable in a civil court for getting a young adult woman addicted to social media and impairing her mental h…",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/articles/meta-and-youtube-lose-social-media-addiction-lawsuit/1100-6539014/?ftag=CAD-01-10abi2f",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "capital",
+            "signal_label": "batch2_candidate_signal",
+            "description": "Draft candidate derived from incoming sample `incoming_20260325_005.json`: Meta And YouTube Lose Social-Media Addiction Lawsuit. California jurors have found YouTube and Meta--the latter of which owns social apps like Instagram and Threads--liable in a civil court for getting a young adult woman addicted to social media and impairing her mental h…",
+            "intensity_score": 8,
+            "confidence_score": 6,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ]
+      },
+      "draft_meta": {
+        "origin": "batch2_bucket_candidates",
+        "origin_file": "incoming_20260325_005.json",
+        "candidate_bucket": "signal",
+        "recommended_set": "main_baseline_candidate",
+        "confidence_band": "medium",
+        "manual_review_priority": "high",
+        "score_signal": 8,
+        "score_noise": 5,
+        "score_boundary": 4,
+        "reasons": [
+          "signal_pattern:regulatory:2",
+          "hint:capital",
+          "high_value_entities:meta",
+          "missing_game_context",
+          "boundary_patterns:2",
+          "non_game_context",
+          "structural_change_keywords"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "suggested",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Source looks outside game-industry scope and should be manually confirmed. Draft is signal but queue reasons explicitly indicate non-game or missing game context. Draft signal type looks suspicious; keyword evidence leans toward `technical`. High boundary score suggests the sample is signal-like but still ambiguous. Signal and noise evidence are relatively close; worth human confirmation.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B2D156",
+      "source_type": "news",
+      "title": "The PS5 Pro Is Still Worth It--For Now",
+      "content": "Sony announced massive price increases for its PS5 consoles last week, with the PS5 Pro getting slapped with the biggest price hike out of all of them: a whopping $150, pushing the MSRP of the hardware to $900. The good…",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/articles/the-ps5-pro-is-still-worth-it-for-now/1100-6539101/?ftag=CAD-01-10abi2f",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "technical",
+            "signal_label": "batch2_candidate_signal",
+            "description": "Draft candidate derived from incoming sample `incoming_20260330_053.json`: The PS5 Pro Is Still Worth It--For Now. Sony announced massive price increases for its PS5 consoles last week, with the PS5 Pro getting slapped with the biggest price hike out of all of them: a whopping $150, pushing the MSRP of the hardware to $900. The good…",
+            "intensity_score": 4,
+            "confidence_score": 6,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ]
+      },
+      "draft_meta": {
+        "origin": "batch2_bucket_candidates",
+        "origin_file": "incoming_20260330_053.json",
+        "candidate_bucket": "signal",
+        "recommended_set": "main_baseline_candidate",
+        "confidence_band": "medium",
+        "manual_review_priority": "medium",
+        "score_signal": 4,
+        "score_noise": 2,
+        "score_boundary": 1,
+        "reasons": [
+          "signal_pattern:market:1",
+          "hint:technical",
+          "high_value_entities:sony",
+          "missing_game_context",
+          "announcement_style"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "suggested",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Source looks outside game-industry scope and should be manually confirmed. Draft is signal but queue reasons explicitly indicate non-game or missing game context. Draft signal type looks suspicious; keyword evidence leans toward `market`.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B2D022",
+      "source_type": "news",
+      "title": "Square Enix Is Turning Slimes Into AI Chatbots In Dragon Quest X",
+      "content": "Square Enix and Google have partnered to inject the tech giant's AI, Gemini, to help advise and guide players in the popular Japan-only MMO, Dragon Quest X . Announced at a press event over the weekend, the partnership …",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/articles/square-enix-is-turning-slimes-into-ai-chatbots-in-dragon-quest-x/1100-6538960/?ftag=CAD-01-10abi2f",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "technical",
+            "signal_label": "batch2_candidate_signal",
+            "description": "Draft candidate derived from incoming sample `incoming_20260323_055.json`: Square Enix Is Turning Slimes Into AI Chatbots In Dragon Quest X. Square Enix and Google have partnered to inject the tech giant's AI, Gemini, to help advise and guide players in the popular Japan-only MMO, Dragon Quest X . Announced at a press event over the weekend, the partnership …",
+            "intensity_score": 9,
+            "confidence_score": 6,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ]
+      },
+      "draft_meta": {
+        "origin": "batch2_bucket_candidates",
+        "origin_file": "incoming_20260323_055.json",
+        "candidate_bucket": "signal",
+        "recommended_set": "main_baseline_candidate",
+        "confidence_band": "medium",
+        "manual_review_priority": "medium",
+        "score_signal": 9,
+        "score_noise": 6,
+        "score_boundary": 1,
+        "reasons": [
+          "signal_pattern:technical:2",
+          "signal_pattern:market:1",
+          "hint:technical",
+          "high_value_entities:square enix,google",
+          "missing_game_context",
+          "noise_patterns:2",
+          "announcement_style"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "suggested",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Source looks outside game-industry scope and should be manually confirmed. Draft is signal but queue reasons explicitly indicate non-game or missing game context. Signal and noise evidence are relatively close; worth human confirmation.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B2D079",
+      "source_type": "news",
+      "title": "Stardew Valley farmer takes advice from AI, ends up brewing 136 useless bottles of rice juice",
+      "content": "\"Don't listen to Google and mill your rice for vinegar.\"",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/games/life-sim/stardew-valley-farmer-takes-advice-from-ai-ends-up-brewing-136-useless-bottles-of-rice-juice/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "draft_meta": {
+        "origin": "batch2_bucket_candidates",
+        "origin_file": "incoming_20260325_066.json",
+        "candidate_bucket": "noise",
+        "recommended_set": "noise_suppression_candidate",
+        "confidence_band": "medium",
+        "manual_review_priority": "low",
+        "score_signal": 4,
+        "score_noise": 6,
+        "score_boundary": 0,
+        "reasons": [
+          "signal_pattern:technical:1",
+          "hint:technical",
+          "high_value_entities:google",
+          "missing_game_context",
+          "noise_patterns:1",
+          "very_short_excerpt"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "suggested",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Source looks outside game-industry scope and should be manually confirmed. Noise sample still shows some structural signal cues and deserves a quick second look.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B2D014",
+      "source_type": "news",
+      "title": "Dragon's Dogma 2 Fans Are Convinced Capcom Is Teasing An Expansion",
+      "content": "Capcom's 2024 open-world RPG Dragon's Dogma 2 could be set to follow in the footsteps of its predeccesor with a major expansion, with the game's community convinced a recent piece of artwork celebrating the game's secon…",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/articles/dragons-dogma-2-fans-are-convinced-capcom-is-teasing-an-expansion/1100-6538950/?ftag=CAD-01-10abi2f",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "technical",
+            "signal_label": "batch2_candidate_signal",
+            "description": "Draft candidate derived from incoming sample `incoming_20260323_036.json`: Dragon's Dogma 2 Fans Are Convinced Capcom Is Teasing An Expansion. Capcom's 2024 open-world RPG Dragon's Dogma 2 could be set to follow in the footsteps of its predeccesor with a major expansion, with the game's community convinced a recent piece of artwork celebrating the game's secon…",
+            "intensity_score": 7,
+            "confidence_score": 6,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ]
+      },
+      "draft_meta": {
+        "origin": "batch2_bucket_candidates",
+        "origin_file": "incoming_20260323_036.json",
+        "candidate_bucket": "signal",
+        "recommended_set": "main_baseline_candidate",
+        "confidence_band": "medium",
+        "manual_review_priority": "medium",
+        "score_signal": 7,
+        "score_noise": 4,
+        "score_boundary": 2,
+        "reasons": [
+          "signal_pattern:team:1",
+          "hint:technical",
+          "high_value_entities:epic,capcom,unity",
+          "game_context",
+          "noise_patterns:2",
+          "boundary_patterns:1"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "suggested",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Title/content matches common non-structural announcement or feature-news patterns. Signal and noise evidence are relatively close; worth human confirmation.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B2D041",
+      "source_type": "news",
+      "title": "New Xbox CEO \"Willing To Question Everything,\" Xbox Exec Says",
+      "content": "Microsoft Gaming's new CEO, Asha Sharma, is \"willing to question everything,\" according to Xbox vice president Jason Ronald. He told The Information that Sharma's ambition as the new CEO is to \"retain what makes Xbox gr…",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/articles/new-xbox-ceo-willing-to-question-everything-xbox-exec-says/1100-6538979/?ftag=CAD-01-10abi2f",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "team",
+            "signal_label": "batch2_candidate_signal",
+            "description": "Draft candidate derived from incoming sample `incoming_20260324_030.json`: New Xbox CEO \"Willing To Question Everything,\" Xbox Exec Says. Microsoft Gaming's new CEO, Asha Sharma, is \"willing to question everything,\" according to Xbox vice president Jason Ronald. He told The Information that Sharma's ambition as the new CEO is to \"retain what makes Xbox gr…",
+            "intensity_score": 6,
+            "confidence_score": 6,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ]
+      },
+      "draft_meta": {
+        "origin": "batch2_bucket_candidates",
+        "origin_file": "incoming_20260324_030.json",
+        "candidate_bucket": "signal",
+        "recommended_set": "main_baseline_candidate",
+        "confidence_band": "medium",
+        "manual_review_priority": "medium",
+        "score_signal": 6,
+        "score_noise": 0,
+        "score_boundary": 4,
+        "reasons": [
+          "signal_pattern:technical:1",
+          "hint:team",
+          "high_value_entities:microsoft,xbox",
+          "game_context",
+          "boundary_patterns:2"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "suggested",
+        "corrected_bucket": "signal",
+        "corrected_signal_types": [
+          "technical"
+        ],
+        "corrected_expected_signals": [
+          {
+            "signal_type": "technical",
+            "signal_label": "ai_suggested_signal",
+            "description": "AI-assisted review suggestion for B2D041: New Xbox CEO \"Willing To Question Everything,\" Xbox Exec Says",
+            "intensity_score": 6,
+            "confidence_score": 7,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ],
+        "review_notes": "Draft signal type looks suspicious; keyword evidence leans toward `technical`. High boundary score suggests the sample is signal-like but still ambiguous.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B2D050",
+      "source_type": "news",
+      "title": "Switch 2 demand appears to be flagging as Nintendo reportedly lowers production",
+      "content": "Year-one for Nintendo's Switch 2 began brightly , with early, record-breaking sales success. But a new report has suggested demand for Nintendo's newest console is flagging, especially in the US. Read more",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/switch-2-flagging-nintendo-lowers-production",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "technical",
+            "signal_label": "batch2_candidate_signal",
+            "description": "Draft candidate derived from incoming sample `incoming_20260324_067.json`: Switch 2 demand appears to be flagging as Nintendo reportedly lowers production. Year-one for Nintendo's Switch 2 began brightly , with early, record-breaking sales success. But a new report has suggested demand for Nintendo's newest console is flagging, especially in the US. Read more",
+            "intensity_score": 7,
+            "confidence_score": 6,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ]
+      },
+      "draft_meta": {
+        "origin": "batch2_bucket_candidates",
+        "origin_file": "incoming_20260324_067.json",
+        "candidate_bucket": "signal",
+        "recommended_set": "main_baseline_candidate",
+        "confidence_band": "medium",
+        "manual_review_priority": "medium",
+        "score_signal": 7,
+        "score_noise": 3,
+        "score_boundary": 4,
+        "reasons": [
+          "signal_pattern:market:2",
+          "hint:technical",
+          "high_value_entities:nintendo",
+          "game_context",
+          "low_information_excerpt",
+          "boundary_patterns:1",
+          "rumor_or_report_sourcing",
+          "truncated_article"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "suggested",
+        "corrected_bucket": "signal",
+        "corrected_signal_types": [
+          "market"
+        ],
+        "corrected_expected_signals": [
+          {
+            "signal_type": "market",
+            "signal_label": "ai_suggested_signal",
+            "description": "AI-assisted review suggestion for B2D050: Switch 2 demand appears to be flagging as Nintendo reportedly lowers production",
+            "intensity_score": 7,
+            "confidence_score": 7,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ],
+        "review_notes": "Draft signal type looks suspicious; keyword evidence leans toward `market`. High boundary score suggests the sample is signal-like but still ambiguous.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B2D005",
+      "source_type": "news",
+      "title": "Minecraft World, a theme park with the world's first-ever Minecraft rollercoaster, to open in the UK next year",
+      "content": "Minecraft World, a new £50 million theme park based on Mojang's seminal sandbox world, will open at London's Chessington World of Adventures next year. Read more",
+      "published_at": "2026-03-22T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/minecraft-world-a-theme-park-with-the-worlds-first-ever-minecraft-rollercoaster-to-open-in-the-uk-next-year",
+      "annotation": {
+        "expected_signals": []
+      },
+      "draft_meta": {
+        "origin": "batch2_bucket_candidates",
+        "origin_file": "incoming_20260322_002.json",
+        "candidate_bucket": "noise",
+        "recommended_set": "noise_suppression_candidate",
+        "confidence_band": "medium",
+        "manual_review_priority": "low",
+        "score_signal": 3,
+        "score_noise": 5,
+        "score_boundary": 1,
+        "reasons": [
+          "hint:technical",
+          "missing_game_context",
+          "low_information_excerpt",
+          "concrete_numbers",
+          "short_excerpt",
+          "truncated_article"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "suggested",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Source looks outside game-industry scope and should be manually confirmed.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B2D006",
+      "source_type": "news",
+      "title": "New report claims Crimson Desert's development was plagued by \"a hodgepodge of features crammed together\" and leaders who \"don't acknowledge anyone who doesn't share their exact mindset\"",
+      "content": "Two Pearl Abyss developers have claimed Crimson Desert was developed in a troubled environment, characterised by an inverted management hierarchy and leaders who \"don't acknowledge anyone who doesn't share their exact m…",
+      "published_at": "2026-03-22T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/new-report-claims-crimson-deserts-development-was-plagued-by-a-hodgepodge-of-features-crammed-together-and-leaders-who-dont-acknowledge-anyone-who-doesnt-share-their-exact-mindset",
+      "annotation": {
+        "expected_signals": []
+      },
+      "draft_meta": {
+        "origin": "batch2_bucket_candidates",
+        "origin_file": "incoming_20260322_003.json",
+        "candidate_bucket": "noise",
+        "recommended_set": "noise_suppression_candidate",
+        "confidence_band": "medium",
+        "manual_review_priority": "low",
+        "score_signal": 1,
+        "score_noise": 5,
+        "score_boundary": 2,
+        "reasons": [
+          "hint:technical",
+          "missing_game_context",
+          "low_information_excerpt",
+          "boundary_patterns:1",
+          "truncated_article"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "suggested",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Source looks outside game-industry scope and should be manually confirmed.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B2D010",
+      "source_type": "news",
+      "title": "Oops, ASRock says motherboards will support 'newly launched' AMD Ryzen 9 9950X3D2 CPU that has definitely not yet been launched",
+      "content": "I hope no one got yelled at for this.",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/hardware/processors/oops-asrock-says-motherboards-will-support-newly-launched-amd-ryzen-9-9950x3d2-cpu-that-has-definitely-not-yet-been-announced/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "draft_meta": {
+        "origin": "batch2_bucket_candidates",
+        "origin_file": "incoming_20260323_012.json",
+        "candidate_bucket": "noise",
+        "recommended_set": "noise_suppression_candidate",
+        "confidence_band": "medium",
+        "manual_review_priority": "low",
+        "score_signal": 1,
+        "score_noise": 4,
+        "score_boundary": 0,
+        "reasons": [
+          "hint:market",
+          "missing_game_context",
+          "very_short_excerpt"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "suggested",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Source looks outside game-industry scope and should be manually confirmed.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B2D011",
+      "source_type": "news",
+      "title": "'A firm announcement is dependent on this final stretch of work': Fans are spinning out over extraction shooter Sand's lack of a specific March release date",
+      "content": "We're running out of March.",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/games/fps/a-firm-announcement-is-dependent-on-this-final-stretch-of-work-fans-are-spinning-out-over-extraction-shooter-sands-lack-of-a-specific-march-release-date/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "draft_meta": {
+        "origin": "batch2_bucket_candidates",
+        "origin_file": "incoming_20260323_020.json",
+        "candidate_bucket": "noise",
+        "recommended_set": "noise_suppression_candidate",
+        "confidence_band": "medium",
+        "manual_review_priority": "low",
+        "score_signal": 1,
+        "score_noise": 4,
+        "score_boundary": 0,
+        "reasons": [
+          "hint:technical",
+          "missing_game_context",
+          "very_short_excerpt"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "suggested",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Source looks outside game-industry scope and should be manually confirmed.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B2D012",
+      "source_type": "news",
+      "title": "Baldur's Gate 3 writer says its Dragon-Agey rep system is there to stop you totally breaking the NPCs, but it 'becomes a dice roll' at points to keep romance natural",
+      "content": "Work smarter, not harder. Still insanely hard, though.",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/games/baldurs-gate/baldurs-gate-3-writer-says-its-dragon-agey-rep-system-is-there-to-stop-you-totally-breaking-the-npcs-but-it-becomes-a-dice-roll-at-points-to-keep-romance-natural/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "draft_meta": {
+        "origin": "batch2_bucket_candidates",
+        "origin_file": "incoming_20260323_026.json",
+        "candidate_bucket": "noise",
+        "recommended_set": "noise_suppression_candidate",
+        "confidence_band": "medium",
+        "manual_review_priority": "low",
+        "score_signal": 1,
+        "score_noise": 4,
+        "score_boundary": 0,
+        "reasons": [
+          "hint:technical",
+          "missing_game_context",
+          "very_short_excerpt"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "suggested",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Source looks outside game-industry scope and should be manually confirmed.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B2D015",
+      "source_type": "news",
+      "title": "Google's Gemini will make its way into Dragon Quest X to power a \"Chatty Slimey\" AI companion, Square Enix has announced",
+      "content": "If you're still recovering from last week's DLSS 5 nightmare and Crimson Desert's gen-AI fiasco , we're sorry to re-open old wounds by telling you that Square Enix has announced it's teaming up with Google to put Gemini…",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/google-gemini-ai-to-power-chatbot-companion-in-dragon-quest-x-square-enix-says",
+      "annotation": {
+        "expected_signals": []
+      },
+      "draft_meta": {
+        "origin": "batch2_bucket_candidates",
+        "origin_file": "incoming_20260323_038.json",
+        "candidate_bucket": "noise",
+        "recommended_set": "noise_suppression_candidate",
+        "confidence_band": "medium",
+        "manual_review_priority": "low",
+        "score_signal": 5,
+        "score_noise": 8,
+        "score_boundary": 1,
+        "reasons": [
+          "signal_pattern:technical:1",
+          "hint:technical",
+          "high_value_entities:square enix,google",
+          "missing_game_context",
+          "low_information_excerpt",
+          "truncated_article",
+          "announcement_style",
+          "shallow_announcement_penalty"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "suggested",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Source looks outside game-industry scope and should be manually confirmed.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B2D016",
+      "source_type": "news",
+      "title": "Grab this early gold bar in Crimson Desert to open a bank account and make some money",
+      "content": "Start earning some coin.",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/games/action/crimson-desert-gold-bar-locations/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "draft_meta": {
+        "origin": "batch2_bucket_candidates",
+        "origin_file": "incoming_20260323_039.json",
+        "candidate_bucket": "noise",
+        "recommended_set": "noise_suppression_candidate",
+        "confidence_band": "medium",
+        "manual_review_priority": "low",
+        "score_signal": 1,
+        "score_noise": 4,
+        "score_boundary": 0,
+        "reasons": [
+          "hint:technical",
+          "missing_game_context",
+          "very_short_excerpt"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "suggested",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Source looks outside game-industry scope and should be manually confirmed.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B2D021",
+      "source_type": "news",
+      "title": "Shadowheart and Lae'zel's Baldur's Gate 3 romance came naturally because their writers realised they 'were writing the same story from different directions'",
+      "content": "Green alien lady, goth cult lady: tom-ay-to, tom-ah-to.",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/games/baldurs-gate/shadowheart-and-laezels-baldurs-gate-3-romance-came-naturally-because-their-writers-realised-they-were-writing-the-same-story-from-different-directions/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "draft_meta": {
+        "origin": "batch2_bucket_candidates",
+        "origin_file": "incoming_20260323_053.json",
+        "candidate_bucket": "noise",
+        "recommended_set": "noise_suppression_candidate",
+        "confidence_band": "medium",
+        "manual_review_priority": "low",
+        "score_signal": 1,
+        "score_noise": 4,
+        "score_boundary": 0,
+        "reasons": [
+          "hint:technical",
+          "missing_game_context",
+          "very_short_excerpt"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "suggested",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Source looks outside game-industry scope and should be manually confirmed.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B2D025",
+      "source_type": "news",
+      "title": "There is nothing like Marathon's Cryo Archive map",
+      "content": "It's a raid. It's a heist. It's Marathon.",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/games/fps/there-is-nothing-like-marathons-cryo-archive-map/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "draft_meta": {
+        "origin": "batch2_bucket_candidates",
+        "origin_file": "incoming_20260323_059.json",
+        "candidate_bucket": "noise",
+        "recommended_set": "noise_suppression_candidate",
+        "confidence_band": "medium",
+        "manual_review_priority": "low",
+        "score_signal": 1,
+        "score_noise": 4,
+        "score_boundary": 0,
+        "reasons": [
+          "hint:technical",
+          "missing_game_context",
+          "very_short_excerpt"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "suggested",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Source looks outside game-industry scope and should be manually confirmed.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B2D027",
+      "source_type": "news",
+      "title": "Today's hefty Crimson Desert patch includes \"beginning of improvements\" to keyboard and mouse controls, plus much more",
+      "content": "Pearl Abyss has detailed a rather chunky patch for Crimson Desert, after its launch last week was marred by multiple issues and AI controversies. Read more",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/todays-hefty-crimson-desert-patch-includes-beginning-of-improvements-to-keyboard-and-mouse-controls-plus-much-more",
+      "annotation": {
+        "expected_signals": []
+      },
+      "draft_meta": {
+        "origin": "batch2_bucket_candidates",
+        "origin_file": "incoming_20260323_061.json",
+        "candidate_bucket": "noise",
+        "recommended_set": "noise_suppression_candidate",
+        "confidence_band": "medium",
+        "manual_review_priority": "low",
+        "score_signal": 3,
+        "score_noise": 5,
+        "score_boundary": 1,
+        "reasons": [
+          "signal_pattern:technical:1",
+          "hint:technical",
+          "missing_game_context",
+          "low_information_excerpt",
+          "short_excerpt",
+          "truncated_article"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "suggested",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Source looks outside game-industry scope and should be manually confirmed.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B2D036",
+      "source_type": "news",
+      "title": "Crimson Desert sells another 1m, as Pearl Abyss pledges more fixes to address launch day struggles",
+      "content": "Crimson Desert has sold another 1m copies since Friday. This afternoon, Pearl Abyss announced its single player RPG spin-off from hit Korean MMO Black Desert had now surpassed 3m copies sold worldwide. Read more",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/crimson-desert-sells-another-1m-as-pearl-abyss-pledges-more-fixes",
+      "annotation": {
+        "expected_signals": []
+      },
+      "draft_meta": {
+        "origin": "batch2_bucket_candidates",
+        "origin_file": "incoming_20260324_012.json",
+        "candidate_bucket": "noise",
+        "recommended_set": "noise_suppression_candidate",
+        "confidence_band": "medium",
+        "manual_review_priority": "low",
+        "score_signal": 5,
+        "score_noise": 8,
+        "score_boundary": 1,
+        "reasons": [
+          "signal_pattern:market:1",
+          "hint:market",
+          "missing_game_context",
+          "low_information_excerpt",
+          "concrete_numbers",
+          "truncated_article",
+          "announcement_style",
+          "shallow_announcement_penalty"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "suggested",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Source looks outside game-industry scope and should be manually confirmed.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B2D040",
+      "source_type": "news",
+      "title": "Even after ZA/UM's messy breakup, the writing team still has a cadre of sad communists—but you won't have to play Zero Parades as one if you don't want to",
+      "content": "But I will, though. Just so you know.",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/games/rpg/even-after-za-ums-messy-breakup-the-writing-team-still-has-a-cadre-of-sad-communists-but-you-wont-have-to-play-zero-parades-as-one-if-you-dont-want-to/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "draft_meta": {
+        "origin": "batch2_bucket_candidates",
+        "origin_file": "incoming_20260324_024.json",
+        "candidate_bucket": "noise",
+        "recommended_set": "noise_suppression_candidate",
+        "confidence_band": "medium",
+        "manual_review_priority": "low",
+        "score_signal": 1,
+        "score_noise": 4,
+        "score_boundary": 0,
+        "reasons": [
+          "hint:team",
+          "missing_game_context",
+          "very_short_excerpt"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "suggested",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Source looks outside game-industry scope and should be manually confirmed.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B2D047",
+      "source_type": "news",
+      "title": "New Devil May Cry Season 2 Trailer Wastes No Time Giving Fans What They Want",
+      "content": "The second season of Netflix's animated Devil May Cry series is almost here, and ahead of its May 12 launch, a new trailer for the series has gone live. Building off of last season's cliffhanger, the teaser wastes no ti…",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/articles/new-devil-may-cry-season-2-trailer-wastes-no-time-giving-fans-what-they-want/1100-6538986/?ftag=CAD-01-10abi2f",
+      "annotation": {
+        "expected_signals": []
+      },
+      "draft_meta": {
+        "origin": "batch2_bucket_candidates",
+        "origin_file": "incoming_20260324_059.json",
+        "candidate_bucket": "noise",
+        "recommended_set": "noise_suppression_candidate",
+        "confidence_band": "medium",
+        "manual_review_priority": "low",
+        "score_signal": 1,
+        "score_noise": 4,
+        "score_boundary": 2,
+        "reasons": [
+          "hint:technical",
+          "missing_game_context",
+          "noise_patterns:1",
+          "boundary_patterns:1"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "suggested",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Source looks outside game-industry scope and should be manually confirmed.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    }
+  ]
+}

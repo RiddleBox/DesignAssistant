@@ -1,0 +1,395 @@
+{
+  "source_queue": "f:\\AIProjects\\DesignAssistant\\data-layer\\projects\\proj_004\\reports\\benchmark_review_queue_batch1.json",
+  "source_benchmark": "f:\\AIProjects\\DesignAssistant\\data-layer\\projects\\proj_004\\phase2.1_implementation\\data\\benchmark_samples_batch1_draft.json",
+  "range": "21-40",
+  "generated_for": "assisted second-pass review",
+  "items": [
+    {
+      "rank": 21,
+      "sample_id": "B1D010",
+      "title": "One Of The Most Controversial Battlefield Games Is Shutting Down On Consoles Soon",
+      "source_name": "GameSpot",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_url": "https://www.gamespot.com/articles/one-of-the-most-controversial-battlefield-games-is-shutting-down-on-consoles-soon/1100-6538954/?ftag=CAD-01-10abi2f",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "team"
+      ],
+      "recommended_bucket": "signal",
+      "recommended_signal_types": [
+        "market"
+      ],
+      "review_focus": "type",
+      "suggestion_confidence": "medium",
+      "one_line_reason": "Platform shutdown or product sunset looks more like a market lifecycle signal than a team change.",
+      "review_note": "If you treat service shutdowns as operational-market signals, retag to market; otherwise keep the current label."
+    },
+    {
+      "rank": 22,
+      "sample_id": "B1D068",
+      "title": "Nintendo cuts Switch 2 production, layoffs at Epic and PlayStation, and another Saudi acquisition - Patch Notes #45",
+      "source_name": "Game Developer",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_url": "https://www.gamedeveloper.com/business/nintendo-cuts-switch-2-production-layoffs-at-epic-and-playstation-and-another-saudi-acquisition-patch-notes-45",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "capital"
+      ],
+      "recommended_bucket": "signal",
+      "recommended_signal_types": [
+        "capital",
+        "market",
+        "team"
+      ],
+      "review_focus": "confirm",
+      "suggestion_confidence": "high",
+      "one_line_reason": "This roundup still functions as a paradigm compression signal because multiple concurrent cuts, layoffs, and acquisitions together expose an industry squeeze regime.",
+      "review_note": "Keep as signal if your benchmark allows compressed multi-event paradigm indicators rather than only single clean event reports."
+    },
+    {
+      "rank": 23,
+      "sample_id": "B1D047",
+      "title": "Fortnite producer asks for patience as developers 'pick up the pieces' after massive layoffs: 'We cannot even fully understand what kind of impacts this will have on the game for the rest of the year and likely beyond'",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/battle-royale/fortnite-producer-asks-for-patience-as-developers-pick-up-the-pieces-after-massive-layoffs-we-cannot-even-fully-understand-what-kind-of-impacts-this-will-have-on-the-game-for-the-rest-of-the-year-and-likely-beyond/",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "team"
+      ],
+      "recommended_bucket": "signal",
+      "recommended_signal_types": [
+        "team"
+      ],
+      "review_focus": "confirm",
+      "suggestion_confidence": "high",
+      "one_line_reason": "Layoff impact coverage remains a clear organizational or team signal.",
+      "review_note": "Keep as signal if the article centers on workforce cuts and downstream org impact."
+    },
+    {
+      "rank": 24,
+      "sample_id": "B1D017",
+      "title": "Microsoft announces Xbox Partner Preview for this week, with Ryu Ga Gotoku's Stranger Than Heaven finally making a showing",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/microsoft-announces-xbox-partner-preview-for-this-week-with-ryu-ga-gotokus-stranger-than-heaven-finally-making-a-showing",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "recommended_bucket": "noise",
+      "recommended_signal_types": [],
+      "review_focus": "confirm",
+      "suggestion_confidence": "high",
+      "one_line_reason": "Showcase/update/speculation style coverage fits negative benchmark scope.",
+      "review_note": "Keep as noise unless the full article contains a concrete structural business event."
+    },
+    {
+      "rank": 25,
+      "sample_id": "B1D022",
+      "title": "Behaviour Interactive acquires 7 Days to Die dev The Fun Pimps",
+      "source_name": "Game Developer",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_url": "https://www.gamedeveloper.com/business/behaviour-interactive-acquires-7-days-to-die-dev-the-fun-pimps",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "capital"
+      ],
+      "recommended_bucket": "signal",
+      "recommended_signal_types": [
+        "capital"
+      ],
+      "review_focus": "confirm",
+      "suggestion_confidence": "high",
+      "one_line_reason": "Acquisition of a game studio is a clear capital and ownership structure signal.",
+      "review_note": "Keep as signal unless the article is mostly retrospective and lacks a concrete transaction event."
+    },
+    {
+      "rank": 26,
+      "sample_id": "B1D026",
+      "title": "The RAMpocalypse Is Already Claiming Its First PC Gaming Handheld",
+      "source_name": "GameSpot",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_url": "https://www.gamespot.com/articles/the-rampocalypse-is-already-claiming-its-first-pc-gaming-handheld/1100-6538982/?ftag=CAD-01-10abi2f",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "market"
+      ],
+      "recommended_bucket": "signal",
+      "recommended_signal_types": [
+        "market"
+      ],
+      "review_focus": "confirm",
+      "suggestion_confidence": "medium-high",
+      "one_line_reason": "Gaming hardware pricing pressure from memory and storage cost shifts reads as a market or supply-chain signal.",
+      "review_note": "Keep as signal if your scope includes gaming hardware economics; otherwise reconsider benchmark scope boundary."
+    },
+    {
+      "rank": 27,
+      "sample_id": "B1D050",
+      "title": "Sony shuts down Dark Outlaw Games and downsizes mobile games development as PlayStation continues to rethink plans",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/sony-closes-dark-outlaw-games-and-downsizes-mobile-gaming-efforts",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "team"
+      ],
+      "recommended_bucket": "signal",
+      "recommended_signal_types": [
+        "team"
+      ],
+      "review_focus": "confirm",
+      "suggestion_confidence": "high",
+      "one_line_reason": "Studio closure and downsizing are concrete team and organizational structure changes.",
+      "review_note": "Keep as signal. This is a strong closure or downsize sample."
+    },
+    {
+      "rank": 28,
+      "sample_id": "B1D057",
+      "title": "Disney X Fortnite Is Still Happening, Despite Massive Cuts At Epic",
+      "source_name": "GameSpot",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_url": "https://www.gamespot.com/articles/disney-x-fortnite-is-still-happening-despite-massive-cuts-at-epic/1100-6539048/?ftag=CAD-01-10abi2f",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "team"
+      ],
+      "recommended_bucket": "signal",
+      "recommended_signal_types": [
+        "team"
+      ],
+      "review_focus": "boundary",
+      "suggestion_confidence": "medium",
+      "one_line_reason": "The partnership continuation itself is not a signal, but the article may still be valid if layoffs are central evidence.",
+      "review_note": "Confirm whether the article is really about Epic layoffs or mostly about Disney reassurance and partnership continuity."
+    },
+    {
+      "rank": 29,
+      "sample_id": "B1D061",
+      "title": "Stalker 2 Cost of Hope expansion announced during Xbox Partner Preview, and it's taking you to the Chernobyl nuclear power plant",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/stalker-2-cost-of-hope-expansion-xbox-partner-preview",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "recommended_bucket": "noise",
+      "recommended_signal_types": [],
+      "review_focus": "confirm",
+      "suggestion_confidence": "high",
+      "one_line_reason": "Showcase/update/speculation style coverage fits negative benchmark scope.",
+      "review_note": "Keep as noise unless the full article contains a concrete structural business event."
+    },
+    {
+      "rank": 30,
+      "sample_id": "B1D072",
+      "title": "Don't worry, Dispatch isn't going to be censored on Xbox",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/dont-worry-dispatch-isnt-going-to-be-censored-on-xbox",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "recommended_bucket": "noise",
+      "recommended_signal_types": [],
+      "review_focus": "confirm",
+      "suggestion_confidence": "high",
+      "one_line_reason": "Showcase/update/speculation style coverage fits negative benchmark scope.",
+      "review_note": "Keep as noise unless the full article contains a concrete structural business event."
+    },
+    {
+      "rank": 31,
+      "sample_id": "B1D082",
+      "title": "A year on from launching Wanderstop, Ivy Road are closing their doors after struggling to fund their next game",
+      "source_name": "Rock Paper Shotgun",
+      "published_at": "2026-03-28T00:00:00Z",
+      "source_url": "https://www.rockpapershotgun.com/a-year-on-from-launching-wanderstop-ivy-road-are-closing-their-doors-after-struggling-to-fund-their-next-game",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "market"
+      ],
+      "recommended_bucket": "signal",
+      "recommended_signal_types": [
+        "team",
+        "capital"
+      ],
+      "review_focus": "type",
+      "suggestion_confidence": "medium-high",
+      "one_line_reason": "Studio closure driven by funding difficulty points to org shutdown plus financing stress, not pure market signal.",
+      "review_note": "Prefer team as primary type; optionally include capital if you support multi-type corrected labels."
+    },
+    {
+      "rank": 32,
+      "sample_id": "B1D027",
+      "title": "Epic is ending 3 Fortnite game modes following its latest round of layoffs: 'We failed to build something awesome enough to attract and retain a large player base'",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/epic-is-ending-3-fortnite-game-modes-following-its-latest-round-of-layoffs-we-failed-to-build-something-awesome-enough-to-attract-and-retain-a-large-player-base/",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "team"
+      ],
+      "recommended_bucket": "signal",
+      "recommended_signal_types": [
+        "market"
+      ],
+      "review_focus": "type",
+      "suggestion_confidence": "medium",
+      "one_line_reason": "Ending game modes due to weak retention reads more like product or market performance than a team signal.",
+      "review_note": "Retag to market if your taxonomy tracks product-line rationalization under market outcomes."
+    },
+    {
+      "rank": 33,
+      "sample_id": "B1D040",
+      "title": "Tencent's genAI animation tools don't seem to make games more fun",
+      "source_name": "Game Developer",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_url": "https://www.gamedeveloper.com/art/tencent-s-genai-animation-tools-don-t-seem-to-make-games-more-fun",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "recommended_bucket": "signal",
+      "recommended_signal_types": [
+        "technical"
+      ],
+      "review_focus": "confirm",
+      "suggestion_confidence": "high",
+      "one_line_reason": "This is a meaningful reverse-paradigm indicator showing that AI production inflation does not automatically convert into player experience value.",
+      "review_note": "Keep as signal if your benchmark explicitly captures counter-signals that reveal the limit of AI productivity narratives in game experience."
+    },
+    {
+      "rank": 34,
+      "sample_id": "B1D048",
+      "title": "Fortnite producer says Epic's mass layoffs will impact the game in ways the remaining teams \"cannot even fully understand\"",
+      "source_name": "Rock Paper Shotgun",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_url": "https://www.rockpapershotgun.com/fortnite-producer-epic-layoffs-impact-cannot-be-understood",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "team"
+      ],
+      "recommended_bucket": "signal",
+      "recommended_signal_types": [
+        "team"
+      ],
+      "review_focus": "confirm",
+      "suggestion_confidence": "high",
+      "one_line_reason": "Layoff impact coverage remains a clear organizational or team signal.",
+      "review_note": "Keep as signal if the article centers on workforce cuts and downstream org impact."
+    },
+    {
+      "rank": 35,
+      "sample_id": "B1D083",
+      "title": "Former Valve writer hits out at Epic Games layoffs: \"It's not like they're a publicly traded company. It's not like there's some need to hit the stock market thing. This is Tim\"",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-28T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/former-valve-writer-hits-out-at-epic-games-layoffs-its-not-like-theyre-a-publicly-traded-company-its-not-like-theres-some-need-to-hit-the-stock-market-thing-this-is-tim",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "team"
+      ],
+      "recommended_bucket": "signal",
+      "recommended_signal_types": [
+        "team"
+      ],
+      "review_focus": "confirm",
+      "suggestion_confidence": "high",
+      "one_line_reason": "Layoff impact coverage remains a clear organizational or team signal.",
+      "review_note": "Keep as signal if the article centers on workforce cuts and downstream org impact."
+    },
+    {
+      "rank": 36,
+      "sample_id": "B1D095",
+      "title": "Don't worry Kingdom Hearts fans, it looks like we might get some new info on Kingdom Hearts 4 in... a year's time?",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/dont-worry-kingdom-hearts-fans-it-looks-like-we-might-get-some-new-info-on-kingdom-hearts-4-in-a-years-time",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "recommended_bucket": "noise",
+      "recommended_signal_types": [],
+      "review_focus": "confirm",
+      "suggestion_confidence": "high",
+      "one_line_reason": "Showcase/update/speculation style coverage fits negative benchmark scope.",
+      "review_note": "Keep as noise unless the full article contains a concrete structural business event."
+    },
+    {
+      "rank": 37,
+      "sample_id": "B1D003",
+      "title": "Crimson Desert has topped 2M sales within a day",
+      "source_name": "Game Developer",
+      "published_at": "2026-03-20T00:00:00Z",
+      "source_url": "https://www.gamedeveloper.com/business/crimson-desert-has-topped-2m-sales-within-a-day",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "market"
+      ],
+      "recommended_bucket": "signal",
+      "recommended_signal_types": [
+        "market"
+      ],
+      "review_focus": "confirm",
+      "suggestion_confidence": "high",
+      "one_line_reason": "Rapid sales milestone is a straightforward market-performance signal.",
+      "review_note": "Keep as signal. Strong clean sales metric sample."
+    },
+    {
+      "rank": 38,
+      "sample_id": "B1D008",
+      "title": "As Crimson Desert developer Pearl Abyss rushes to fix pressing issues, players are asking for updates to the time-gated dragon mount",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/crimson-desert-players-criticize-temporary-mounts-like-the-dragon",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "market"
+      ],
+      "recommended_bucket": "signal",
+      "recommended_signal_types": [
+        "market"
+      ],
+      "review_focus": "boundary",
+      "suggestion_confidence": "medium",
+      "one_line_reason": "Launch backlash plus remediation may be signal-like, but this could also be ordinary post-launch operations coverage.",
+      "review_note": "Keep only if the article contains durable market or strategy implications beyond routine fix discourse."
+    },
+    {
+      "rank": 39,
+      "sample_id": "B1D028",
+      "title": "I crashed out reading layoff condolence letters in this shop sim about a laid-off adventurer made by a laid-off Xbox developer",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/sim/i-crashed-out-reading-layoff-condolence-letters-in-this-shop-sim-about-a-laid-off-adventurer-made-by-a-laid-off-xbox-developer/",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "team"
+      ],
+      "recommended_bucket": "signal",
+      "recommended_signal_types": [
+        "team"
+      ],
+      "review_focus": "confirm",
+      "suggestion_confidence": "medium",
+      "one_line_reason": "Likely keep current draft label pending human confirmation.",
+      "review_note": "Quick confirm unless full article changes the interpretation."
+    },
+    {
+      "rank": 40,
+      "sample_id": "B1D045",
+      "title": "Investors Are Having a 'Whoopsie' Moment — After 3 Million Sales, Shares in Crimson Desert Dev Pearl Abyss Skyrocket",
+      "source_name": "IGN Game News",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_url": "https://www.ign.com/articles/investors-are-having-a-whoopsie-moment-after-3-million-sales-shares-in-crimson-desert-dev-pearl-abyss-skyrocket",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "market"
+      ],
+      "recommended_bucket": "signal",
+      "recommended_signal_types": [
+        "market"
+      ],
+      "review_focus": "confirm",
+      "suggestion_confidence": "medium",
+      "one_line_reason": "Likely keep current draft label pending human confirmation.",
+      "review_note": "Quick confirm unless full article changes the interpretation."
+    }
+  ]
+}

@@ -298,6 +298,55 @@
    - 使用 JSON 校验工具检查格式
    - 确认样本数量和分布
 
+### 步骤 6：多批次 benchmark 准备（batch1 / batch2 / 后续批次）
+
+当单次候选量较大时，推荐把形式化 benchmark 准备拆成多个批次，并保留每一批的中间产物 [[memory:zhkz686l]]。
+
+**推荐产物链路**：
+
+1. **候选报告**：例如 `reports/batch2_bucket_candidates.json`
+2. **正式草案**：例如 `phase2.1_implementation/data/benchmark_samples_batch2_draft.json`
+3. **review queue**：例如 `reports/benchmark_review_queue_batch2.json`
+4. **辅助建议**：例如 `reports/benchmark_review_assisted_batch2_pass1.json`
+
+**推荐脚本入口**：
+
+- `derive_followup_batch_candidates.py`
+  - 用途：从上一轮总候选报告里排除已经进入已有 draft 的 `origin_file`
+  - 默认行为：基于 `batch1` 候选报告扣除 `benchmark_samples_batch1_draft.json`，生成 `batch2` 候选文件
+- `batch1_build_benchmark_draft.py`
+  - 现已参数化，可用于 `batch1`、`batch2` 及后续批次
+  - 关键参数：`--input`、`--output`、`--sample-prefix`、`--origin-label`、`--signal-label`
+  - 批次筛选参数：`--signal-confidence-bands`、`--noise-confidence-bands`、`--noise-excluded-priorities`、`--excluded-buckets`
+- `export_benchmark_review_queue.py`
+  - 用途：把 draft 转成 reviewer 友好的扁平 queue
+- `build_assisted_review_suggestions.py`
+  - 用途：基于 queue 生成第一轮辅助建议 shortlist
+
+**batch2 的推荐策略**：
+
+- `batch1` 可以继续使用高置信默认规则：
+  - signal: `high`
+  - noise: `high` 且非 `high` priority
+- `batch2` 建议放宽到中高置信清晰样本：
+  - signal: `medium,high`
+  - noise: `medium,high` 且非 `high` priority
+  - 排除 `boundary`
+
+**batch2 实际命令示例**：
+
+```bash
+python derive_followup_batch_candidates.py
+python batch1_build_benchmark_draft.py --input reports/batch2_bucket_candidates.json --output phase2.1_implementation/data/benchmark_samples_batch2_draft.json --sample-prefix B2D --origin-label batch2_bucket_candidates --signal-label batch2_candidate_signal --signal-confidence-bands medium,high --noise-confidence-bands medium,high --noise-excluded-priorities high --excluded-buckets boundary
+python export_benchmark_review_queue.py --input phase2.1_implementation/data/benchmark_samples_batch2_draft.json --output reports/benchmark_review_queue_batch2.json
+python build_assisted_review_suggestions.py --input reports/benchmark_review_queue_batch2.json --output reports/benchmark_review_assisted_batch2_pass1.json
+```
+
+**经验说明**：
+- 如果 follow-up batch 按 `batch1` 的高置信默认规则得到空 draft，通常不是没有数据，而是剩余样本里缺少 `high-confidence signal`
+- 此时优先放宽到 `medium,high` 的 signal / noise 清晰样本，而不是直接纳入 `boundary`
+- 每一批都应保留候选报告、draft、queue、assisted suggestions，便于后续复盘与再加工
+
 ---
 
 ## 五、质量检查清单

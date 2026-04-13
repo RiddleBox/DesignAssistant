@@ -1,0 +1,1281 @@
+{
+  "source_recommendations": "f:\\AIProjects\\DesignAssistant\\data-layer\\projects\\proj_004\\reports\\benchmark_review_21_40_recommendations.json",
+  "source_benchmark": "f:\\AIProjects\\DesignAssistant\\data-layer\\projects\\proj_004\\phase2.1_implementation\\data\\benchmark_samples_batch1_draft.json",
+  "purpose": "Reviewer confirmation backfill draft for items 21-40. Suggestions are prefilled but not yet final.",
+  "instructions_for_reviewer": {
+    "how_to_use": [
+      "Check each row's suggested human_review fields.",
+      "Change human_review.decision from `suggested` to `accepted` if you agree.",
+      "If you disagree, keep `decision` as `modified` and edit corrected_bucket / corrected_signal_types / corrected_expected_signals / review_notes.",
+      "After confirmation, approved changes can be merged back into the formal benchmark draft in a later step."
+    ],
+    "decision_meaning": {
+      "suggested": "AI-prepared recommendation, not yet confirmed by human.",
+      "accepted": "Human confirmed the suggestion as final.",
+      "modified": "Human changed one or more suggested fields.",
+      "rejected": "Human rejected the suggestion and plans to keep original draft labeling."
+    }
+  },
+  "items": [
+    {
+      "sample_id": "B1D010",
+      "source_type": "news",
+      "title": "One Of The Most Controversial Battlefield Games Is Shutting Down On Consoles Soon",
+      "content": "Electronic Arts has announced that Battlefield Hardline--the 2015 FPS entry in the series focused on police and heists, not traditional military warfare--will shut down on console this June. The game will be removed fro…",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/articles/one-of-the-most-controversial-battlefield-games-is-shutting-down-on-consoles-soon/1100-6538954/?ftag=CAD-01-10abi2f",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "team",
+            "signal_label": "batch1_candidate_signal",
+            "description": "Batch 1 draft candidate derived from incoming sample `incoming_20260323_018.json`: One Of The Most Controversial Battlefield Games Is Shutting Down On Consoles Soon. Electronic Arts has announced that Battlefield Hardline--the 2015 FPS entry in the series focused on police and heists, not traditional military warfare--will shut down on console this June. The game will be removed fro…",
+            "intensity_score": 9,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ]
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260323_018.json",
+        "candidate_bucket": "signal",
+        "recommended_set": "main_baseline_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 13,
+        "score_noise": 0,
+        "score_boundary": 3,
+        "reasons": [
+          "signal_pattern:team:3",
+          "signal_pattern:market:1",
+          "hint:team",
+          "high_value_entities:xbox",
+          "game_context",
+          "boundary_patterns:1",
+          "announcement_style",
+          "structural_change_keywords"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "signal",
+        "corrected_signal_types": [
+          "market"
+        ],
+        "corrected_expected_signals": [
+          {
+            "signal_type": "market",
+            "signal_label": "ai_suggested_signal",
+            "description": "AI-assisted review suggestion for B1D010: One Of The Most Controversial Battlefield Games Is Shutting Down On Consoles Soon",
+            "intensity_score": 7,
+            "confidence_score": 7,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ],
+        "review_notes": "If you treat service shutdowns as operational-market signals, retag to market; otherwise keep the current label.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D068",
+      "source_type": "news",
+      "title": "Nintendo cuts Switch 2 production, layoffs at Epic and PlayStation, and another Saudi acquisition - Patch Notes #45",
+      "content": "Plus: Crimson Desert sells 3 million copies and a love letter to 'girl games.'",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_name": "Game Developer",
+      "source_url": "https://www.gamedeveloper.com/business/nintendo-cuts-switch-2-production-layoffs-at-epic-and-playstation-and-another-saudi-acquisition-patch-notes-45",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "capital",
+            "signal_label": "batch1_candidate_signal",
+            "description": "Batch 1 draft candidate derived from incoming sample `incoming_20260327_001.json`: Nintendo cuts Switch 2 production, layoffs at Epic and PlayStation, and another Saudi acquisition - Patch Notes #45. Plus: Crimson Desert sells 3 million copies and a love letter to 'girl games.'",
+            "intensity_score": 9,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ]
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260327_001.json",
+        "candidate_bucket": "signal",
+        "recommended_set": "main_baseline_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 13,
+        "score_noise": 4,
+        "score_boundary": 0,
+        "reasons": [
+          "signal_pattern:capital:1",
+          "signal_pattern:team:1",
+          "hint:capital",
+          "high_value_entities:playstation,nintendo,epic",
+          "game_context",
+          "noise_patterns:1",
+          "concrete_numbers",
+          "very_short_excerpt",
+          "structural_change_keywords"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "modified",
+        "corrected_bucket": "signal",
+        "corrected_signal_types": [
+          "capital",
+          "market",
+          "team"
+        ],
+        "corrected_expected_signals": [
+          {
+            "signal_type": "capital",
+            "signal_label": "paradigm_compression_signal",
+            "description": "Compressed signal of capital concentration and acquisition activity within a broader industry squeeze moment.",
+            "intensity_score": 8,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          },
+          {
+            "signal_type": "market",
+            "signal_label": "paradigm_compression_signal",
+            "description": "Compressed signal of demand, production, and hardware pressure showing a broader market squeeze rather than an isolated event.",
+            "intensity_score": 8,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          },
+          {
+            "signal_type": "team",
+            "signal_label": "paradigm_compression_signal",
+            "description": "Compressed signal of layoffs and organizational contraction across major game companies.",
+            "intensity_score": 8,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ],
+        "review_notes": "Treat this roundup as a paradigm compression signal rather than noise. The co-occurrence of production cuts, layoffs, and acquisition activity reveals an industry squeeze regime instead of a single isolated event.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D047",
+      "source_type": "news",
+      "title": "Fortnite producer asks for patience as developers 'pick up the pieces' after massive layoffs: 'We cannot even fully understand what kind of impacts this will have on the game for the rest of the year and likely beyond'",
+      "content": "Epic laid off more than 1,000 employees yesterday as CEO Tim Sweeney says the company is still spending more than it's making.",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/games/battle-royale/fortnite-producer-asks-for-patience-as-developers-pick-up-the-pieces-after-massive-layoffs-we-cannot-even-fully-understand-what-kind-of-impacts-this-will-have-on-the-game-for-the-rest-of-the-year-and-likely-beyond/",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "team",
+            "signal_label": "batch1_candidate_signal",
+            "description": "Batch 1 draft candidate derived from incoming sample `incoming_20260325_021.json`: Fortnite producer asks for patience as developers 'pick up the pieces' after massive layoffs: 'We cannot even fully understand what kind of impacts this will have on the game for the rest of the year and likely beyond'. Epic laid off more than 1,000 employees yesterday as CEO Tim Sweeney says the company is still spending more than it's making.",
+            "intensity_score": 9,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ]
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260325_021.json",
+        "candidate_bucket": "signal",
+        "recommended_set": "main_baseline_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 11,
+        "score_noise": 0,
+        "score_boundary": 1,
+        "reasons": [
+          "signal_pattern:team:2",
+          "signal_pattern:market:1",
+          "hint:team",
+          "high_value_entities:epic",
+          "game_context",
+          "short_excerpt",
+          "structural_change_keywords"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "signal",
+        "corrected_signal_types": [
+          "team"
+        ],
+        "corrected_expected_signals": [
+          {
+            "signal_type": "team",
+            "signal_label": "ai_suggested_signal",
+            "description": "AI-assisted review suggestion for B1D047: Fortnite producer asks for patience as developers 'pick up the pieces' after massive layoffs: 'We cannot even fully understand what kind of impacts this will have on the game for the rest of the year and likely beyond'",
+            "intensity_score": 7,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ],
+        "review_notes": "Keep as signal if the article centers on workforce cuts and downstream org impact.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D017",
+      "source_type": "news",
+      "title": "Microsoft announces Xbox Partner Preview for this week, with Ryu Ga Gotoku's Stranger Than Heaven finally making a showing",
+      "content": "Microsoft has announced its next Xbox Partner Preview showcase will take place later this week, and focus on third-party games from the likes of Sega and GSC Game World . Read more",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/microsoft-announces-xbox-partner-preview-for-this-week-with-ryu-ga-gotokus-stranger-than-heaven-finally-making-a-showing",
+      "annotation": {
+        "expected_signals": []
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260323_045.json",
+        "candidate_bucket": "noise",
+        "recommended_set": "noise_suppression_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 4,
+        "score_noise": 10,
+        "score_boundary": 1,
+        "reasons": [
+          "hint:technical",
+          "high_value_entities:microsoft,xbox",
+          "game_context",
+          "noise_patterns:2",
+          "low_information_excerpt",
+          "truncated_article",
+          "announcement_style",
+          "shallow_announcement_penalty"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Keep as noise unless the full article contains a concrete structural business event.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D022",
+      "source_type": "news",
+      "title": "Behaviour Interactive acquires 7 Days to Die dev The Fun Pimps",
+      "content": "Behaviour shut down Midwinter Entertainment in 2024, amidst two layoff rounds.",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_name": "Game Developer",
+      "source_url": "https://www.gamedeveloper.com/business/behaviour-interactive-acquires-7-days-to-die-dev-the-fun-pimps",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "capital",
+            "signal_label": "batch1_candidate_signal",
+            "description": "Batch 1 draft candidate derived from incoming sample `incoming_20260324_002.json`: Behaviour Interactive acquires 7 Days to Die dev The Fun Pimps. Behaviour shut down Midwinter Entertainment in 2024, amidst two layoff rounds.",
+            "intensity_score": 9,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ]
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260324_002.json",
+        "candidate_bucket": "signal",
+        "recommended_set": "main_baseline_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 10,
+        "score_noise": 2,
+        "score_boundary": 0,
+        "reasons": [
+          "signal_pattern:capital:1",
+          "signal_pattern:team:2",
+          "hint:capital",
+          "game_context",
+          "very_short_excerpt",
+          "structural_change_keywords"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "modified",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Treat this as noise. It is a routine acquisition and does not, by itself, indicate a paradigm shift, a new capital source, or a broader change in industry operating logic.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D040",
+      "source_type": "news",
+      "title": "Tencent's genAI animation tools don't seem to make games more fun",
+      "content": "Tencent's generative AI tools shown off at GDC are technically impressive, but do they offer anything for developers?",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_name": "Game Developer",
+      "source_url": "https://www.gamedeveloper.com/art/tencent-s-genai-animation-tools-don-t-seem-to-make-games-more-fun",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "technical",
+            "signal_label": "batch1_candidate_signal",
+            "description": "Batch 1 draft candidate derived from incoming sample `incoming_20260324_068.json`: Tencent's genAI animation tools don't seem to make games more fun. Tencent's generative AI tools shown off at GDC are technically impressive, but do they offer anything for developers?",
+            "intensity_score": 9,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ]
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260324_068.json",
+        "candidate_bucket": "signal",
+        "recommended_set": "main_baseline_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 9,
+        "score_noise": 0,
+        "score_boundary": 1,
+        "reasons": [
+          "signal_pattern:technical:3",
+          "hint:technical",
+          "high_value_entities:tencent",
+          "game_context",
+          "short_excerpt"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "modified",
+        "corrected_bucket": "signal",
+        "corrected_signal_types": [
+          "technical"
+        ],
+        "corrected_expected_signals": [
+          {
+            "signal_type": "technical",
+            "signal_label": "reverse_paradigm_signal",
+            "description": "Important counter-signal showing that AI production inflation does not automatically translate into better game experience or player value.",
+            "intensity_score": 8,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ],
+        "review_notes": "Keep as signal. This is an important reverse-paradigm indicator: higher AI-assisted production capability does not necessarily produce better experiential value for players.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D026",
+      "source_type": "news",
+      "title": "The RAMpocalypse Is Already Claiming Its First PC Gaming Handheld",
+      "content": "Handheld gaming PCs have become more common since the launch of the Steam Deck, with significant price differences across brands. Due to rising memory and storage costs driven by increased demand from AI and data-center…",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/articles/the-rampocalypse-is-already-claiming-its-first-pc-gaming-handheld/1100-6538982/?ftag=CAD-01-10abi2f",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "market",
+            "signal_label": "batch1_candidate_signal",
+            "description": "Batch 1 draft candidate derived from incoming sample `incoming_20260324_018.json`: The RAMpocalypse Is Already Claiming Its First PC Gaming Handheld. Handheld gaming PCs have become more common since the launch of the Steam Deck, with significant price differences across brands. Due to rising memory and storage costs driven by increased demand from AI and data-center…",
+            "intensity_score": 9,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ]
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260324_018.json",
+        "candidate_bucket": "signal",
+        "recommended_set": "main_baseline_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 10,
+        "score_noise": 0,
+        "score_boundary": 0,
+        "reasons": [
+          "signal_pattern:technical:1",
+          "signal_pattern:market:3",
+          "hint:market",
+          "game_context"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "signal",
+        "corrected_signal_types": [
+          "market"
+        ],
+        "corrected_expected_signals": [
+          {
+            "signal_type": "market",
+            "signal_label": "ai_suggested_signal",
+            "description": "AI-assisted review suggestion for B1D026: The RAMpocalypse Is Already Claiming Its First PC Gaming Handheld",
+            "intensity_score": 7,
+            "confidence_score": 7,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ],
+        "review_notes": "Keep as signal if your scope includes gaming hardware economics; otherwise reconsider benchmark scope boundary.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D050",
+      "source_type": "news",
+      "title": "Sony shuts down Dark Outlaw Games and downsizes mobile games development as PlayStation continues to rethink plans",
+      "content": "2026 has been off to an awful start when it comes to the health of the games industry, despite consumer spending holding up in the face of increasingly global pressure. Sony and PlayStation haven't escaped the layoff-re…",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/sony-closes-dark-outlaw-games-and-downsizes-mobile-gaming-efforts",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "team",
+            "signal_label": "batch1_candidate_signal",
+            "description": "Batch 1 draft candidate derived from incoming sample `incoming_20260325_026.json`: Sony shuts down Dark Outlaw Games and downsizes mobile games development as PlayStation continues to rethink plans. 2026 has been off to an awful start when it comes to the health of the games industry, despite consumer spending holding up in the face of increasingly global pressure. Sony and PlayStation haven't escaped the layoff-re…",
+            "intensity_score": 9,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ]
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260325_026.json",
+        "candidate_bucket": "signal",
+        "recommended_set": "main_baseline_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 10,
+        "score_noise": 6,
+        "score_boundary": 1,
+        "reasons": [
+          "signal_pattern:team:1",
+          "signal_pattern:market:1",
+          "hint:team",
+          "high_value_entities:sony,playstation",
+          "game_context",
+          "low_information_excerpt",
+          "truncated_article",
+          "announcement_style",
+          "shallow_announcement_penalty",
+          "structural_change_keywords"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "signal",
+        "corrected_signal_types": [
+          "team"
+        ],
+        "corrected_expected_signals": [
+          {
+            "signal_type": "team",
+            "signal_label": "ai_suggested_signal",
+            "description": "AI-assisted review suggestion for B1D050: Sony shuts down Dark Outlaw Games and downsizes mobile games development as PlayStation continues to rethink plans",
+            "intensity_score": 7,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ],
+        "review_notes": "Keep as signal. This is a strong closure or downsize sample.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D057",
+      "source_type": "news",
+      "title": "Disney X Fortnite Is Still Happening, Despite Massive Cuts At Epic",
+      "content": "Despite the massive recent layoffs at Epic Games, Disney says it hasn't abandoned its plans to build a universe inside Fortnite . Epic is still fully on board, too--even though it just laid off the artist who created ma…",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/articles/disney-x-fortnite-is-still-happening-despite-massive-cuts-at-epic/1100-6539048/?ftag=CAD-01-10abi2f",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "team",
+            "signal_label": "batch1_candidate_signal",
+            "description": "Batch 1 draft candidate derived from incoming sample `incoming_20260326_020.json`: Disney X Fortnite Is Still Happening, Despite Massive Cuts At Epic. Despite the massive recent layoffs at Epic Games, Disney says it hasn't abandoned its plans to build a universe inside Fortnite . Epic is still fully on board, too--even though it just laid off the artist who created ma…",
+            "intensity_score": 9,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ]
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260326_020.json",
+        "candidate_bucket": "signal",
+        "recommended_set": "main_baseline_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 10,
+        "score_noise": 0,
+        "score_boundary": 2,
+        "reasons": [
+          "signal_pattern:team:2",
+          "hint:team",
+          "high_value_entities:epic,disney",
+          "game_context",
+          "boundary_patterns:1",
+          "structural_change_keywords"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "signal",
+        "corrected_signal_types": [
+          "team"
+        ],
+        "corrected_expected_signals": [
+          {
+            "signal_type": "team",
+            "signal_label": "ai_suggested_signal",
+            "description": "AI-assisted review suggestion for B1D057: Disney X Fortnite Is Still Happening, Despite Massive Cuts At Epic",
+            "intensity_score": 7,
+            "confidence_score": 7,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ],
+        "review_notes": "Confirm whether the article is really about Epic layoffs or mostly about Disney reassurance and partnership continuity.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D061",
+      "source_type": "news",
+      "title": "Stalker 2 Cost of Hope expansion announced during Xbox Partner Preview, and it's taking you to the Chernobyl nuclear power plant",
+      "content": "GSC Game World has announced new DLC for Stalker 2 at today's Xbox Partner Showcase. Titled Cost of Hope, it's a full expansion to the first person shooter set to release Summer 2026. Read more",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/stalker-2-cost-of-hope-expansion-xbox-partner-preview",
+      "annotation": {
+        "expected_signals": []
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260326_059.json",
+        "candidate_bucket": "noise",
+        "recommended_set": "noise_suppression_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 3,
+        "score_noise": 10,
+        "score_boundary": 1,
+        "reasons": [
+          "hint:technical",
+          "high_value_entities:xbox",
+          "game_context",
+          "noise_patterns:2",
+          "low_information_excerpt",
+          "truncated_article",
+          "announcement_style",
+          "shallow_announcement_penalty"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Keep as noise unless the full article contains a concrete structural business event.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D072",
+      "source_type": "news",
+      "title": "Don't worry, Dispatch isn't going to be censored on Xbox",
+      "content": "During last night's Xbox Partner Preview showcase, AdHoc announced that its brilliant superhero workplace comedy Dispatch would be heading over to Microsoft's Series X/S consoles, as well as Xbox on PC and Xbox Cloud. R…",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/dont-worry-dispatch-isnt-going-to-be-censored-on-xbox",
+      "annotation": {
+        "expected_signals": []
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260327_027.json",
+        "candidate_bucket": "noise",
+        "recommended_set": "noise_suppression_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 4,
+        "score_noise": 10,
+        "score_boundary": 1,
+        "reasons": [
+          "hint:technical",
+          "high_value_entities:microsoft,xbox",
+          "game_context",
+          "noise_patterns:2",
+          "low_information_excerpt",
+          "truncated_article",
+          "announcement_style",
+          "shallow_announcement_penalty"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Keep as noise unless the full article contains a concrete structural business event.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D082",
+      "source_type": "news",
+      "title": "A year on from launching Wanderstop, Ivy Road are closing their doors after struggling to fund their next game",
+      "content": "It's been a little over a year since the release of Wanderstop , the debut game of Ivy Road, itself a studio made up of Stanley Parable, Gone Home , and Minecraft talent. Since then, the developer has been trying to fin…",
+      "published_at": "2026-03-28T00:00:00Z",
+      "source_name": "Rock Paper Shotgun",
+      "source_url": "https://www.rockpapershotgun.com/a-year-on-from-launching-wanderstop-ivy-road-are-closing-their-doors-after-struggling-to-fund-their-next-game",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "market",
+            "signal_label": "batch1_candidate_signal",
+            "description": "Batch 1 draft candidate derived from incoming sample `incoming_20260328_002.json`: A year on from launching Wanderstop, Ivy Road are closing their doors after struggling to fund their next game. It's been a little over a year since the release of Wanderstop , the debut game of Ivy Road, itself a studio made up of Stanley Parable, Gone Home , and Minecraft talent. Since then, the developer has been trying to fin…",
+            "intensity_score": 9,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ]
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260328_002.json",
+        "candidate_bucket": "signal",
+        "recommended_set": "main_baseline_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 10,
+        "score_noise": 6,
+        "score_boundary": 1,
+        "reasons": [
+          "signal_pattern:capital:1",
+          "signal_pattern:team:1",
+          "signal_pattern:technical:1",
+          "hint:market",
+          "game_context",
+          "low_information_excerpt",
+          "truncated_article",
+          "announcement_style",
+          "shallow_announcement_penalty",
+          "structural_change_keywords"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "signal",
+        "corrected_signal_types": [
+          "team",
+          "capital"
+        ],
+        "corrected_expected_signals": [
+          {
+            "signal_type": "team",
+            "signal_label": "ai_suggested_signal",
+            "description": "AI-assisted review suggestion for B1D082: A year on from launching Wanderstop, Ivy Road are closing their doors after struggling to fund their next game",
+            "intensity_score": 7,
+            "confidence_score": 7,
+            "timeliness_score": 5,
+            "entities": []
+          },
+          {
+            "signal_type": "capital",
+            "signal_label": "ai_suggested_signal",
+            "description": "AI-assisted review suggestion for B1D082: A year on from launching Wanderstop, Ivy Road are closing their doors after struggling to fund their next game",
+            "intensity_score": 7,
+            "confidence_score": 7,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ],
+        "review_notes": "Prefer team as primary type; optionally include capital if you support multi-type corrected labels.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D027",
+      "source_type": "news",
+      "title": "Epic is ending 3 Fortnite game modes following its latest round of layoffs: 'We failed to build something awesome enough to attract and retain a large player base'",
+      "content": "Rocket Racing, Ballistic, and Fortnite Festival Battle Stage are all being ended, and Epic is also removing Horizon Chase Turbo from sale.",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/games/epic-is-ending-3-fortnite-game-modes-following-its-latest-round-of-layoffs-we-failed-to-build-something-awesome-enough-to-attract-and-retain-a-large-player-base/",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "team",
+            "signal_label": "batch1_candidate_signal",
+            "description": "Batch 1 draft candidate derived from incoming sample `incoming_20260324_023.json`: Epic is ending 3 Fortnite game modes following its latest round of layoffs: 'We failed to build something awesome enough to attract and retain a large player base'. Rocket Racing, Ballistic, and Fortnite Festival Battle Stage are all being ended, and Epic is also removing Horizon Chase Turbo from sale.",
+            "intensity_score": 9,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ]
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260324_023.json",
+        "candidate_bucket": "signal",
+        "recommended_set": "main_baseline_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 9,
+        "score_noise": 0,
+        "score_boundary": 1,
+        "reasons": [
+          "signal_pattern:team:1",
+          "signal_pattern:market:1",
+          "hint:team",
+          "high_value_entities:epic",
+          "game_context",
+          "short_excerpt",
+          "structural_change_keywords"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "signal",
+        "corrected_signal_types": [
+          "market"
+        ],
+        "corrected_expected_signals": [
+          {
+            "signal_type": "market",
+            "signal_label": "ai_suggested_signal",
+            "description": "AI-assisted review suggestion for B1D027: Epic is ending 3 Fortnite game modes following its latest round of layoffs: 'We failed to build something awesome enough to attract and retain a large player base'",
+            "intensity_score": 7,
+            "confidence_score": 7,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ],
+        "review_notes": "Retag to market if your taxonomy tracks product-line rationalization under market outcomes.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D040",
+      "source_type": "news",
+      "title": "Tencent's genAI animation tools don't seem to make games more fun",
+      "content": "Tencent's generative AI tools shown off at GDC are technically impressive, but do they offer anything for developers?",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_name": "Game Developer",
+      "source_url": "https://www.gamedeveloper.com/art/tencent-s-genai-animation-tools-don-t-seem-to-make-games-more-fun",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "technical",
+            "signal_label": "batch1_candidate_signal",
+            "description": "Batch 1 draft candidate derived from incoming sample `incoming_20260324_068.json`: Tencent's genAI animation tools don't seem to make games more fun. Tencent's generative AI tools shown off at GDC are technically impressive, but do they offer anything for developers?",
+            "intensity_score": 9,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ]
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260324_068.json",
+        "candidate_bucket": "signal",
+        "recommended_set": "main_baseline_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 9,
+        "score_noise": 0,
+        "score_boundary": 1,
+        "reasons": [
+          "signal_pattern:technical:3",
+          "hint:technical",
+          "high_value_entities:tencent",
+          "game_context",
+          "short_excerpt"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "rejected",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Downgrade to noise unless the article contains a concrete Tencent deployment or policy action rather than analysis.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D048",
+      "source_type": "news",
+      "title": "Fortnite producer says Epic's mass layoffs will impact the game in ways the remaining teams \"cannot even fully understand\"",
+      "content": "Following Epic Games' mass layoffs , a Fortnite producer has said that the devs left behind \"cannot even fully understand\" the sort of impact the job cuts will have on the game during this year and into the future. Read…",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_name": "Rock Paper Shotgun",
+      "source_url": "https://www.rockpapershotgun.com/fortnite-producer-epic-layoffs-impact-cannot-be-understood",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "team",
+            "signal_label": "batch1_candidate_signal",
+            "description": "Batch 1 draft candidate derived from incoming sample `incoming_20260325_022.json`: Fortnite producer says Epic's mass layoffs will impact the game in ways the remaining teams \"cannot even fully understand\". Following Epic Games' mass layoffs , a Fortnite producer has said that the devs left behind \"cannot even fully understand\" the sort of impact the job cuts will have on the game during this year and into the future. Read…",
+            "intensity_score": 9,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ]
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260325_022.json",
+        "candidate_bucket": "signal",
+        "recommended_set": "main_baseline_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 9,
+        "score_noise": 3,
+        "score_boundary": 0,
+        "reasons": [
+          "signal_pattern:team:2",
+          "hint:team",
+          "high_value_entities:epic",
+          "game_context",
+          "low_information_excerpt",
+          "truncated_article",
+          "structural_change_keywords"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "signal",
+        "corrected_signal_types": [
+          "team"
+        ],
+        "corrected_expected_signals": [
+          {
+            "signal_type": "team",
+            "signal_label": "ai_suggested_signal",
+            "description": "AI-assisted review suggestion for B1D048: Fortnite producer says Epic's mass layoffs will impact the game in ways the remaining teams \"cannot even fully understand\"",
+            "intensity_score": 7,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ],
+        "review_notes": "Keep as signal if the article centers on workforce cuts and downstream org impact.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D083",
+      "source_type": "news",
+      "title": "Former Valve writer hits out at Epic Games layoffs: \"It's not like they're a publicly traded company. It's not like there's some need to hit the stock market thing. This is Tim\"",
+      "content": "Prolific former Valve writer, Chet Faliszek, has hit out at Epic Games founder Tim Sweeney, asking why anyone at Epic \"should work hard\" when staff have no agency and \"the recent 1,000 job cuts didn't come because of sh…",
+      "published_at": "2026-03-28T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/former-valve-writer-hits-out-at-epic-games-layoffs-its-not-like-theyre-a-publicly-traded-company-its-not-like-theres-some-need-to-hit-the-stock-market-thing-this-is-tim",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "team",
+            "signal_label": "batch1_candidate_signal",
+            "description": "Batch 1 draft candidate derived from incoming sample `incoming_20260328_006.json`: Former Valve writer hits out at Epic Games layoffs: \"It's not like they're a publicly traded company. It's not like there's some need to hit the stock market thing. This is Tim\". Prolific former Valve writer, Chet Faliszek, has hit out at Epic Games founder Tim Sweeney, asking why anyone at Epic \"should work hard\" when staff have no agency and \"the recent 1,000 job cuts didn't come because of sh…",
+            "intensity_score": 9,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ]
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260328_006.json",
+        "candidate_bucket": "signal",
+        "recommended_set": "main_baseline_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 9,
+        "score_noise": 3,
+        "score_boundary": 0,
+        "reasons": [
+          "signal_pattern:team:2",
+          "hint:team",
+          "high_value_entities:epic",
+          "game_context",
+          "low_information_excerpt",
+          "truncated_article",
+          "structural_change_keywords"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "signal",
+        "corrected_signal_types": [
+          "team"
+        ],
+        "corrected_expected_signals": [
+          {
+            "signal_type": "team",
+            "signal_label": "ai_suggested_signal",
+            "description": "AI-assisted review suggestion for B1D083: Former Valve writer hits out at Epic Games layoffs: \"It's not like they're a publicly traded company. It's not like there's some need to hit the stock market thing. This is Tim\"",
+            "intensity_score": 7,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ],
+        "review_notes": "Keep as signal if the article centers on workforce cuts and downstream org impact.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D095",
+      "source_type": "news",
+      "title": "Don't worry Kingdom Hearts fans, it looks like we might get some new info on Kingdom Hearts 4 in... a year's time?",
+      "content": "A new illustration published to celebrate the 24th anniversary of Kingdom Hearts has some fans' hopes reignited for a Kingdom Hearts 4 update. Read more",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/dont-worry-kingdom-hearts-fans-it-looks-like-we-might-get-some-new-info-on-kingdom-hearts-4-in-a-years-time",
+      "annotation": {
+        "expected_signals": []
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260330_029.json",
+        "candidate_bucket": "noise",
+        "recommended_set": "noise_suppression_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 1,
+        "score_noise": 9,
+        "score_boundary": 3,
+        "reasons": [
+          "hint:technical",
+          "missing_game_context",
+          "noise_patterns:2",
+          "low_information_excerpt",
+          "boundary_patterns:1",
+          "short_excerpt",
+          "truncated_article"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Keep as noise unless the full article contains a concrete structural business event.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D003",
+      "source_type": "news",
+      "title": "Crimson Desert has topped 2M sales within a day",
+      "content": "The studio is planning to \"make improvements quickly\" based on player feedback.",
+      "published_at": "2026-03-20T00:00:00Z",
+      "source_name": "Game Developer",
+      "source_url": "https://www.gamedeveloper.com/business/crimson-desert-has-topped-2m-sales-within-a-day",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "market",
+            "signal_label": "batch1_candidate_signal",
+            "description": "Batch 1 draft candidate derived from incoming sample `incoming_20260320_002.json`: Crimson Desert has topped 2M sales within a day. The studio is planning to \"make improvements quickly\" based on player feedback.",
+            "intensity_score": 8,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ]
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260320_002.json",
+        "candidate_bucket": "signal",
+        "recommended_set": "main_baseline_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 8,
+        "score_noise": 2,
+        "score_boundary": 0,
+        "reasons": [
+          "signal_pattern:market:2",
+          "hint:market",
+          "game_context",
+          "concrete_numbers",
+          "very_short_excerpt"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "signal",
+        "corrected_signal_types": [
+          "market"
+        ],
+        "corrected_expected_signals": [
+          {
+            "signal_type": "market",
+            "signal_label": "ai_suggested_signal",
+            "description": "AI-assisted review suggestion for B1D003: Crimson Desert has topped 2M sales within a day",
+            "intensity_score": 7,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ],
+        "review_notes": "Keep as signal. Strong clean sales metric sample.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D008",
+      "source_type": "news",
+      "title": "As Crimson Desert developer Pearl Abyss rushes to fix pressing issues, players are asking for updates to the time-gated dragon mount",
+      "content": "After a massive but divisive launch last week, Crimson Desert is the talk of the town. From its use of gen-AI that supposedly was \"unintentionally included in the final release\" to talk from anonymous sources that point…",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/crimson-desert-players-criticize-temporary-mounts-like-the-dragon",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "market",
+            "signal_label": "batch1_candidate_signal",
+            "description": "Batch 1 draft candidate derived from incoming sample `incoming_20260323_008.json`: As Crimson Desert developer Pearl Abyss rushes to fix pressing issues, players are asking for updates to the time-gated dragon mount. After a massive but divisive launch last week, Crimson Desert is the talk of the town. From its use of gen-AI that supposedly was \"unintentionally included in the final release\" to talk from anonymous sources that point…",
+            "intensity_score": 8,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ]
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260323_008.json",
+        "candidate_bucket": "signal",
+        "recommended_set": "main_baseline_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 8,
+        "score_noise": 3,
+        "score_boundary": 0,
+        "reasons": [
+          "signal_pattern:technical:1",
+          "signal_pattern:market:1",
+          "hint:market",
+          "game_context",
+          "low_information_excerpt",
+          "concrete_numbers",
+          "truncated_article"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "signal",
+        "corrected_signal_types": [
+          "market"
+        ],
+        "corrected_expected_signals": [
+          {
+            "signal_type": "market",
+            "signal_label": "ai_suggested_signal",
+            "description": "AI-assisted review suggestion for B1D008: As Crimson Desert developer Pearl Abyss rushes to fix pressing issues, players are asking for updates to the time-gated dragon mount",
+            "intensity_score": 7,
+            "confidence_score": 7,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ],
+        "review_notes": "Keep only if the article contains durable market or strategy implications beyond routine fix discourse.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D028",
+      "source_type": "news",
+      "title": "I crashed out reading layoff condolence letters in this shop sim about a laid-off adventurer made by a laid-off Xbox developer",
+      "content": "Being a game dev \"is not something a corporation can take from you\" says solo developer releasing a game alone after last year's Microsoft layoffs.",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/games/sim/i-crashed-out-reading-layoff-condolence-letters-in-this-shop-sim-about-a-laid-off-adventurer-made-by-a-laid-off-xbox-developer/",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "team",
+            "signal_label": "batch1_candidate_signal",
+            "description": "Batch 1 draft candidate derived from incoming sample `incoming_20260324_027.json`: I crashed out reading layoff condolence letters in this shop sim about a laid-off adventurer made by a laid-off Xbox developer. Being a game dev \"is not something a corporation can take from you\" says solo developer releasing a game alone after last year's Microsoft layoffs.",
+            "intensity_score": 8,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ]
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260324_027.json",
+        "candidate_bucket": "signal",
+        "recommended_set": "main_baseline_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 8,
+        "score_noise": 0,
+        "score_boundary": 1,
+        "reasons": [
+          "signal_pattern:team:1",
+          "hint:team",
+          "high_value_entities:microsoft,xbox",
+          "game_context",
+          "short_excerpt",
+          "structural_change_keywords"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "signal",
+        "corrected_signal_types": [
+          "team"
+        ],
+        "corrected_expected_signals": [
+          {
+            "signal_type": "team",
+            "signal_label": "ai_suggested_signal",
+            "description": "AI-assisted review suggestion for B1D028: I crashed out reading layoff condolence letters in this shop sim about a laid-off adventurer made by a laid-off Xbox developer",
+            "intensity_score": 7,
+            "confidence_score": 7,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ],
+        "review_notes": "Quick confirm unless full article changes the interpretation.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D045",
+      "source_type": "news",
+      "title": "Investors Are Having a 'Whoopsie' Moment — After 3 Million Sales, Shares in Crimson Desert Dev Pearl Abyss Skyrocket",
+      "content": "Shares in Pearl Abyss, the developer and publisher of Crimson Desert, skyrocketed today after the company announced 3 million sales — addressing a significant stock price collapse that occured around the game’s launch.",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_name": "IGN Game News",
+      "source_url": "https://www.ign.com/articles/investors-are-having-a-whoopsie-moment-after-3-million-sales-shares-in-crimson-desert-dev-pearl-abyss-skyrocket",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "market",
+            "signal_label": "batch1_candidate_signal",
+            "description": "Batch 1 draft candidate derived from incoming sample `incoming_20260325_011.json`: Investors Are Having a 'Whoopsie' Moment — After 3 Million Sales, Shares in Crimson Desert Dev Pearl Abyss Skyrocket. Shares in Pearl Abyss, the developer and publisher of Crimson Desert, skyrocketed today after the company announced 3 million sales — addressing a significant stock price collapse that occured around the game’s launch.",
+            "intensity_score": 8,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ]
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260325_011.json",
+        "candidate_bucket": "signal",
+        "recommended_set": "main_baseline_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 8,
+        "score_noise": 0,
+        "score_boundary": 1,
+        "reasons": [
+          "signal_pattern:market:2",
+          "hint:market",
+          "game_context",
+          "concrete_numbers",
+          "announcement_style"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "signal",
+        "corrected_signal_types": [
+          "market"
+        ],
+        "corrected_expected_signals": [
+          {
+            "signal_type": "market",
+            "signal_label": "ai_suggested_signal",
+            "description": "AI-assisted review suggestion for B1D045: Investors Are Having a 'Whoopsie' Moment — After 3 Million Sales, Shares in Crimson Desert Dev Pearl Abyss Skyrocket",
+            "intensity_score": 7,
+            "confidence_score": 7,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ],
+        "review_notes": "Quick confirm unless full article changes the interpretation.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    }
+  ]
+}

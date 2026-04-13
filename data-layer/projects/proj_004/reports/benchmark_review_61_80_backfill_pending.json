@@ -1,0 +1,1017 @@
+{
+  "generated_at": "2026-04-13T16:05:00Z",
+  "source_report": "F:\\AIProjects\\DesignAssistant\\data-layer\\projects\\proj_004\\reports\\benchmark_review_61_80_recommendations.json",
+  "selection_policy": {
+    "included_samples": "review tranche 61-80 from benchmark review queue",
+    "review_mode": "assistant-prefilled pending confirmation",
+    "alignment_note": "recommendations updated to reflect paradigm-signal, squeeze-signal, and reverse-paradigm logic"
+  },
+  "summary": {
+    "selected_total": 20,
+    "range": "61-80"
+  },
+  "samples": [
+    {
+      "sample_id": "B1D049",
+      "source_type": "news",
+      "title": "Fortnite Rocket Racing and more are being sunsetted amidst layoffs",
+      "content": "Plus, Horizon Chase and Horizon Chase Turbo will no longer be available to download starting in June.",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_name": "Game Developer",
+      "source_url": "https://www.gamedeveloper.com/business/fortnite-rocket-racing-and-more-are-being-sunsetted-amidst-layoffs",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "team",
+            "signal_label": "batch1_candidate_signal",
+            "description": "Batch 1 draft candidate derived from incoming sample `incoming_20260325_023.json`: Fortnite Rocket Racing and more are being sunsetted amidst layoffs. Plus, Horizon Chase and Horizon Chase Turbo will no longer be available to download starting in June.",
+            "intensity_score": 6,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ]
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260325_023.json",
+        "candidate_bucket": "signal",
+        "recommended_set": "main_baseline_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 6,
+        "score_noise": 0,
+        "score_boundary": 1,
+        "reasons": [
+          "signal_pattern:team:1",
+          "hint:team",
+          "game_context",
+          "short_excerpt",
+          "structural_change_keywords"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "modified",
+        "corrected_bucket": "signal",
+        "corrected_signal_types": [
+          "team",
+          "market"
+        ],
+        "corrected_expected_signals": [
+          {
+            "signal_type": "team",
+            "signal_label": "retrenchment_signal",
+            "description": "Layoffs around Fortnite support a workforce contraction interpretation.",
+            "intensity_score": 8,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          },
+          {
+            "signal_type": "market",
+            "signal_label": "retrenchment_signal",
+            "description": "Mode shutdowns indicate product portfolio retrenchment and demand or monetization reprioritization.",
+            "intensity_score": 8,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ],
+        "review_notes": "Keep as signal. This is stronger as team plus market, not team alone.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D058",
+      "source_type": "news",
+      "title": "Hades 2 trailer teases a new steamy scene that will be added with 'bonus content and quality-of-life improvements' in an update next month",
+      "content": "That's a lot more of Heracles than we've ever seen.",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/games/action/hades-2-trailer-teases-a-new-steamy-scene-that-will-be-added-with-bonus-content-and-quality-of-life-improvements-in-an-update-next-month/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260326_021.json",
+        "candidate_bucket": "noise",
+        "recommended_set": "noise_suppression_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 1,
+        "score_noise": 6,
+        "score_boundary": 0,
+        "reasons": [
+          "hint:team",
+          "missing_game_context",
+          "noise_patterns:1",
+          "very_short_excerpt"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Keep as noise.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D062",
+      "source_type": "news",
+      "title": "The latest Star Wars Zero Company details tease Mass Effect DNA, hardcore turn-based tactics, permadeath, and new Clone Wars lore",
+      "content": "Ever since it was announced in April 2025, Star Wars Zero Company has quickly become one of those unexpected games to watch out for. XCOM, but Star Wars? Sure, sign us up. Now, after nearly one year in the shadows, Resp…",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/new-star-wars-zero-company-details-emerge",
+      "annotation": {
+        "expected_signals": []
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260326_063.json",
+        "candidate_bucket": "noise",
+        "recommended_set": "noise_suppression_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 2,
+        "score_noise": 6,
+        "score_boundary": 1,
+        "reasons": [
+          "hint:technical",
+          "game_context",
+          "low_information_excerpt",
+          "truncated_article",
+          "announcement_style",
+          "shallow_announcement_penalty"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Keep as noise.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D063",
+      "source_type": "news",
+      "title": "The Nex Playground is getting a price hike because of the memory crisis",
+      "content": "Hardware manufacturer Nex said the 'rapid expansion of AI infrastructure' has resulted in key component shortages.",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_name": "Game Developer",
+      "source_url": "https://www.gamedeveloper.com/business/nex-playground-increases-its-price-due-to-ongoing-memory-crisis",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "technical",
+            "signal_label": "batch1_candidate_signal",
+            "description": "Batch 1 draft candidate derived from incoming sample `incoming_20260326_064.json`: The Nex Playground is getting a price hike because of the memory crisis. Hardware manufacturer Nex said the 'rapid expansion of AI infrastructure' has resulted in key component shortages.",
+            "intensity_score": 6,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ]
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260326_064.json",
+        "candidate_bucket": "signal",
+        "recommended_set": "main_baseline_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 6,
+        "score_noise": 0,
+        "score_boundary": 1,
+        "reasons": [
+          "signal_pattern:technical:1",
+          "signal_pattern:market:1",
+          "hint:technical",
+          "game_context",
+          "short_excerpt"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "modified",
+        "corrected_bucket": "signal",
+        "corrected_signal_types": [
+          "technical",
+          "market"
+        ],
+        "corrected_expected_signals": [
+          {
+            "signal_type": "technical",
+            "signal_label": "ai_infrastructure_externality_signal",
+            "description": "Rapid AI infrastructure expansion is creating memory or component shortages that affect game-adjacent hardware makers.",
+            "intensity_score": 8,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          },
+          {
+            "signal_type": "market",
+            "signal_label": "ai_infrastructure_externality_signal",
+            "description": "Component shortages are translating into consumer hardware price hikes and market pressure.",
+            "intensity_score": 7,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ],
+        "review_notes": "Keep as signal. This is a strong AI infrastructure externality signal and should include market impact.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D075",
+      "source_type": "news",
+      "title": "Owlcat Games is using generative AI to 'iterate faster' on The Expanse",
+      "content": "The studio is using the tech for prototyping and placeholders, but claims temporary assets will be replaced for the final version.",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_name": "Game Developer",
+      "source_url": "https://www.gamedeveloper.com/business/owlcat-games-is-using-gen-ai-to-iterate-faster-on-the-expanse",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "technical",
+            "signal_label": "batch1_candidate_signal",
+            "description": "Batch 1 draft candidate derived from incoming sample `incoming_20260327_039.json`: Owlcat Games is using generative AI to 'iterate faster' on The Expanse. The studio is using the tech for prototyping and placeholders, but claims temporary assets will be replaced for the final version.",
+            "intensity_score": 6,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ]
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260327_039.json",
+        "candidate_bucket": "signal",
+        "recommended_set": "main_baseline_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 6,
+        "score_noise": 0,
+        "score_boundary": 1,
+        "reasons": [
+          "signal_pattern:technical:2",
+          "hint:technical",
+          "game_context",
+          "short_excerpt"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "signal",
+        "corrected_signal_types": [
+          "technical"
+        ],
+        "corrected_expected_signals": [],
+        "review_notes": "Keep as signal. This is a clean AI-in-production workflow signal.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D076",
+      "source_type": "news",
+      "title": "Path of Exile's richest player and item trading kingpin gets banned and pleads with Grinding Gear Games to restore 'more than 1,500 items, some of which can't ever be recreated': 'This is the worst day of my life'",
+      "content": "The Forbidden Trove's days as a hub for Path of Exile trading may be coming to an end.",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/games/rpg/path-of-exiles-richest-player-and-item-trading-kingpin-gets-banned-and-pleads-with-grinding-gear-games-to-restore-more-than-1-500-items-some-of-which-cant-ever-be-recreated-this-is-the-worst-day-of-my-life/",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "technical",
+            "signal_label": "batch1_candidate_signal",
+            "description": "Batch 1 draft candidate derived from incoming sample `incoming_20260327_040.json`: Path of Exile's richest player and item trading kingpin gets banned and pleads with Grinding Gear Games to restore 'more than 1,500 items, some of which can't ever be recreated': 'This is the worst day of my life'. The Forbidden Trove's days as a hub for Path of Exile trading may be coming to an end.",
+            "intensity_score": 6,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ]
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260327_040.json",
+        "candidate_bucket": "signal",
+        "recommended_set": "main_baseline_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 6,
+        "score_noise": 2,
+        "score_boundary": 2,
+        "reasons": [
+          "signal_pattern:market:1",
+          "signal_pattern:regulatory:1",
+          "hint:technical",
+          "game_context",
+          "boundary_patterns:1",
+          "very_short_excerpt"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "modified",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Downgrade to noise unless you explicitly want platform-governance micro-incidents in scope.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D077",
+      "source_type": "news",
+      "title": "Pearl Abyss boss admits the studio \"could have done a better job\" with Crimson Desert's totally underwhelming story",
+      "content": "Though there are things to love in Crimson Desert if you're open to hobbies like tower ogling or ghost train riding , the mammoth action adventure blob's story is arguably its biggest weakness. Well, aside from those AI…",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_name": "Rock Paper Shotgun",
+      "source_url": "https://www.rockpapershotgun.com/pearl-abyss-boss-admits-the-studio-could-have-done-a-better-job-with-crimson-deserts-totally-underwhelming-story",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "technical",
+            "signal_label": "batch1_candidate_signal",
+            "description": "Batch 1 draft candidate derived from incoming sample `incoming_20260327_041.json`: Pearl Abyss boss admits the studio \"could have done a better job\" with Crimson Desert's totally underwhelming story. Though there are things to love in Crimson Desert if you're open to hobbies like tower ogling or ghost train riding , the mammoth action adventure blob's story is arguably its biggest weakness. Well, aside from those AI…",
+            "intensity_score": 6,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ]
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260327_041.json",
+        "candidate_bucket": "signal",
+        "recommended_set": "main_baseline_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 6,
+        "score_noise": 0,
+        "score_boundary": 2,
+        "reasons": [
+          "signal_pattern:technical:1",
+          "signal_pattern:market:1",
+          "hint:technical",
+          "game_context",
+          "boundary_patterns:1"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "modified",
+        "corrected_bucket": "signal",
+        "corrected_signal_types": [
+          "technical"
+        ],
+        "corrected_expected_signals": [
+          {
+            "signal_type": "technical",
+            "signal_label": "product_design_paradigm_signal",
+            "description": "Pearl Abyss admitting the story underperformed highlights a mismatch between traditional linear AAA narrative design and player expectations for more dynamic narrative systems.",
+            "intensity_score": 8,
+            "confidence_score": 7,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ],
+        "review_notes": "Keep as signal. This is a product design paradigm signal: the story failure exposes a lagging narrative model and a delayed evaluation loop that a BEACON-like AI simulation system could have surfaced earlier.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D080",
+      "source_type": "news",
+      "title": "The PS5 Price Hike Was Inevitable, But What Comes Next?",
+      "content": "It's been a big week for bad news in gaming, and that included Sony announcing yet another price hike for the PlayStation 5 , the second increase in less than a year . When the new PS5 pricing goes into effect on April …",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/articles/the-ps5-price-hike-was-inevitable-but-what-comes-next/1100-6539077/?ftag=CAD-01-10abi2f",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "technical",
+            "signal_label": "batch1_candidate_signal",
+            "description": "Batch 1 draft candidate derived from incoming sample `incoming_20260327_055.json`: The PS5 Price Hike Was Inevitable, But What Comes Next?. It's been a big week for bad news in gaming, and that included Sony announcing yet another price hike for the PlayStation 5 , the second increase in less than a year . When the new PS5 pricing goes into effect on April …",
+            "intensity_score": 6,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ]
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260327_055.json",
+        "candidate_bucket": "signal",
+        "recommended_set": "main_baseline_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 6,
+        "score_noise": 0,
+        "score_boundary": 0,
+        "reasons": [
+          "signal_pattern:market:1",
+          "hint:technical",
+          "high_value_entities:sony,playstation",
+          "game_context"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "modified",
+        "corrected_bucket": "signal",
+        "corrected_signal_types": [
+          "market"
+        ],
+        "corrected_expected_signals": [
+          {
+            "signal_type": "market",
+            "signal_label": "hardware_price_pressure_signal",
+            "description": "Sony's repeated PS5 price hikes indicate sustained pricing pressure and changing market conditions in console hardware.",
+            "intensity_score": 8,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ],
+        "review_notes": "Keep as signal, but retag to market. This is hardware pricing pressure, not a technical shift.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D084",
+      "source_type": "news",
+      "title": "Developer of cozy tea shop adventure Wanderstop is shutting down: 'It's a particularly tough time for raising game funds'",
+      "content": "The studio, Ivy Road, wasn't able to secure funding for its next game, Engine Angel.",
+      "published_at": "2026-03-28T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/gaming-industry/developer-of-cozy-tea-shop-adventure-wanderstop-is-shutting-down-its-a-particularly-tough-time-for-raising-game-funds/",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "technical",
+            "signal_label": "batch1_candidate_signal",
+            "description": "Batch 1 draft candidate derived from incoming sample `incoming_20260328_009.json`: Developer of cozy tea shop adventure Wanderstop is shutting down: 'It's a particularly tough time for raising game funds'. The studio, Ivy Road, wasn't able to secure funding for its next game, Engine Angel.",
+            "intensity_score": 6,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ]
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260328_009.json",
+        "candidate_bucket": "signal",
+        "recommended_set": "main_baseline_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 6,
+        "score_noise": 2,
+        "score_boundary": 0,
+        "reasons": [
+          "signal_pattern:capital:1",
+          "signal_pattern:technical:1",
+          "hint:technical",
+          "game_context",
+          "very_short_excerpt"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "modified",
+        "corrected_bucket": "signal",
+        "corrected_signal_types": [
+          "team",
+          "capital"
+        ],
+        "corrected_expected_signals": [
+          {
+            "signal_type": "team",
+            "signal_label": "studio_shutdown_signal",
+            "description": "The studio shutdown represents direct team contraction and loss of operating capacity.",
+            "intensity_score": 8,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          },
+          {
+            "signal_type": "capital",
+            "signal_label": "studio_shutdown_signal",
+            "description": "Failure to secure funding indicates capital-market tightening for game studios.",
+            "intensity_score": 8,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ],
+        "review_notes": "Keep as signal. This should be tagged team plus capital.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D088",
+      "source_type": "news",
+      "title": "Crimson Desert Is Doing Something Very Uncommon For RPGs",
+      "content": "Crimson Desert has been out for barely two weeks now, having launched on March 19 for PC, PlayStation 5, and Xbox Series X|S, but the game is already toppling its own player count records. This is quite impressive, as P…",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/articles/crimson-desert-is-doing-something-very-uncommon-for-rpgs/1100-6539097/?ftag=CAD-01-10abi2f",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "market",
+            "signal_label": "batch1_candidate_signal",
+            "description": "Batch 1 draft candidate derived from incoming sample `incoming_20260330_003.json`: Crimson Desert Is Doing Something Very Uncommon For RPGs. Crimson Desert has been out for barely two weeks now, having launched on March 19 for PC, PlayStation 5, and Xbox Series X|S, but the game is already toppling its own player count records. This is quite impressive, as P…",
+            "intensity_score": 6,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ]
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260330_003.json",
+        "candidate_bucket": "signal",
+        "recommended_set": "main_baseline_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 6,
+        "score_noise": 0,
+        "score_boundary": 0,
+        "reasons": [
+          "signal_pattern:market:1",
+          "hint:market",
+          "high_value_entities:xbox,playstation",
+          "game_context"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "signal",
+        "corrected_signal_types": [
+          "market"
+        ],
+        "corrected_expected_signals": [],
+        "review_notes": "Keep as signal if you want strong product-demand evidence in scope.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D089",
+      "source_type": "news",
+      "title": "Deus Ex Dev Eidos-Montreal Conducts Mass Layoffs Affecting 124 People",
+      "content": "Eidos-Montreal has announced a round of mass layoffs, with 124 people losing their jobs and studio head David Anfossi leaving the company. In a statement , Eidos-Montreal said the cuts are the result of \"changing projec…",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/articles/deus-ex-dev-eidos-montreal-conducts-mass-layoffs-affecting-124-people/1100-6539106/?ftag=CAD-01-10abi2f",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "team",
+            "signal_label": "batch1_candidate_signal",
+            "description": "Batch 1 draft candidate derived from incoming sample `incoming_20260330_006.json`: Deus Ex Dev Eidos-Montreal Conducts Mass Layoffs Affecting 124 People. Eidos-Montreal has announced a round of mass layoffs, with 124 people losing their jobs and studio head David Anfossi leaving the company. In a statement , Eidos-Montreal said the cuts are the result of \"changing projec…",
+            "intensity_score": 6,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ]
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260330_006.json",
+        "candidate_bucket": "signal",
+        "recommended_set": "main_baseline_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 6,
+        "score_noise": 0,
+        "score_boundary": 1,
+        "reasons": [
+          "signal_pattern:team:1",
+          "hint:team",
+          "game_context",
+          "announcement_style",
+          "structural_change_keywords"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "signal",
+        "corrected_signal_types": [
+          "team"
+        ],
+        "corrected_expected_signals": [],
+        "review_notes": "Keep as signal.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D091",
+      "source_type": "news",
+      "title": "Arc Raiders' Flashpoint update finally streamlines crafting—oh, and you can also supercharge Scrappy using food because that just makes sense",
+      "content": "A new enemy, a map event, and two guns arrive in the Flashpoint update tomorrow.",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/games/third-person-shooter/arc-raiders-flashpoint-update/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260330_020.json",
+        "candidate_bucket": "noise",
+        "recommended_set": "noise_suppression_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 1,
+        "score_noise": 6,
+        "score_boundary": 0,
+        "reasons": [
+          "hint:technical",
+          "missing_game_context",
+          "noise_patterns:1",
+          "very_short_excerpt"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Keep as noise.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D094",
+      "source_type": "news",
+      "title": "Crimson Desert Update Seemingly Replaces AI Artwork",
+      "content": "A new update for the popular RPG Crimson Desert has seemingly removed some of the generative AI art that fans discovered in the game recently. The patch notes alluded to this, with developer Pearl Abyss saying the new u…",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/articles/crimson-desert-update-seemingly-replaces-ai-artwork/1100-6539094/?ftag=CAD-01-10abi2f",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "technical",
+            "signal_label": "batch1_candidate_signal",
+            "description": "Batch 1 draft candidate derived from incoming sample `incoming_20260330_028.json`: Crimson Desert Update Seemingly Replaces AI Artwork. A new update for the popular RPG Crimson Desert has seemingly removed some of the generative AI art that fans discovered in the game recently. The patch notes alluded to this, with developer Pearl Abyss saying the new u…",
+            "intensity_score": 6,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ]
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260330_028.json",
+        "candidate_bucket": "signal",
+        "recommended_set": "main_baseline_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 6,
+        "score_noise": 2,
+        "score_boundary": 0,
+        "reasons": [
+          "signal_pattern:technical:2",
+          "hint:technical",
+          "game_context",
+          "noise_patterns:1"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "signal",
+        "corrected_signal_types": [
+          "technical"
+        ],
+        "corrected_expected_signals": [],
+        "review_notes": "Keep as signal. This clearly fits your reverse-paradigm logic.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D098",
+      "source_type": "news",
+      "title": "Not Even Crimson Desert's Main Character VA Understood The Game's Story",
+      "content": "While Crimson Desert has seen huge success since its March 19 launch on consoles and PC, toppling its own concurrent player numbers and selling over 3 million copies to date , the game isn't without its flaws. The narra…",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/articles/not-even-crimson-deserts-main-character-va-understood-the-games-story/1100-6539099/?ftag=CAD-01-10abi2f",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "technical",
+            "signal_label": "batch1_candidate_signal",
+            "description": "Batch 1 draft candidate derived from incoming sample `incoming_20260330_044.json`: Not Even Crimson Desert's Main Character VA Understood The Game's Story. While Crimson Desert has seen huge success since its March 19 launch on consoles and PC, toppling its own concurrent player numbers and selling over 3 million copies to date , the game isn't without its flaws. The narra…",
+            "intensity_score": 6,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ]
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260330_044.json",
+        "candidate_bucket": "signal",
+        "recommended_set": "main_baseline_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 6,
+        "score_noise": 0,
+        "score_boundary": 0,
+        "reasons": [
+          "signal_pattern:market:1",
+          "hint:technical",
+          "game_context",
+          "concrete_numbers"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "modified",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Downgrade to noise unless you are intentionally collecting quality-collapse companion samples around Crimson Desert.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D100",
+      "source_type": "news",
+      "title": "Thermaltake View 380 WS ARGB review",
+      "content": "Affordable and flashy.",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/hardware/pc-cases/thermaltake-view-380-ws-argb-review/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260330_054.json",
+        "candidate_bucket": "noise",
+        "recommended_set": "noise_suppression_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 1,
+        "score_noise": 6,
+        "score_boundary": 0,
+        "reasons": [
+          "hint:technical",
+          "missing_game_context",
+          "noise_patterns:1",
+          "very_short_excerpt"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Keep as noise.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D101",
+      "source_type": "news",
+      "title": "Evercade unveils its next-gen retro gaming handheld Nexus, with analogue sticks and Banjo-Kazooie 1&2 bundled in",
+      "content": "Evercade, purveyor of all things retro gaming, has unveiled the Evercade Nexus - its next-generation gaming handheld, which launches this October. Read more",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/evercade-next-gen-retro-gaming-handheld-evercade-nexus",
+      "annotation": {
+        "expected_signals": []
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260331_002.json",
+        "candidate_bucket": "noise",
+        "recommended_set": "noise_suppression_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 2,
+        "score_noise": 6,
+        "score_boundary": 2,
+        "reasons": [
+          "hint:market",
+          "game_context",
+          "low_information_excerpt",
+          "short_excerpt",
+          "truncated_article",
+          "announcement_style",
+          "shallow_announcement_penalty"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Keep as noise.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D103",
+      "source_type": "news",
+      "title": "Aether & Iron review",
+      "content": "Arcanum meets Bioshock Infinite in a speakeasy.",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/games/rpg/aether-and-iron-review/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260331_014.json",
+        "candidate_bucket": "noise",
+        "recommended_set": "noise_suppression_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 1,
+        "score_noise": 6,
+        "score_boundary": 0,
+        "reasons": [
+          "hint:technical",
+          "missing_game_context",
+          "noise_patterns:1",
+          "very_short_excerpt"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Keep as noise.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D105",
+      "source_type": "news",
+      "title": "Everything you need to know for Final Fantasy 14's Moogle Treasure Trove event, including what to do with all of those tomestones when you already have everything",
+      "content": "Fear and Loathing in Eorzea.",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/games/final-fantasy/ffxiv-moogle-treasure-trove/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260331_028.json",
+        "candidate_bucket": "noise",
+        "recommended_set": "noise_suppression_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 1,
+        "score_noise": 6,
+        "score_boundary": 0,
+        "reasons": [
+          "hint:technical",
+          "missing_game_context",
+          "noise_patterns:1",
+          "very_short_excerpt"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Keep as noise.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D106",
+      "source_type": "news",
+      "title": "GTA Online's first-of-its-kind community showcase offers a glimpse of what's to come in GTA 6—and might just answer a big question facing the multiplayer offshoot",
+      "content": "Back to Cali.",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/games/grand-theft-auto/gta-onlines-first-of-its-kind-community-showcase-offers-a-glimpse-of-whats-to-come-in-gta-6-and-might-just-answer-a-big-question-facing-the-multiplayer-offshoot/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260331_033.json",
+        "candidate_bucket": "noise",
+        "recommended_set": "noise_suppression_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 2,
+        "score_noise": 6,
+        "score_boundary": 2,
+        "reasons": [
+          "hint:technical",
+          "high_value_entities:unity",
+          "missing_game_context",
+          "noise_patterns:1",
+          "boundary_patterns:1",
+          "very_short_excerpt"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Keep as noise.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D004",
+      "source_type": "news",
+      "title": "RPS Verdict: Anime racer Screamer slides sideways into success with its colourful, characterful driving",
+      "content": "Ed (RPS in peace) has, finally, posthumously, got his wish : another Screamer . This one’s gone all cyberpunk and/or anime-styled, with a heavy focus on story – it follows multiple, multinational merc-drivers entering a…",
+      "published_at": "2026-03-22T00:00:00Z",
+      "source_name": "Rock Paper Shotgun",
+      "source_url": "https://www.rockpapershotgun.com/rps-verdict-screamer-review",
+      "annotation": {
+        "expected_signals": []
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260322_004.json",
+        "candidate_bucket": "noise",
+        "recommended_set": "noise_suppression_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 1,
+        "score_noise": 5,
+        "score_boundary": 0,
+        "reasons": [
+          "hint:technical",
+          "missing_game_context",
+          "low_information_excerpt",
+          "truncated_article"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Keep as noise.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    }
+  ]
+}

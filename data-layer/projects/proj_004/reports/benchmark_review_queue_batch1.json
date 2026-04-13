@@ -1,0 +1,3375 @@
+{
+  "source_benchmark": "F:\\AIProjects\\DesignAssistant\\data-layer\\projects\\proj_004\\phase2.1_implementation\\data\\benchmark_samples_batch1_draft.json",
+  "total": 110,
+  "pending": 0,
+  "rows": [
+    {
+      "sample_id": "B1D023",
+      "origin_file": "incoming_20260324_004.json",
+      "title": "OpenAI discontinues Sora video generation app, Disney pulls out of $1 billion investment deal",
+      "content_preview": "The shutdown of the app is reportedly part of a broader strategic shift away from video generation in favor of productivity apps.",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/software/ai/openai-discontinues-sora-video-generation-app-disney-pulls-out-of-usd1-billion-investment-deal/",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "capital"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "high",
+      "score_signal": 10,
+      "score_noise": 5,
+      "score_boundary": 3,
+      "reasons": [
+        "signal_pattern:capital:1",
+        "signal_pattern:team:1",
+        "hint:capital",
+        "high_value_entities:disney",
+        "missing_game_context",
+        "non_game_context",
+        "rumor_or_report_sourcing",
+        "concrete_numbers",
+        "short_excerpt",
+        "structural_change_keywords"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "modified",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Suggested downgrade to noise because the article appears outside core game-industry scope. Keep as signal only if adjacent AI-business news is intentionally in benchmark scope."
+    },
+    {
+      "sample_id": "B1D010",
+      "origin_file": "incoming_20260323_018.json",
+      "title": "One Of The Most Controversial Battlefield Games Is Shutting Down On Consoles Soon",
+      "content_preview": "Electronic Arts has announced that Battlefield Hardline--the 2015 FPS entry in the series focused on police and heists, not traditional military warfare--will shut down on console this June. The game will be removed fro…",
+      "source_name": "GameSpot",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_url": "https://www.gamespot.com/articles/one-of-the-most-controversial-battlefield-games-is-shutting-down-on-consoles-soon/1100-6538954/?ftag=CAD-01-10abi2f",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "team"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 13,
+      "score_noise": 0,
+      "score_boundary": 3,
+      "reasons": [
+        "signal_pattern:team:3",
+        "signal_pattern:market:1",
+        "hint:team",
+        "high_value_entities:xbox",
+        "game_context",
+        "boundary_patterns:1",
+        "announcement_style",
+        "structural_change_keywords"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "modified",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Downgrade to noise. Legacy service shutdown coverage here does not clearly imply a broader structural shift for the benchmark."
+    },
+    {
+      "sample_id": "B1D068",
+      "origin_file": "incoming_20260327_001.json",
+      "title": "Nintendo cuts Switch 2 production, layoffs at Epic and PlayStation, and another Saudi acquisition - Patch Notes #45",
+      "content_preview": "Plus: Crimson Desert sells 3 million copies and a love letter to 'girl games.'",
+      "source_name": "Game Developer",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_url": "https://www.gamedeveloper.com/business/nintendo-cuts-switch-2-production-layoffs-at-epic-and-playstation-and-another-saudi-acquisition-patch-notes-45",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "capital"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 13,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "reasons": [
+        "signal_pattern:capital:1",
+        "signal_pattern:team:1",
+        "hint:capital",
+        "high_value_entities:playstation,nintendo,epic",
+        "game_context",
+        "noise_patterns:1",
+        "concrete_numbers",
+        "very_short_excerpt",
+        "structural_change_keywords"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "modified",
+      "corrected_bucket": "signal",
+      "corrected_signal_types": [
+        "capital",
+        "market",
+        "team"
+      ],
+      "review_notes": "Treat this roundup as a paradigm compression signal rather than noise. The co-occurrence of production cuts, layoffs, and acquisition activity reveals an industry squeeze regime instead of a single isolated event."
+    },
+    {
+      "sample_id": "B1D034",
+      "origin_file": "incoming_20260324_048.json",
+      "title": "\"I'm sorry we're here again,\" says Epic Games CEO as Fortnite maker lays off over 1000 employees",
+      "content_preview": "Epic Games, the creator of Fortnite and the Unreal Engine, have announced plans to lay off more than 1000 staff. In a company-wide letter , CEO Tim Sweeney blamed both \"industry-wide challenges\" and \"challenges unique t…",
+      "source_name": "Rock Paper Shotgun",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_url": "https://www.rockpapershotgun.com/im-sorry-were-here-again-says-epic-games-ceo-as-company-lays-off-over-1000-employees",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 11,
+      "score_noise": 0,
+      "score_boundary": 3,
+      "reasons": [
+        "signal_pattern:team:1",
+        "signal_pattern:technical:1",
+        "hint:technical",
+        "high_value_entities:epic",
+        "game_context",
+        "boundary_patterns:1",
+        "concrete_numbers",
+        "announcement_style",
+        "structural_change_keywords"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "accepted",
+      "corrected_bucket": "signal",
+      "corrected_signal_types": [
+        "team"
+      ],
+      "review_notes": "Strong team/org signal. Recommended to keep as signal and correct the type from technical to team."
+    },
+    {
+      "sample_id": "B1D047",
+      "origin_file": "incoming_20260325_021.json",
+      "title": "Fortnite producer asks for patience as developers 'pick up the pieces' after massive layoffs: 'We cannot even fully understand what kind of impacts this will have on the game for the rest of the year and likely beyond'",
+      "content_preview": "Epic laid off more than 1,000 employees yesterday as CEO Tim Sweeney says the company is still spending more than it's making.",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/battle-royale/fortnite-producer-asks-for-patience-as-developers-pick-up-the-pieces-after-massive-layoffs-we-cannot-even-fully-understand-what-kind-of-impacts-this-will-have-on-the-game-for-the-rest-of-the-year-and-likely-beyond/",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "team"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 11,
+      "score_noise": 0,
+      "score_boundary": 1,
+      "reasons": [
+        "signal_pattern:team:2",
+        "signal_pattern:market:1",
+        "hint:team",
+        "high_value_entities:epic",
+        "game_context",
+        "short_excerpt",
+        "structural_change_keywords"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "accepted",
+      "corrected_bucket": "signal",
+      "corrected_signal_types": [
+        "team"
+      ],
+      "review_notes": "Keep as signal if the article centers on workforce cuts and downstream org impact."
+    },
+    {
+      "sample_id": "B1D017",
+      "origin_file": "incoming_20260323_045.json",
+      "title": "Microsoft announces Xbox Partner Preview for this week, with Ryu Ga Gotoku's Stranger Than Heaven finally making a showing",
+      "content_preview": "Microsoft has announced its next Xbox Partner Preview showcase will take place later this week, and focus on third-party games from the likes of Sega and GSC Game World . Read more",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/microsoft-announces-xbox-partner-preview-for-this-week-with-ryu-ga-gotokus-stranger-than-heaven-finally-making-a-showing",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 4,
+      "score_noise": 10,
+      "score_boundary": 1,
+      "reasons": [
+        "hint:technical",
+        "high_value_entities:microsoft,xbox",
+        "game_context",
+        "noise_patterns:2",
+        "low_information_excerpt",
+        "truncated_article",
+        "announcement_style",
+        "shallow_announcement_penalty"
+      ],
+      "current_expected_bucket": "noise",
+      "review_decision": "accepted",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Keep as noise. Standard showcase announcement coverage is outside the benchmark's structural signal scope."
+    },
+    {
+      "sample_id": "B1D022",
+      "origin_file": "incoming_20260324_002.json",
+      "title": "Behaviour Interactive acquires 7 Days to Die dev The Fun Pimps",
+      "content_preview": "Behaviour shut down Midwinter Entertainment in 2024, amidst two layoff rounds.",
+      "source_name": "Game Developer",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_url": "https://www.gamedeveloper.com/business/behaviour-interactive-acquires-7-days-to-die-dev-the-fun-pimps",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "capital"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 10,
+      "score_noise": 2,
+      "score_boundary": 0,
+      "reasons": [
+        "signal_pattern:capital:1",
+        "signal_pattern:team:2",
+        "hint:capital",
+        "game_context",
+        "very_short_excerpt",
+        "structural_change_keywords"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "accepted",
+      "corrected_bucket": "signal",
+      "corrected_signal_types": [
+        "capital"
+      ],
+      "review_notes": "Keep as signal. Studio acquisition is clear in-scope capital consolidation evidence."
+    },
+    {
+      "sample_id": "B1D026",
+      "origin_file": "incoming_20260324_018.json",
+      "title": "The RAMpocalypse Is Already Claiming Its First PC Gaming Handheld",
+      "content_preview": "Handheld gaming PCs have become more common since the launch of the Steam Deck, with significant price differences across brands. Due to rising memory and storage costs driven by increased demand from AI and data-center…",
+      "source_name": "GameSpot",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_url": "https://www.gamespot.com/articles/the-rampocalypse-is-already-claiming-its-first-pc-gaming-handheld/1100-6538982/?ftag=CAD-01-10abi2f",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "market"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 10,
+      "score_noise": 0,
+      "score_boundary": 0,
+      "reasons": [
+        "signal_pattern:technical:1",
+        "signal_pattern:market:3",
+        "hint:market",
+        "game_context"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "accepted",
+      "corrected_bucket": "signal",
+      "corrected_signal_types": [
+        "market"
+      ],
+      "review_notes": "Keep as signal. This is a strong market squeeze indicator."
+    },
+    {
+      "sample_id": "B1D050",
+      "origin_file": "incoming_20260325_026.json",
+      "title": "Sony shuts down Dark Outlaw Games and downsizes mobile games development as PlayStation continues to rethink plans",
+      "content_preview": "2026 has been off to an awful start when it comes to the health of the games industry, despite consumer spending holding up in the face of increasingly global pressure. Sony and PlayStation haven't escaped the layoff-re…",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/sony-closes-dark-outlaw-games-and-downsizes-mobile-gaming-efforts",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "team"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 10,
+      "score_noise": 6,
+      "score_boundary": 1,
+      "reasons": [
+        "signal_pattern:team:1",
+        "signal_pattern:market:1",
+        "hint:team",
+        "high_value_entities:sony,playstation",
+        "game_context",
+        "low_information_excerpt",
+        "truncated_article",
+        "announcement_style",
+        "shallow_announcement_penalty",
+        "structural_change_keywords"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "accepted",
+      "corrected_bucket": "signal",
+      "corrected_signal_types": [
+        "team"
+      ],
+      "review_notes": "Keep as signal. This is a strong closure or downsize sample."
+    },
+    {
+      "sample_id": "B1D057",
+      "origin_file": "incoming_20260326_020.json",
+      "title": "Disney X Fortnite Is Still Happening, Despite Massive Cuts At Epic",
+      "content_preview": "Despite the massive recent layoffs at Epic Games, Disney says it hasn't abandoned its plans to build a universe inside Fortnite . Epic is still fully on board, too--even though it just laid off the artist who created ma…",
+      "source_name": "GameSpot",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_url": "https://www.gamespot.com/articles/disney-x-fortnite-is-still-happening-despite-massive-cuts-at-epic/1100-6539048/?ftag=CAD-01-10abi2f",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "team"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 10,
+      "score_noise": 0,
+      "score_boundary": 2,
+      "reasons": [
+        "signal_pattern:team:2",
+        "hint:team",
+        "high_value_entities:epic,disney",
+        "game_context",
+        "boundary_patterns:1",
+        "structural_change_keywords"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "accepted",
+      "corrected_bucket": "signal",
+      "corrected_signal_types": [
+        "team"
+      ],
+      "review_notes": "Keep as signal. The story still uses Epic layoffs as the central operating condition shaping partnership continuity and execution risk."
+    },
+    {
+      "sample_id": "B1D061",
+      "origin_file": "incoming_20260326_059.json",
+      "title": "Stalker 2 Cost of Hope expansion announced during Xbox Partner Preview, and it's taking you to the Chernobyl nuclear power plant",
+      "content_preview": "GSC Game World has announced new DLC for Stalker 2 at today's Xbox Partner Showcase. Titled Cost of Hope, it's a full expansion to the first person shooter set to release Summer 2026. Read more",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/stalker-2-cost-of-hope-expansion-xbox-partner-preview",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 3,
+      "score_noise": 10,
+      "score_boundary": 1,
+      "reasons": [
+        "hint:technical",
+        "high_value_entities:xbox",
+        "game_context",
+        "noise_patterns:2",
+        "low_information_excerpt",
+        "truncated_article",
+        "announcement_style",
+        "shallow_announcement_penalty"
+      ],
+      "current_expected_bucket": "noise",
+      "review_decision": "accepted",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Keep as noise unless the full article contains a concrete structural business event."
+    },
+    {
+      "sample_id": "B1D072",
+      "origin_file": "incoming_20260327_027.json",
+      "title": "Don't worry, Dispatch isn't going to be censored on Xbox",
+      "content_preview": "During last night's Xbox Partner Preview showcase, AdHoc announced that its brilliant superhero workplace comedy Dispatch would be heading over to Microsoft's Series X/S consoles, as well as Xbox on PC and Xbox Cloud. R…",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/dont-worry-dispatch-isnt-going-to-be-censored-on-xbox",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 4,
+      "score_noise": 10,
+      "score_boundary": 1,
+      "reasons": [
+        "hint:technical",
+        "high_value_entities:microsoft,xbox",
+        "game_context",
+        "noise_patterns:2",
+        "low_information_excerpt",
+        "truncated_article",
+        "announcement_style",
+        "shallow_announcement_penalty"
+      ],
+      "current_expected_bucket": "noise",
+      "review_decision": "accepted",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Keep as noise unless the full article contains a concrete structural business event."
+    },
+    {
+      "sample_id": "B1D082",
+      "origin_file": "incoming_20260328_002.json",
+      "title": "A year on from launching Wanderstop, Ivy Road are closing their doors after struggling to fund their next game",
+      "content_preview": "It's been a little over a year since the release of Wanderstop , the debut game of Ivy Road, itself a studio made up of Stanley Parable, Gone Home , and Minecraft talent. Since then, the developer has been trying to fin…",
+      "source_name": "Rock Paper Shotgun",
+      "published_at": "2026-03-28T00:00:00Z",
+      "source_url": "https://www.rockpapershotgun.com/a-year-on-from-launching-wanderstop-ivy-road-are-closing-their-doors-after-struggling-to-fund-their-next-game",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "market"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 10,
+      "score_noise": 6,
+      "score_boundary": 1,
+      "reasons": [
+        "signal_pattern:capital:1",
+        "signal_pattern:team:1",
+        "signal_pattern:technical:1",
+        "hint:market",
+        "game_context",
+        "low_information_excerpt",
+        "truncated_article",
+        "announcement_style",
+        "shallow_announcement_penalty",
+        "structural_change_keywords"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "accepted",
+      "corrected_bucket": "signal",
+      "corrected_signal_types": [
+        "team",
+        "capital"
+      ],
+      "review_notes": "Prefer team as primary type; optionally include capital if you support multi-type corrected labels."
+    },
+    {
+      "sample_id": "B1D027",
+      "origin_file": "incoming_20260324_023.json",
+      "title": "Epic is ending 3 Fortnite game modes following its latest round of layoffs: 'We failed to build something awesome enough to attract and retain a large player base'",
+      "content_preview": "Rocket Racing, Ballistic, and Fortnite Festival Battle Stage are all being ended, and Epic is also removing Horizon Chase Turbo from sale.",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/epic-is-ending-3-fortnite-game-modes-following-its-latest-round-of-layoffs-we-failed-to-build-something-awesome-enough-to-attract-and-retain-a-large-player-base/",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "team"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 9,
+      "score_noise": 0,
+      "score_boundary": 1,
+      "reasons": [
+        "signal_pattern:team:1",
+        "signal_pattern:market:1",
+        "hint:team",
+        "high_value_entities:epic",
+        "game_context",
+        "short_excerpt",
+        "structural_change_keywords"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "modified",
+      "corrected_bucket": "signal",
+      "corrected_signal_types": [
+        "team",
+        "market"
+      ],
+      "review_notes": "Keep as signal. Ending multiple modes after layoffs is both a workforce contraction and a product-portfolio retrenchment signal."
+    },
+    {
+      "sample_id": "B1D040",
+      "origin_file": "incoming_20260324_068.json",
+      "title": "Tencent's genAI animation tools don't seem to make games more fun",
+      "content_preview": "Tencent's generative AI tools shown off at GDC are technically impressive, but do they offer anything for developers?",
+      "source_name": "Game Developer",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_url": "https://www.gamedeveloper.com/art/tencent-s-genai-animation-tools-don-t-seem-to-make-games-more-fun",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 9,
+      "score_noise": 0,
+      "score_boundary": 1,
+      "reasons": [
+        "signal_pattern:technical:3",
+        "hint:technical",
+        "high_value_entities:tencent",
+        "game_context",
+        "short_excerpt"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "modified",
+      "corrected_bucket": "signal",
+      "corrected_signal_types": [
+        "technical"
+      ],
+      "review_notes": "Keep as signal. This is an important reverse-paradigm indicator: stronger genAI production tooling does not automatically produce better game value."
+    },
+    {
+      "sample_id": "B1D042",
+      "origin_file": "incoming_20260325_002.json",
+      "title": "'Things Are Looking Lukewarm Right Now' — Marathon Has Reportedly Sold Just 1.2 Million So Far, With Steam Making Up 70% of the Player Base",
+      "content_preview": "Marathon has been out for a few weeks now, and we’ve yet to get an official sales figure. So, how’s it doing? According to one analyst: “Marathon hasn't exactly made the splash Sony and Bungie wanted.”",
+      "source_name": "IGN Game News",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_url": "https://www.ign.com/articles/things-are-looking-lukewarm-right-now-marathon-has-reportedly-sold-just-12-million-so-far-with-steam-making-up-70-of-the-player-base",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "capital"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 9,
+      "score_noise": 0,
+      "score_boundary": 4,
+      "reasons": [
+        "signal_pattern:market:2",
+        "hint:capital",
+        "high_value_entities:sony",
+        "game_context",
+        "boundary_patterns:1",
+        "rumor_or_report_sourcing",
+        "concrete_numbers"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "accepted",
+      "corrected_bucket": "signal",
+      "corrected_signal_types": [
+        "market"
+      ],
+      "review_notes": "Recommended to keep as signal but retag as market. If you only want very clean market signals, this can also be reconsidered as a boundary case."
+    },
+    {
+      "sample_id": "B1D048",
+      "origin_file": "incoming_20260325_022.json",
+      "title": "Fortnite producer says Epic's mass layoffs will impact the game in ways the remaining teams \"cannot even fully understand\"",
+      "content_preview": "Following Epic Games' mass layoffs , a Fortnite producer has said that the devs left behind \"cannot even fully understand\" the sort of impact the job cuts will have on the game during this year and into the future. Read…",
+      "source_name": "Rock Paper Shotgun",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_url": "https://www.rockpapershotgun.com/fortnite-producer-epic-layoffs-impact-cannot-be-understood",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "team"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 9,
+      "score_noise": 3,
+      "score_boundary": 0,
+      "reasons": [
+        "signal_pattern:team:2",
+        "hint:team",
+        "high_value_entities:epic",
+        "game_context",
+        "low_information_excerpt",
+        "truncated_article",
+        "structural_change_keywords"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "accepted",
+      "corrected_bucket": "signal",
+      "corrected_signal_types": [
+        "team"
+      ],
+      "review_notes": "Keep as signal if the article centers on workforce cuts and downstream org impact."
+    },
+    {
+      "sample_id": "B1D083",
+      "origin_file": "incoming_20260328_006.json",
+      "title": "Former Valve writer hits out at Epic Games layoffs: \"It's not like they're a publicly traded company. It's not like there's some need to hit the stock market thing. This is Tim\"",
+      "content_preview": "Prolific former Valve writer, Chet Faliszek, has hit out at Epic Games founder Tim Sweeney, asking why anyone at Epic \"should work hard\" when staff have no agency and \"the recent 1,000 job cuts didn't come because of sh…",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-28T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/former-valve-writer-hits-out-at-epic-games-layoffs-its-not-like-theyre-a-publicly-traded-company-its-not-like-theres-some-need-to-hit-the-stock-market-thing-this-is-tim",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "team"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 9,
+      "score_noise": 3,
+      "score_boundary": 0,
+      "reasons": [
+        "signal_pattern:team:2",
+        "hint:team",
+        "high_value_entities:epic",
+        "game_context",
+        "low_information_excerpt",
+        "truncated_article",
+        "structural_change_keywords"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "accepted",
+      "corrected_bucket": "signal",
+      "corrected_signal_types": [
+        "team"
+      ],
+      "review_notes": "Keep as signal if the article centers on workforce cuts and downstream org impact."
+    },
+    {
+      "sample_id": "B1D095",
+      "origin_file": "incoming_20260330_029.json",
+      "title": "Don't worry Kingdom Hearts fans, it looks like we might get some new info on Kingdom Hearts 4 in... a year's time?",
+      "content_preview": "A new illustration published to celebrate the 24th anniversary of Kingdom Hearts has some fans' hopes reignited for a Kingdom Hearts 4 update. Read more",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/dont-worry-kingdom-hearts-fans-it-looks-like-we-might-get-some-new-info-on-kingdom-hearts-4-in-a-years-time",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 1,
+      "score_noise": 9,
+      "score_boundary": 3,
+      "reasons": [
+        "hint:technical",
+        "missing_game_context",
+        "noise_patterns:2",
+        "low_information_excerpt",
+        "boundary_patterns:1",
+        "short_excerpt",
+        "truncated_article"
+      ],
+      "current_expected_bucket": "noise",
+      "review_decision": "accepted",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Keep as noise unless the full article contains a concrete structural business event."
+    },
+    {
+      "sample_id": "B1D003",
+      "origin_file": "incoming_20260320_002.json",
+      "title": "Crimson Desert has topped 2M sales within a day",
+      "content_preview": "The studio is planning to \"make improvements quickly\" based on player feedback.",
+      "source_name": "Game Developer",
+      "published_at": "2026-03-20T00:00:00Z",
+      "source_url": "https://www.gamedeveloper.com/business/crimson-desert-has-topped-2m-sales-within-a-day",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "market"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 8,
+      "score_noise": 2,
+      "score_boundary": 0,
+      "reasons": [
+        "signal_pattern:market:2",
+        "hint:market",
+        "game_context",
+        "concrete_numbers",
+        "very_short_excerpt"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "accepted",
+      "corrected_bucket": "signal",
+      "corrected_signal_types": [
+        "market"
+      ],
+      "review_notes": "Keep as signal. Strong day-one sales and immediate response pressure are valid market baseline evidence."
+    },
+    {
+      "sample_id": "B1D008",
+      "origin_file": "incoming_20260323_008.json",
+      "title": "As Crimson Desert developer Pearl Abyss rushes to fix pressing issues, players are asking for updates to the time-gated dragon mount",
+      "content_preview": "After a massive but divisive launch last week, Crimson Desert is the talk of the town. From its use of gen-AI that supposedly was \"unintentionally included in the final release\" to talk from anonymous sources that point…",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/crimson-desert-players-criticize-temporary-mounts-like-the-dragon",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "market"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 8,
+      "score_noise": 3,
+      "score_boundary": 0,
+      "reasons": [
+        "signal_pattern:technical:1",
+        "signal_pattern:market:1",
+        "hint:market",
+        "game_context",
+        "low_information_excerpt",
+        "concrete_numbers",
+        "truncated_article"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "accepted",
+      "corrected_bucket": "signal",
+      "corrected_signal_types": [
+        "market"
+      ],
+      "review_notes": "Keep as signal. Divisive launch fallout and rapid player-pressure response are valid market stress signals."
+    },
+    {
+      "sample_id": "B1D009",
+      "origin_file": "incoming_20260323_011.json",
+      "title": "Minecraft Dungeons 2 will dungeon-crawl through the blockworld yet again when it launches later this year",
+      "content_preview": "Diablo-ish Minecraft spin-off Minecraft Dungeons has a sequel, and said sequel's coming out at some point in 2026. What's it about? Well, Mojang say, \"all was well until it wasn't\". Wait, lads, that's pretty much the se…",
+      "source_name": "Rock Paper Shotgun",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_url": "https://www.rockpapershotgun.com/minecraft-dungeons-2-will-dungeon-crawl-through-the-blockworld-yet-again-when-it-launches-later-this-year",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 1,
+      "score_noise": 8,
+      "score_boundary": 1,
+      "reasons": [
+        "hint:market",
+        "missing_game_context",
+        "low_information_excerpt",
+        "truncated_article",
+        "announcement_style",
+        "shallow_announcement_penalty"
+      ],
+      "current_expected_bucket": "noise",
+      "review_decision": "accepted",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Keep as noise. Standard sequel/launch coverage is outside the benchmark's structural signal target."
+    },
+    {
+      "sample_id": "B1D028",
+      "origin_file": "incoming_20260324_027.json",
+      "title": "I crashed out reading layoff condolence letters in this shop sim about a laid-off adventurer made by a laid-off Xbox developer",
+      "content_preview": "Being a game dev \"is not something a corporation can take from you\" says solo developer releasing a game alone after last year's Microsoft layoffs.",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/sim/i-crashed-out-reading-layoff-condolence-letters-in-this-shop-sim-about-a-laid-off-adventurer-made-by-a-laid-off-xbox-developer/",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "team"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 8,
+      "score_noise": 0,
+      "score_boundary": 1,
+      "reasons": [
+        "signal_pattern:team:1",
+        "hint:team",
+        "high_value_entities:microsoft,xbox",
+        "game_context",
+        "short_excerpt",
+        "structural_change_keywords"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "accepted",
+      "corrected_bucket": "signal",
+      "corrected_signal_types": [
+        "team"
+      ],
+      "review_notes": "Quick confirm unless full article changes the interpretation."
+    },
+    {
+      "sample_id": "B1D032",
+      "origin_file": "incoming_20260324_043.json",
+      "title": "EverQuest Legends is the 1999 MMO you know and love born again with more respect for your time",
+      "content_preview": "The year is 2026, and a new-but-not-really EverQuest is on the way. Announced today, EverQuest Legends is the same MMO some of you have been playing for coming up to 30 years, just without all the years of expansions. A…",
+      "source_name": "Rock Paper Shotgun",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_url": "https://www.rockpapershotgun.com/everquest-legends-is-the-1999-mmo-you-know-and-love-born-again-with-more-respect-for-your-time",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 1,
+      "score_noise": 8,
+      "score_boundary": 1,
+      "reasons": [
+        "hint:technical",
+        "missing_game_context",
+        "low_information_excerpt",
+        "truncated_article",
+        "announcement_style",
+        "shallow_announcement_penalty"
+      ],
+      "current_expected_bucket": "noise",
+      "review_decision": "accepted",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Keep as noise unless the full article reveals a concrete business-model or platform-structure change."
+    },
+    {
+      "sample_id": "B1D045",
+      "origin_file": "incoming_20260325_011.json",
+      "title": "Investors Are Having a 'Whoopsie' Moment — After 3 Million Sales, Shares in Crimson Desert Dev Pearl Abyss Skyrocket",
+      "content_preview": "Shares in Pearl Abyss, the developer and publisher of Crimson Desert, skyrocketed today after the company announced 3 million sales — addressing a significant stock price collapse that occured around the game’s launch.",
+      "source_name": "IGN Game News",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_url": "https://www.ign.com/articles/investors-are-having-a-whoopsie-moment-after-3-million-sales-shares-in-crimson-desert-dev-pearl-abyss-skyrocket",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "market"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 8,
+      "score_noise": 0,
+      "score_boundary": 1,
+      "reasons": [
+        "signal_pattern:market:2",
+        "hint:market",
+        "game_context",
+        "concrete_numbers",
+        "announcement_style"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "accepted",
+      "corrected_bucket": "signal",
+      "corrected_signal_types": [
+        "market"
+      ],
+      "review_notes": "Quick confirm unless full article changes the interpretation."
+    },
+    {
+      "sample_id": "B1D051",
+      "origin_file": "incoming_20260325_033.json",
+      "title": "After Tekken 8 Season 3 led to a Mostly Negative rating on Steam, Bandai Namco is working on an \"emergency patch\" to win fans back",
+      "content_preview": "Tekken 8 's Season 3 update has proven such a fumble that the game now has a Mostly Negative rating on Steam, and multiple professional players have left the game behind. In response to this harsh criticism, Bandai Namc…",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/after-tekken-8-season-3-led-to-a-mostly-negative-rating-on-steam-bandai-namco-is-working-on-an-emergency-patch-to-win-fans-back",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 4,
+      "score_noise": 8,
+      "score_boundary": 3,
+      "reasons": [
+        "signal_pattern:market:1",
+        "hint:technical",
+        "game_context",
+        "noise_patterns:1",
+        "low_information_excerpt",
+        "boundary_patterns:1",
+        "truncated_article",
+        "announcement_style",
+        "shallow_announcement_penalty"
+      ],
+      "current_expected_bucket": "noise",
+      "review_decision": "accepted",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Keep as noise. A backlash-driven balance patch is product maintenance, not a structural benchmark signal."
+    },
+    {
+      "sample_id": "B1D052",
+      "origin_file": "incoming_20260325_048.json",
+      "title": "Imagine GTA with AI-generated characters \"just going along with whatever insane thing you say,\" muses Valve writer, absent-mindedly spotlighting what terrifies me about genAI",
+      "content_preview": "Like many people at companies preoccupied with discovering the next \"goose that lays the golden egg\" , Half-Life 2 and Portal writer Erik Wolpaw has been \"poking around\" with generative AI. He and a small team at Valve …",
+      "source_name": "Rock Paper Shotgun",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_url": "https://www.rockpapershotgun.com/imagine-gta-with-ai-generated-characters-just-going-along-with-whatever-insane-thing-you-say-muses-valve-writer-absent-mindedly-spotlighting-what-terrifies-me-about-genai",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 8,
+      "score_noise": 0,
+      "score_boundary": 0,
+      "reasons": [
+        "signal_pattern:technical:3",
+        "hint:technical",
+        "game_context"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "modified",
+      "corrected_bucket": "signal",
+      "corrected_signal_types": [
+        "technical"
+      ],
+      "review_notes": "Keep as signal. This is a clear AI-native design paradigm discussion around generative characters and interaction loops."
+    },
+    {
+      "sample_id": "B1D060",
+      "origin_file": "incoming_20260326_056.json",
+      "title": "Serious Sam: Shatterverse revealed in Xbox Partner Showcase, and it's being made by the Dead by Daylight devs",
+      "content_preview": "Serious Sam is back! Announced during today's Xbox Partner Showcase, Serious Sam: Shatterverse is a co-operative multiplayer Roguelite FPS from Devolver Digital and Behavior Interactive. It's set to release some time th…",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/serious-sam-shatterverse-revealed-in-xbox-partner-showcase-a-new-co-op-roguelite-fps",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 3,
+      "score_noise": 8,
+      "score_boundary": 1,
+      "reasons": [
+        "hint:technical",
+        "high_value_entities:xbox",
+        "game_context",
+        "noise_patterns:1",
+        "low_information_excerpt",
+        "truncated_article",
+        "announcement_style",
+        "shallow_announcement_penalty"
+      ],
+      "current_expected_bucket": "noise",
+      "review_decision": "accepted",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Keep as noise. Routine showcase reveal coverage belongs in suppression, not benchmark signals."
+    },
+    {
+      "sample_id": "B1D064",
+      "origin_file": "incoming_20260326_065.json",
+      "title": "The Super Mario Galaxy Movie adds Fox McCloud from Star Fox, and it really feels like we're being set up for a Super Smash Bros. film",
+      "content_preview": "The Super Mario Galaxy Movie 's marketing campaign has been aggressive to the point of spoiling several shocking cameos in recent weeks, even if its trailers aren't the most informative when it comes to plot. Maybe that…",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/the-super-mario-galaxy-movie-adds-fox-mccloud-from-star-fox",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 1,
+      "score_noise": 8,
+      "score_boundary": 1,
+      "reasons": [
+        "hint:technical",
+        "missing_game_context",
+        "low_information_excerpt",
+        "truncated_article",
+        "announcement_style",
+        "shallow_announcement_penalty"
+      ],
+      "current_expected_bucket": "noise",
+      "review_decision": "accepted",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Keep as noise. Franchise/movie speculation should not trigger structural signal extraction."
+    },
+    {
+      "sample_id": "B1D066",
+      "origin_file": "incoming_20260326_069.json",
+      "title": "Vaunted's tactical combat looks fine, but I'm most interested in the consequences of rewriting history when one of its dodgy mercenaries bites the bullet",
+      "content_preview": "We've all been there. You and two other morally dubious alien treasure hunters have an expedition go wrong, and find yourselves having to tactically blast through some baddies in order to secure some relics in timely fa…",
+      "source_name": "Rock Paper Shotgun",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_url": "https://www.rockpapershotgun.com/vaunteds-tactical-combat-looks-fine-but-im-most-interested-in-the-consequences-of-rewriting-history-when-one-of-its-dodgy-mercenaries-bites-the-bullet",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 3,
+      "score_noise": 8,
+      "score_boundary": 1,
+      "reasons": [
+        "signal_pattern:regulatory:1",
+        "hint:technical",
+        "missing_game_context",
+        "low_information_excerpt",
+        "truncated_article",
+        "announcement_style",
+        "shallow_announcement_penalty"
+      ],
+      "current_expected_bucket": "noise",
+      "review_decision": "accepted",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Keep as noise. Descriptive impressions coverage is a clean suppression sample."
+    },
+    {
+      "sample_id": "B1D067",
+      "origin_file": "incoming_20260326_070.json",
+      "title": "Xbox Partner Preview showcase March 2026 - here's everything announced",
+      "content_preview": "What better way to celebrate a Thursday than another Xbox Partner Preview showcase? Yes, it's that time again when Microsoft turns to its chums and offers them the spotlight; a chance to show the world what they've been…",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/xbox-partner-preview-showcase-march-2026-heres-everything-announced",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 4,
+      "score_noise": 8,
+      "score_boundary": 3,
+      "reasons": [
+        "hint:technical",
+        "high_value_entities:microsoft,xbox",
+        "game_context",
+        "noise_patterns:4",
+        "boundary_patterns:1",
+        "announcement_style"
+      ],
+      "current_expected_bucket": "noise",
+      "review_decision": "accepted",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Keep as noise. Showcase roundups are clean suppression samples, not structural signals."
+    },
+    {
+      "sample_id": "B1D074",
+      "origin_file": "incoming_20260327_036.json",
+      "title": "Monster Hunter Stories 3 is cranking up the challenge in a free new update, and its first story DLC might arrive sooner than expected",
+      "content_preview": "If you've whizzed your way through Monster Hunter Stories 3: Twisted Reflections already and you're wishing its beasties had a little more bite, Capcom's got you covered. It's just announced some \"extremely powerful\" va…",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/monster-hunter-stories-3-cranking-up-the-challenge-in-free-new-update",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 2,
+      "score_noise": 8,
+      "score_boundary": 3,
+      "reasons": [
+        "hint:technical",
+        "high_value_entities:capcom",
+        "missing_game_context",
+        "low_information_excerpt",
+        "boundary_patterns:1",
+        "truncated_article",
+        "announcement_style",
+        "shallow_announcement_penalty"
+      ],
+      "current_expected_bucket": "noise",
+      "review_decision": "accepted",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Keep as noise unless the full article unexpectedly indicates a broader strategic or platform-policy change."
+    },
+    {
+      "sample_id": "B1D085",
+      "origin_file": "incoming_20260328_014.json",
+      "title": "Kingdom Come: Deliverance 2 translator claims Warhorse have laid him off in preference of using AI going forward",
+      "content_preview": "It sounds like Kingdom Come: Deliverance 2 developer Warhorse Studios' future projects won't be translated entirely by human hands. Earlier today, a Reddit post was shared to the game's subreddit from Max Hejtmánek, a C…",
+      "source_name": "Rock Paper Shotgun",
+      "published_at": "2026-03-28T00:00:00Z",
+      "source_url": "https://www.rockpapershotgun.com/kingdom-come-deliverance-2-translator-claims-warhorse-have-laid-him-off-in-preference-of-using-ai-going-forward",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 8,
+      "score_noise": 3,
+      "score_boundary": 0,
+      "reasons": [
+        "signal_pattern:team:1",
+        "signal_pattern:technical:1",
+        "hint:technical",
+        "game_context",
+        "low_information_excerpt",
+        "truncated_article",
+        "structural_change_keywords"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "modified",
+      "corrected_bucket": "signal",
+      "corrected_signal_types": [
+        "technical",
+        "team"
+      ],
+      "review_notes": "Keep as signal. This is a direct AI substitution claim affecting labor structure and production workflow."
+    },
+    {
+      "sample_id": "B1D102",
+      "origin_file": "incoming_20260331_006.json",
+      "title": "Zero Parades: For Dead Spies is the first Disco Elysium successor to get a release date, will finally be playable this summer",
+      "content_preview": "Zero Parades: For Dead Spies - the much-anticipated espionage RPG from some of the developers behind Disco Elysuim - finally has a release date. It launches for PC on 21st May. Read more",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/zero-parades-for-dead-spies-release-date-pc",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 1,
+      "score_noise": 8,
+      "score_boundary": 3,
+      "reasons": [
+        "hint:market",
+        "missing_game_context",
+        "low_information_excerpt",
+        "boundary_patterns:1",
+        "truncated_article",
+        "announcement_style",
+        "shallow_announcement_penalty"
+      ],
+      "current_expected_bucket": "noise",
+      "review_decision": "accepted",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Keep as noise. This is a standard release-date announcement with no structural business signal."
+    },
+    {
+      "sample_id": "B1D110",
+      "origin_file": "incoming_20260331_063.json",
+      "title": "Yes, the Palworld dating sim is actually real",
+      "content_preview": "Pocketpair has finally done it. After revealing it as an April Fools joke a few years ago, the company has officially announced that the Palworld Dating Sim - called Palworld: More Than Just Pals - is real and in active…",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/yes-the-palworld-dating-sim-is-actually-real",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 1,
+      "score_noise": 8,
+      "score_boundary": 1,
+      "reasons": [
+        "hint:technical",
+        "missing_game_context",
+        "low_information_excerpt",
+        "truncated_article",
+        "announcement_style",
+        "shallow_announcement_penalty"
+      ],
+      "current_expected_bucket": "noise",
+      "review_decision": "accepted",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Keep as noise. This is novelty announcement coverage, not a structural benchmark signal."
+    },
+    {
+      "sample_id": "B1D002",
+      "origin_file": "incoming_20260320_001.json",
+      "title": "Savvy Games Group to acquire Moonton Games for $6 billion",
+      "content_preview": "TikTok maker ByteDance paid $4 billion for Moonton in 2021.",
+      "source_name": "Game Developer",
+      "published_at": "2026-03-20T00:00:00Z",
+      "source_url": "https://www.gamedeveloper.com/business/savvy-games-group-agreed-to-buy-moonton-games-for-6-billion",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "capital"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 7,
+      "score_noise": 2,
+      "score_boundary": 0,
+      "reasons": [
+        "signal_pattern:capital:1",
+        "hint:capital",
+        "high_value_entities:savvy",
+        "game_context",
+        "concrete_numbers",
+        "very_short_excerpt"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "accepted",
+      "corrected_bucket": "signal",
+      "corrected_signal_types": [
+        "capital"
+      ],
+      "review_notes": "Keep as signal. A major acquisition in core game industry scope is valid capital benchmark material."
+    },
+    {
+      "sample_id": "B1D005",
+      "origin_file": "incoming_20260323_004.json",
+      "title": "Top 12 Most Expensive Video Game Buyouts Of All Time",
+      "content_preview": "Big deals. Many mature industries trend toward consolidation as time goes on, and the video game business is no different. Big companies are bought and sold for massive sums of money. But what are the biggest of the big…",
+      "source_name": "GameSpot",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_url": "https://www.gamespot.com/gallery/top-10-most-expensive-video-game-buyouts-of-all-time/2900-4718/",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "capital"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 7,
+      "score_noise": 0,
+      "score_boundary": 0,
+      "reasons": [
+        "hint:capital",
+        "high_value_entities:microsoft",
+        "game_context",
+        "concrete_numbers",
+        "structural_change_keywords"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "modified",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Downgrade to noise. This is a retrospective roundup, not a fresh structural event for the benchmark."
+    },
+    {
+      "sample_id": "B1D011",
+      "origin_file": "incoming_20260323_023.json",
+      "title": "After all that furore over Nvidia's AI-powered DLSS 5 makeover of Resident Evil Requiem, Capcom promises gen-AI assets won't be part of its games any time soon",
+      "content_preview": "We've seen a slew of comapnies clarify their stance on generative AI over the past few months, and now it's Capcom's turn to outline its boundaries with the tech. Read more",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/capcom-vows-not-to-use-generative-ai-for-final-assets-but-wants-to-improve-efficiency",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 7,
+      "score_noise": 3,
+      "score_boundary": 1,
+      "reasons": [
+        "signal_pattern:technical:2",
+        "hint:technical",
+        "high_value_entities:capcom",
+        "game_context",
+        "low_information_excerpt",
+        "short_excerpt",
+        "truncated_article"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "accepted",
+      "corrected_bucket": "signal",
+      "corrected_signal_types": [
+        "technical"
+      ],
+      "review_notes": "Keep as signal. A publisher-level gen-AI boundary statement is valid technical governance signal material."
+    },
+    {
+      "sample_id": "B1D013",
+      "origin_file": "incoming_20260323_027.json",
+      "title": "Capcom says it 'will not implement assets generated by AI into our game content,' but still plans to use AI to 'enhance efficiency and boost productivity' in game development",
+      "content_preview": "Capcom told its investors that its players won't be presented with any AI-generated assets, but it's unclear where it draws the line.",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/gaming-industry/capcom-says-it-will-not-implement-assets-generated-by-ai-into-our-game-content-but-still-plans-to-use-ai-to-enhance-efficiency-and-boost-productivity-in-game-development/",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 7,
+      "score_noise": 0,
+      "score_boundary": 3,
+      "reasons": [
+        "signal_pattern:technical:1",
+        "signal_pattern:market:1",
+        "hint:technical",
+        "high_value_entities:capcom",
+        "game_context",
+        "boundary_patterns:1",
+        "short_excerpt"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "accepted",
+      "corrected_bucket": "signal",
+      "corrected_signal_types": [
+        "technical"
+      ],
+      "review_notes": "Keep as signal. This is a clear AI workflow and production-policy shift, even if the customer-facing asset boundary is constrained."
+    },
+    {
+      "sample_id": "B1D014",
+      "origin_file": "incoming_20260323_028.json",
+      "title": "Capcom says it will use generative AI to speed up production",
+      "content_preview": "The company claims it will not be using the tech for asset creation.",
+      "source_name": "Game Developer",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_url": "https://www.gamedeveloper.com/business/capcom-says-it-will-use-generative-ai-to-speed-up-production",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 7,
+      "score_noise": 2,
+      "score_boundary": 0,
+      "reasons": [
+        "signal_pattern:technical:2",
+        "hint:technical",
+        "high_value_entities:capcom",
+        "game_context",
+        "very_short_excerpt"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "accepted",
+      "corrected_bucket": "signal",
+      "corrected_signal_types": [
+        "technical"
+      ],
+      "review_notes": "Keep as signal. Explicit use of generative AI to speed production is in-scope technical process change."
+    },
+    {
+      "sample_id": "B1D016",
+      "origin_file": "incoming_20260323_035.json",
+      "title": "Dragon's Dogma 2 celebrates second anniversary with \"special celebratory artwork\" and a custom controller, as fans ponder: are we getting DLC?",
+      "content_preview": "Dragon's Dogma 2 was a very special RPG even if some its bones could've used more work and the New Game Plus loop span its wheels without extra end-game content to give it juice. Still, like the original , it gained a d…",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/dragons-dogma-2-celebrates-second-anniversary-with-no-dlc-news-but-we-might-have-a-solid-tease",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 3,
+      "score_noise": 7,
+      "score_boundary": 2,
+      "reasons": [
+        "hint:technical",
+        "high_value_entities:capcom",
+        "game_context",
+        "noise_patterns:2",
+        "low_information_excerpt",
+        "boundary_patterns:1",
+        "truncated_article"
+      ],
+      "current_expected_bucket": "noise",
+      "review_decision": "accepted",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Keep as noise. Anniversary celebration plus DLC speculation is standard promotional coverage."
+    },
+    {
+      "sample_id": "B1D020",
+      "origin_file": "incoming_20260323_062.json",
+      "title": "Two more leadership exits take place at Xbox",
+      "content_preview": "VP Lori Wright and general manager of gaming AI Haiyan Zhang have parted ways with the company.",
+      "source_name": "Game Developer",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_url": "https://www.gamedeveloper.com/business/two-more-leadership-exists-took-place-at-xbox",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 7,
+      "score_noise": 2,
+      "score_boundary": 0,
+      "reasons": [
+        "signal_pattern:team:1",
+        "signal_pattern:technical:1",
+        "hint:technical",
+        "high_value_entities:xbox",
+        "game_context",
+        "very_short_excerpt"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "modified",
+      "corrected_bucket": "signal",
+      "corrected_signal_types": [
+        "team"
+      ],
+      "review_notes": "Keep as signal, but retag to team because executive departures reflect org structure change."
+    },
+    {
+      "sample_id": "B1D025",
+      "origin_file": "incoming_20260324_016.json",
+      "title": "Report: Nintendo slashes Switch 2 production by a third due to weak U.S. sales",
+      "content_preview": "The company has purportedly downgraded its output to 4 million units from 6 million units.",
+      "source_name": "Game Developer",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_url": "https://www.gamedeveloper.com/business/report-nintendo-slashes-switch-2-production-by-a-third-due-to-weak-u-s-sales",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "market"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 7,
+      "score_noise": 2,
+      "score_boundary": 2,
+      "reasons": [
+        "signal_pattern:market:1",
+        "hint:market",
+        "high_value_entities:nintendo",
+        "game_context",
+        "boundary_patterns:1",
+        "concrete_numbers",
+        "very_short_excerpt"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "accepted",
+      "corrected_bucket": "signal",
+      "corrected_signal_types": [
+        "market"
+      ],
+      "review_notes": "Keep as signal. This is a strong market squeeze indicator."
+    },
+    {
+      "sample_id": "B1D035",
+      "origin_file": "incoming_20260324_052.json",
+      "title": "\"It's essential to me that it's approached with care and love and caution\" - How Life is Strange: Reunion actors Hannah Telle and Rhianna DeVries are preparing to say farewell to Max and Chloe",
+      "content_preview": "\"I remember being in a really strange time in my life, oddly enough, and a big transition where I felt really uncertain of myself and my place in the world, and this audition came around that was somehow celebrating all…",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/its-essential-to-me-that-its-approached-with-care-and-love-and-caution-how-life-is-strange-reunion-actors-hannah-telle-and-rhianna-devries-are-preparing-to-say-farewell-to-max-and-chloe",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 1,
+      "score_noise": 7,
+      "score_boundary": 0,
+      "reasons": [
+        "hint:technical",
+        "missing_game_context",
+        "noise_patterns:1",
+        "low_information_excerpt",
+        "truncated_article"
+      ],
+      "current_expected_bucket": "noise",
+      "review_decision": "accepted",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Keep as noise. Human-interest or cast-interview content is outside benchmark scope."
+    },
+    {
+      "sample_id": "B1D039",
+      "origin_file": "incoming_20260324_066.json",
+      "title": "Super Mario Galaxy Movie age-rating accidentally confirms a 20-year-old fan theory",
+      "content_preview": "An age-rating for Nintendo's upcoming Super Mario Galaxy Movie might have let slip a major plot point which, if accurate, will finally confirm a fan theory which has been floating about for almost 20 years. Read more",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/super-mario-galaxy-movie-age-rating-accidentally-confirms-a-20-year-fan-theory",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 3,
+      "score_noise": 7,
+      "score_boundary": 2,
+      "reasons": [
+        "hint:technical",
+        "high_value_entities:nintendo",
+        "game_context",
+        "noise_patterns:2",
+        "low_information_excerpt",
+        "boundary_patterns:1",
+        "truncated_article"
+      ],
+      "current_expected_bucket": "noise",
+      "review_decision": "accepted",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Keep as noise."
+    },
+    {
+      "sample_id": "B1D046",
+      "origin_file": "incoming_20260325_019.json",
+      "title": "Epic Games layoffs serve as a timely reminder that accountability is dead",
+      "content_preview": "What happened to Harmonix and Mediatonic under Epic Games? Good question.",
+      "source_name": "Game Developer",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_url": "https://www.gamedeveloper.com/business/epic-games-layoffs-should-remind-you-that-accountability-is-dead",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "team"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 7,
+      "score_noise": 2,
+      "score_boundary": 0,
+      "reasons": [
+        "signal_pattern:team:1",
+        "hint:team",
+        "high_value_entities:epic",
+        "game_context",
+        "very_short_excerpt",
+        "structural_change_keywords"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "accepted",
+      "corrected_bucket": "signal",
+      "corrected_signal_types": [
+        "team"
+      ],
+      "review_notes": "Keep as signal only if you accept commentary that crystallizes layoff consequences as paradigm evidence; otherwise boundary."
+    },
+    {
+      "sample_id": "B1D056",
+      "origin_file": "incoming_20260326_019.json",
+      "title": "Analyst says Epic Games layoffs send a clear signal: 'This will not get any easier'",
+      "content_preview": "The myth of perpetual growth continues to bulldoze through the industry.",
+      "source_name": "Game Developer",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_url": "https://www.gamedeveloper.com/business/analyst-says-epic-games-layoffs-send-a-clear-signal-this-will-not-get-any-easier-",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "team"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 7,
+      "score_noise": 2,
+      "score_boundary": 0,
+      "reasons": [
+        "signal_pattern:team:1",
+        "hint:team",
+        "high_value_entities:epic",
+        "game_context",
+        "very_short_excerpt",
+        "structural_change_keywords"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "modified",
+      "corrected_bucket": "signal",
+      "corrected_signal_types": [
+        "team",
+        "market"
+      ],
+      "review_notes": "Keep as signal. Multi-type makes sense if your taxonomy allows team plus market for paradigm squeeze interpretation."
+    },
+    {
+      "sample_id": "B1D059",
+      "origin_file": "incoming_20260326_023.json",
+      "title": "That Hunter: The Reckoning game that was accidentally leaked on Steam is now officially revealed as a new FPS RPG",
+      "content_preview": "Hunter: The Reckoning - Deathwish was announced, on purpose this time, in today's Xbox showcase.",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/rpg/that-hunter-the-reckoning-game-that-was-accidentally-leaked-on-steam-is-now-officially-revealed-as-a-new-fps-rpg/",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 3,
+      "score_noise": 7,
+      "score_boundary": 1,
+      "reasons": [
+        "hint:team",
+        "high_value_entities:xbox",
+        "game_context",
+        "noise_patterns:1",
+        "very_short_excerpt",
+        "announcement_style",
+        "shallow_announcement_penalty"
+      ],
+      "current_expected_bucket": "noise",
+      "review_decision": "accepted",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Keep as noise."
+    },
+    {
+      "sample_id": "B1D069",
+      "origin_file": "incoming_20260327_005.json",
+      "title": "Record Sales, Declining Stock Prices, Production Decreases: Is Switch 2 A Massive Success Or Not?",
+      "content_preview": "There is no denying that the Switch 2 is crushing it. Its sales in the US are pacing 45% ahead of the original Switch over its first four months and most consoles in history. No data exists in a vacuum, though, and Swit…",
+      "source_name": "GameSpot",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_url": "https://www.gamespot.com/articles/record-sales-declining-stock-production-decreases-is-switch-2-a-massive-success-or-not/1100-6539066/?ftag=CAD-01-10abi2f",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "market"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 7,
+      "score_noise": 0,
+      "score_boundary": 2,
+      "reasons": [
+        "signal_pattern:market:2",
+        "hint:market",
+        "high_value_entities:nintendo",
+        "game_context",
+        "boundary_patterns:1"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "accepted",
+      "corrected_bucket": "signal",
+      "corrected_signal_types": [
+        "market"
+      ],
+      "review_notes": "Keep as signal. It captures a market contradiction rather than simple success reporting."
+    },
+    {
+      "sample_id": "B1D086",
+      "origin_file": "incoming_20260329_003.json",
+      "title": "A programmer with terminal brain cancer was caught in Epic's mass layoff, but CEO Tim Sweeney says the studio 'will solve the insurance for them'",
+      "content_preview": "\"Mike is not just a number. He is a father. A husband. A person deeply loved.\"",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-29T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/gaming-industry/a-programmer-with-terminal-brain-cancer-was-caught-in-epics-mass-layoff-but-ceo-tim-sweeney-says-the-studio-will-solve-the-insurance-for-them/",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "team"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 7,
+      "score_noise": 2,
+      "score_boundary": 0,
+      "reasons": [
+        "signal_pattern:team:1",
+        "hint:team",
+        "high_value_entities:epic",
+        "game_context",
+        "very_short_excerpt",
+        "structural_change_keywords"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "accepted",
+      "corrected_bucket": "signal",
+      "corrected_signal_types": [
+        "team"
+      ],
+      "review_notes": "Keep as signal if downstream worker fallout from layoffs is valid benchmark evidence; otherwise boundary."
+    },
+    {
+      "sample_id": "B1D090",
+      "origin_file": "incoming_20260330_008.json",
+      "title": "Epic's mass layoffs left a programmer with terminal brain cancer without life insurance, but Tim Sweeney says the company will \"solve\" the problem",
+      "content_preview": "Epic Games' mass layoffs led a programmer with terminal brain cancer to lose his life insurance, leaving him and his family struggling to find new coverage. Following news of the situation breaking, Epic CEO Tim Sweeney…",
+      "source_name": "Rock Paper Shotgun",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_url": "https://www.rockpapershotgun.com/epics-mass-layoffs-left-a-programmer-with-terminal-brain-cancer-without-life-insurance-but-tim-sweeney-says-the-company-will-solve-the-problem",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "team"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 7,
+      "score_noise": 3,
+      "score_boundary": 0,
+      "reasons": [
+        "signal_pattern:team:1",
+        "hint:team",
+        "high_value_entities:epic",
+        "game_context",
+        "low_information_excerpt",
+        "truncated_article",
+        "structural_change_keywords"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "accepted",
+      "corrected_bucket": "signal",
+      "corrected_signal_types": [
+        "team"
+      ],
+      "review_notes": "Keep as signal if second-order worker impact belongs in scope; otherwise boundary."
+    },
+    {
+      "sample_id": "B1D099",
+      "origin_file": "incoming_20260330_047.json",
+      "title": "Screamer’s multiplayer chases unleash the racer’s full chaotic potential, trapping you inside a relentlessly boosty, bashy, and boomy washing machine",
+      "content_preview": "When James and I published our impressions of anime racer Screamer the other week, I mentioned I was keen to give its online races a go once it’d pulled out of the garage. Would the sights and sounds of sliding around i…",
+      "source_name": "Rock Paper Shotgun",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_url": "https://www.rockpapershotgun.com/screamers-multiplayer-chases-unleash-the-racers-full-chaotic-potential-trapping-you-inside-a-relentlessly-boosty-bashy-and-boomy-washing-machine",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 1,
+      "score_noise": 7,
+      "score_boundary": 0,
+      "reasons": [
+        "hint:technical",
+        "missing_game_context",
+        "noise_patterns:1",
+        "low_information_excerpt",
+        "truncated_article"
+      ],
+      "current_expected_bucket": "noise",
+      "review_decision": "accepted",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Keep as noise."
+    },
+    {
+      "sample_id": "B1D001",
+      "origin_file": "incoming_20260319_008.json",
+      "title": "Fortnite back on Google Play worldwide after Epic and Google settle",
+      "content_preview": "The settlement took place in early March, months after a federal court cast doubts on the terms.",
+      "source_name": "Game Developer",
+      "published_at": "2026-03-19T00:00:00Z",
+      "source_url": "https://www.gamedeveloper.com/business/fortnite-back-on-google-play-worldwide-after-epic-and-google-settle",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 6,
+      "score_noise": 2,
+      "score_boundary": 0,
+      "reasons": [
+        "signal_pattern:regulatory:1",
+        "hint:technical",
+        "high_value_entities:epic,google",
+        "game_context",
+        "very_short_excerpt"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "modified",
+      "corrected_bucket": "signal",
+      "corrected_signal_types": [
+        "regulatory",
+        "market"
+      ],
+      "review_notes": "Keep as signal. Prefer regulatory as primary; include market if your taxonomy allows distribution impact."
+    },
+    {
+      "sample_id": "B1D007",
+      "origin_file": "incoming_20260323_006.json",
+      "title": "2019's Call of Duty: Modern Warfare Is Blowing Up on Steam Thanks to a Big Sale and Positive Word of Mouth",
+      "content_preview": "A generous price drop has seen Call of Duty: Modern Warfare break its own Steam concurrent record over the weekend, hitting an all-new high of 61,667 peak players and making it more popular than last year's Call of Duty…",
+      "source_name": "IGN Game News",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_url": "https://www.ign.com/articles/2019s-call-of-duty-modern-warfare-is-blowing-up-on-steam-thanks-to-a-big-sale-and-positive-word-of-mouth",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "market"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 6,
+      "score_noise": 0,
+      "score_boundary": 0,
+      "reasons": [
+        "signal_pattern:market:2",
+        "hint:market",
+        "game_context"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "accepted",
+      "corrected_bucket": "signal",
+      "corrected_signal_types": [
+        "market"
+      ],
+      "review_notes": "Keep as signal if you accept concrete market response signals, not just strategic events."
+    },
+    {
+      "sample_id": "B1D012",
+      "origin_file": "incoming_20260323_025.json",
+      "title": "As controversy swamps Tekken 8 and Street Fighter 6, Guilty Gear Strive just announced a massive new update",
+      "content_preview": "Arc System Works has announced a flashy major update for its long-running fighting game Guilty Gear Strive, overhauling the game and adding a new selection of characters. All the while, Street Fighter 6 and Tekken 8 see…",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/controversy-tekken-8-street-fighter-6-guilty-gear-strive-announced-massive-new-update",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 2,
+      "score_noise": 6,
+      "score_boundary": 1,
+      "reasons": [
+        "hint:technical",
+        "game_context",
+        "low_information_excerpt",
+        "truncated_article",
+        "announcement_style",
+        "shallow_announcement_penalty"
+      ],
+      "current_expected_bucket": "noise",
+      "review_decision": "accepted",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Keep as noise unless the full article contains a concrete business policy shift."
+    },
+    {
+      "sample_id": "B1D018",
+      "origin_file": "incoming_20260323_048.json",
+      "title": "Pearl Abyss forgot to mention it used generative AI to create assets for Crimson Desert",
+      "content_preview": "The studio has now pledged to conduct a 'comprehensive audit' to identify and remove all generative AI assets.",
+      "source_name": "Game Developer",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_url": "https://www.gamedeveloper.com/production/whoops-pearl-abyss-forgot-to-mention-it-used-generative-ai-to-create-crimson-desert",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 6,
+      "score_noise": 0,
+      "score_boundary": 1,
+      "reasons": [
+        "signal_pattern:technical:2",
+        "hint:technical",
+        "game_context",
+        "short_excerpt"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "accepted",
+      "corrected_bucket": "signal",
+      "corrected_signal_types": [
+        "technical"
+      ],
+      "review_notes": "Keep as signal. This also fits reverse-paradigm or AI-boundary logic."
+    },
+    {
+      "sample_id": "B1D021",
+      "origin_file": "incoming_20260324_001.json",
+      "title": "I felt like playing a janky choice-driven RPG on my Steam Deck, and this gritty AA deepcut is hitting the spot for just 99 cents",
+      "content_preview": "Mars War Logs isn't amazing, but it's definitely worth investigating.",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/rpg/i-felt-like-playing-a-janky-choice-driven-rpg-on-my-steam-deck-and-this-gritty-aa-deepcut-is-hitting-the-spot-for-just-99-cents/",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 2,
+      "score_noise": 6,
+      "score_boundary": 0,
+      "reasons": [
+        "hint:team",
+        "game_context",
+        "noise_patterns:2",
+        "very_short_excerpt"
+      ],
+      "current_expected_bucket": "noise",
+      "review_decision": "accepted",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Keep as noise."
+    },
+    {
+      "sample_id": "B1D037",
+      "origin_file": "incoming_20260324_055.json",
+      "title": "Marathon review",
+      "content_preview": "A confident reminder that nobody does an FPS like Bungie.",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/fps/marathon-review/",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 1,
+      "score_noise": 6,
+      "score_boundary": 0,
+      "reasons": [
+        "hint:technical",
+        "missing_game_context",
+        "noise_patterns:1",
+        "very_short_excerpt"
+      ],
+      "current_expected_bucket": "noise",
+      "review_decision": "accepted",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Keep as noise."
+    },
+    {
+      "sample_id": "B1D038",
+      "origin_file": "incoming_20260324_063.json",
+      "title": "Official World Of Warcraft Music Video Is A Walk Down Memory Lane",
+      "content_preview": "World of Warcraft has been around for 22 years, and a new music video in collaboration with singer Aurora will have players reliving every memory. The song, titled A Place to Call Home , is accompanied by an animated mu…",
+      "source_name": "GameSpot",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_url": "https://www.gamespot.com/articles/official-world-of-warcraft-music-video-is-a-walk-down-memory-lane/1100-6538991/?ftag=CAD-01-10abi2f",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 6,
+      "score_noise": 0,
+      "score_boundary": 0,
+      "reasons": [
+        "signal_pattern:technical:1",
+        "signal_pattern:market:1",
+        "hint:technical",
+        "game_context"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "modified",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Downgrade to noise. This is promo/media content, not a structural signal."
+    },
+    {
+      "sample_id": "B1D043",
+      "origin_file": "incoming_20260325_008.json",
+      "title": "'Cripple their sales, tank their stock price. Stop collaborating with them as developers': New Blood CEO on fighting against DLSS 5",
+      "content_preview": "DLSS 5 has unleashed a fiery debate among game developers.",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/hardware/graphics-cards/cripple-their-sales-tank-their-stock-price-stop-collaborating-with-them-as-developers-new-blood-ceo-on-fighting-against-dlss-5/",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "market"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 6,
+      "score_noise": 2,
+      "score_boundary": 0,
+      "reasons": [
+        "signal_pattern:market:2",
+        "hint:market",
+        "game_context",
+        "very_short_excerpt"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "modified",
+      "corrected_bucket": "signal",
+      "corrected_signal_types": [
+        "technical",
+        "market"
+      ],
+      "review_notes": "Keep as signal. This is a technical controversy with clear market and developer-ecosystem implications."
+    },
+    {
+      "sample_id": "B1D049",
+      "origin_file": "incoming_20260325_023.json",
+      "title": "Fortnite Rocket Racing and more are being sunsetted amidst layoffs",
+      "content_preview": "Plus, Horizon Chase and Horizon Chase Turbo will no longer be available to download starting in June.",
+      "source_name": "Game Developer",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_url": "https://www.gamedeveloper.com/business/fortnite-rocket-racing-and-more-are-being-sunsetted-amidst-layoffs",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "team"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 6,
+      "score_noise": 0,
+      "score_boundary": 1,
+      "reasons": [
+        "signal_pattern:team:1",
+        "hint:team",
+        "game_context",
+        "short_excerpt",
+        "structural_change_keywords"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "modified",
+      "corrected_bucket": "signal",
+      "corrected_signal_types": [
+        "team",
+        "market"
+      ],
+      "review_notes": "Keep as signal. This is stronger as team plus market, not team alone."
+    },
+    {
+      "sample_id": "B1D058",
+      "origin_file": "incoming_20260326_021.json",
+      "title": "Hades 2 trailer teases a new steamy scene that will be added with 'bonus content and quality-of-life improvements' in an update next month",
+      "content_preview": "That's a lot more of Heracles than we've ever seen.",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/action/hades-2-trailer-teases-a-new-steamy-scene-that-will-be-added-with-bonus-content-and-quality-of-life-improvements-in-an-update-next-month/",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 1,
+      "score_noise": 6,
+      "score_boundary": 0,
+      "reasons": [
+        "hint:team",
+        "missing_game_context",
+        "noise_patterns:1",
+        "very_short_excerpt"
+      ],
+      "current_expected_bucket": "noise",
+      "review_decision": "accepted",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Keep as noise."
+    },
+    {
+      "sample_id": "B1D062",
+      "origin_file": "incoming_20260326_063.json",
+      "title": "The latest Star Wars Zero Company details tease Mass Effect DNA, hardcore turn-based tactics, permadeath, and new Clone Wars lore",
+      "content_preview": "Ever since it was announced in April 2025, Star Wars Zero Company has quickly become one of those unexpected games to watch out for. XCOM, but Star Wars? Sure, sign us up. Now, after nearly one year in the shadows, Resp…",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/new-star-wars-zero-company-details-emerge",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 2,
+      "score_noise": 6,
+      "score_boundary": 1,
+      "reasons": [
+        "hint:technical",
+        "game_context",
+        "low_information_excerpt",
+        "truncated_article",
+        "announcement_style",
+        "shallow_announcement_penalty"
+      ],
+      "current_expected_bucket": "noise",
+      "review_decision": "accepted",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Keep as noise."
+    },
+    {
+      "sample_id": "B1D063",
+      "origin_file": "incoming_20260326_064.json",
+      "title": "The Nex Playground is getting a price hike because of the memory crisis",
+      "content_preview": "Hardware manufacturer Nex said the 'rapid expansion of AI infrastructure' has resulted in key component shortages.",
+      "source_name": "Game Developer",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_url": "https://www.gamedeveloper.com/business/nex-playground-increases-its-price-due-to-ongoing-memory-crisis",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 6,
+      "score_noise": 0,
+      "score_boundary": 1,
+      "reasons": [
+        "signal_pattern:technical:1",
+        "signal_pattern:market:1",
+        "hint:technical",
+        "game_context",
+        "short_excerpt"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "modified",
+      "corrected_bucket": "signal",
+      "corrected_signal_types": [
+        "technical",
+        "market"
+      ],
+      "review_notes": "Keep as signal. This is a strong AI infrastructure externality signal and should include market impact."
+    },
+    {
+      "sample_id": "B1D075",
+      "origin_file": "incoming_20260327_039.json",
+      "title": "Owlcat Games is using generative AI to 'iterate faster' on The Expanse",
+      "content_preview": "The studio is using the tech for prototyping and placeholders, but claims temporary assets will be replaced for the final version.",
+      "source_name": "Game Developer",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_url": "https://www.gamedeveloper.com/business/owlcat-games-is-using-gen-ai-to-iterate-faster-on-the-expanse",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 6,
+      "score_noise": 0,
+      "score_boundary": 1,
+      "reasons": [
+        "signal_pattern:technical:2",
+        "hint:technical",
+        "game_context",
+        "short_excerpt"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "accepted",
+      "corrected_bucket": "signal",
+      "corrected_signal_types": [
+        "technical"
+      ],
+      "review_notes": "Keep as signal. This is a clean AI-in-production workflow signal."
+    },
+    {
+      "sample_id": "B1D076",
+      "origin_file": "incoming_20260327_040.json",
+      "title": "Path of Exile's richest player and item trading kingpin gets banned and pleads with Grinding Gear Games to restore 'more than 1,500 items, some of which can't ever be recreated': 'This is the worst day of my life'",
+      "content_preview": "The Forbidden Trove's days as a hub for Path of Exile trading may be coming to an end.",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/rpg/path-of-exiles-richest-player-and-item-trading-kingpin-gets-banned-and-pleads-with-grinding-gear-games-to-restore-more-than-1-500-items-some-of-which-cant-ever-be-recreated-this-is-the-worst-day-of-my-life/",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 6,
+      "score_noise": 2,
+      "score_boundary": 2,
+      "reasons": [
+        "signal_pattern:market:1",
+        "signal_pattern:regulatory:1",
+        "hint:technical",
+        "game_context",
+        "boundary_patterns:1",
+        "very_short_excerpt"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "modified",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Downgrade to noise unless you explicitly want platform-governance micro-incidents in scope."
+    },
+    {
+      "sample_id": "B1D077",
+      "origin_file": "incoming_20260327_041.json",
+      "title": "Pearl Abyss boss admits the studio \"could have done a better job\" with Crimson Desert's totally underwhelming story",
+      "content_preview": "Though there are things to love in Crimson Desert if you're open to hobbies like tower ogling or ghost train riding , the mammoth action adventure blob's story is arguably its biggest weakness. Well, aside from those AI…",
+      "source_name": "Rock Paper Shotgun",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_url": "https://www.rockpapershotgun.com/pearl-abyss-boss-admits-the-studio-could-have-done-a-better-job-with-crimson-deserts-totally-underwhelming-story",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 6,
+      "score_noise": 0,
+      "score_boundary": 2,
+      "reasons": [
+        "signal_pattern:technical:1",
+        "signal_pattern:market:1",
+        "hint:technical",
+        "game_context",
+        "boundary_patterns:1"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "modified",
+      "corrected_bucket": "signal",
+      "corrected_signal_types": [
+        "technical"
+      ],
+      "review_notes": "Keep as signal. This is a product design paradigm signal: the story failure exposes a lagging narrative model and a delayed evaluation loop that a BEACON-like AI simulation system could have surfaced earlier."
+    },
+    {
+      "sample_id": "B1D080",
+      "origin_file": "incoming_20260327_055.json",
+      "title": "The PS5 Price Hike Was Inevitable, But What Comes Next?",
+      "content_preview": "It's been a big week for bad news in gaming, and that included Sony announcing yet another price hike for the PlayStation 5 , the second increase in less than a year . When the new PS5 pricing goes into effect on April …",
+      "source_name": "GameSpot",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_url": "https://www.gamespot.com/articles/the-ps5-price-hike-was-inevitable-but-what-comes-next/1100-6539077/?ftag=CAD-01-10abi2f",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 6,
+      "score_noise": 0,
+      "score_boundary": 0,
+      "reasons": [
+        "signal_pattern:market:1",
+        "hint:technical",
+        "high_value_entities:sony,playstation",
+        "game_context"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "modified",
+      "corrected_bucket": "signal",
+      "corrected_signal_types": [
+        "market"
+      ],
+      "review_notes": "Keep as signal, but retag to market. This is hardware pricing pressure, not a technical shift."
+    },
+    {
+      "sample_id": "B1D084",
+      "origin_file": "incoming_20260328_009.json",
+      "title": "Developer of cozy tea shop adventure Wanderstop is shutting down: 'It's a particularly tough time for raising game funds'",
+      "content_preview": "The studio, Ivy Road, wasn't able to secure funding for its next game, Engine Angel.",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-28T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/gaming-industry/developer-of-cozy-tea-shop-adventure-wanderstop-is-shutting-down-its-a-particularly-tough-time-for-raising-game-funds/",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 6,
+      "score_noise": 2,
+      "score_boundary": 0,
+      "reasons": [
+        "signal_pattern:capital:1",
+        "signal_pattern:technical:1",
+        "hint:technical",
+        "game_context",
+        "very_short_excerpt"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "modified",
+      "corrected_bucket": "signal",
+      "corrected_signal_types": [
+        "team",
+        "capital"
+      ],
+      "review_notes": "Keep as signal. This should be tagged team plus capital."
+    },
+    {
+      "sample_id": "B1D088",
+      "origin_file": "incoming_20260330_003.json",
+      "title": "Crimson Desert Is Doing Something Very Uncommon For RPGs",
+      "content_preview": "Crimson Desert has been out for barely two weeks now, having launched on March 19 for PC, PlayStation 5, and Xbox Series X|S, but the game is already toppling its own player count records. This is quite impressive, as P…",
+      "source_name": "GameSpot",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_url": "https://www.gamespot.com/articles/crimson-desert-is-doing-something-very-uncommon-for-rpgs/1100-6539097/?ftag=CAD-01-10abi2f",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "market"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 6,
+      "score_noise": 0,
+      "score_boundary": 0,
+      "reasons": [
+        "signal_pattern:market:1",
+        "hint:market",
+        "high_value_entities:xbox,playstation",
+        "game_context"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "accepted",
+      "corrected_bucket": "signal",
+      "corrected_signal_types": [
+        "market"
+      ],
+      "review_notes": "Keep as signal if you want strong product-demand evidence in scope."
+    },
+    {
+      "sample_id": "B1D089",
+      "origin_file": "incoming_20260330_006.json",
+      "title": "Deus Ex Dev Eidos-Montreal Conducts Mass Layoffs Affecting 124 People",
+      "content_preview": "Eidos-Montreal has announced a round of mass layoffs, with 124 people losing their jobs and studio head David Anfossi leaving the company. In a statement , Eidos-Montreal said the cuts are the result of \"changing projec…",
+      "source_name": "GameSpot",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_url": "https://www.gamespot.com/articles/deus-ex-dev-eidos-montreal-conducts-mass-layoffs-affecting-124-people/1100-6539106/?ftag=CAD-01-10abi2f",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "team"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 6,
+      "score_noise": 0,
+      "score_boundary": 1,
+      "reasons": [
+        "signal_pattern:team:1",
+        "hint:team",
+        "game_context",
+        "announcement_style",
+        "structural_change_keywords"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "accepted",
+      "corrected_bucket": "signal",
+      "corrected_signal_types": [
+        "team"
+      ],
+      "review_notes": "Keep as signal."
+    },
+    {
+      "sample_id": "B1D091",
+      "origin_file": "incoming_20260330_020.json",
+      "title": "Arc Raiders' Flashpoint update finally streamlines crafting—oh, and you can also supercharge Scrappy using food because that just makes sense",
+      "content_preview": "A new enemy, a map event, and two guns arrive in the Flashpoint update tomorrow.",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/third-person-shooter/arc-raiders-flashpoint-update/",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 1,
+      "score_noise": 6,
+      "score_boundary": 0,
+      "reasons": [
+        "hint:technical",
+        "missing_game_context",
+        "noise_patterns:1",
+        "very_short_excerpt"
+      ],
+      "current_expected_bucket": "noise",
+      "review_decision": "accepted",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Keep as noise."
+    },
+    {
+      "sample_id": "B1D094",
+      "origin_file": "incoming_20260330_028.json",
+      "title": "Crimson Desert Update Seemingly Replaces AI Artwork",
+      "content_preview": "A new update for the popular RPG Crimson Desert has seemingly removed some of the generative AI art that fans discovered in the game recently. The patch notes alluded to this, with developer Pearl Abyss saying the new u…",
+      "source_name": "GameSpot",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_url": "https://www.gamespot.com/articles/crimson-desert-update-seemingly-replaces-ai-artwork/1100-6539094/?ftag=CAD-01-10abi2f",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 6,
+      "score_noise": 2,
+      "score_boundary": 0,
+      "reasons": [
+        "signal_pattern:technical:2",
+        "hint:technical",
+        "game_context",
+        "noise_patterns:1"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "accepted",
+      "corrected_bucket": "signal",
+      "corrected_signal_types": [
+        "technical"
+      ],
+      "review_notes": "Keep as signal. This clearly fits your reverse-paradigm logic."
+    },
+    {
+      "sample_id": "B1D098",
+      "origin_file": "incoming_20260330_044.json",
+      "title": "Not Even Crimson Desert's Main Character VA Understood The Game's Story",
+      "content_preview": "While Crimson Desert has seen huge success since its March 19 launch on consoles and PC, toppling its own concurrent player numbers and selling over 3 million copies to date , the game isn't without its flaws. The narra…",
+      "source_name": "GameSpot",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_url": "https://www.gamespot.com/articles/not-even-crimson-deserts-main-character-va-understood-the-games-story/1100-6539099/?ftag=CAD-01-10abi2f",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 6,
+      "score_noise": 0,
+      "score_boundary": 0,
+      "reasons": [
+        "signal_pattern:market:1",
+        "hint:technical",
+        "game_context",
+        "concrete_numbers"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "modified",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Downgrade to noise unless you are intentionally collecting quality-collapse companion samples around Crimson Desert."
+    },
+    {
+      "sample_id": "B1D100",
+      "origin_file": "incoming_20260330_054.json",
+      "title": "Thermaltake View 380 WS ARGB review",
+      "content_preview": "Affordable and flashy.",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/hardware/pc-cases/thermaltake-view-380-ws-argb-review/",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 1,
+      "score_noise": 6,
+      "score_boundary": 0,
+      "reasons": [
+        "hint:technical",
+        "missing_game_context",
+        "noise_patterns:1",
+        "very_short_excerpt"
+      ],
+      "current_expected_bucket": "noise",
+      "review_decision": "accepted",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Keep as noise."
+    },
+    {
+      "sample_id": "B1D101",
+      "origin_file": "incoming_20260331_002.json",
+      "title": "Evercade unveils its next-gen retro gaming handheld Nexus, with analogue sticks and Banjo-Kazooie 1&2 bundled in",
+      "content_preview": "Evercade, purveyor of all things retro gaming, has unveiled the Evercade Nexus - its next-generation gaming handheld, which launches this October. Read more",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/evercade-next-gen-retro-gaming-handheld-evercade-nexus",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 2,
+      "score_noise": 6,
+      "score_boundary": 2,
+      "reasons": [
+        "hint:market",
+        "game_context",
+        "low_information_excerpt",
+        "short_excerpt",
+        "truncated_article",
+        "announcement_style",
+        "shallow_announcement_penalty"
+      ],
+      "current_expected_bucket": "noise",
+      "review_decision": "accepted",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Keep as noise."
+    },
+    {
+      "sample_id": "B1D103",
+      "origin_file": "incoming_20260331_014.json",
+      "title": "Aether & Iron review",
+      "content_preview": "Arcanum meets Bioshock Infinite in a speakeasy.",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/rpg/aether-and-iron-review/",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 1,
+      "score_noise": 6,
+      "score_boundary": 0,
+      "reasons": [
+        "hint:technical",
+        "missing_game_context",
+        "noise_patterns:1",
+        "very_short_excerpt"
+      ],
+      "current_expected_bucket": "noise",
+      "review_decision": "accepted",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Keep as noise."
+    },
+    {
+      "sample_id": "B1D105",
+      "origin_file": "incoming_20260331_028.json",
+      "title": "Everything you need to know for Final Fantasy 14's Moogle Treasure Trove event, including what to do with all of those tomestones when you already have everything",
+      "content_preview": "Fear and Loathing in Eorzea.",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/final-fantasy/ffxiv-moogle-treasure-trove/",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 1,
+      "score_noise": 6,
+      "score_boundary": 0,
+      "reasons": [
+        "hint:technical",
+        "missing_game_context",
+        "noise_patterns:1",
+        "very_short_excerpt"
+      ],
+      "current_expected_bucket": "noise",
+      "review_decision": "accepted",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Keep as noise."
+    },
+    {
+      "sample_id": "B1D106",
+      "origin_file": "incoming_20260331_033.json",
+      "title": "GTA Online's first-of-its-kind community showcase offers a glimpse of what's to come in GTA 6—and might just answer a big question facing the multiplayer offshoot",
+      "content_preview": "Back to Cali.",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/grand-theft-auto/gta-onlines-first-of-its-kind-community-showcase-offers-a-glimpse-of-whats-to-come-in-gta-6-and-might-just-answer-a-big-question-facing-the-multiplayer-offshoot/",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 2,
+      "score_noise": 6,
+      "score_boundary": 2,
+      "reasons": [
+        "hint:technical",
+        "high_value_entities:unity",
+        "missing_game_context",
+        "noise_patterns:1",
+        "boundary_patterns:1",
+        "very_short_excerpt"
+      ],
+      "current_expected_bucket": "noise",
+      "review_decision": "accepted",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Keep as noise."
+    },
+    {
+      "sample_id": "B1D004",
+      "origin_file": "incoming_20260322_004.json",
+      "title": "RPS Verdict: Anime racer Screamer slides sideways into success with its colourful, characterful driving",
+      "content_preview": "Ed (RPS in peace) has, finally, posthumously, got his wish : another Screamer . This one’s gone all cyberpunk and/or anime-styled, with a heavy focus on story – it follows multiple, multinational merc-drivers entering a…",
+      "source_name": "Rock Paper Shotgun",
+      "published_at": "2026-03-22T00:00:00Z",
+      "source_url": "https://www.rockpapershotgun.com/rps-verdict-screamer-review",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 1,
+      "score_noise": 5,
+      "score_boundary": 0,
+      "reasons": [
+        "hint:technical",
+        "missing_game_context",
+        "low_information_excerpt",
+        "truncated_article"
+      ],
+      "current_expected_bucket": "noise",
+      "review_decision": "accepted",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Keep as noise."
+    },
+    {
+      "sample_id": "B1D019",
+      "origin_file": "incoming_20260323_054.json",
+      "title": "Solve a crab housing crisis and fight a Dreadhog in part one of Runescape's big Havenhythe expansion, which is out now",
+      "content_preview": "That sound you can hear in the distance is someone mumbling in-teh-grih-teh , because a key bit of RuneScape 's in-teh-grih-teh-focused 2026 additions has gone live today, March 23rd. It's part one of the Havenhythe exp…",
+      "source_name": "Rock Paper Shotgun",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_url": "https://www.rockpapershotgun.com/solve-a-crab-housing-crisis-and-fight-a-dreadhog-in-part-one-of-runescapes-big-havenhythe-expansion-which-is-out-now",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 1,
+      "score_noise": 5,
+      "score_boundary": 0,
+      "reasons": [
+        "hint:technical",
+        "missing_game_context",
+        "low_information_excerpt",
+        "truncated_article"
+      ],
+      "current_expected_bucket": "noise",
+      "review_decision": "accepted",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Keep as noise."
+    },
+    {
+      "sample_id": "B1D024",
+      "origin_file": "incoming_20260324_011.json",
+      "title": "Crimson Desert developers are \"preparing to provide a smooth and stable gameplay experience\" following Intel GPU launch woes",
+      "content_preview": "Pearl Abyss has addressed the future of Crimson Desert's Intel Arc GPU support, after it was discovered the hardware wasn't compatible at launch . Read more",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/crimson-desert-preparing-smooth-and-stable-gameplay-experience-following-intel-launch-woes",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 1,
+      "score_noise": 5,
+      "score_boundary": 1,
+      "reasons": [
+        "hint:market",
+        "missing_game_context",
+        "low_information_excerpt",
+        "short_excerpt",
+        "truncated_article"
+      ],
+      "current_expected_bucket": "noise",
+      "review_decision": "accepted",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Keep as noise. This is a local support issue, not a paradigm or structural signal."
+    },
+    {
+      "sample_id": "B1D030",
+      "origin_file": "incoming_20260324_040.json",
+      "title": "Cornwall is overrun with mutant fish people and you are a fisherman with a nailgun in the boomer shooter BRINE",
+      "content_preview": "I've heard Cornwall is quite lovely this time of year. Still cool enough for a fresh pastie, warm enough to have fish and chips by the beach. Shame about all the mutant fish people that are hungry for death! Ah, no, sor…",
+      "source_name": "Rock Paper Shotgun",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_url": "https://www.rockpapershotgun.com/cornwall-is-overrun-with-mutant-fish-people-and-you-are-a-fisherman-with-a-nailgun-in-the-boomer-shooter-brine",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 1,
+      "score_noise": 5,
+      "score_boundary": 0,
+      "reasons": [
+        "hint:technical",
+        "missing_game_context",
+        "low_information_excerpt",
+        "truncated_article"
+      ],
+      "current_expected_bucket": "noise",
+      "review_decision": "accepted",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Keep as noise."
+    },
+    {
+      "sample_id": "B1D031",
+      "origin_file": "incoming_20260324_042.json",
+      "title": "Disney Gaming Boss On \"Massive Disruption\" In Games And What's Coming Next",
+      "content_preview": "Disney's top gaming boss, the veteran Sean Shoptaw, has outlined the company's vision for games amid what he described as a \"massive disruption\" in the gaming market today. Part of Disney's investments and efforts in ga…",
+      "source_name": "GameSpot",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_url": "https://www.gamespot.com/articles/disney-gaming-boss-on-massive-disruption-in-games-and-whats-coming-next/1100-6538983/?ftag=CAD-01-10abi2f",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 5,
+      "score_noise": 0,
+      "score_boundary": 0,
+      "reasons": [
+        "hint:technical",
+        "high_value_entities:disney",
+        "game_context",
+        "structural_change_keywords"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "modified",
+      "corrected_bucket": "signal",
+      "corrected_signal_types": [
+        "technical",
+        "market"
+      ],
+      "review_notes": "Keep as signal. This is better typed as technical plus market because it is about strategic response to industry disruption."
+    },
+    {
+      "sample_id": "B1D033",
+      "origin_file": "incoming_20260324_046.json",
+      "title": "Hello Kitty: Island Adventure's Next DLC Focuses Less On Coziness, More On Fun",
+      "content_preview": "Hello Kitty: Island Adventure is about to get a lot more metropolitan. Sunblink and Sanrio have officially announced the release date for the cozy adventure game's next DLC, City Town, which sends players to a \"a rainbo…",
+      "source_name": "GameSpot",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_url": "https://www.gamespot.com/articles/hello-kitty-island-adventures-next-dlc-focuses-less-on-coziness-more-on-fun/1100-6538984/?ftag=CAD-01-10abi2f",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 5,
+      "score_noise": 0,
+      "score_boundary": 1,
+      "reasons": [
+        "signal_pattern:market:1",
+        "hint:technical",
+        "high_value_entities:apple",
+        "game_context",
+        "announcement_style"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "accepted",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Keep as noise for now. It may support a broader trendline when combined with other samples such as Pokopia, but this item alone is too weak to promote."
+    },
+    {
+      "sample_id": "B1D036",
+      "origin_file": "incoming_20260324_054.json",
+      "title": "\"It was just dripping in my lap\" - Resident Evil Requiem's terrifying The Girl found her voice by drinking gallons of milk while recording",
+      "content_preview": "If you are one of the many who've played even a short bit of Resident Evil Requiem, you'll have come across The Girl. She's Requiem's lumbering Shadow Ghost who seems to take great pleasure in chasing Grace around in th…",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/resident-evil-requiems-terrifying-the-girl-found-her-voice-by-drinking-milk",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 1,
+      "score_noise": 5,
+      "score_boundary": 0,
+      "reasons": [
+        "hint:technical",
+        "missing_game_context",
+        "low_information_excerpt",
+        "truncated_article"
+      ],
+      "current_expected_bucket": "noise",
+      "review_decision": "accepted",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Keep as noise."
+    },
+    {
+      "sample_id": "B1D044",
+      "origin_file": "incoming_20260325_009.json",
+      "title": "Crimson Desert's Pearl Abyss regains investor confidence as it continues to move beyond launch day woes",
+      "content_preview": "After a rocky start, Pearl Abyss and Crimson Desert are regaining some lost confidence from investors. Read more",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/crimson-deserts-pearl-abyss-regains-investor-confidence-as-it-continues-to-move-beyond-launch-day-woes",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 1,
+      "score_noise": 5,
+      "score_boundary": 1,
+      "reasons": [
+        "hint:market",
+        "missing_game_context",
+        "low_information_excerpt",
+        "short_excerpt",
+        "truncated_article"
+      ],
+      "current_expected_bucket": "noise",
+      "review_decision": "accepted",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Keep as noise. It exposes a 2026 investor blind spot around the self-repair capacity of community sentiment, but the item itself is still not a structural benchmark signal."
+    },
+    {
+      "sample_id": "B1D065",
+      "origin_file": "incoming_20260326_068.json",
+      "title": "Tomodachi Life: Living the Dream Players Are Already Demonstrating Why Nintendo's Strict Image-Sharing Rules Exist",
+      "content_preview": "A Tomodachi Life: Living the Dream demo has been out since yesterday, and it's pretty quickly made it apparent why Nintendo put heavier restrictions than usual on media sharing from this game specifically.",
+      "source_name": "IGN Game News",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_url": "https://www.ign.com/articles/tomodachi-life-living-the-dream-players-are-already-demonstrating-why-nintendos-strict-image-sharing-rules-exist",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 5,
+      "score_noise": 0,
+      "score_boundary": 0,
+      "reasons": [
+        "signal_pattern:market:1",
+        "hint:technical",
+        "high_value_entities:nintendo",
+        "game_context"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "modified",
+      "corrected_bucket": "signal",
+      "corrected_signal_types": [
+        "technical"
+      ],
+      "review_notes": "Keep as signal. Treat this as a governance-paradigm signal rather than routine policy noise."
+    },
+    {
+      "sample_id": "B1D070",
+      "origin_file": "incoming_20260327_022.json",
+      "title": "Baldur's Gate 3 actor Neil Newbon says he's avoided roles over Astarion typecasting concerns",
+      "content_preview": "Neil Newbon, the award-winning actor known for portraying the vampire Astarion in Baldur's Gate 3 , has said he's avoided roles recently because they wanted a repeat performance - or thereabouts - of the same thing. Rea…",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/actor-neil-newbon-avoids-astarion-typecasting",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 1,
+      "score_noise": 5,
+      "score_boundary": 0,
+      "reasons": [
+        "hint:technical",
+        "missing_game_context",
+        "low_information_excerpt",
+        "truncated_article"
+      ],
+      "current_expected_bucket": "noise",
+      "review_decision": "accepted",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Keep as noise."
+    },
+    {
+      "sample_id": "B1D073",
+      "origin_file": "incoming_20260327_030.json",
+      "title": "Glen Powell is voicing Starfox's Fox McCloud in the upcoming Super Mario Galaxy movie",
+      "content_preview": "It's official: Glen Powell will be voicing Star Fox in the upcoming Super Mario Galaxy movie. Read more",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/glen-powel-voicing-fox-mccloud-starfox-in-super-mario-galaxy-movie",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 1,
+      "score_noise": 5,
+      "score_boundary": 1,
+      "reasons": [
+        "hint:technical",
+        "missing_game_context",
+        "low_information_excerpt",
+        "short_excerpt",
+        "truncated_article"
+      ],
+      "current_expected_bucket": "noise",
+      "review_decision": "accepted",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Keep as noise."
+    },
+    {
+      "sample_id": "B1D078",
+      "origin_file": "incoming_20260327_043.json",
+      "title": "Pearl Abyss is approaching the idea of a Crimson Desert Switch 2 port \"with interest\"",
+      "content_preview": "The idea of porting Crimson Desert over to Switch 2 is currently being discussed by Pearl Abyss, which while I am no tech expert, sounds pretty ambitious to me. Read more",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/pearl-abyss-is-approaching-the-idea-of-a-crimson-desert-switch-2-port-with-interest",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 1,
+      "score_noise": 5,
+      "score_boundary": 1,
+      "reasons": [
+        "hint:technical",
+        "missing_game_context",
+        "low_information_excerpt",
+        "short_excerpt",
+        "truncated_article"
+      ],
+      "current_expected_bucket": "noise",
+      "review_decision": "accepted",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Keep as noise unless you want speculative platform expansion intent counted."
+    },
+    {
+      "sample_id": "B1D081",
+      "origin_file": "incoming_20260327_057.json",
+      "title": "The Super Mario Galaxy Movie actors Charlie Day and Chris Pratt appear to confirm earlier film leak",
+      "content_preview": "Actors Chris Pratt and Charlie Day appear to have confirmed an earlier Super Mario Galaxy Movie leak, while also sharing how to actually pronounce Mario (it's Maaa-rio, apparently, not Ma-rio). Read more",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/the-super-mario-galaxy-movie-actors-charlie-day-and-chris-pratt-appear-to-confirm-earlier-film-leak",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 1,
+      "score_noise": 5,
+      "score_boundary": 0,
+      "reasons": [
+        "hint:technical",
+        "missing_game_context",
+        "low_information_excerpt",
+        "truncated_article"
+      ],
+      "current_expected_bucket": "noise",
+      "review_decision": "accepted",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Keep as noise."
+    },
+    {
+      "sample_id": "B1D093",
+      "origin_file": "incoming_20260330_022.json",
+      "title": "Astarion actor urges Baldur's Gate 3 fans to give The Last of Us showrunner's HBO adaptation a chance",
+      "content_preview": "Astarion actor Neil Newbon has urged Baldur's Gate 3 fans to give Craig Maizin's HBO TV adaptation a chance. Read more",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/astarion-says-give-baldurs-gate-3-hbo-adaptation-a-chance",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 1,
+      "score_noise": 5,
+      "score_boundary": 1,
+      "reasons": [
+        "hint:technical",
+        "missing_game_context",
+        "low_information_excerpt",
+        "short_excerpt",
+        "truncated_article"
+      ],
+      "current_expected_bucket": "noise",
+      "review_decision": "accepted",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Keep as noise."
+    },
+    {
+      "sample_id": "B1D096",
+      "origin_file": "incoming_20260330_042.json",
+      "title": "Nightholme, a New 3-Player Horror Game, Shows Off 9 Minutes of Narrated Gameplay",
+      "content_preview": "Join Nightholme creator Alex Amancio (previously the creative director on Assassin's Creed Unity and Assassin's Creed Revelations) as he walks you through his new multiplayer horror game, Nightholme. In it, up to three …",
+      "source_name": "IGN Game News",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_url": "https://www.ign.com/articles/nightholme-narrated-gameplay-3-player-horror-game",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 5,
+      "score_noise": 0,
+      "score_boundary": 0,
+      "reasons": [
+        "signal_pattern:market:1",
+        "hint:technical",
+        "high_value_entities:unity",
+        "game_context"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "modified",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Keep as noise for now. It may serve as supporting evidence for a cross-sample trend toward high-density emotional interaction when read with adjacent cases such as Hello Kitty, but it should not stand alone as a benchmark signal."
+    },
+    {
+      "sample_id": "B1D097",
+      "origin_file": "incoming_20260330_043.json",
+      "title": "Ninja Gaiden Sigma 2 Plus Player Becomes First to Achieve Platinum Trophy",
+      "content_preview": "No one has ever truly unlocked the Platinum trophy for Ninja Gaiden Sigma 2 Plus on the PlayStation Vita – until recently.",
+      "source_name": "IGN Game News",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_url": "https://www.ign.com/articles/ninja-gaiden-sigma-2-plus-player-becomes-first-to-achieve-platinum-trophy",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 5,
+      "score_noise": 0,
+      "score_boundary": 1,
+      "reasons": [
+        "signal_pattern:market:1",
+        "hint:technical",
+        "high_value_entities:playstation",
+        "game_context",
+        "short_excerpt"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "modified",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Downgrade to noise."
+    },
+    {
+      "sample_id": "B1D104",
+      "origin_file": "incoming_20260331_015.json",
+      "title": "An Olympic Bronze Medalist Kicked My Ass in Mario Tennis Fever and I Lived to Tell the Tale",
+      "content_preview": "The world's number 8 tennis player talks about the real tennis skills required to master the popular Nintendo Switch 2 game.",
+      "source_name": "IGN Game News",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_url": "https://www.ign.com/articles/mario-tennis-fever-with-olympic-medalist-taylor-fritz",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 5,
+      "score_noise": 0,
+      "score_boundary": 1,
+      "reasons": [
+        "signal_pattern:market:1",
+        "hint:technical",
+        "high_value_entities:nintendo",
+        "game_context",
+        "short_excerpt"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "modified",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Downgrade to noise."
+    },
+    {
+      "sample_id": "B1D107",
+      "origin_file": "incoming_20260331_052.json",
+      "title": "The Last of Us creator Neil Druckmann teases a \"few stops\" left for Naughty Dog's post-apocalyptic series",
+      "content_preview": "Head of Naughty Dog Neil Druckmann has shared two early sketches of what would eventually become Joel and Ellie in The Last of Us, teasing a \"few stops\" still left on the series' \"road ahead\". Read more",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/the-last-of-us-creator-neil-druckmann-teases-a-few-stops-left-for-its-post-apocalyptic-series",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 1,
+      "score_noise": 5,
+      "score_boundary": 0,
+      "reasons": [
+        "hint:technical",
+        "missing_game_context",
+        "low_information_excerpt",
+        "truncated_article"
+      ],
+      "current_expected_bucket": "noise",
+      "review_decision": "accepted",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Keep as noise."
+    },
+    {
+      "sample_id": "B1D108",
+      "origin_file": "incoming_20260331_053.json",
+      "title": "The Last of Us season three set photos give us our first look at Kyriana Kratter's Lev",
+      "content_preview": "Filming has begun on The Last of Us season three, with photos giving us a look at Kaitlyn Dever's Abby and Kyriana Kratter's Lev on set. Read more",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/the-last-of-us-season-three-set-photos-give-us-our-first-look-at-kyriana-kratters-lev",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 1,
+      "score_noise": 5,
+      "score_boundary": 1,
+      "reasons": [
+        "hint:technical",
+        "missing_game_context",
+        "low_information_excerpt",
+        "short_excerpt",
+        "truncated_article"
+      ],
+      "current_expected_bucket": "noise",
+      "review_decision": "accepted",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Keep as noise."
+    },
+    {
+      "sample_id": "B1D006",
+      "origin_file": "incoming_20260323_005.json",
+      "title": "Younger Generations Are Struggling to 'Connect' With the Final Fantasy Series Because It Takes So Long for New Games to Come Out, Yoshi-P Says",
+      "content_preview": "Final Fantasy 14 director Naoki Yoshida, known to fans as Yoshi-P, has admitted that long development cycles right across the Final Fantasy series make it \"harder\" for new players or younger generations \"to engage with\"…",
+      "source_name": "IGN Game News",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_url": "https://www.ign.com/articles/younger-generations-are-struggling-to-connect-with-the-final-fantasy-series-because-it-takes-so-long-for-new-games-to-come-out-yoshi-p-says",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "capital"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 4,
+      "score_noise": 0,
+      "score_boundary": 0,
+      "reasons": [
+        "signal_pattern:market:1",
+        "hint:capital",
+        "game_context"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "modified",
+      "corrected_bucket": "signal",
+      "corrected_signal_types": [
+        "market",
+        "technical"
+      ],
+      "review_notes": "Keep as signal, but this is not capital. It is better framed as technical plus market around development-cycle mismatch and audience attrition."
+    },
+    {
+      "sample_id": "B1D015",
+      "origin_file": "incoming_20260323_033.json",
+      "title": "Crimson Desert Tools Can Have Some Very Unexpected Uses, And That Includes Cooking Meat",
+      "content_preview": "Crimson Desert has a lot of skills, tools, and abilities that let you interact with the world in unconventional and unexpected ways. Players are learning this for themselves and have discovered that one of the game's ea…",
+      "source_name": "GameSpot",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_url": "https://www.gamespot.com/articles/crimson-desert-tools-can-have-some-very-unexpected-uses-and-that-includes-cooking-meat/1100-6538949/?ftag=CAD-01-10abi2f",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 4,
+      "score_noise": 0,
+      "score_boundary": 0,
+      "reasons": [
+        "signal_pattern:market:1",
+        "hint:technical",
+        "game_context"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "modified",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Downgrade to noise."
+    },
+    {
+      "sample_id": "B1D029",
+      "origin_file": "incoming_20260324_037.json",
+      "title": "Arcade racer Screamer’s first update nerfs AI difficulty, with an \"additional balance pass\" coming soon",
+      "content_preview": "If you read our verdict over the weekend, you’ll know that Mark and I found the anime-flavoured Screamer reboot to be a delightfully exaggerated bit of slidey arcade racing – albeit one that, in the story-based Tourname…",
+      "source_name": "Rock Paper Shotgun",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_url": "https://www.rockpapershotgun.com/arcade-racer-screamers-first-update-nerfs-ai-difficulty-with-an-additional-balance-pass-coming-soon",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 4,
+      "score_noise": 0,
+      "score_boundary": 0,
+      "reasons": [
+        "signal_pattern:technical:1",
+        "hint:technical",
+        "game_context"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "modified",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Downgrade to noise. This is a routine gameplay balance patch, not a structural industry or paradigm signal."
+    },
+    {
+      "sample_id": "B1D041",
+      "origin_file": "incoming_20260324_071.json",
+      "title": "\"The thing we are trying to stop keeps happening\": Highguard and other high-profile demises keep making the argument for Stop Killing Games",
+      "content_preview": "Having reached the point of making their case to the European parliament, the Stop Killing Games 's organisers are having to think about keeping their campaign going in the long-term. For example, they're setting up set…",
+      "source_name": "Rock Paper Shotgun",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_url": "https://www.rockpapershotgun.com/the-thing-we-are-trying-to-stop-keeps-happening-highguard-and-other-high-profile-demises-keep-making-the-argument-for-stop-killing-games",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 4,
+      "score_noise": 0,
+      "score_boundary": 0,
+      "reasons": [
+        "hint:technical",
+        "game_context",
+        "structural_change_keywords"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "modified",
+      "corrected_bucket": "signal",
+      "corrected_signal_types": [
+        "regulatory",
+        "market"
+      ],
+      "review_notes": "Keep as signal. Ongoing service death and preservation pressure are meaningful platform-governance and market-access signals."
+    },
+    {
+      "sample_id": "B1D053",
+      "origin_file": "incoming_20260325_054.json",
+      "title": "My go-to PC game controller is getting Spring sale price cuts - and so is its cheaper wired version",
+      "content_preview": "I’ve been through much with my Razer Wolverine V3 Pro . Malenia, Blade of Miquella . Groal the Great . The bit in Dispatch where you have to choose a favourite doughnut and \"Chocolate\" isn’t an option. Then there’s the …",
+      "source_name": "Rock Paper Shotgun",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_url": "https://www.rockpapershotgun.com/my-go-to-pc-game-controller-is-getting-spring-sale-price-cuts-and-so-is-its-cheaper-wired-version",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 4,
+      "score_noise": 0,
+      "score_boundary": 0,
+      "reasons": [
+        "signal_pattern:market:1",
+        "hint:technical",
+        "game_context"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "modified",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Downgrade to noise. This is straightforward affiliate-style deal coverage for a controller sale."
+    },
+    {
+      "sample_id": "B1D054",
+      "origin_file": "incoming_20260325_056.json",
+      "title": "One of my favourite gaming keyboards is back to its record low price for the US Amazon Spring Sale",
+      "content_preview": "The Asus ROG Strix Scope II 96 Wireless has been a long-time favourite mechanical keyboard of mine. That's because of its highly functional, near-full-size layout, its smooth, lubricated switches, and just the sense tha…",
+      "source_name": "Rock Paper Shotgun",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_url": "https://www.rockpapershotgun.com/one-of-my-favourite-gaming-keyboards-is-back-to-its-record-low-price-for-the-us-amazon-spring-sale",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 4,
+      "score_noise": 0,
+      "score_boundary": 0,
+      "reasons": [
+        "signal_pattern:market:1",
+        "hint:technical",
+        "game_context"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "modified",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Downgrade to noise. Routine keyboard sale coverage is not a structural market or production signal."
+    },
+    {
+      "sample_id": "B1D055",
+      "origin_file": "incoming_20260325_068.json",
+      "title": "The Asus ROG Strix XG27UCG, one of the dual-mode gaming monitor pioneers, has hit its lowest-ever price",
+      "content_preview": "High-resolution monitors have become a lot cheaper over recent years, in contrast to a most internal component types, which are currently in a race to see who can plunge us into financial destitution the fastest. It was…",
+      "source_name": "Rock Paper Shotgun",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_url": "https://www.rockpapershotgun.com/the-asus-rog-strix-xg27ucg-one-of-the-dual-mode-gaming-monitor-pioneers-has-hit-its-lowest-ever-price",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 4,
+      "score_noise": 0,
+      "score_boundary": 0,
+      "reasons": [
+        "signal_pattern:market:1",
+        "hint:technical",
+        "game_context"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "modified",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Downgrade to noise. This is consumer hardware discount coverage, not an industry-structure signal."
+    },
+    {
+      "sample_id": "B1D071",
+      "origin_file": "incoming_20260327_024.json",
+      "title": "Crimson Desert Players Are Building a Cat Army — and Some Are Even Honoring the Memory of Their IRL Cats Who Passed Away",
+      "content_preview": "As players get further into the sprawling Crimson Desert, they’re finding new ways to play around in its gargantuan open world and with the many, many mechanics and systems. One way in which fans have found fun is to pl…",
+      "source_name": "IGN Game News",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_url": "https://www.ign.com/articles/crimson-desert-players-are-are-building-a-cat-army-and-some-are-even-honoring-the-memory-of-their-irl-cats-who-passed-away",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 4,
+      "score_noise": 0,
+      "score_boundary": 0,
+      "reasons": [
+        "signal_pattern:market:1",
+        "hint:technical",
+        "game_context"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "modified",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Downgrade to noise. This is player-culture feature coverage, not a structural product or industry signal."
+    },
+    {
+      "sample_id": "B1D079",
+      "origin_file": "incoming_20260327_047.json",
+      "title": "Rebellion return to their AvP roots with Alien Deathstorm, an 80s sci-fi FPS with apocalyptic winds and some slightly naff aliens",
+      "content_preview": "Alien Deathstorm is the new sci-fi FPS from Rebellion, developers of skull-popping shooter series Sniper Elite and the recent, Very English survival game Atomfall . What is Alien Deathstorm about? Why, it's a slice-of-l…",
+      "source_name": "Rock Paper Shotgun",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_url": "https://www.rockpapershotgun.com/rebellion-return-to-their-avp-roots-with-alien-deathstorm-an-80s-sci-fi-fps-with-apocalyptic-winds-and-some-slightly-naff-aliens",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 4,
+      "score_noise": 0,
+      "score_boundary": 0,
+      "reasons": [
+        "signal_pattern:technical:1",
+        "hint:technical",
+        "game_context"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "modified",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Downgrade to noise. This is standard announcement or feature coverage for a new FPS title."
+    },
+    {
+      "sample_id": "B1D087",
+      "origin_file": "incoming_20260329_004.json",
+      "title": "Crimson Desert Hits New Steam Concurrent Player Peak as Latest Game-Changing Update Kicks In",
+      "content_preview": "Crimson Desert has hit a new Steam concurrent player peak during its second weekend, after another game-changing update brought a raft of improvements to the open world action adventure.",
+      "source_name": "IGN Game News",
+      "published_at": "2026-03-29T00:00:00Z",
+      "source_url": "https://www.ign.com/articles/crimson-desert-hits-new-steam-concurrent-player-peak-as-latest-game-changing-update-kicks-in",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "team"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 4,
+      "score_noise": 0,
+      "score_boundary": 0,
+      "reasons": [
+        "signal_pattern:market:1",
+        "hint:team",
+        "game_context"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "modified",
+      "corrected_bucket": "signal",
+      "corrected_signal_types": [
+        "market"
+      ],
+      "review_notes": "Keep as signal. New concurrency highs after a major update are concrete market-response evidence, not a team signal."
+    },
+    {
+      "sample_id": "B1D092",
+      "origin_file": "incoming_20260330_021.json",
+      "title": "Arc Raiders Flashpoint Update Breakdown Includes First Look at New Enemy and Map Condition",
+      "content_preview": "Embark Studios has unveiled a closer look at the new Vaporizer Arc unit, the Close Scrutiny map condition, and everything else coming to Arc Raiders in tomorrow's Flashpoint update.",
+      "source_name": "IGN Game News",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_url": "https://www.ign.com/articles/arc-raiders-flashpoint-update-breakdown-includes-first-look-at-new-enemy-and-map-condition",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 4,
+      "score_noise": 0,
+      "score_boundary": 0,
+      "reasons": [
+        "signal_pattern:team:1",
+        "hint:technical",
+        "game_context"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "modified",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Downgrade to noise. This is routine update-detail coverage rather than a structural product or industry signal."
+    },
+    {
+      "sample_id": "B1D109",
+      "origin_file": "incoming_20260331_059.json",
+      "title": "This popular and capacious Anker Zolo power bank is just £25/$33 from Amazon",
+      "content_preview": "A capacious and speedy power bank is a tech essential in my book for keeping all your stuff charged, be it a phone, headphones or a handheld games console such as a Steam Deck . This Anker Zolo option provides up to 30W…",
+      "source_name": "Rock Paper Shotgun",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_url": "https://www.rockpapershotgun.com/this-popular-and-capacious-anker-zolo-power-bank-is-just-2533-from-amazon",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "confidence_band": "high",
+      "manual_review_priority": "low",
+      "score_signal": 4,
+      "score_noise": 0,
+      "score_boundary": 0,
+      "reasons": [
+        "signal_pattern:market:1",
+        "hint:technical",
+        "game_context"
+      ],
+      "current_expected_bucket": "signal",
+      "review_decision": "modified",
+      "corrected_bucket": "noise",
+      "corrected_signal_types": [],
+      "review_notes": "Downgrade to noise. This is simple accessory deal coverage with no structural market implication."
+    }
+  ]
+}

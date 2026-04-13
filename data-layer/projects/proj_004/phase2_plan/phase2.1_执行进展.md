@@ -1,8 +1,8 @@
 # Phase 2.1 执行进展记录
 
 > **文档类型**：执行进展追踪
-> **最后更新**：2026-04-02
-> **当前状态**：✅ MVP 实现完成，✅ Benchmark 验证完成，✅ Prompt v1.6 noise boundary 显式化，✅ 两阶段筛选框架落地，✅ phase2.1 旧入口统一收口到 `llm_config`，⏳ DeepSeek 稳定性诊断待后续窗口处理
+> **最后更新**：2026-04-13
+> **当前状态**：✅ MVP 实现完成，✅ Benchmark 验证完成，✅ Prompt v1.6 noise boundary 显式化，✅ 两阶段筛选框架落地，✅ phase2.1 旧入口统一收口到 `llm_config`，✅ batch2 专用文件链路落地，⏳ DeepSeek 稳定性诊断待后续窗口处理
 
 ---
 
@@ -25,6 +25,8 @@
 | 2026-03-27 | 增强阶段 | 两阶段筛选框架落地（方向四：source_type 规则预筛；方向二：haiku 粗筛架构） | 实现落地视角 |
 | 2026-04-02 | 稳定性治理阶段 | phase2.1 其余旧入口统一迁移到项目级 `llm_config`，完成 decoder / 测试脚本 / 批处理脚本接线收口 | 实现落地视角 |
 | 2026-04-02 | 稳定性治理阶段 | DeepSeek 真实调用验证：请求已发出，但当前环境 completion 响应挂起；决定先记录优化计划、不回滚统一配置 | 实现落地视角 |
+| 2026-04-13 | benchmark 扩充阶段 | 落地多批次 benchmark 准备链路：follow-up candidates → batch draft → review queue → assisted suggestions | 评测验收视角 |
+| 2026-04-13 | benchmark 扩充阶段 | 完成 `batch2` 专用产物生成，并确认剩余样本需要从 high-only 放宽到 medium+ 清晰样本策略 | 评测验收视角 |
 
 ---
 
@@ -145,6 +147,41 @@
 - 粗筛失败自动放行（容错），不影响精筛结果
 - 并发方案留后期：asyncio + 限速，目标 100条/天可处理
 
+### 2.5 多批次 benchmark 样本准备（新增）
+
+✅ **batch2 专用文件链路落地**：
+- 新增脚本：[derive_followup_batch_candidates.py](../proj_004/derive_followup_batch_candidates.py)
+  - 作用：从已有候选报告中剔除已经进入既有 draft 的 `origin_file`，形成后续批次的冻结输入边界
+- 改造脚本：[batch1_build_benchmark_draft.py](../proj_004/batch1_build_benchmark_draft.py)
+  - 现状：已支持通过参数生成 `batch1` / `batch2` / 后续批次草案
+  - 新增能力：支持 `sample_prefix`、`origin_label`、`signal_label`、置信区间和优先级筛选参数
+
+✅ **已生成的 batch2 产物**：
+- 候选报告：[batch2_bucket_candidates.json](../proj_004/reports/batch2_bucket_candidates.json)
+- 候选 CSV：[batch2_bucket_candidates.csv](../proj_004/reports/batch2_bucket_candidates.csv)
+- 正式草案：[benchmark_samples_batch2_draft.json](../proj_004/phase2.1_implementation/data/benchmark_samples_batch2_draft.json)
+- review queue：[benchmark_review_queue_batch2.json](../proj_004/reports/benchmark_review_queue_batch2.json)
+- assisted suggestions：[benchmark_review_assisted_batch2_pass1.json](../proj_004/reports/benchmark_review_assisted_batch2_pass1.json)
+- tranche recommendations：[benchmark_review_batch2_top20_recommendations.json](../proj_004/reports/benchmark_review_batch2_top20_recommendations.json)
+- tranche backfill pending：[benchmark_review_batch2_top20_backfill_pending.json](../proj_004/reports/benchmark_review_batch2_top20_backfill_pending.json)
+
+✅ **新增通用审核入口**：
+- 新增脚本：[build_review_tranche_from_assisted.py](../proj_004/build_review_tranche_from_assisted.py)
+  - 作用：从 `benchmark_review_assisted_*` 直接切出可审核 tranche，并同步产出 `recommendations + backfill_pending`
+  - 价值：避免继续复制 `41_60 / 61_80 / 81_100` 这类硬编码脚本，后续 `batch3+` 可直接复用
+- 新增脚本：[apply_review_backfill_to_draft.py](../proj_004/apply_review_backfill_to_draft.py)
+  - 作用：只把 `accepted / modified / rejected` 这类**人工已确认**的 `human_review` 回填到正式 draft
+  - 价值：默认不会把 `suggested` 状态误写回正式 benchmark
+
+✅ **batch2 选择策略结论**：
+- 直接沿用 `batch1` 的 `high-confidence only` 规则会得到空 draft
+- 原因不是候选不足，而是剩余 450 条样本里已没有可直接纳入的 `high-confidence signal`
+- 本次采用的 follow-up 策略：
+  - signal：`medium,high`
+  - noise：`medium,high` 且排除 `high` priority
+  - boundary：继续排除出正式 draft
+- 结果：`batch2` 共选出 180 条样本，其中 105 条 signal、75 条 noise
+
 ### 2.6 信号来源（待独立）
 
 **当前状态**：信号原始内容来自 knowledge base 仓库的每日订阅处理流程
@@ -215,6 +252,7 @@
 - ✅ 三轮 benchmark 执行与验证
 - ✅ 优化历程总结与方法论反思
 - ✅ phase2.1 历史旧入口统一收口到项目级 `llm_config`
+- ✅ batch2 专用文件链路与产物生成完成
 
 ### 4.2 进行中
 
@@ -228,6 +266,7 @@
 - ⏳ 信号来源独立化（后期）：ingestion 层从 knowledge base 仓库解耦
 - ⏳ DecodedIntelligence 消费语义：按 source_id 分组 vs 打平传入 2.2，待 2.2 推进时确认
 - ⏳ LLM 稳定性治理：补 timeout 配置、增强超时/连接失败日志、做 provider 对照测试，定位 DeepSeek 挂起根因
+- ⏳ batch2 人工审核与 backfill：按 `benchmark_review_queue_batch2.json` 和 `benchmark_review_assisted_batch2_pass1.json` 推进
 
 ---
 
@@ -297,6 +336,7 @@
 1. 扩大到 50-100 个样本
 2. 补充更多边界样本和负例样本
 3. 覆盖更多场景类型
+4. 按多批次方式保留候选、draft、queue、review artifacts，便于持续迭代 [[memory:zhkz686l]]
 
 ### 6.5 优先级 P4：与 Phase 2.2 联调
 
@@ -319,6 +359,7 @@
 | Taxonomy 边界暧昧 | 中 | 纳入后续规划，不影响当前 MVP 交付 | ⏳ 待决策 |
 | 2.4 上下文增强未就绪 | 低 | 当前为可选增强项，不阻塞 MVP | ⏳ 待协调 |
 | DeepSeek completion 挂起 | 中 | 先保留统一配置改动，后续专项做 timeout / 日志 / provider 对照诊断 | ⏳ 待处理 |
+| follow-up batch 高置信 signal 可能耗尽 | 中 | 对后续批次允许 `medium+` 清晰样本策略，并持续隔离 boundary | ✅ 已应对 |
 
 ---
 
@@ -335,6 +376,7 @@
 
 - 实现代码：[phase2.1_implementation/](../proj_004/phase2.1_implementation/)
 - 模块 README：[phase2.1_implementation/README.md](../proj_004/phase2.1_implementation/README.md)
+- 样本准备指南：[sample_preparation_guide.md](../proj_004/phase2.1_implementation/docs/sample_preparation_guide.md)
 
 ### 8.3 Benchmark 报告
 
@@ -345,5 +387,5 @@
 ---
 
 **文档状态**: ✅ 已完成
-**版本**: v2.1
-**建议下次更新时机**: 完成 LLM 稳定性治理验证或推进 2.2 联调后
+**版本**: v2.2
+**建议下次更新时机**: 完成 batch2 人工审核 / backfill，或推进 2.2 联调后

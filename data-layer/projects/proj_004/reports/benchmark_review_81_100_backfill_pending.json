@@ -1,0 +1,938 @@
+{
+  "generated_at": "2026-04-13T16:45:00Z",
+  "source_report": "F:\\AIProjects\\DesignAssistant\\data-layer\\projects\\proj_004\\reports\\benchmark_review_81_100_recommendations.json",
+  "selection_policy": {
+    "included_samples": "review tranche 81-100 from benchmark review queue",
+    "review_mode": "assistant-prefilled pending confirmation",
+    "alignment_note": "recommendations updated to reflect paradigm-signal, squeeze-signal, reverse-paradigm, and market-sentiment logic"
+  },
+  "summary": {
+    "selected_total": 20,
+    "range": "81-100"
+  },
+  "samples": [
+    {
+      "sample_id": "B1D019",
+      "source_type": "news",
+      "title": "Solve a crab housing crisis and fight a Dreadhog in part one of Runescape's big Havenhythe expansion, which is out now",
+      "content": "That sound you can hear in the distance is someone mumbling in-teh-grih-teh , because a key bit of RuneScape 's in-teh-grih-teh-focused 2026 additions has gone live today, March 23rd. It's part one of the Havenhythe exp…",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_name": "Rock Paper Shotgun",
+      "source_url": "https://www.rockpapershotgun.com/solve-a-crab-housing-crisis-and-fight-a-dreadhog-in-part-one-of-runescapes-big-havenhythe-expansion-which-is-out-now",
+      "annotation": {
+        "expected_signals": []
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260323_054.json",
+        "candidate_bucket": "noise",
+        "recommended_set": "noise_suppression_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 1,
+        "score_noise": 5,
+        "score_boundary": 0,
+        "reasons": [
+          "hint:technical",
+          "missing_game_context",
+          "low_information_excerpt",
+          "truncated_article"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Keep as noise.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D024",
+      "source_type": "news",
+      "title": "Crimson Desert developers are \"preparing to provide a smooth and stable gameplay experience\" following Intel GPU launch woes",
+      "content": "Pearl Abyss has addressed the future of Crimson Desert's Intel Arc GPU support, after it was discovered the hardware wasn't compatible at launch . Read more",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/crimson-desert-preparing-smooth-and-stable-gameplay-experience-following-intel-launch-woes",
+      "annotation": {
+        "expected_signals": []
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260324_011.json",
+        "candidate_bucket": "noise",
+        "recommended_set": "noise_suppression_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 1,
+        "score_noise": 5,
+        "score_boundary": 1,
+        "reasons": [
+          "hint:market",
+          "missing_game_context",
+          "low_information_excerpt",
+          "short_excerpt",
+          "truncated_article"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Keep as noise. This is a local support issue, not a paradigm or structural signal.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D030",
+      "source_type": "news",
+      "title": "Cornwall is overrun with mutant fish people and you are a fisherman with a nailgun in the boomer shooter BRINE",
+      "content": "I've heard Cornwall is quite lovely this time of year. Still cool enough for a fresh pastie, warm enough to have fish and chips by the beach. Shame about all the mutant fish people that are hungry for death! Ah, no, sor…",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_name": "Rock Paper Shotgun",
+      "source_url": "https://www.rockpapershotgun.com/cornwall-is-overrun-with-mutant-fish-people-and-you-are-a-fisherman-with-a-nailgun-in-the-boomer-shooter-brine",
+      "annotation": {
+        "expected_signals": []
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260324_040.json",
+        "candidate_bucket": "noise",
+        "recommended_set": "noise_suppression_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 1,
+        "score_noise": 5,
+        "score_boundary": 0,
+        "reasons": [
+          "hint:technical",
+          "missing_game_context",
+          "low_information_excerpt",
+          "truncated_article"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Keep as noise.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D031",
+      "source_type": "news",
+      "title": "Disney Gaming Boss On \"Massive Disruption\" In Games And What's Coming Next",
+      "content": "Disney's top gaming boss, the veteran Sean Shoptaw, has outlined the company's vision for games amid what he described as a \"massive disruption\" in the gaming market today. Part of Disney's investments and efforts in ga…",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/articles/disney-gaming-boss-on-massive-disruption-in-games-and-whats-coming-next/1100-6538983/?ftag=CAD-01-10abi2f",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "technical",
+            "signal_label": "batch1_candidate_signal",
+            "description": "Batch 1 draft candidate derived from incoming sample `incoming_20260324_042.json`: Disney Gaming Boss On \"Massive Disruption\" In Games And What's Coming Next. Disney's top gaming boss, the veteran Sean Shoptaw, has outlined the company's vision for games amid what he described as a \"massive disruption\" in the gaming market today. Part of Disney's investments and efforts in ga…",
+            "intensity_score": 5,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ]
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260324_042.json",
+        "candidate_bucket": "signal",
+        "recommended_set": "main_baseline_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 5,
+        "score_noise": 0,
+        "score_boundary": 0,
+        "reasons": [
+          "hint:technical",
+          "high_value_entities:disney",
+          "game_context",
+          "structural_change_keywords"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "modified",
+        "corrected_bucket": "signal",
+        "corrected_signal_types": [
+          "technical",
+          "market"
+        ],
+        "corrected_expected_signals": [
+          {
+            "signal_type": "technical",
+            "signal_label": "platform_shift_signal",
+            "description": "Disney is explicitly reacting to a disruptive shift in how games are built and distributed, implying changing platform and production assumptions.",
+            "intensity_score": 7,
+            "confidence_score": 7,
+            "timeliness_score": 5,
+            "entities": []
+          },
+          {
+            "signal_type": "market",
+            "signal_label": "platform_shift_signal",
+            "description": "The comments frame gaming as undergoing market-level disruption that requires strategic repositioning from large IP holders.",
+            "intensity_score": 7,
+            "confidence_score": 7,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ],
+        "review_notes": "Keep as signal. This is better typed as technical plus market because it is about strategic response to industry disruption.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D033",
+      "source_type": "news",
+      "title": "Hello Kitty: Island Adventure's Next DLC Focuses Less On Coziness, More On Fun",
+      "content": "Hello Kitty: Island Adventure is about to get a lot more metropolitan. Sunblink and Sanrio have officially announced the release date for the cozy adventure game's next DLC, City Town, which sends players to a \"a rainbo…",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/articles/hello-kitty-island-adventures-next-dlc-focuses-less-on-coziness-more-on-fun/1100-6538984/?ftag=CAD-01-10abi2f",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "technical",
+            "signal_label": "batch1_candidate_signal",
+            "description": "Batch 1 draft candidate derived from incoming sample `incoming_20260324_046.json`: Hello Kitty: Island Adventure's Next DLC Focuses Less On Coziness, More On Fun. Hello Kitty: Island Adventure is about to get a lot more metropolitan. Sunblink and Sanrio have officially announced the release date for the cozy adventure game's next DLC, City Town, which sends players to a \"a rainbo…",
+            "intensity_score": 5,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ]
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260324_046.json",
+        "candidate_bucket": "signal",
+        "recommended_set": "main_baseline_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 5,
+        "score_noise": 0,
+        "score_boundary": 1,
+        "reasons": [
+          "signal_pattern:market:1",
+          "hint:technical",
+          "high_value_entities:apple",
+          "game_context",
+          "announcement_style"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Keep as noise for now. It may support a broader trendline when combined with other samples such as Pokopia, but this item alone is too weak to promote.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D036",
+      "source_type": "news",
+      "title": "\"It was just dripping in my lap\" - Resident Evil Requiem's terrifying The Girl found her voice by drinking gallons of milk while recording",
+      "content": "If you are one of the many who've played even a short bit of Resident Evil Requiem, you'll have come across The Girl. She's Requiem's lumbering Shadow Ghost who seems to take great pleasure in chasing Grace around in th…",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/resident-evil-requiems-terrifying-the-girl-found-her-voice-by-drinking-milk",
+      "annotation": {
+        "expected_signals": []
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260324_054.json",
+        "candidate_bucket": "noise",
+        "recommended_set": "noise_suppression_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 1,
+        "score_noise": 5,
+        "score_boundary": 0,
+        "reasons": [
+          "hint:technical",
+          "missing_game_context",
+          "low_information_excerpt",
+          "truncated_article"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Keep as noise.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D044",
+      "source_type": "news",
+      "title": "Crimson Desert's Pearl Abyss regains investor confidence as it continues to move beyond launch day woes",
+      "content": "After a rocky start, Pearl Abyss and Crimson Desert are regaining some lost confidence from investors. Read more",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/crimson-deserts-pearl-abyss-regains-investor-confidence-as-it-continues-to-move-beyond-launch-day-woes",
+      "annotation": {
+        "expected_signals": []
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260325_009.json",
+        "candidate_bucket": "noise",
+        "recommended_set": "noise_suppression_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 1,
+        "score_noise": 5,
+        "score_boundary": 1,
+        "reasons": [
+          "hint:market",
+          "missing_game_context",
+          "low_information_excerpt",
+          "short_excerpt",
+          "truncated_article"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Keep as noise. It exposes a 2026 investor blind spot around the self-repair capacity of community sentiment, but the item itself is still not a structural benchmark signal.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D065",
+      "source_type": "news",
+      "title": "Tomodachi Life: Living the Dream Players Are Already Demonstrating Why Nintendo's Strict Image-Sharing Rules Exist",
+      "content": "A Tomodachi Life: Living the Dream demo has been out since yesterday, and it's pretty quickly made it apparent why Nintendo put heavier restrictions than usual on media sharing from this game specifically.",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_name": "IGN Game News",
+      "source_url": "https://www.ign.com/articles/tomodachi-life-living-the-dream-players-are-already-demonstrating-why-nintendos-strict-image-sharing-rules-exist",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "technical",
+            "signal_label": "batch1_candidate_signal",
+            "description": "Batch 1 draft candidate derived from incoming sample `incoming_20260326_068.json`: Tomodachi Life: Living the Dream Players Are Already Demonstrating Why Nintendo's Strict Image-Sharing Rules Exist. A Tomodachi Life: Living the Dream demo has been out since yesterday, and it's pretty quickly made it apparent why Nintendo put heavier restrictions than usual on media sharing from this game specifically.",
+            "intensity_score": 5,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ]
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260326_068.json",
+        "candidate_bucket": "signal",
+        "recommended_set": "main_baseline_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 5,
+        "score_noise": 0,
+        "score_boundary": 0,
+        "reasons": [
+          "signal_pattern:market:1",
+          "hint:technical",
+          "high_value_entities:nintendo",
+          "game_context"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "signal",
+        "corrected_signal_types": [
+          "technical"
+        ],
+        "corrected_expected_signals": [
+          {
+            "signal_type": "technical",
+            "signal_label": "governance_paradigm_signal",
+            "description": "Nintendo's stricter image-sharing controls indicate a governance shift from static platform restrictions toward more adaptive ecosystem management of player expression.",
+            "intensity_score": 7,
+            "confidence_score": 7,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ],
+        "review_notes": "Keep as signal. Treat this as a governance-paradigm signal rather than routine policy noise.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D070",
+      "source_type": "news",
+      "title": "Baldur's Gate 3 actor Neil Newbon says he's avoided roles over Astarion typecasting concerns",
+      "content": "Neil Newbon, the award-winning actor known for portraying the vampire Astarion in Baldur's Gate 3 , has said he's avoided roles recently because they wanted a repeat performance - or thereabouts - of the same thing. Rea…",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/actor-neil-newbon-avoids-astarion-typecasting",
+      "annotation": {
+        "expected_signals": []
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260327_022.json",
+        "candidate_bucket": "noise",
+        "recommended_set": "noise_suppression_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 1,
+        "score_noise": 5,
+        "score_boundary": 0,
+        "reasons": [
+          "hint:technical",
+          "missing_game_context",
+          "low_information_excerpt",
+          "truncated_article"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Keep as noise.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D073",
+      "source_type": "news",
+      "title": "Glen Powell is voicing Starfox's Fox McCloud in the upcoming Super Mario Galaxy movie",
+      "content": "It's official: Glen Powell will be voicing Star Fox in the upcoming Super Mario Galaxy movie. Read more",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/glen-powel-voicing-fox-mccloud-starfox-in-super-mario-galaxy-movie",
+      "annotation": {
+        "expected_signals": []
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260327_030.json",
+        "candidate_bucket": "noise",
+        "recommended_set": "noise_suppression_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 1,
+        "score_noise": 5,
+        "score_boundary": 1,
+        "reasons": [
+          "hint:technical",
+          "missing_game_context",
+          "low_information_excerpt",
+          "short_excerpt",
+          "truncated_article"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Keep as noise.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D078",
+      "source_type": "news",
+      "title": "Pearl Abyss is approaching the idea of a Crimson Desert Switch 2 port \"with interest\"",
+      "content": "The idea of porting Crimson Desert over to Switch 2 is currently being discussed by Pearl Abyss, which while I am no tech expert, sounds pretty ambitious to me. Read more",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/pearl-abyss-is-approaching-the-idea-of-a-crimson-desert-switch-2-port-with-interest",
+      "annotation": {
+        "expected_signals": []
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260327_043.json",
+        "candidate_bucket": "noise",
+        "recommended_set": "noise_suppression_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 1,
+        "score_noise": 5,
+        "score_boundary": 1,
+        "reasons": [
+          "hint:technical",
+          "missing_game_context",
+          "low_information_excerpt",
+          "short_excerpt",
+          "truncated_article"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Keep as noise unless you want speculative platform expansion intent counted.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D081",
+      "source_type": "news",
+      "title": "The Super Mario Galaxy Movie actors Charlie Day and Chris Pratt appear to confirm earlier film leak",
+      "content": "Actors Chris Pratt and Charlie Day appear to have confirmed an earlier Super Mario Galaxy Movie leak, while also sharing how to actually pronounce Mario (it's Maaa-rio, apparently, not Ma-rio). Read more",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/the-super-mario-galaxy-movie-actors-charlie-day-and-chris-pratt-appear-to-confirm-earlier-film-leak",
+      "annotation": {
+        "expected_signals": []
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260327_057.json",
+        "candidate_bucket": "noise",
+        "recommended_set": "noise_suppression_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 1,
+        "score_noise": 5,
+        "score_boundary": 0,
+        "reasons": [
+          "hint:technical",
+          "missing_game_context",
+          "low_information_excerpt",
+          "truncated_article"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Keep as noise.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D093",
+      "source_type": "news",
+      "title": "Astarion actor urges Baldur's Gate 3 fans to give The Last of Us showrunner's HBO adaptation a chance",
+      "content": "Astarion actor Neil Newbon has urged Baldur's Gate 3 fans to give Craig Maizin's HBO TV adaptation a chance. Read more",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/astarion-says-give-baldurs-gate-3-hbo-adaptation-a-chance",
+      "annotation": {
+        "expected_signals": []
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260330_022.json",
+        "candidate_bucket": "noise",
+        "recommended_set": "noise_suppression_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 1,
+        "score_noise": 5,
+        "score_boundary": 1,
+        "reasons": [
+          "hint:technical",
+          "missing_game_context",
+          "low_information_excerpt",
+          "short_excerpt",
+          "truncated_article"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Keep as noise.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D096",
+      "source_type": "news",
+      "title": "Nightholme, a New 3-Player Horror Game, Shows Off 9 Minutes of Narrated Gameplay",
+      "content": "Join Nightholme creator Alex Amancio (previously the creative director on Assassin's Creed Unity and Assassin's Creed Revelations) as he walks you through his new multiplayer horror game, Nightholme. In it, up to three …",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_name": "IGN Game News",
+      "source_url": "https://www.ign.com/articles/nightholme-narrated-gameplay-3-player-horror-game",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "technical",
+            "signal_label": "batch1_candidate_signal",
+            "description": "Batch 1 draft candidate derived from incoming sample `incoming_20260330_042.json`: Nightholme, a New 3-Player Horror Game, Shows Off 9 Minutes of Narrated Gameplay. Join Nightholme creator Alex Amancio (previously the creative director on Assassin's Creed Unity and Assassin's Creed Revelations) as he walks you through his new multiplayer horror game, Nightholme. In it, up to three …",
+            "intensity_score": 5,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ]
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260330_042.json",
+        "candidate_bucket": "signal",
+        "recommended_set": "main_baseline_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 5,
+        "score_noise": 0,
+        "score_boundary": 0,
+        "reasons": [
+          "signal_pattern:market:1",
+          "hint:technical",
+          "high_value_entities:unity",
+          "game_context"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Keep as noise for now. It may serve as supporting evidence for a cross-sample trend toward high-density emotional interaction when read with adjacent cases such as Hello Kitty, but it should not stand alone as a benchmark signal.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D097",
+      "source_type": "news",
+      "title": "Ninja Gaiden Sigma 2 Plus Player Becomes First to Achieve Platinum Trophy",
+      "content": "No one has ever truly unlocked the Platinum trophy for Ninja Gaiden Sigma 2 Plus on the PlayStation Vita – until recently.",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_name": "IGN Game News",
+      "source_url": "https://www.ign.com/articles/ninja-gaiden-sigma-2-plus-player-becomes-first-to-achieve-platinum-trophy",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "technical",
+            "signal_label": "batch1_candidate_signal",
+            "description": "Batch 1 draft candidate derived from incoming sample `incoming_20260330_043.json`: Ninja Gaiden Sigma 2 Plus Player Becomes First to Achieve Platinum Trophy. No one has ever truly unlocked the Platinum trophy for Ninja Gaiden Sigma 2 Plus on the PlayStation Vita – until recently.",
+            "intensity_score": 5,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ]
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260330_043.json",
+        "candidate_bucket": "signal",
+        "recommended_set": "main_baseline_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 5,
+        "score_noise": 0,
+        "score_boundary": 1,
+        "reasons": [
+          "signal_pattern:market:1",
+          "hint:technical",
+          "high_value_entities:playstation",
+          "game_context",
+          "short_excerpt"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "modified",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Downgrade to noise.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D104",
+      "source_type": "news",
+      "title": "An Olympic Bronze Medalist Kicked My Ass in Mario Tennis Fever and I Lived to Tell the Tale",
+      "content": "The world's number 8 tennis player talks about the real tennis skills required to master the popular Nintendo Switch 2 game.",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_name": "IGN Game News",
+      "source_url": "https://www.ign.com/articles/mario-tennis-fever-with-olympic-medalist-taylor-fritz",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "technical",
+            "signal_label": "batch1_candidate_signal",
+            "description": "Batch 1 draft candidate derived from incoming sample `incoming_20260331_015.json`: An Olympic Bronze Medalist Kicked My Ass in Mario Tennis Fever and I Lived to Tell the Tale. The world's number 8 tennis player talks about the real tennis skills required to master the popular Nintendo Switch 2 game.",
+            "intensity_score": 5,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ]
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260331_015.json",
+        "candidate_bucket": "signal",
+        "recommended_set": "main_baseline_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 5,
+        "score_noise": 0,
+        "score_boundary": 1,
+        "reasons": [
+          "signal_pattern:market:1",
+          "hint:technical",
+          "high_value_entities:nintendo",
+          "game_context",
+          "short_excerpt"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "modified",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Downgrade to noise.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D107",
+      "source_type": "news",
+      "title": "The Last of Us creator Neil Druckmann teases a \"few stops\" left for Naughty Dog's post-apocalyptic series",
+      "content": "Head of Naughty Dog Neil Druckmann has shared two early sketches of what would eventually become Joel and Ellie in The Last of Us, teasing a \"few stops\" still left on the series' \"road ahead\". Read more",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/the-last-of-us-creator-neil-druckmann-teases-a-few-stops-left-for-its-post-apocalyptic-series",
+      "annotation": {
+        "expected_signals": []
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260331_052.json",
+        "candidate_bucket": "noise",
+        "recommended_set": "noise_suppression_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 1,
+        "score_noise": 5,
+        "score_boundary": 0,
+        "reasons": [
+          "hint:technical",
+          "missing_game_context",
+          "low_information_excerpt",
+          "truncated_article"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Keep as noise.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D108",
+      "source_type": "news",
+      "title": "The Last of Us season three set photos give us our first look at Kyriana Kratter's Lev",
+      "content": "Filming has begun on The Last of Us season three, with photos giving us a look at Kaitlyn Dever's Abby and Kyriana Kratter's Lev on set. Read more",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/the-last-of-us-season-three-set-photos-give-us-our-first-look-at-kyriana-kratters-lev",
+      "annotation": {
+        "expected_signals": []
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260331_053.json",
+        "candidate_bucket": "noise",
+        "recommended_set": "noise_suppression_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 1,
+        "score_noise": 5,
+        "score_boundary": 1,
+        "reasons": [
+          "hint:technical",
+          "missing_game_context",
+          "low_information_excerpt",
+          "short_excerpt",
+          "truncated_article"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Keep as noise.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D006",
+      "source_type": "news",
+      "title": "Younger Generations Are Struggling to 'Connect' With the Final Fantasy Series Because It Takes So Long for New Games to Come Out, Yoshi-P Says",
+      "content": "Final Fantasy 14 director Naoki Yoshida, known to fans as Yoshi-P, has admitted that long development cycles right across the Final Fantasy series make it \"harder\" for new players or younger generations \"to engage with\"…",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_name": "IGN Game News",
+      "source_url": "https://www.ign.com/articles/younger-generations-are-struggling-to-connect-with-the-final-fantasy-series-because-it-takes-so-long-for-new-games-to-come-out-yoshi-p-says",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "capital",
+            "signal_label": "batch1_candidate_signal",
+            "description": "Batch 1 draft candidate derived from incoming sample `incoming_20260323_005.json`: Younger Generations Are Struggling to 'Connect' With the Final Fantasy Series Because It Takes So Long for New Games to Come Out, Yoshi-P Says. Final Fantasy 14 director Naoki Yoshida, known to fans as Yoshi-P, has admitted that long development cycles right across the Final Fantasy series make it \"harder\" for new players or younger generations \"to engage with\"…",
+            "intensity_score": 4,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ]
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260323_005.json",
+        "candidate_bucket": "signal",
+        "recommended_set": "main_baseline_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 4,
+        "score_noise": 0,
+        "score_boundary": 0,
+        "reasons": [
+          "signal_pattern:market:1",
+          "hint:capital",
+          "game_context"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "modified",
+        "corrected_bucket": "signal",
+        "corrected_signal_types": [
+          "market",
+          "technical"
+        ],
+        "corrected_expected_signals": [
+          {
+            "signal_type": "technical",
+            "signal_label": "development_cycle_mismatch_signal",
+            "description": "The comment highlights a production-model lag where long AAA development cycles no longer match contemporary audience engagement rhythms.",
+            "intensity_score": 7,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          },
+          {
+            "signal_type": "market",
+            "signal_label": "development_cycle_mismatch_signal",
+            "description": "Long release gaps are weakening younger audience connection and creating generational engagement risk for a major franchise.",
+            "intensity_score": 7,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ],
+        "review_notes": "Keep as signal, but this is not capital. It is better framed as technical plus market around development-cycle mismatch and audience attrition.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D015",
+      "source_type": "news",
+      "title": "Crimson Desert Tools Can Have Some Very Unexpected Uses, And That Includes Cooking Meat",
+      "content": "Crimson Desert has a lot of skills, tools, and abilities that let you interact with the world in unconventional and unexpected ways. Players are learning this for themselves and have discovered that one of the game's ea…",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/articles/crimson-desert-tools-can-have-some-very-unexpected-uses-and-that-includes-cooking-meat/1100-6538949/?ftag=CAD-01-10abi2f",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "technical",
+            "signal_label": "batch1_candidate_signal",
+            "description": "Batch 1 draft candidate derived from incoming sample `incoming_20260323_033.json`: Crimson Desert Tools Can Have Some Very Unexpected Uses, And That Includes Cooking Meat. Crimson Desert has a lot of skills, tools, and abilities that let you interact with the world in unconventional and unexpected ways. Players are learning this for themselves and have discovered that one of the game's ea…",
+            "intensity_score": 4,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ]
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260323_033.json",
+        "candidate_bucket": "signal",
+        "recommended_set": "main_baseline_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 4,
+        "score_noise": 0,
+        "score_boundary": 0,
+        "reasons": [
+          "signal_pattern:market:1",
+          "hint:technical",
+          "game_context"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "modified",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Downgrade to noise.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    }
+  ]
+}

@@ -1,0 +1,99 @@
+{
+  "prompt_version": "v2.1",
+  "run_at": "2026-04-13T05:27:19.525128Z",
+  "benchmark_path": "F:\\AIProjects\\DesignAssistant\\data-layer\\projects\\proj_004\\phase2.1_implementation\\data\\benchmark_samples_batch1_draft.json",
+  "total": 5,
+  "tp": 0,
+  "tn": 1,
+  "fp": 0,
+  "fn": 4,
+  "precision": 0,
+  "recall": 0.0,
+  "f1": 0,
+  "accuracy": 0.2,
+  "details": [
+    {
+      "sample_id": "B1D001",
+      "origin_file": "incoming_20260319_008.json",
+      "expected_class": "signal",
+      "predicted_class": "noise",
+      "expected_labels": [
+        "technical:batch1_candidate_signal"
+      ],
+      "predicted_labels": [],
+      "verdict": "FN",
+      "signal_count": 0,
+      "processing_time_ms": 9803,
+      "warnings": [
+        "粗筛失败（429 Client Error: Too Many Requests for url: https://ark.cn-beijing.volces.com/api/coding/v1/messages），放行进入精筛",
+        "解码失败: 429 Client Error: Too Many Requests for url: https://ark.cn-beijing.volces.com/api/coding/v1/messages"
+      ]
+    },
+    {
+      "sample_id": "B1D002",
+      "origin_file": "incoming_20260320_001.json",
+      "expected_class": "signal",
+      "predicted_class": "noise",
+      "expected_labels": [
+        "capital:batch1_candidate_signal"
+      ],
+      "predicted_labels": [],
+      "verdict": "FN",
+      "signal_count": 0,
+      "processing_time_ms": 9587,
+      "warnings": [
+        "粗筛失败（429 Client Error: Too Many Requests for url: https://ark.cn-beijing.volces.com/api/coding/v1/messages），放行进入精筛",
+        "解码失败: 429 Client Error: Too Many Requests for url: https://ark.cn-beijing.volces.com/api/coding/v1/messages"
+      ]
+    },
+    {
+      "sample_id": "B1D003",
+      "origin_file": "incoming_20260320_002.json",
+      "expected_class": "signal",
+      "predicted_class": "noise",
+      "expected_labels": [
+        "market:batch1_candidate_signal"
+      ],
+      "predicted_labels": [],
+      "verdict": "FN",
+      "signal_count": 0,
+      "processing_time_ms": 9691,
+      "warnings": [
+        "粗筛失败（429 Client Error: Too Many Requests for url: https://ark.cn-beijing.volces.com/api/coding/v1/messages），放行进入精筛",
+        "解码失败: 429 Client Error: Too Many Requests for url: https://ark.cn-beijing.volces.com/api/coding/v1/messages"
+      ]
+    },
+    {
+      "sample_id": "B1D004",
+      "origin_file": "incoming_20260322_004.json",
+      "expected_class": "noise",
+      "predicted_class": "noise",
+      "expected_labels": [],
+      "predicted_labels": [],
+      "verdict": "TN",
+      "signal_count": 0,
+      "processing_time_ms": 9601,
+      "warnings": [
+        "粗筛失败（429 Client Error: Too Many Requests for url: https://ark.cn-beijing.volces.com/api/coding/v1/messages），放行进入精筛",
+        "解码失败: 429 Client Error: Too Many Requests for url: https://ark.cn-beijing.volces.com/api/coding/v1/messages"
+      ]
+    },
+    {
+      "sample_id": "B1D005",
+      "origin_file": "incoming_20260323_004.json",
+      "expected_class": "signal",
+      "predicted_class": "noise",
+      "expected_labels": [
+        "capital:batch1_candidate_signal"
+      ],
+      "predicted_labels": [],
+      "verdict": "FN",
+      "signal_count": 0,
+      "processing_time_ms": 9570,
+      "warnings": [
+        "粗筛失败（429 Client Error: Too Many Requests for url: https://ark.cn-beijing.volces.com/api/coding/v1/messages），放行进入精筛",
+        "解码失败: 429 Client Error: Too Many Requests for url: https://ark.cn-beijing.volces.com/api/coding/v1/messages"
+      ]
+    }
+  ]
+}

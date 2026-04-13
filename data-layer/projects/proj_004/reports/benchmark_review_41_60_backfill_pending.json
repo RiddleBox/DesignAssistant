@@ -1,0 +1,1035 @@
+{
+  "generated_at": "2026-04-13T15:42:45Z",
+  "source_report": "F:\\AIProjects\\DesignAssistant\\data-layer\\projects\\proj_004\\reports\\benchmark_review_41_60_recommendations.json",
+  "selection_policy": {
+    "included_samples": "review tranche 41-60 from benchmark review queue",
+    "review_mode": "assistant-prefilled pending confirmation",
+    "alignment_note": "recommendations updated to reflect paradigm-signal, squeeze-signal, and reverse-paradigm logic"
+  },
+  "summary": {
+    "selected_total": 20,
+    "range": "41-60"
+  },
+  "samples": [
+    {
+      "sample_id": "B1D016",
+      "source_type": "news",
+      "title": "Dragon's Dogma 2 celebrates second anniversary with \"special celebratory artwork\" and a custom controller, as fans ponder: are we getting DLC?",
+      "content": "Dragon's Dogma 2 was a very special RPG even if some its bones could've used more work and the New Game Plus loop span its wheels without extra end-game content to give it juice. Still, like the original , it gained a d…",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/dragons-dogma-2-celebrates-second-anniversary-with-no-dlc-news-but-we-might-have-a-solid-tease",
+      "annotation": {
+        "expected_signals": []
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260323_035.json",
+        "candidate_bucket": "noise",
+        "recommended_set": "noise_suppression_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 3,
+        "score_noise": 7,
+        "score_boundary": 2,
+        "reasons": [
+          "hint:technical",
+          "high_value_entities:capcom",
+          "game_context",
+          "noise_patterns:2",
+          "low_information_excerpt",
+          "boundary_patterns:1",
+          "truncated_article"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Keep as noise. Anniversary celebration plus DLC speculation is standard promotional coverage.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D020",
+      "source_type": "news",
+      "title": "Two more leadership exits take place at Xbox",
+      "content": "VP Lori Wright and general manager of gaming AI Haiyan Zhang have parted ways with the company.",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_name": "Game Developer",
+      "source_url": "https://www.gamedeveloper.com/business/two-more-leadership-exists-took-place-at-xbox",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "technical",
+            "signal_label": "batch1_candidate_signal",
+            "description": "Batch 1 draft candidate derived from incoming sample `incoming_20260323_062.json`: Two more leadership exits take place at Xbox. VP Lori Wright and general manager of gaming AI Haiyan Zhang have parted ways with the company.",
+            "intensity_score": 7,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ]
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260323_062.json",
+        "candidate_bucket": "signal",
+        "recommended_set": "main_baseline_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 7,
+        "score_noise": 2,
+        "score_boundary": 0,
+        "reasons": [
+          "signal_pattern:team:1",
+          "signal_pattern:technical:1",
+          "hint:technical",
+          "high_value_entities:xbox",
+          "game_context",
+          "very_short_excerpt"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "modified",
+        "corrected_bucket": "signal",
+        "corrected_signal_types": [
+          "team"
+        ],
+        "corrected_expected_signals": [
+          {
+            "signal_type": "team",
+            "signal_label": "leadership_change_signal",
+            "description": "Leadership exits at Xbox indicate organizational restructuring rather than a technical shift.",
+            "intensity_score": 8,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ],
+        "review_notes": "Keep as signal, but retag to team because executive departures reflect org structure change.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D025",
+      "source_type": "news",
+      "title": "Report: Nintendo slashes Switch 2 production by a third due to weak U.S. sales",
+      "content": "The company has purportedly downgraded its output to 4 million units from 6 million units.",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_name": "Game Developer",
+      "source_url": "https://www.gamedeveloper.com/business/report-nintendo-slashes-switch-2-production-by-a-third-due-to-weak-u-s-sales",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "market",
+            "signal_label": "batch1_candidate_signal",
+            "description": "Batch 1 draft candidate derived from incoming sample `incoming_20260324_016.json`: Report: Nintendo slashes Switch 2 production by a third due to weak U.S. sales. The company has purportedly downgraded its output to 4 million units from 6 million units.",
+            "intensity_score": 7,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ]
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260324_016.json",
+        "candidate_bucket": "signal",
+        "recommended_set": "main_baseline_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 7,
+        "score_noise": 2,
+        "score_boundary": 2,
+        "reasons": [
+          "signal_pattern:market:1",
+          "hint:market",
+          "high_value_entities:nintendo",
+          "game_context",
+          "boundary_patterns:1",
+          "concrete_numbers",
+          "very_short_excerpt"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "signal",
+        "corrected_signal_types": [
+          "market"
+        ],
+        "corrected_expected_signals": [],
+        "review_notes": "Keep as signal. This is a strong market squeeze indicator.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D035",
+      "source_type": "news",
+      "title": "\"It's essential to me that it's approached with care and love and caution\" - How Life is Strange: Reunion actors Hannah Telle and Rhianna DeVries are preparing to say farewell to Max and Chloe",
+      "content": "\"I remember being in a really strange time in my life, oddly enough, and a big transition where I felt really uncertain of myself and my place in the world, and this audition came around that was somehow celebrating all…",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/its-essential-to-me-that-its-approached-with-care-and-love-and-caution-how-life-is-strange-reunion-actors-hannah-telle-and-rhianna-devries-are-preparing-to-say-farewell-to-max-and-chloe",
+      "annotation": {
+        "expected_signals": []
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260324_052.json",
+        "candidate_bucket": "noise",
+        "recommended_set": "noise_suppression_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 1,
+        "score_noise": 7,
+        "score_boundary": 0,
+        "reasons": [
+          "hint:technical",
+          "missing_game_context",
+          "noise_patterns:1",
+          "low_information_excerpt",
+          "truncated_article"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Keep as noise. Human-interest or cast-interview content is outside benchmark scope.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D039",
+      "source_type": "news",
+      "title": "Super Mario Galaxy Movie age-rating accidentally confirms a 20-year-old fan theory",
+      "content": "An age-rating for Nintendo's upcoming Super Mario Galaxy Movie might have let slip a major plot point which, if accurate, will finally confirm a fan theory which has been floating about for almost 20 years. Read more",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/super-mario-galaxy-movie-age-rating-accidentally-confirms-a-20-year-fan-theory",
+      "annotation": {
+        "expected_signals": []
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260324_066.json",
+        "candidate_bucket": "noise",
+        "recommended_set": "noise_suppression_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 3,
+        "score_noise": 7,
+        "score_boundary": 2,
+        "reasons": [
+          "hint:technical",
+          "high_value_entities:nintendo",
+          "game_context",
+          "noise_patterns:2",
+          "low_information_excerpt",
+          "boundary_patterns:1",
+          "truncated_article"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Keep as noise.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D046",
+      "source_type": "news",
+      "title": "Epic Games layoffs serve as a timely reminder that accountability is dead",
+      "content": "What happened to Harmonix and Mediatonic under Epic Games? Good question.",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_name": "Game Developer",
+      "source_url": "https://www.gamedeveloper.com/business/epic-games-layoffs-should-remind-you-that-accountability-is-dead",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "team",
+            "signal_label": "batch1_candidate_signal",
+            "description": "Batch 1 draft candidate derived from incoming sample `incoming_20260325_019.json`: Epic Games layoffs serve as a timely reminder that accountability is dead. What happened to Harmonix and Mediatonic under Epic Games? Good question.",
+            "intensity_score": 7,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ]
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260325_019.json",
+        "candidate_bucket": "signal",
+        "recommended_set": "main_baseline_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 7,
+        "score_noise": 2,
+        "score_boundary": 0,
+        "reasons": [
+          "signal_pattern:team:1",
+          "hint:team",
+          "high_value_entities:epic",
+          "game_context",
+          "very_short_excerpt",
+          "structural_change_keywords"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "signal",
+        "corrected_signal_types": [
+          "team"
+        ],
+        "corrected_expected_signals": [],
+        "review_notes": "Keep as signal only if you accept commentary that crystallizes layoff consequences as paradigm evidence; otherwise boundary.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D056",
+      "source_type": "news",
+      "title": "Analyst says Epic Games layoffs send a clear signal: 'This will not get any easier'",
+      "content": "The myth of perpetual growth continues to bulldoze through the industry.",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_name": "Game Developer",
+      "source_url": "https://www.gamedeveloper.com/business/analyst-says-epic-games-layoffs-send-a-clear-signal-this-will-not-get-any-easier-",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "team",
+            "signal_label": "batch1_candidate_signal",
+            "description": "Batch 1 draft candidate derived from incoming sample `incoming_20260326_019.json`: Analyst says Epic Games layoffs send a clear signal: 'This will not get any easier'. The myth of perpetual growth continues to bulldoze through the industry.",
+            "intensity_score": 7,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ]
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260326_019.json",
+        "candidate_bucket": "signal",
+        "recommended_set": "main_baseline_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 7,
+        "score_noise": 2,
+        "score_boundary": 0,
+        "reasons": [
+          "signal_pattern:team:1",
+          "hint:team",
+          "high_value_entities:epic",
+          "game_context",
+          "very_short_excerpt",
+          "structural_change_keywords"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "modified",
+        "corrected_bucket": "signal",
+        "corrected_signal_types": [
+          "team",
+          "market"
+        ],
+        "corrected_expected_signals": [
+          {
+            "signal_type": "team",
+            "signal_label": "industry_squeeze_signal",
+            "description": "Epic layoffs are used as evidence of ongoing workforce contraction in the game industry.",
+            "intensity_score": 8,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          },
+          {
+            "signal_type": "market",
+            "signal_label": "industry_squeeze_signal",
+            "description": "The article frames layoffs as evidence that market conditions and growth expectations are deteriorating across the industry.",
+            "intensity_score": 8,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ],
+        "review_notes": "Keep as signal. Multi-type makes sense if your taxonomy allows team plus market for paradigm squeeze interpretation.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D059",
+      "source_type": "news",
+      "title": "That Hunter: The Reckoning game that was accidentally leaked on Steam is now officially revealed as a new FPS RPG",
+      "content": "Hunter: The Reckoning - Deathwish was announced, on purpose this time, in today's Xbox showcase.",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/games/rpg/that-hunter-the-reckoning-game-that-was-accidentally-leaked-on-steam-is-now-officially-revealed-as-a-new-fps-rpg/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260326_023.json",
+        "candidate_bucket": "noise",
+        "recommended_set": "noise_suppression_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 3,
+        "score_noise": 7,
+        "score_boundary": 1,
+        "reasons": [
+          "hint:team",
+          "high_value_entities:xbox",
+          "game_context",
+          "noise_patterns:1",
+          "very_short_excerpt",
+          "announcement_style",
+          "shallow_announcement_penalty"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Keep as noise.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D069",
+      "source_type": "news",
+      "title": "Record Sales, Declining Stock Prices, Production Decreases: Is Switch 2 A Massive Success Or Not?",
+      "content": "There is no denying that the Switch 2 is crushing it. Its sales in the US are pacing 45% ahead of the original Switch over its first four months and most consoles in history. No data exists in a vacuum, though, and Swit…",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/articles/record-sales-declining-stock-production-decreases-is-switch-2-a-massive-success-or-not/1100-6539066/?ftag=CAD-01-10abi2f",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "market",
+            "signal_label": "batch1_candidate_signal",
+            "description": "Batch 1 draft candidate derived from incoming sample `incoming_20260327_005.json`: Record Sales, Declining Stock Prices, Production Decreases: Is Switch 2 A Massive Success Or Not?. There is no denying that the Switch 2 is crushing it. Its sales in the US are pacing 45% ahead of the original Switch over its first four months and most consoles in history. No data exists in a vacuum, though, and Swit…",
+            "intensity_score": 7,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ]
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260327_005.json",
+        "candidate_bucket": "signal",
+        "recommended_set": "main_baseline_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 7,
+        "score_noise": 0,
+        "score_boundary": 2,
+        "reasons": [
+          "signal_pattern:market:2",
+          "hint:market",
+          "high_value_entities:nintendo",
+          "game_context",
+          "boundary_patterns:1"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "signal",
+        "corrected_signal_types": [
+          "market"
+        ],
+        "corrected_expected_signals": [],
+        "review_notes": "Keep as signal. It captures a market contradiction rather than simple success reporting.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D086",
+      "source_type": "news",
+      "title": "A programmer with terminal brain cancer was caught in Epic's mass layoff, but CEO Tim Sweeney says the studio 'will solve the insurance for them'",
+      "content": "\"Mike is not just a number. He is a father. A husband. A person deeply loved.\"",
+      "published_at": "2026-03-29T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/gaming-industry/a-programmer-with-terminal-brain-cancer-was-caught-in-epics-mass-layoff-but-ceo-tim-sweeney-says-the-studio-will-solve-the-insurance-for-them/",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "team",
+            "signal_label": "batch1_candidate_signal",
+            "description": "Batch 1 draft candidate derived from incoming sample `incoming_20260329_003.json`: A programmer with terminal brain cancer was caught in Epic's mass layoff, but CEO Tim Sweeney says the studio 'will solve the insurance for them'. \"Mike is not just a number. He is a father. A husband. A person deeply loved.\"",
+            "intensity_score": 7,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ]
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260329_003.json",
+        "candidate_bucket": "signal",
+        "recommended_set": "main_baseline_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 7,
+        "score_noise": 2,
+        "score_boundary": 0,
+        "reasons": [
+          "signal_pattern:team:1",
+          "hint:team",
+          "high_value_entities:epic",
+          "game_context",
+          "very_short_excerpt",
+          "structural_change_keywords"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "signal",
+        "corrected_signal_types": [
+          "team"
+        ],
+        "corrected_expected_signals": [],
+        "review_notes": "Keep as signal if downstream worker fallout from layoffs is valid benchmark evidence; otherwise boundary.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D090",
+      "source_type": "news",
+      "title": "Epic's mass layoffs left a programmer with terminal brain cancer without life insurance, but Tim Sweeney says the company will \"solve\" the problem",
+      "content": "Epic Games' mass layoffs led a programmer with terminal brain cancer to lose his life insurance, leaving him and his family struggling to find new coverage. Following news of the situation breaking, Epic CEO Tim Sweeney…",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_name": "Rock Paper Shotgun",
+      "source_url": "https://www.rockpapershotgun.com/epics-mass-layoffs-left-a-programmer-with-terminal-brain-cancer-without-life-insurance-but-tim-sweeney-says-the-company-will-solve-the-problem",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "team",
+            "signal_label": "batch1_candidate_signal",
+            "description": "Batch 1 draft candidate derived from incoming sample `incoming_20260330_008.json`: Epic's mass layoffs left a programmer with terminal brain cancer without life insurance, but Tim Sweeney says the company will \"solve\" the problem. Epic Games' mass layoffs led a programmer with terminal brain cancer to lose his life insurance, leaving him and his family struggling to find new coverage. Following news of the situation breaking, Epic CEO Tim Sweeney…",
+            "intensity_score": 7,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ]
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260330_008.json",
+        "candidate_bucket": "signal",
+        "recommended_set": "main_baseline_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 7,
+        "score_noise": 3,
+        "score_boundary": 0,
+        "reasons": [
+          "signal_pattern:team:1",
+          "hint:team",
+          "high_value_entities:epic",
+          "game_context",
+          "low_information_excerpt",
+          "truncated_article",
+          "structural_change_keywords"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "signal",
+        "corrected_signal_types": [
+          "team"
+        ],
+        "corrected_expected_signals": [],
+        "review_notes": "Keep as signal if second-order worker impact belongs in scope; otherwise boundary.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D099",
+      "source_type": "news",
+      "title": "Screamer’s multiplayer chases unleash the racer’s full chaotic potential, trapping you inside a relentlessly boosty, bashy, and boomy washing machine",
+      "content": "When James and I published our impressions of anime racer Screamer the other week, I mentioned I was keen to give its online races a go once it’d pulled out of the garage. Would the sights and sounds of sliding around i…",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_name": "Rock Paper Shotgun",
+      "source_url": "https://www.rockpapershotgun.com/screamers-multiplayer-chases-unleash-the-racers-full-chaotic-potential-trapping-you-inside-a-relentlessly-boosty-bashy-and-boomy-washing-machine",
+      "annotation": {
+        "expected_signals": []
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260330_047.json",
+        "candidate_bucket": "noise",
+        "recommended_set": "noise_suppression_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 1,
+        "score_noise": 7,
+        "score_boundary": 0,
+        "reasons": [
+          "hint:technical",
+          "missing_game_context",
+          "noise_patterns:1",
+          "low_information_excerpt",
+          "truncated_article"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Keep as noise.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D001",
+      "source_type": "news",
+      "title": "Fortnite back on Google Play worldwide after Epic and Google settle",
+      "content": "The settlement took place in early March, months after a federal court cast doubts on the terms.",
+      "published_at": "2026-03-19T00:00:00Z",
+      "source_name": "Game Developer",
+      "source_url": "https://www.gamedeveloper.com/business/fortnite-back-on-google-play-worldwide-after-epic-and-google-settle",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "technical",
+            "signal_label": "batch1_candidate_signal",
+            "description": "Batch 1 draft candidate derived from incoming sample `incoming_20260319_008.json`: Fortnite back on Google Play worldwide after Epic and Google settle. The settlement took place in early March, months after a federal court cast doubts on the terms.",
+            "intensity_score": 6,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ]
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260319_008.json",
+        "candidate_bucket": "signal",
+        "recommended_set": "main_baseline_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 6,
+        "score_noise": 2,
+        "score_boundary": 0,
+        "reasons": [
+          "signal_pattern:regulatory:1",
+          "hint:technical",
+          "high_value_entities:epic,google",
+          "game_context",
+          "very_short_excerpt"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "modified",
+        "corrected_bucket": "signal",
+        "corrected_signal_types": [
+          "regulatory",
+          "market"
+        ],
+        "corrected_expected_signals": [
+          {
+            "signal_type": "regulatory",
+            "signal_label": "platform_settlement_signal",
+            "description": "The Epic-Google settlement changes platform access and distribution conditions for Fortnite on Google Play.",
+            "intensity_score": 7,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          },
+          {
+            "signal_type": "market",
+            "signal_label": "platform_settlement_signal",
+            "description": "Return to Google Play materially affects market access and player distribution reach.",
+            "intensity_score": 6,
+            "confidence_score": 7,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ],
+        "review_notes": "Keep as signal. Prefer regulatory as primary; include market if your taxonomy allows distribution impact.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D007",
+      "source_type": "news",
+      "title": "2019's Call of Duty: Modern Warfare Is Blowing Up on Steam Thanks to a Big Sale and Positive Word of Mouth",
+      "content": "A generous price drop has seen Call of Duty: Modern Warfare break its own Steam concurrent record over the weekend, hitting an all-new high of 61,667 peak players and making it more popular than last year's Call of Duty…",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_name": "IGN Game News",
+      "source_url": "https://www.ign.com/articles/2019s-call-of-duty-modern-warfare-is-blowing-up-on-steam-thanks-to-a-big-sale-and-positive-word-of-mouth",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "market",
+            "signal_label": "batch1_candidate_signal",
+            "description": "Batch 1 draft candidate derived from incoming sample `incoming_20260323_006.json`: 2019's Call of Duty: Modern Warfare Is Blowing Up on Steam Thanks to a Big Sale and Positive Word of Mouth. A generous price drop has seen Call of Duty: Modern Warfare break its own Steam concurrent record over the weekend, hitting an all-new high of 61,667 peak players and making it more popular than last year's Call of Duty…",
+            "intensity_score": 6,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ]
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260323_006.json",
+        "candidate_bucket": "signal",
+        "recommended_set": "main_baseline_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 6,
+        "score_noise": 0,
+        "score_boundary": 0,
+        "reasons": [
+          "signal_pattern:market:2",
+          "hint:market",
+          "game_context"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "signal",
+        "corrected_signal_types": [
+          "market"
+        ],
+        "corrected_expected_signals": [],
+        "review_notes": "Keep as signal if you accept concrete market response signals, not just strategic events.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D012",
+      "source_type": "news",
+      "title": "As controversy swamps Tekken 8 and Street Fighter 6, Guilty Gear Strive just announced a massive new update",
+      "content": "Arc System Works has announced a flashy major update for its long-running fighting game Guilty Gear Strive, overhauling the game and adding a new selection of characters. All the while, Street Fighter 6 and Tekken 8 see…",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/controversy-tekken-8-street-fighter-6-guilty-gear-strive-announced-massive-new-update",
+      "annotation": {
+        "expected_signals": []
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260323_025.json",
+        "candidate_bucket": "noise",
+        "recommended_set": "noise_suppression_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 2,
+        "score_noise": 6,
+        "score_boundary": 1,
+        "reasons": [
+          "hint:technical",
+          "game_context",
+          "low_information_excerpt",
+          "truncated_article",
+          "announcement_style",
+          "shallow_announcement_penalty"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Keep as noise unless the full article contains a concrete business policy shift.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D018",
+      "source_type": "news",
+      "title": "Pearl Abyss forgot to mention it used generative AI to create assets for Crimson Desert",
+      "content": "The studio has now pledged to conduct a 'comprehensive audit' to identify and remove all generative AI assets.",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_name": "Game Developer",
+      "source_url": "https://www.gamedeveloper.com/production/whoops-pearl-abyss-forgot-to-mention-it-used-generative-ai-to-create-crimson-desert",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "technical",
+            "signal_label": "batch1_candidate_signal",
+            "description": "Batch 1 draft candidate derived from incoming sample `incoming_20260323_048.json`: Pearl Abyss forgot to mention it used generative AI to create assets for Crimson Desert. The studio has now pledged to conduct a 'comprehensive audit' to identify and remove all generative AI assets.",
+            "intensity_score": 6,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ]
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260323_048.json",
+        "candidate_bucket": "signal",
+        "recommended_set": "main_baseline_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 6,
+        "score_noise": 0,
+        "score_boundary": 1,
+        "reasons": [
+          "signal_pattern:technical:2",
+          "hint:technical",
+          "game_context",
+          "short_excerpt"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "signal",
+        "corrected_signal_types": [
+          "technical"
+        ],
+        "corrected_expected_signals": [],
+        "review_notes": "Keep as signal. This also fits reverse-paradigm or AI-boundary logic.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D021",
+      "source_type": "news",
+      "title": "I felt like playing a janky choice-driven RPG on my Steam Deck, and this gritty AA deepcut is hitting the spot for just 99 cents",
+      "content": "Mars War Logs isn't amazing, but it's definitely worth investigating.",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/games/rpg/i-felt-like-playing-a-janky-choice-driven-rpg-on-my-steam-deck-and-this-gritty-aa-deepcut-is-hitting-the-spot-for-just-99-cents/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260324_001.json",
+        "candidate_bucket": "noise",
+        "recommended_set": "noise_suppression_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 2,
+        "score_noise": 6,
+        "score_boundary": 0,
+        "reasons": [
+          "hint:team",
+          "game_context",
+          "noise_patterns:2",
+          "very_short_excerpt"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Keep as noise.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D037",
+      "source_type": "news",
+      "title": "Marathon review",
+      "content": "A confident reminder that nobody does an FPS like Bungie.",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/games/fps/marathon-review/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260324_055.json",
+        "candidate_bucket": "noise",
+        "recommended_set": "noise_suppression_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 1,
+        "score_noise": 6,
+        "score_boundary": 0,
+        "reasons": [
+          "hint:technical",
+          "missing_game_context",
+          "noise_patterns:1",
+          "very_short_excerpt"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "accepted",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Keep as noise.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D038",
+      "source_type": "news",
+      "title": "Official World Of Warcraft Music Video Is A Walk Down Memory Lane",
+      "content": "World of Warcraft has been around for 22 years, and a new music video in collaboration with singer Aurora will have players reliving every memory. The song, titled A Place to Call Home , is accompanied by an animated mu…",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/articles/official-world-of-warcraft-music-video-is-a-walk-down-memory-lane/1100-6538991/?ftag=CAD-01-10abi2f",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "technical",
+            "signal_label": "batch1_candidate_signal",
+            "description": "Batch 1 draft candidate derived from incoming sample `incoming_20260324_063.json`: Official World Of Warcraft Music Video Is A Walk Down Memory Lane. World of Warcraft has been around for 22 years, and a new music video in collaboration with singer Aurora will have players reliving every memory. The song, titled A Place to Call Home , is accompanied by an animated mu…",
+            "intensity_score": 6,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ]
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260324_063.json",
+        "candidate_bucket": "signal",
+        "recommended_set": "main_baseline_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 6,
+        "score_noise": 0,
+        "score_boundary": 0,
+        "reasons": [
+          "signal_pattern:technical:1",
+          "signal_pattern:market:1",
+          "hint:technical",
+          "game_context"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "modified",
+        "corrected_bucket": "noise",
+        "corrected_signal_types": [],
+        "corrected_expected_signals": [],
+        "review_notes": "Downgrade to noise. This is promo/media content, not a structural signal.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    },
+    {
+      "sample_id": "B1D043",
+      "source_type": "news",
+      "title": "'Cripple their sales, tank their stock price. Stop collaborating with them as developers': New Blood CEO on fighting against DLSS 5",
+      "content": "DLSS 5 has unleashed a fiery debate among game developers.",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/hardware/graphics-cards/cripple-their-sales-tank-their-stock-price-stop-collaborating-with-them-as-developers-new-blood-ceo-on-fighting-against-dlss-5/",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "market",
+            "signal_label": "batch1_candidate_signal",
+            "description": "Batch 1 draft candidate derived from incoming sample `incoming_20260325_008.json`: 'Cripple their sales, tank their stock price. Stop collaborating with them as developers': New Blood CEO on fighting against DLSS 5. DLSS 5 has unleashed a fiery debate among game developers.",
+            "intensity_score": 6,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ]
+      },
+      "draft_meta": {
+        "origin": "batch1_bucket_candidates",
+        "origin_file": "incoming_20260325_008.json",
+        "candidate_bucket": "signal",
+        "recommended_set": "main_baseline_candidate",
+        "confidence_band": "high",
+        "manual_review_priority": "low",
+        "score_signal": 6,
+        "score_noise": 2,
+        "score_boundary": 0,
+        "reasons": [
+          "signal_pattern:market:2",
+          "hint:market",
+          "game_context",
+          "very_short_excerpt"
+        ],
+        "review_status": "draft_unreviewed"
+      },
+      "human_review": {
+        "decision": "modified",
+        "corrected_bucket": "signal",
+        "corrected_signal_types": [
+          "technical",
+          "market"
+        ],
+        "corrected_expected_signals": [
+          {
+            "signal_type": "technical",
+            "signal_label": "reverse_paradigm_signal",
+            "description": "Developer backlash against DLSS 5 shows resistance to an AI-assisted graphics paradigm and questions its value.",
+            "intensity_score": 8,
+            "confidence_score": 8,
+            "timeliness_score": 5,
+            "entities": []
+          },
+          {
+            "signal_type": "market",
+            "signal_label": "reverse_paradigm_signal",
+            "description": "Calls to stop collaborating and tank sales show the technical dispute spilling into market and ecosystem behavior.",
+            "intensity_score": 7,
+            "confidence_score": 7,
+            "timeliness_score": 5,
+            "entities": []
+          }
+        ],
+        "review_notes": "Keep as signal. This is a technical controversy with clear market and developer-ecosystem implications.",
+        "reviewer": "",
+        "reviewed_at": ""
+      }
+    }
+  ]
+}

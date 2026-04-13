@@ -1,0 +1,3567 @@
+{
+  "source_queue": "f:\\AIProjects\\DesignAssistant\\data-layer\\projects\\proj_004\\reports\\benchmark_review_queue_batch2.json",
+  "total_rows": 180,
+  "suggestion_count": 98,
+  "priority_shortlist_count": 40,
+  "issue_tag_counts": {
+    "non_game_context": 60,
+    "possible_false_positive": 3,
+    "possible_type_mismatch": 26,
+    "high_boundary_tension": 7,
+    "signal_noise_tension": 5,
+    "possible_false_negative": 1,
+    "announcement_or_feature_noise": 8
+  },
+  "priority_shortlist": [
+    {
+      "sample_id": "B2D056",
+      "title": "Meta And YouTube Lose Social-Media Addiction Lawsuit",
+      "source_name": "GameSpot",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_url": "https://www.gamespot.com/articles/meta-and-youtube-lose-social-media-addiction-lawsuit/1100-6539014/?ftag=CAD-01-10abi2f",
+      "draft_bucket": "signal",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [
+        "capital"
+      ],
+      "suggested_signal_types": [
+        "technical"
+      ],
+      "manual_review_priority": "high",
+      "confidence_band": "medium",
+      "score_signal": 8,
+      "score_noise": 5,
+      "score_boundary": 4,
+      "issue_tags": [
+        "non_game_context",
+        "possible_false_positive",
+        "possible_type_mismatch",
+        "high_boundary_tension",
+        "signal_noise_tension"
+      ],
+      "review_focus": "bucket",
+      "priority_score": 18,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed.",
+        "Draft is signal but queue reasons explicitly indicate non-game or missing game context.",
+        "Draft signal type looks suspicious; keyword evidence leans toward `technical`.",
+        "High boundary score suggests the sample is signal-like but still ambiguous.",
+        "Signal and noise evidence are relatively close; worth human confirmation."
+      ]
+    },
+    {
+      "sample_id": "B2D156",
+      "title": "The PS5 Pro Is Still Worth It--For Now",
+      "source_name": "GameSpot",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_url": "https://www.gamespot.com/articles/the-ps5-pro-is-still-worth-it-for-now/1100-6539101/?ftag=CAD-01-10abi2f",
+      "draft_bucket": "signal",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "suggested_signal_types": [
+        "market"
+      ],
+      "manual_review_priority": "medium",
+      "confidence_band": "medium",
+      "score_signal": 4,
+      "score_noise": 2,
+      "score_boundary": 1,
+      "issue_tags": [
+        "non_game_context",
+        "possible_false_positive",
+        "possible_type_mismatch"
+      ],
+      "review_focus": "bucket",
+      "priority_score": 13,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed.",
+        "Draft is signal but queue reasons explicitly indicate non-game or missing game context.",
+        "Draft signal type looks suspicious; keyword evidence leans toward `market`."
+      ]
+    },
+    {
+      "sample_id": "B2D022",
+      "title": "Square Enix Is Turning Slimes Into AI Chatbots In Dragon Quest X",
+      "source_name": "GameSpot",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_url": "https://www.gamespot.com/articles/square-enix-is-turning-slimes-into-ai-chatbots-in-dragon-quest-x/1100-6538960/?ftag=CAD-01-10abi2f",
+      "draft_bucket": "signal",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "suggested_signal_types": [
+        "technical"
+      ],
+      "manual_review_priority": "medium",
+      "confidence_band": "medium",
+      "score_signal": 9,
+      "score_noise": 6,
+      "score_boundary": 1,
+      "issue_tags": [
+        "non_game_context",
+        "possible_false_positive",
+        "signal_noise_tension"
+      ],
+      "review_focus": "bucket",
+      "priority_score": 12,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed.",
+        "Draft is signal but queue reasons explicitly indicate non-game or missing game context.",
+        "Signal and noise evidence are relatively close; worth human confirmation."
+      ]
+    },
+    {
+      "sample_id": "B2D079",
+      "title": "Stardew Valley farmer takes advice from AI, ends up brewing 136 useless bottles of rice juice",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/life-sim/stardew-valley-farmer-takes-advice-from-ai-ends-up-brewing-136-useless-bottles-of-rice-juice/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 4,
+      "score_noise": 6,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context",
+        "possible_false_negative"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 8,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed.",
+        "Noise sample still shows some structural signal cues and deserves a quick second look."
+      ]
+    },
+    {
+      "sample_id": "B2D014",
+      "title": "Dragon's Dogma 2 Fans Are Convinced Capcom Is Teasing An Expansion",
+      "source_name": "GameSpot",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_url": "https://www.gamespot.com/articles/dragons-dogma-2-fans-are-convinced-capcom-is-teasing-an-expansion/1100-6538950/?ftag=CAD-01-10abi2f",
+      "draft_bucket": "signal",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "suggested_signal_types": [
+        "technical"
+      ],
+      "manual_review_priority": "medium",
+      "confidence_band": "medium",
+      "score_signal": 7,
+      "score_noise": 4,
+      "score_boundary": 2,
+      "issue_tags": [
+        "announcement_or_feature_noise",
+        "signal_noise_tension"
+      ],
+      "review_focus": "bucket",
+      "priority_score": 7,
+      "rationale": [
+        "Title/content matches common non-structural announcement or feature-news patterns.",
+        "Signal and noise evidence are relatively close; worth human confirmation."
+      ]
+    },
+    {
+      "sample_id": "B2D041",
+      "title": "New Xbox CEO \"Willing To Question Everything,\" Xbox Exec Says",
+      "source_name": "GameSpot",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_url": "https://www.gamespot.com/articles/new-xbox-ceo-willing-to-question-everything-xbox-exec-says/1100-6538979/?ftag=CAD-01-10abi2f",
+      "draft_bucket": "signal",
+      "suggested_bucket": "signal",
+      "draft_signal_types": [
+        "team"
+      ],
+      "suggested_signal_types": [
+        "technical"
+      ],
+      "manual_review_priority": "medium",
+      "confidence_band": "medium",
+      "score_signal": 6,
+      "score_noise": 0,
+      "score_boundary": 4,
+      "issue_tags": [
+        "possible_type_mismatch",
+        "high_boundary_tension"
+      ],
+      "review_focus": "type",
+      "priority_score": 7,
+      "rationale": [
+        "Draft signal type looks suspicious; keyword evidence leans toward `technical`.",
+        "High boundary score suggests the sample is signal-like but still ambiguous."
+      ]
+    },
+    {
+      "sample_id": "B2D050",
+      "title": "Switch 2 demand appears to be flagging as Nintendo reportedly lowers production",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/switch-2-flagging-nintendo-lowers-production",
+      "draft_bucket": "signal",
+      "suggested_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "suggested_signal_types": [
+        "market"
+      ],
+      "manual_review_priority": "medium",
+      "confidence_band": "medium",
+      "score_signal": 7,
+      "score_noise": 3,
+      "score_boundary": 4,
+      "issue_tags": [
+        "possible_type_mismatch",
+        "high_boundary_tension"
+      ],
+      "review_focus": "type",
+      "priority_score": 7,
+      "rationale": [
+        "Draft signal type looks suspicious; keyword evidence leans toward `market`.",
+        "High boundary score suggests the sample is signal-like but still ambiguous."
+      ]
+    },
+    {
+      "sample_id": "B2D005",
+      "title": "Minecraft World, a theme park with the world's first-ever Minecraft rollercoaster, to open in the UK next year",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-22T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/minecraft-world-a-theme-park-with-the-worlds-first-ever-minecraft-rollercoaster-to-open-in-the-uk-next-year",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 3,
+      "score_noise": 5,
+      "score_boundary": 1,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D006",
+      "title": "New report claims Crimson Desert's development was plagued by \"a hodgepodge of features crammed together\" and leaders who \"don't acknowledge anyone who doesn't share their exact mindset\"",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-22T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/new-report-claims-crimson-deserts-development-was-plagued-by-a-hodgepodge-of-features-crammed-together-and-leaders-who-dont-acknowledge-anyone-who-doesnt-share-their-exact-mindset",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 5,
+      "score_boundary": 2,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D010",
+      "title": "Oops, ASRock says motherboards will support 'newly launched' AMD Ryzen 9 9950X3D2 CPU that has definitely not yet been launched",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/hardware/processors/oops-asrock-says-motherboards-will-support-newly-launched-amd-ryzen-9-9950x3d2-cpu-that-has-definitely-not-yet-been-announced/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D011",
+      "title": "'A firm announcement is dependent on this final stretch of work': Fans are spinning out over extraction shooter Sand's lack of a specific March release date",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/fps/a-firm-announcement-is-dependent-on-this-final-stretch-of-work-fans-are-spinning-out-over-extraction-shooter-sands-lack-of-a-specific-march-release-date/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D012",
+      "title": "Baldur's Gate 3 writer says its Dragon-Agey rep system is there to stop you totally breaking the NPCs, but it 'becomes a dice roll' at points to keep romance natural",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/baldurs-gate/baldurs-gate-3-writer-says-its-dragon-agey-rep-system-is-there-to-stop-you-totally-breaking-the-npcs-but-it-becomes-a-dice-roll-at-points-to-keep-romance-natural/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D015",
+      "title": "Google's Gemini will make its way into Dragon Quest X to power a \"Chatty Slimey\" AI companion, Square Enix has announced",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/google-gemini-ai-to-power-chatbot-companion-in-dragon-quest-x-square-enix-says",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 5,
+      "score_noise": 8,
+      "score_boundary": 1,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D016",
+      "title": "Grab this early gold bar in Crimson Desert to open a bank account and make some money",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/action/crimson-desert-gold-bar-locations/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D021",
+      "title": "Shadowheart and Lae'zel's Baldur's Gate 3 romance came naturally because their writers realised they 'were writing the same story from different directions'",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/baldurs-gate/shadowheart-and-laezels-baldurs-gate-3-romance-came-naturally-because-their-writers-realised-they-were-writing-the-same-story-from-different-directions/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D025",
+      "title": "There is nothing like Marathon's Cryo Archive map",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/fps/there-is-nothing-like-marathons-cryo-archive-map/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D027",
+      "title": "Today's hefty Crimson Desert patch includes \"beginning of improvements\" to keyboard and mouse controls, plus much more",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/todays-hefty-crimson-desert-patch-includes-beginning-of-improvements-to-keyboard-and-mouse-controls-plus-much-more",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 3,
+      "score_noise": 5,
+      "score_boundary": 1,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D036",
+      "title": "Crimson Desert sells another 1m, as Pearl Abyss pledges more fixes to address launch day struggles",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/crimson-desert-sells-another-1m-as-pearl-abyss-pledges-more-fixes",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 5,
+      "score_noise": 8,
+      "score_boundary": 1,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D040",
+      "title": "Even after ZA/UM's messy breakup, the writing team still has a cadre of sad communists—but you won't have to play Zero Parades as one if you don't want to",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/rpg/even-after-za-ums-messy-breakup-the-writing-team-still-has-a-cadre-of-sad-communists-but-you-wont-have-to-play-zero-parades-as-one-if-you-dont-want-to/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D047",
+      "title": "New Devil May Cry Season 2 Trailer Wastes No Time Giving Fans What They Want",
+      "source_name": "GameSpot",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_url": "https://www.gamespot.com/articles/new-devil-may-cry-season-2-trailer-wastes-no-time-giving-fans-what-they-want/1100-6538986/?ftag=CAD-01-10abi2f",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 2,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D049",
+      "title": "Popular Skyrim mod returns after 9 years with a major update and a full source code release to keep it relevant 'for many years to come'",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/rpg/popular-skyrim-mod-returns-after-9-years-with-a-major-update-and-a-full-source-code-release-to-keep-it-relevant-for-many-years-to-come/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D052",
+      "title": "The Super Mario Galaxy Movie's Rating May Have Confirmed A Decades-Old Fan Theory",
+      "source_name": "GameSpot",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_url": "https://www.gamespot.com/articles/the-super-mario-galaxy-movies-rating-may-have-confirmed-a-decades-old-fan-theory/1100-6538981/?ftag=CAD-01-10abi2f",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 2,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D055",
+      "title": "How multiplayer works in Slay the Spire 2",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/roguelike/slay-the-spire-2-multiplayer-co-op/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D069",
+      "title": "Bungie is shifting Marathon's endgame content around, so you won't have to pick between ranked or Cryo Archive this weekend",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/bungie-is-shifting-marathons-endgame-content-around-so-you-wont-have-to-pick-between-ranked-or-cryo-archive-this-weekend",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 5,
+      "score_boundary": 2,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D071",
+      "title": "Crimson Desert is great because it's a total mess, not in spite of it, and I hope Pearl Abyss doesn't change too much",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/rpg/crimson-desert-is-great-because-its-a-total-mess-not-in-spite-of-it-and-i-hope-pearl-abyss-doesnt-change-too-much/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D073",
+      "title": "How to get the Frostcursed Armor in Crimson Desert",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/action/crimson-desert-frostcursed-armor-location/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D074",
+      "title": "I was the untitled goose in Big Walk, the balmy new open world co-op puzzler from House House",
+      "source_name": "Rock Paper Shotgun",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_url": "https://www.rockpapershotgun.com/i-was-the-untitled-goose-in-big-walk-the-balmy-new-open-world-co-op-puzzler-from-house-house",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 3,
+      "score_noise": 6,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D075",
+      "title": "Marathon is rescheduling its frustrating endgame, but you're still against the clock: 'No schedule is perfect, but we're here to listen and learn'",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/fps/marathon-is-rescheduling-its-frustrating-endgame-but-youre-still-against-the-clock-no-schedule-is-perfect-but-were-here-to-listen-and-learn/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D080",
+      "title": "The companions in Owlcat's new Mass Effect-inspired RPG stand ready to have heart-to-heart chats, drag you into their sidequests, and blow a lot of stuff up",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/rpg/the-companions-in-owlcats-new-mass-effect-inspired-rpg-stand-ready-to-have-heart-to-heart-chats-drag-you-into-their-sidequests-and-blow-a-lot-of-stuff-up/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D090",
+      "title": "There are two different Jesus sims launching within a week of each other",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/sim/there-are-two-different-jesus-sims-launching-within-a-week-of-each-other/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D097",
+      "title": "How to increase your Cryo Archive Security Clearance Level in Marathon",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/fps/marathon-security-clearance-level-cryo-archive/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D100",
+      "title": "Neuralink patient raiding in World of Warcraft after only 100 days of having the implant installed calls it 'pure magic… exploring Azeroth hands-free at full speed'",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/world-of-warcraft/neuralink-patient-raiding-in-world-of-warcraft-after-only-100-days-of-having-the-implant-installed-calls-it-pure-magic-exploring-azeroth-hands-free-at-full-speed/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D104",
+      "title": "New Resident Evil Requiem patch adds highly-anticipated photo mode feature",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/new-resident-evil-requiem-patch-adds-highly-anticipated-photo-mode-feature",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 2,
+      "score_noise": 5,
+      "score_boundary": 2,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D105",
+      "title": "PUBG: Blindspot is going offline forever after just two months in early access, despite Krafton's record Battlegrounds revenues",
+      "source_name": "Rock Paper Shotgun",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_url": "https://www.rockpapershotgun.com/pubg-blindspot-is-going-offline-forever-after-just-two-months-in-early-access-despite-kraftons-record-battlegrounds-revenues",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 3,
+      "score_noise": 5,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D110",
+      "title": "D&D Beyond's slick new online character creator lets you make a hero in seconds",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/d-and-d-beyonds-slick-new-online-character-creator-lets-you-make-a-hero-in-seconds/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D114",
+      "title": "Overwatch reveals that only 32% of players stayed loyal to Winston until the end: 'You are not to be trusted'",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/fps/overwatch-reveals-that-only-32-percent-of-players-stayed-loyal-to-winston-until-the-end-you-are-not-to-be-trusted/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 3,
+      "score_noise": 6,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D120",
+      "title": "This legendary Baldur's Gate 3 exploit has taken my latest solo Durge run to a new level of immersion and god-tier power",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/rpg/this-legendary-baldurs-gate-3-exploit-has-taken-my-latest-solo-durge-run-to-a-new-level-of-immersion-and-god-tier-power/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D122",
+      "title": "With Bloodlines 2 behind us, it's time for a new open world Hunter: The Reckoning RPG from the creators of RoboCop: Rogue City",
+      "source_name": "Rock Paper Shotgun",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_url": "https://www.rockpapershotgun.com/with-bloodlines-2-behind-us-its-time-for-a-new-open-world-hunter-the-reckoning-rpg-from-the-creators-of-robocop-rogue-city",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 3,
+      "score_noise": 5,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D125",
+      "title": "Discussion: Is it okay for an MMO expansion's launch to be buggy?",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-28T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/mmo/discussion-is-it-okay-for-an-mmo-expansions-launch-to-be-buggy/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D126",
+      "title": "Elder Scrolls mobile spinoff Blades is shutting down this summer after eight years, but at least all its store items are ultra-cheap now",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-28T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/the-elder-scrolls/elder-scrolls-mobile-spinoff-blades-is-shutting-down-this-summer-after-eight-years-but-at-least-all-its-store-items-are-ultra-cheap-now/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    }
+  ],
+  "all_suggestions": [
+    {
+      "sample_id": "B2D056",
+      "title": "Meta And YouTube Lose Social-Media Addiction Lawsuit",
+      "source_name": "GameSpot",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_url": "https://www.gamespot.com/articles/meta-and-youtube-lose-social-media-addiction-lawsuit/1100-6539014/?ftag=CAD-01-10abi2f",
+      "draft_bucket": "signal",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [
+        "capital"
+      ],
+      "suggested_signal_types": [
+        "technical"
+      ],
+      "manual_review_priority": "high",
+      "confidence_band": "medium",
+      "score_signal": 8,
+      "score_noise": 5,
+      "score_boundary": 4,
+      "issue_tags": [
+        "non_game_context",
+        "possible_false_positive",
+        "possible_type_mismatch",
+        "high_boundary_tension",
+        "signal_noise_tension"
+      ],
+      "review_focus": "bucket",
+      "priority_score": 18,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed.",
+        "Draft is signal but queue reasons explicitly indicate non-game or missing game context.",
+        "Draft signal type looks suspicious; keyword evidence leans toward `technical`.",
+        "High boundary score suggests the sample is signal-like but still ambiguous.",
+        "Signal and noise evidence are relatively close; worth human confirmation."
+      ]
+    },
+    {
+      "sample_id": "B2D156",
+      "title": "The PS5 Pro Is Still Worth It--For Now",
+      "source_name": "GameSpot",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_url": "https://www.gamespot.com/articles/the-ps5-pro-is-still-worth-it-for-now/1100-6539101/?ftag=CAD-01-10abi2f",
+      "draft_bucket": "signal",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "suggested_signal_types": [
+        "market"
+      ],
+      "manual_review_priority": "medium",
+      "confidence_band": "medium",
+      "score_signal": 4,
+      "score_noise": 2,
+      "score_boundary": 1,
+      "issue_tags": [
+        "non_game_context",
+        "possible_false_positive",
+        "possible_type_mismatch"
+      ],
+      "review_focus": "bucket",
+      "priority_score": 13,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed.",
+        "Draft is signal but queue reasons explicitly indicate non-game or missing game context.",
+        "Draft signal type looks suspicious; keyword evidence leans toward `market`."
+      ]
+    },
+    {
+      "sample_id": "B2D022",
+      "title": "Square Enix Is Turning Slimes Into AI Chatbots In Dragon Quest X",
+      "source_name": "GameSpot",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_url": "https://www.gamespot.com/articles/square-enix-is-turning-slimes-into-ai-chatbots-in-dragon-quest-x/1100-6538960/?ftag=CAD-01-10abi2f",
+      "draft_bucket": "signal",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "suggested_signal_types": [
+        "technical"
+      ],
+      "manual_review_priority": "medium",
+      "confidence_band": "medium",
+      "score_signal": 9,
+      "score_noise": 6,
+      "score_boundary": 1,
+      "issue_tags": [
+        "non_game_context",
+        "possible_false_positive",
+        "signal_noise_tension"
+      ],
+      "review_focus": "bucket",
+      "priority_score": 12,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed.",
+        "Draft is signal but queue reasons explicitly indicate non-game or missing game context.",
+        "Signal and noise evidence are relatively close; worth human confirmation."
+      ]
+    },
+    {
+      "sample_id": "B2D079",
+      "title": "Stardew Valley farmer takes advice from AI, ends up brewing 136 useless bottles of rice juice",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/life-sim/stardew-valley-farmer-takes-advice-from-ai-ends-up-brewing-136-useless-bottles-of-rice-juice/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 4,
+      "score_noise": 6,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context",
+        "possible_false_negative"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 8,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed.",
+        "Noise sample still shows some structural signal cues and deserves a quick second look."
+      ]
+    },
+    {
+      "sample_id": "B2D014",
+      "title": "Dragon's Dogma 2 Fans Are Convinced Capcom Is Teasing An Expansion",
+      "source_name": "GameSpot",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_url": "https://www.gamespot.com/articles/dragons-dogma-2-fans-are-convinced-capcom-is-teasing-an-expansion/1100-6538950/?ftag=CAD-01-10abi2f",
+      "draft_bucket": "signal",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "suggested_signal_types": [
+        "technical"
+      ],
+      "manual_review_priority": "medium",
+      "confidence_band": "medium",
+      "score_signal": 7,
+      "score_noise": 4,
+      "score_boundary": 2,
+      "issue_tags": [
+        "announcement_or_feature_noise",
+        "signal_noise_tension"
+      ],
+      "review_focus": "bucket",
+      "priority_score": 7,
+      "rationale": [
+        "Title/content matches common non-structural announcement or feature-news patterns.",
+        "Signal and noise evidence are relatively close; worth human confirmation."
+      ]
+    },
+    {
+      "sample_id": "B2D041",
+      "title": "New Xbox CEO \"Willing To Question Everything,\" Xbox Exec Says",
+      "source_name": "GameSpot",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_url": "https://www.gamespot.com/articles/new-xbox-ceo-willing-to-question-everything-xbox-exec-says/1100-6538979/?ftag=CAD-01-10abi2f",
+      "draft_bucket": "signal",
+      "suggested_bucket": "signal",
+      "draft_signal_types": [
+        "team"
+      ],
+      "suggested_signal_types": [
+        "technical"
+      ],
+      "manual_review_priority": "medium",
+      "confidence_band": "medium",
+      "score_signal": 6,
+      "score_noise": 0,
+      "score_boundary": 4,
+      "issue_tags": [
+        "possible_type_mismatch",
+        "high_boundary_tension"
+      ],
+      "review_focus": "type",
+      "priority_score": 7,
+      "rationale": [
+        "Draft signal type looks suspicious; keyword evidence leans toward `technical`.",
+        "High boundary score suggests the sample is signal-like but still ambiguous."
+      ]
+    },
+    {
+      "sample_id": "B2D050",
+      "title": "Switch 2 demand appears to be flagging as Nintendo reportedly lowers production",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/switch-2-flagging-nintendo-lowers-production",
+      "draft_bucket": "signal",
+      "suggested_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "suggested_signal_types": [
+        "market"
+      ],
+      "manual_review_priority": "medium",
+      "confidence_band": "medium",
+      "score_signal": 7,
+      "score_noise": 3,
+      "score_boundary": 4,
+      "issue_tags": [
+        "possible_type_mismatch",
+        "high_boundary_tension"
+      ],
+      "review_focus": "type",
+      "priority_score": 7,
+      "rationale": [
+        "Draft signal type looks suspicious; keyword evidence leans toward `market`.",
+        "High boundary score suggests the sample is signal-like but still ambiguous."
+      ]
+    },
+    {
+      "sample_id": "B2D005",
+      "title": "Minecraft World, a theme park with the world's first-ever Minecraft rollercoaster, to open in the UK next year",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-22T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/minecraft-world-a-theme-park-with-the-worlds-first-ever-minecraft-rollercoaster-to-open-in-the-uk-next-year",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 3,
+      "score_noise": 5,
+      "score_boundary": 1,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D006",
+      "title": "New report claims Crimson Desert's development was plagued by \"a hodgepodge of features crammed together\" and leaders who \"don't acknowledge anyone who doesn't share their exact mindset\"",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-22T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/new-report-claims-crimson-deserts-development-was-plagued-by-a-hodgepodge-of-features-crammed-together-and-leaders-who-dont-acknowledge-anyone-who-doesnt-share-their-exact-mindset",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 5,
+      "score_boundary": 2,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D010",
+      "title": "Oops, ASRock says motherboards will support 'newly launched' AMD Ryzen 9 9950X3D2 CPU that has definitely not yet been launched",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/hardware/processors/oops-asrock-says-motherboards-will-support-newly-launched-amd-ryzen-9-9950x3d2-cpu-that-has-definitely-not-yet-been-announced/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D011",
+      "title": "'A firm announcement is dependent on this final stretch of work': Fans are spinning out over extraction shooter Sand's lack of a specific March release date",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/fps/a-firm-announcement-is-dependent-on-this-final-stretch-of-work-fans-are-spinning-out-over-extraction-shooter-sands-lack-of-a-specific-march-release-date/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D012",
+      "title": "Baldur's Gate 3 writer says its Dragon-Agey rep system is there to stop you totally breaking the NPCs, but it 'becomes a dice roll' at points to keep romance natural",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/baldurs-gate/baldurs-gate-3-writer-says-its-dragon-agey-rep-system-is-there-to-stop-you-totally-breaking-the-npcs-but-it-becomes-a-dice-roll-at-points-to-keep-romance-natural/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D015",
+      "title": "Google's Gemini will make its way into Dragon Quest X to power a \"Chatty Slimey\" AI companion, Square Enix has announced",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/google-gemini-ai-to-power-chatbot-companion-in-dragon-quest-x-square-enix-says",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 5,
+      "score_noise": 8,
+      "score_boundary": 1,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D016",
+      "title": "Grab this early gold bar in Crimson Desert to open a bank account and make some money",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/action/crimson-desert-gold-bar-locations/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D021",
+      "title": "Shadowheart and Lae'zel's Baldur's Gate 3 romance came naturally because their writers realised they 'were writing the same story from different directions'",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/baldurs-gate/shadowheart-and-laezels-baldurs-gate-3-romance-came-naturally-because-their-writers-realised-they-were-writing-the-same-story-from-different-directions/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D025",
+      "title": "There is nothing like Marathon's Cryo Archive map",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/fps/there-is-nothing-like-marathons-cryo-archive-map/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D027",
+      "title": "Today's hefty Crimson Desert patch includes \"beginning of improvements\" to keyboard and mouse controls, plus much more",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/todays-hefty-crimson-desert-patch-includes-beginning-of-improvements-to-keyboard-and-mouse-controls-plus-much-more",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 3,
+      "score_noise": 5,
+      "score_boundary": 1,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D036",
+      "title": "Crimson Desert sells another 1m, as Pearl Abyss pledges more fixes to address launch day struggles",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/crimson-desert-sells-another-1m-as-pearl-abyss-pledges-more-fixes",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 5,
+      "score_noise": 8,
+      "score_boundary": 1,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D040",
+      "title": "Even after ZA/UM's messy breakup, the writing team still has a cadre of sad communists—but you won't have to play Zero Parades as one if you don't want to",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/rpg/even-after-za-ums-messy-breakup-the-writing-team-still-has-a-cadre-of-sad-communists-but-you-wont-have-to-play-zero-parades-as-one-if-you-dont-want-to/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D047",
+      "title": "New Devil May Cry Season 2 Trailer Wastes No Time Giving Fans What They Want",
+      "source_name": "GameSpot",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_url": "https://www.gamespot.com/articles/new-devil-may-cry-season-2-trailer-wastes-no-time-giving-fans-what-they-want/1100-6538986/?ftag=CAD-01-10abi2f",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 2,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D049",
+      "title": "Popular Skyrim mod returns after 9 years with a major update and a full source code release to keep it relevant 'for many years to come'",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/rpg/popular-skyrim-mod-returns-after-9-years-with-a-major-update-and-a-full-source-code-release-to-keep-it-relevant-for-many-years-to-come/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D052",
+      "title": "The Super Mario Galaxy Movie's Rating May Have Confirmed A Decades-Old Fan Theory",
+      "source_name": "GameSpot",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_url": "https://www.gamespot.com/articles/the-super-mario-galaxy-movies-rating-may-have-confirmed-a-decades-old-fan-theory/1100-6538981/?ftag=CAD-01-10abi2f",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 2,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D055",
+      "title": "How multiplayer works in Slay the Spire 2",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/roguelike/slay-the-spire-2-multiplayer-co-op/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D069",
+      "title": "Bungie is shifting Marathon's endgame content around, so you won't have to pick between ranked or Cryo Archive this weekend",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/bungie-is-shifting-marathons-endgame-content-around-so-you-wont-have-to-pick-between-ranked-or-cryo-archive-this-weekend",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 5,
+      "score_boundary": 2,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D071",
+      "title": "Crimson Desert is great because it's a total mess, not in spite of it, and I hope Pearl Abyss doesn't change too much",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/rpg/crimson-desert-is-great-because-its-a-total-mess-not-in-spite-of-it-and-i-hope-pearl-abyss-doesnt-change-too-much/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D073",
+      "title": "How to get the Frostcursed Armor in Crimson Desert",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/action/crimson-desert-frostcursed-armor-location/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D074",
+      "title": "I was the untitled goose in Big Walk, the balmy new open world co-op puzzler from House House",
+      "source_name": "Rock Paper Shotgun",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_url": "https://www.rockpapershotgun.com/i-was-the-untitled-goose-in-big-walk-the-balmy-new-open-world-co-op-puzzler-from-house-house",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 3,
+      "score_noise": 6,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D075",
+      "title": "Marathon is rescheduling its frustrating endgame, but you're still against the clock: 'No schedule is perfect, but we're here to listen and learn'",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/fps/marathon-is-rescheduling-its-frustrating-endgame-but-youre-still-against-the-clock-no-schedule-is-perfect-but-were-here-to-listen-and-learn/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D080",
+      "title": "The companions in Owlcat's new Mass Effect-inspired RPG stand ready to have heart-to-heart chats, drag you into their sidequests, and blow a lot of stuff up",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/rpg/the-companions-in-owlcats-new-mass-effect-inspired-rpg-stand-ready-to-have-heart-to-heart-chats-drag-you-into-their-sidequests-and-blow-a-lot-of-stuff-up/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D090",
+      "title": "There are two different Jesus sims launching within a week of each other",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/sim/there-are-two-different-jesus-sims-launching-within-a-week-of-each-other/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D097",
+      "title": "How to increase your Cryo Archive Security Clearance Level in Marathon",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/fps/marathon-security-clearance-level-cryo-archive/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D100",
+      "title": "Neuralink patient raiding in World of Warcraft after only 100 days of having the implant installed calls it 'pure magic… exploring Azeroth hands-free at full speed'",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/world-of-warcraft/neuralink-patient-raiding-in-world-of-warcraft-after-only-100-days-of-having-the-implant-installed-calls-it-pure-magic-exploring-azeroth-hands-free-at-full-speed/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D104",
+      "title": "New Resident Evil Requiem patch adds highly-anticipated photo mode feature",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/new-resident-evil-requiem-patch-adds-highly-anticipated-photo-mode-feature",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 2,
+      "score_noise": 5,
+      "score_boundary": 2,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D105",
+      "title": "PUBG: Blindspot is going offline forever after just two months in early access, despite Krafton's record Battlegrounds revenues",
+      "source_name": "Rock Paper Shotgun",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_url": "https://www.rockpapershotgun.com/pubg-blindspot-is-going-offline-forever-after-just-two-months-in-early-access-despite-kraftons-record-battlegrounds-revenues",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 3,
+      "score_noise": 5,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D110",
+      "title": "D&D Beyond's slick new online character creator lets you make a hero in seconds",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/d-and-d-beyonds-slick-new-online-character-creator-lets-you-make-a-hero-in-seconds/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D114",
+      "title": "Overwatch reveals that only 32% of players stayed loyal to Winston until the end: 'You are not to be trusted'",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/fps/overwatch-reveals-that-only-32-percent-of-players-stayed-loyal-to-winston-until-the-end-you-are-not-to-be-trusted/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 3,
+      "score_noise": 6,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D120",
+      "title": "This legendary Baldur's Gate 3 exploit has taken my latest solo Durge run to a new level of immersion and god-tier power",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/rpg/this-legendary-baldurs-gate-3-exploit-has-taken-my-latest-solo-durge-run-to-a-new-level-of-immersion-and-god-tier-power/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D122",
+      "title": "With Bloodlines 2 behind us, it's time for a new open world Hunter: The Reckoning RPG from the creators of RoboCop: Rogue City",
+      "source_name": "Rock Paper Shotgun",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_url": "https://www.rockpapershotgun.com/with-bloodlines-2-behind-us-its-time-for-a-new-open-world-hunter-the-reckoning-rpg-from-the-creators-of-robocop-rogue-city",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 3,
+      "score_noise": 5,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D125",
+      "title": "Discussion: Is it okay for an MMO expansion's launch to be buggy?",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-28T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/mmo/discussion-is-it-okay-for-an-mmo-expansions-launch-to-be-buggy/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D126",
+      "title": "Elder Scrolls mobile spinoff Blades is shutting down this summer after eight years, but at least all its store items are ultra-cheap now",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-28T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/the-elder-scrolls/elder-scrolls-mobile-spinoff-blades-is-shutting-down-this-summer-after-eight-years-but-at-least-all-its-store-items-are-ultra-cheap-now/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D129",
+      "title": "Lawn Mowing Simulator 2 takes to Kickstarter with the lushest virtual grass I've ever seen",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-28T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/sim/lawn-mowing-simulator-2-takes-to-kickstarter-with-the-lushest-virtual-grass-ive-ever-seen/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D130",
+      "title": "Slay the Spire 2 beta patch rolls back some prior changes following player feedback",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-28T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/slay-the-spire-2-beta-patch-rolls-back-some-prior-changes-following-player-feedback",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 3,
+      "score_noise": 5,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D131",
+      "title": "Starship Troopers: Extermination's latest update adds a big stompy mech, ideal for squashing the shooter's newly polished bug holes",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-28T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/fps/starship-troopers-exterminations-latest-update-adds-a-big-stompy-mech-ideal-for-squashing-the-shooters-newly-polished-bug-holes/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D133",
+      "title": "Death Stranding 2: On the Beach's PC release takes sequel's total sales past 2 million",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-29T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/death-stranding-2-on-the-beachs-pc-release-takes-sequels-total-sales-past-2-million",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 5,
+      "score_noise": 7,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D134",
+      "title": "Altera is a hardcore, realistic, unforgiving military survival sandbox, so of course it features penguin soldiers with reflex sights on their heads",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-29T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/fps/altera-is-a-hardcore-realistic-unforgiving-military-survival-sandbox-so-of-course-it-features-penguin-soldiers-with-reflex-sights-on-their-heads/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D139",
+      "title": "Surprise! 9-year-old Hollow Knight's brutal final boss fight may be just that little bit easier after this patch",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-29T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/surprise-9-year-old-hollow-knights-brutal-final-boss-fight-may-be-just-that-little-bit-easier-after-this-patch",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 5,
+      "score_boundary": 2,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D143",
+      "title": "'The most boring protocol on the internet is also, quietly, one of the most abusable': Doom has been broken down into 1,964 DNS text records and can be run via a PowerShell script",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/hardware/networking/the-most-boring-protocol-on-the-internet-is-also-quietly-one-of-the-most-abusable-doom-has-been-broken-down-into-1-964-dns-text-records-and-can-be-run-via-a-powershell-script/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D146",
+      "title": "Clair Obscur: Expedition 33 devs never imagined to achieve the kind of massive success it did: 'Our official goal towards the end of production was to reach for 85 in Metacritic'",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/rpg/clair-obscur-expedition-33-devs-never-imagined-to-achieve-the-kind-of-massive-success-it-did-our-official-goal-towards-the-end-of-production-was-to-reach-for-85-in-metacritic/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 2,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D147",
+      "title": "Flawless victory was never on the cards for eurojank, but I honestly can't tell if it won or lost",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/gaming-industry/flawless-victory-was-never-on-the-cards-for-eurojank-but-i-honestly-cant-tell-if-it-won-or-lost/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D149",
+      "title": "How to get the White Bear mount in Crimson Desert",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/action/crimson-desert-white-bear-mount-location/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D154",
+      "title": "The Elder Scrolls: Blades, the mobile RPG you probably forgot about long ago, has been delisted and will stop working this summer",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/the-elder-scrolls-blades-delisted-from-mobile-stores-and-eshop-goes-offline-this-summer",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 2,
+      "score_noise": 5,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D158",
+      "title": "You're missing out on getting Marathon's best loot for free because it's hidden in a menu",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/fps/marathon-priority-access-armory/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D164",
+      "title": "Arc Raiders Furtive Meetings Quest Guide",
+      "source_name": "GameSpot",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_url": "https://www.gamespot.com/articles/arc-raiders-furtive-meetings-quest-guide/1100-6539144/?ftag=CAD-01-10abi2f",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D165",
+      "title": "Bungie nerfs Marathon's slide cancel movement tech, says no movement freaks allowed: 'Unbounded movement, while expressive and clip-worthy, is ultimately unhealthy for the pace of play'",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/fps/bungie-patches-marathons-slide-cancel-movement-tech-says-no-movement-freaks-allowed-unbounded-movement-while-expressive-and-clip-worthy-is-ultimately-unhealthy-for-the-pace-of-play/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D168",
+      "title": "I've only had my cyberpunk ripperdoc license for a week and the mob are already coming after me because I spent all my money upgrading my friend's robotic arms",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/sim/ive-only-had-my-cyberpunk-ripperdoc-license-for-a-week-and-the-mob-are-already-coming-after-me-because-i-spent-all-my-money-upgrading-my-friends-robotic-arms/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D169",
+      "title": "I opened my own store in Stardew Valley so now Pierre has to buy my seeds. MY SEEDS",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/life-sim/i-opened-my-own-store-in-stardew-valley-so-now-pierre-has-to-buy-my-seeds-my-seeds/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D170",
+      "title": "Magic The Gathering: Secrets Of Strixhaven Includes Banned Power Nine Spell And A Powerful Tutor",
+      "source_name": "GameSpot",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_url": "https://www.gamespot.com/articles/magic-the-gathering-secrets-of-strixhaven-includes-banned-power-nine-spell-and-a-powerful-tutor/1100-6539119/?ftag=CAD-01-10abi2f",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 3,
+      "score_noise": 6,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D174",
+      "title": "Skyblivion devs are \"on the hunt\" for some \"final, vital\" veteran hands to get the Oblivion remake mod over the line this year",
+      "source_name": "Rock Paper Shotgun",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_url": "https://www.rockpapershotgun.com/skyblivion-devs-are-on-the-hunt-for-some-final-vital-veteran-hands-to-get-the-oblivion-remake-mod-over-the-line-this-year",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 5,
+      "score_noise": 7,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D175",
+      "title": "Somehow a movie that gave me nightmares as a kid has been turned into the delightful Metroidvania palate cleanser I needed after Silksong",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/action/somehow-a-movie-that-gave-me-nightmares-as-a-kid-has-been-turned-into-the-delightful-metroidvania-palate-cleanser-i-needed-after-silksong/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D177",
+      "title": "The Call of Duty schism: Why fans are trapped in a forever war with each other",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/call-of-duty/the-call-of-duty-schism-why-fans-are-trapped-in-a-forever-war-with-each-other/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D178",
+      "title": "The Super Mario Galaxy Movie is set to stomp the global box office this week with the biggest debut of 2026 so far, say analysts",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/the-super-mario-galaxy-movie-opening-weekend-box-office-predictions-aim-high",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 5,
+      "score_boundary": 2,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D179",
+      "title": "Vaporizer swarms are wiping out squads en masse as Arc Raiders diehards finally get the tougher Arc they were asking for",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/third-person-shooter/vaporizer-swarms-are-wiping-out-squads-en-masse-as-arc-raiders-diehards-finally-get-the-tougher-arc-they-were-asking-for/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D180",
+      "title": "What the heck: A superhuman has beaten Dark Souls at level 1, hitless, and without using dodge roll or ranged weapons",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/rpg/what-the-heck-a-superhuman-has-beaten-dark-souls-at-level-1-hitless-and-without-using-dodge-roll-or-ranged-weapons/",
+      "draft_bucket": "noise",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [],
+      "suggested_signal_types": [],
+      "manual_review_priority": "low",
+      "confidence_band": "medium",
+      "score_signal": 1,
+      "score_noise": 4,
+      "score_boundary": 0,
+      "issue_tags": [
+        "non_game_context"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 6,
+      "rationale": [
+        "Source looks outside game-industry scope and should be manually confirmed."
+      ]
+    },
+    {
+      "sample_id": "B2D019",
+      "title": "Pokemon Pokopia Players Are Building Incredibly Complex Creations",
+      "source_name": "GameSpot",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_url": "https://www.gamespot.com/articles/pokemon-pokopia-players-are-building-incredibly-complex-creations/1100-6538948/?ftag=CAD-01-10abi2f",
+      "draft_bucket": "signal",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "suggested_signal_types": [
+        "technical"
+      ],
+      "manual_review_priority": "medium",
+      "confidence_band": "medium",
+      "score_signal": 5,
+      "score_noise": 2,
+      "score_boundary": 0,
+      "issue_tags": [
+        "announcement_or_feature_noise"
+      ],
+      "review_focus": "bucket",
+      "priority_score": 5,
+      "rationale": [
+        "Title/content matches common non-structural announcement or feature-news patterns."
+      ]
+    },
+    {
+      "sample_id": "B2D064",
+      "title": "Hideo Kojima's Focus For Death Stranding 2 Was Ensuring Fans Enjoyed It 'All the Way to the End'",
+      "source_name": "IGN Game News",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_url": "https://www.ign.com/articles/hideo-kojimas-focus-for-death-stranding-2-was-ensuring-fans-enjoyed-it-all-the-way-to-the-end",
+      "draft_bucket": "signal",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [
+        "team"
+      ],
+      "suggested_signal_types": [
+        "team"
+      ],
+      "manual_review_priority": "medium",
+      "confidence_band": "medium",
+      "score_signal": 4,
+      "score_noise": 0,
+      "score_boundary": 1,
+      "issue_tags": [
+        "announcement_or_feature_noise"
+      ],
+      "review_focus": "bucket",
+      "priority_score": 5,
+      "rationale": [
+        "Title/content matches common non-structural announcement or feature-news patterns."
+      ]
+    },
+    {
+      "sample_id": "B2D091",
+      "title": "Vaunted Is A Tactical RPG Where You Can’t Trust Your Own Team",
+      "source_name": "GameSpot",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_url": "https://www.gamespot.com/articles/vaunted-is-a-tactical-rpg-where-you-cant-trust-your-own-team/1100-6539006/?ftag=CAD-01-10abi2f",
+      "draft_bucket": "signal",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [
+        "team"
+      ],
+      "suggested_signal_types": [
+        "team"
+      ],
+      "manual_review_priority": "medium",
+      "confidence_band": "medium",
+      "score_signal": 5,
+      "score_noise": 2,
+      "score_boundary": 0,
+      "issue_tags": [
+        "announcement_or_feature_noise"
+      ],
+      "review_focus": "bucket",
+      "priority_score": 5,
+      "rationale": [
+        "Title/content matches common non-structural announcement or feature-news patterns."
+      ]
+    },
+    {
+      "sample_id": "B2D103",
+      "title": "Slay the Spire 2 Dev Adjusts Update That Led To Review Bombing",
+      "source_name": "GameSpot",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_url": "https://www.gamespot.com/articles/slay-the-spire-2-dev-adjusts-update-that-led-to-review-bombing/1100-6539079/?ftag=CAD-01-10abi2f",
+      "draft_bucket": "signal",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [
+        "capital"
+      ],
+      "suggested_signal_types": [
+        "capital"
+      ],
+      "manual_review_priority": "medium",
+      "confidence_band": "medium",
+      "score_signal": 4,
+      "score_noise": 2,
+      "score_boundary": 2,
+      "issue_tags": [
+        "announcement_or_feature_noise"
+      ],
+      "review_focus": "bucket",
+      "priority_score": 5,
+      "rationale": [
+        "Title/content matches common non-structural announcement or feature-news patterns."
+      ]
+    },
+    {
+      "sample_id": "B2D107",
+      "title": "Boy, There Sure Was A Lot Of Bad News This Week, Right?",
+      "source_name": "GameSpot",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_url": "https://www.gamespot.com/articles/boy-there-sure-was-a-lot-of-bad-news-this-week-right/1100-6539070/?ftag=CAD-01-10abi2f",
+      "draft_bucket": "signal",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [
+        "team"
+      ],
+      "suggested_signal_types": [
+        "team"
+      ],
+      "manual_review_priority": "medium",
+      "confidence_band": "medium",
+      "score_signal": 4,
+      "score_noise": 2,
+      "score_boundary": 0,
+      "issue_tags": [
+        "announcement_or_feature_noise"
+      ],
+      "review_focus": "bucket",
+      "priority_score": 5,
+      "rationale": [
+        "Title/content matches common non-structural announcement or feature-news patterns."
+      ]
+    },
+    {
+      "sample_id": "B2D108",
+      "title": "The New PUBG Game Is Closing After Less Than 2 Months",
+      "source_name": "GameSpot",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_url": "https://www.gamespot.com/articles/the-new-pubg-game-is-closing-after-less-than-2-months/1100-6539078/?ftag=CAD-01-10abi2f",
+      "draft_bucket": "signal",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [
+        "team"
+      ],
+      "suggested_signal_types": [
+        "team"
+      ],
+      "manual_review_priority": "medium",
+      "confidence_band": "medium",
+      "score_signal": 4,
+      "score_noise": 2,
+      "score_boundary": 0,
+      "issue_tags": [
+        "announcement_or_feature_noise"
+      ],
+      "review_focus": "bucket",
+      "priority_score": 5,
+      "rationale": [
+        "Title/content matches common non-structural announcement or feature-news patterns."
+      ]
+    },
+    {
+      "sample_id": "B2D148",
+      "title": "Get The Complete Castlevania Anime Series On Blu-ray For 26% Off",
+      "source_name": "GameSpot",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_url": "https://www.gamespot.com/articles/get-the-complete-castlevania-anime-series-on-blu-ray-for-26-off/1100-6539100/?ftag=CAD-01-10abi2f",
+      "draft_bucket": "signal",
+      "suggested_bucket": "noise",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "suggested_signal_types": [
+        "technical"
+      ],
+      "manual_review_priority": "medium",
+      "confidence_band": "medium",
+      "score_signal": 4,
+      "score_noise": 2,
+      "score_boundary": 0,
+      "issue_tags": [
+        "announcement_or_feature_noise"
+      ],
+      "review_focus": "bucket",
+      "priority_score": 5,
+      "rationale": [
+        "Title/content matches common non-structural announcement or feature-news patterns."
+      ]
+    },
+    {
+      "sample_id": "B2D007",
+      "title": "Resident Evil Requiem Kills The Past So The Series Can Move Forward",
+      "source_name": "GameSpot",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_url": "https://www.gamespot.com/articles/resident-evil-requiem-kills-the-past-so-the-series-can-move-forward/1100-6538964/?ftag=CAD-01-10abi2f",
+      "draft_bucket": "signal",
+      "suggested_bucket": "signal",
+      "draft_signal_types": [
+        "capital"
+      ],
+      "suggested_signal_types": [
+        "technical"
+      ],
+      "manual_review_priority": "medium",
+      "confidence_band": "medium",
+      "score_signal": 2,
+      "score_noise": 0,
+      "score_boundary": 0,
+      "issue_tags": [
+        "possible_type_mismatch"
+      ],
+      "review_focus": "type",
+      "priority_score": 4,
+      "rationale": [
+        "Draft signal type looks suspicious; keyword evidence leans toward `technical`."
+      ]
+    },
+    {
+      "sample_id": "B2D031",
+      "title": "Crimson Desert Sells 3 Million in Just 5 Days",
+      "source_name": "IGN Game News",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_url": "https://www.ign.com/articles/crimson-desert-sells-3-million-in-just-5-days",
+      "draft_bucket": "signal",
+      "suggested_bucket": "signal",
+      "draft_signal_types": [
+        "capital"
+      ],
+      "suggested_signal_types": [
+        "market"
+      ],
+      "manual_review_priority": "medium",
+      "confidence_band": "medium",
+      "score_signal": 4,
+      "score_noise": 2,
+      "score_boundary": 0,
+      "issue_tags": [
+        "possible_type_mismatch"
+      ],
+      "review_focus": "type",
+      "priority_score": 4,
+      "rationale": [
+        "Draft signal type looks suspicious; keyword evidence leans toward `market`."
+      ]
+    },
+    {
+      "sample_id": "B2D037",
+      "title": "Pokémon Champions Launches Next Month With Paid Upgrade Pack to 'Support Early Progression'",
+      "source_name": "IGN Game News",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_url": "https://www.ign.com/articles/pokemon-champions-launches-next-month-with-paid-upgrade-pack-to-support-early-progression",
+      "draft_bucket": "signal",
+      "suggested_bucket": "signal",
+      "draft_signal_types": [
+        "market"
+      ],
+      "suggested_signal_types": [
+        "technical"
+      ],
+      "manual_review_priority": "medium",
+      "confidence_band": "medium",
+      "score_signal": 3,
+      "score_noise": 0,
+      "score_boundary": 1,
+      "issue_tags": [
+        "possible_type_mismatch"
+      ],
+      "review_focus": "type",
+      "priority_score": 4,
+      "rationale": [
+        "Draft signal type looks suspicious; keyword evidence leans toward `technical`."
+      ]
+    },
+    {
+      "sample_id": "B2D038",
+      "title": "The Newest Payday Game Is Unexpected, And I Hope It's Better Than Payday 3",
+      "source_name": "GameSpot",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_url": "https://www.gamespot.com/articles/the-newest-payday-game-is-unexpected-and-i-hope-its-better-than-payday-3/1100-6538956/?ftag=CAD-01-10abi2f",
+      "draft_bucket": "signal",
+      "suggested_bucket": "signal",
+      "draft_signal_types": [
+        "market"
+      ],
+      "suggested_signal_types": [
+        "technical"
+      ],
+      "manual_review_priority": "medium",
+      "confidence_band": "medium",
+      "score_signal": 4,
+      "score_noise": 0,
+      "score_boundary": 1,
+      "issue_tags": [
+        "possible_type_mismatch"
+      ],
+      "review_focus": "type",
+      "priority_score": 4,
+      "rationale": [
+        "Draft signal type looks suspicious; keyword evidence leans toward `technical`."
+      ]
+    },
+    {
+      "sample_id": "B2D042",
+      "title": "Sony Shuts Down Former CoD Dev's Studio Amid Wider Cuts",
+      "source_name": "GameSpot",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_url": "https://www.gamespot.com/articles/sony-shuts-down-former-cod-devs-studio-amid-wider-cuts/1100-6538989/?ftag=CAD-01-10abi2f",
+      "draft_bucket": "signal",
+      "suggested_bucket": "signal",
+      "draft_signal_types": [
+        "team"
+      ],
+      "suggested_signal_types": [
+        "team"
+      ],
+      "manual_review_priority": "medium",
+      "confidence_band": "medium",
+      "score_signal": 6,
+      "score_noise": 0,
+      "score_boundary": 4,
+      "issue_tags": [
+        "high_boundary_tension"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 4,
+      "rationale": [
+        "High boundary score suggests the sample is signal-like but still ambiguous."
+      ]
+    },
+    {
+      "sample_id": "B2D045",
+      "title": "Fortnite developer Epic Games is cutting over 1,000 jobs",
+      "source_name": "Game Developer",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_url": "https://www.gamedeveloper.com/business/fortnite-developer-epic-games-is-cutting-1-000-jobs",
+      "draft_bucket": "signal",
+      "suggested_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "suggested_signal_types": [
+        "team"
+      ],
+      "manual_review_priority": "medium",
+      "confidence_band": "medium",
+      "score_signal": 3,
+      "score_noise": 0,
+      "score_boundary": 1,
+      "issue_tags": [
+        "possible_type_mismatch"
+      ],
+      "review_focus": "type",
+      "priority_score": 4,
+      "rationale": [
+        "Draft signal type looks suspicious; keyword evidence leans toward `team`."
+      ]
+    },
+    {
+      "sample_id": "B2D060",
+      "title": "Marathon may have sold roughly 1.2m copies worldwide, with the majority on Steam rather than PlayStation, according to analyst estimates",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/marathon-may-have-sold-roughly-12m-copies-worldwide-with-the-majority-on-steam-rather-than-playstation-according-to-analyst-estimates",
+      "draft_bucket": "signal",
+      "suggested_bucket": "signal",
+      "draft_signal_types": [
+        "market"
+      ],
+      "suggested_signal_types": [
+        "market"
+      ],
+      "manual_review_priority": "medium",
+      "confidence_band": "medium",
+      "score_signal": 7,
+      "score_noise": 3,
+      "score_boundary": 5,
+      "issue_tags": [
+        "high_boundary_tension"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 4,
+      "rationale": [
+        "High boundary score suggests the sample is signal-like but still ambiguous."
+      ]
+    },
+    {
+      "sample_id": "B2D062",
+      "title": "The Best Deals On Razer Gaming Accessories In Amazon's Spring Sale",
+      "source_name": "GameSpot",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_url": "https://www.gamespot.com/articles/amazon-spring-sale-razer-deals/1100-6538993/?ftag=CAD-01-10abi2f",
+      "draft_bucket": "signal",
+      "suggested_bucket": "signal",
+      "draft_signal_types": [
+        "market"
+      ],
+      "suggested_signal_types": [
+        "capital"
+      ],
+      "manual_review_priority": "medium",
+      "confidence_band": "medium",
+      "score_signal": 4,
+      "score_noise": 2,
+      "score_boundary": 0,
+      "issue_tags": [
+        "possible_type_mismatch"
+      ],
+      "review_focus": "type",
+      "priority_score": 4,
+      "rationale": [
+        "Draft signal type looks suspicious; keyword evidence leans toward `capital`."
+      ]
+    },
+    {
+      "sample_id": "B2D068",
+      "title": "Amazon’s Has a Bunch of New Magic: The Gathering Deals as Part of Its Spring Sale",
+      "source_name": "IGN Game News",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_url": "https://www.ign.com/articles/amazons-has-a-bunch-of-new-magic-the-gathering-deals-as-part-of-its-spring-sale",
+      "draft_bucket": "signal",
+      "suggested_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "suggested_signal_types": [
+        "capital"
+      ],
+      "manual_review_priority": "medium",
+      "confidence_band": "medium",
+      "score_signal": 4,
+      "score_noise": 2,
+      "score_boundary": 1,
+      "issue_tags": [
+        "possible_type_mismatch"
+      ],
+      "review_focus": "type",
+      "priority_score": 4,
+      "rationale": [
+        "Draft signal type looks suspicious; keyword evidence leans toward `capital`."
+      ]
+    },
+    {
+      "sample_id": "B2D077",
+      "title": "Nintendo Clarifies 'The Cost of Physical Games Is Not Going Up' Following Decision to Charge Different Prices for U.S. Physical and Digital Switch 2 Games",
+      "source_name": "IGN Game News",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_url": "https://www.ign.com/articles/nintendo-switch-2-physical-games-will-now-be-more-expensive-than-digital-versions-with-10-price-difference-for-yoshi-and-the-mysterious-book",
+      "draft_bucket": "signal",
+      "suggested_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "suggested_signal_types": [
+        "market"
+      ],
+      "manual_review_priority": "medium",
+      "confidence_band": "medium",
+      "score_signal": 3,
+      "score_noise": 0,
+      "score_boundary": 1,
+      "issue_tags": [
+        "possible_type_mismatch"
+      ],
+      "review_focus": "type",
+      "priority_score": 4,
+      "rationale": [
+        "Draft signal type looks suspicious; keyword evidence leans toward `market`."
+      ]
+    },
+    {
+      "sample_id": "B2D078",
+      "title": "Save On Xbox Controller Deals During Amazon's Spring Sale",
+      "source_name": "GameSpot",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_url": "https://www.gamespot.com/articles/amazon-spring-sale-xbox-controller-deals/1100-6538995/?ftag=CAD-01-10abi2f",
+      "draft_bucket": "signal",
+      "suggested_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "suggested_signal_types": [
+        "capital"
+      ],
+      "manual_review_priority": "medium",
+      "confidence_band": "medium",
+      "score_signal": 3,
+      "score_noise": 0,
+      "score_boundary": 0,
+      "issue_tags": [
+        "possible_type_mismatch"
+      ],
+      "review_focus": "type",
+      "priority_score": 4,
+      "rationale": [
+        "Draft signal type looks suspicious; keyword evidence leans toward `capital`."
+      ]
+    },
+    {
+      "sample_id": "B2D081",
+      "title": "This Mario-Themed Switch Controller Is Only $30 Right Now",
+      "source_name": "GameSpot",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_url": "https://www.gamespot.com/articles/this-mario-themed-switch-controller-is-only-30-right-now/1100-6539013/?ftag=CAD-01-10abi2f",
+      "draft_bucket": "signal",
+      "suggested_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "suggested_signal_types": [
+        "capital"
+      ],
+      "manual_review_priority": "medium",
+      "confidence_band": "medium",
+      "score_signal": 3,
+      "score_noise": 0,
+      "score_boundary": 0,
+      "issue_tags": [
+        "possible_type_mismatch"
+      ],
+      "review_focus": "type",
+      "priority_score": 4,
+      "rationale": [
+        "Draft signal type looks suspicious; keyword evidence leans toward `capital`."
+      ]
+    },
+    {
+      "sample_id": "B2D083",
+      "title": "Netflix Is Getting More Expensive, And That Impacts Games, Too",
+      "source_name": "GameSpot",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_url": "https://www.gamespot.com/articles/netflix-is-getting-more-expensive-and-that-impacts-games-too/1100-6539050/?ftag=CAD-01-10abi2f",
+      "draft_bucket": "signal",
+      "suggested_bucket": "signal",
+      "draft_signal_types": [
+        "capital"
+      ],
+      "suggested_signal_types": [
+        "technical"
+      ],
+      "manual_review_priority": "medium",
+      "confidence_band": "medium",
+      "score_signal": 2,
+      "score_noise": 0,
+      "score_boundary": 0,
+      "issue_tags": [
+        "possible_type_mismatch"
+      ],
+      "review_focus": "type",
+      "priority_score": 4,
+      "rationale": [
+        "Draft signal type looks suspicious; keyword evidence leans toward `technical`."
+      ]
+    },
+    {
+      "sample_id": "B2D088",
+      "title": "Save On Select Magic: The Gathering Lorwyn Eclipse Releases This Week",
+      "source_name": "GameSpot",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_url": "https://www.gamespot.com/articles/save-on-select-magic-the-gathering-lorwyn-eclipse-releases-this-week/1100-6539054/?ftag=CAD-01-10abi2f",
+      "draft_bucket": "signal",
+      "suggested_bucket": "signal",
+      "draft_signal_types": [
+        "market"
+      ],
+      "suggested_signal_types": [
+        "capital"
+      ],
+      "manual_review_priority": "medium",
+      "confidence_band": "medium",
+      "score_signal": 4,
+      "score_noise": 2,
+      "score_boundary": 0,
+      "issue_tags": [
+        "possible_type_mismatch"
+      ],
+      "review_focus": "type",
+      "priority_score": 4,
+      "rationale": [
+        "Draft signal type looks suspicious; keyword evidence leans toward `capital`."
+      ]
+    },
+    {
+      "sample_id": "B2D101",
+      "title": "PlayStation Store's rumoured \"dynamic pricing\" has reportedly been spotted in the wild, and the differences appear to be huge",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/playstation-store-dynamic-pricing-reportedly-spotted-march-2026",
+      "draft_bucket": "signal",
+      "suggested_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "suggested_signal_types": [
+        "technical"
+      ],
+      "manual_review_priority": "medium",
+      "confidence_band": "medium",
+      "score_signal": 6,
+      "score_noise": 3,
+      "score_boundary": 4,
+      "issue_tags": [
+        "high_boundary_tension"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 4,
+      "rationale": [
+        "High boundary score suggests the sample is signal-like but still ambiguous."
+      ]
+    },
+    {
+      "sample_id": "B2D112",
+      "title": "Magic's TMNT Draft Night Box Is Discounted For Amazon's Big Spring Sale",
+      "source_name": "IGN Game News",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_url": "https://www.ign.com/articles/magics-tmnt-draft-night-box-is-discounted-for-amazons-big-spring-sale",
+      "draft_bucket": "signal",
+      "suggested_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "suggested_signal_types": [
+        "capital"
+      ],
+      "manual_review_priority": "medium",
+      "confidence_band": "medium",
+      "score_signal": 4,
+      "score_noise": 0,
+      "score_boundary": 1,
+      "issue_tags": [
+        "possible_type_mismatch"
+      ],
+      "review_focus": "type",
+      "priority_score": 4,
+      "rationale": [
+        "Draft signal type looks suspicious; keyword evidence leans toward `capital`."
+      ]
+    },
+    {
+      "sample_id": "B2D113",
+      "title": "Magic: The Gathering's Lord of the Rings Scene Boxes Are Back on Sale at Amazon",
+      "source_name": "IGN Game News",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_url": "https://www.ign.com/articles/magic-the-gathering-lord-of-the-rings-scene-boxes-are-back-on-sale-at-amazon",
+      "draft_bucket": "signal",
+      "suggested_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "suggested_signal_types": [
+        "capital"
+      ],
+      "manual_review_priority": "medium",
+      "confidence_band": "medium",
+      "score_signal": 4,
+      "score_noise": 2,
+      "score_boundary": 0,
+      "issue_tags": [
+        "possible_type_mismatch"
+      ],
+      "review_focus": "type",
+      "priority_score": 4,
+      "rationale": [
+        "Draft signal type looks suspicious; keyword evidence leans toward `capital`."
+      ]
+    },
+    {
+      "sample_id": "B2D117",
+      "title": "Sony confirms PS5 hardware is about to become even more expensive",
+      "source_name": "Game Developer",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_url": "https://www.gamedeveloper.com/console/sony-confirms-ps5-hardware-is-about-to-become-more-expensive",
+      "draft_bucket": "signal",
+      "suggested_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "suggested_signal_types": [
+        "market"
+      ],
+      "manual_review_priority": "medium",
+      "confidence_band": "medium",
+      "score_signal": 5,
+      "score_noise": 2,
+      "score_boundary": 0,
+      "issue_tags": [
+        "possible_type_mismatch"
+      ],
+      "review_focus": "type",
+      "priority_score": 4,
+      "rationale": [
+        "Draft signal type looks suspicious; keyword evidence leans toward `market`."
+      ]
+    },
+    {
+      "sample_id": "B2D124",
+      "title": "Wanderstop studio Ivy Road to close after funding for second game \"didn't come to fruition\"",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-28T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/wanderstop-studio-ivy-road-to-close-after-funding-for-second-game-didnt-come-to-fruition",
+      "draft_bucket": "signal",
+      "suggested_bucket": "signal",
+      "draft_signal_types": [
+        "capital"
+      ],
+      "suggested_signal_types": [
+        "team"
+      ],
+      "manual_review_priority": "medium",
+      "confidence_band": "medium",
+      "score_signal": 6,
+      "score_noise": 3,
+      "score_boundary": 1,
+      "issue_tags": [
+        "possible_type_mismatch"
+      ],
+      "review_focus": "type",
+      "priority_score": 4,
+      "rationale": [
+        "Draft signal type looks suspicious; keyword evidence leans toward `team`."
+      ]
+    },
+    {
+      "sample_id": "B2D140",
+      "title": "'Nintendo Is Absolutely Furious': Former Employee Says Mario, Zelda Developer in 'Uncharted Territory' Following Major Leaks",
+      "source_name": "IGN Game News",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_url": "https://www.ign.com/articles/nintendo-is-absolutely-furious-former-employee-says-mario-zelda-developer-in-uncharted-territory-following-major-leaks",
+      "draft_bucket": "signal",
+      "suggested_bucket": "signal",
+      "draft_signal_types": [
+        "market"
+      ],
+      "suggested_signal_types": [
+        "technical"
+      ],
+      "manual_review_priority": "medium",
+      "confidence_band": "medium",
+      "score_signal": 3,
+      "score_noise": 0,
+      "score_boundary": 0,
+      "issue_tags": [
+        "possible_type_mismatch"
+      ],
+      "review_focus": "type",
+      "priority_score": 4,
+      "rationale": [
+        "Draft signal type looks suspicious; keyword evidence leans toward `technical`."
+      ]
+    },
+    {
+      "sample_id": "B2D152",
+      "title": "Remember when Mastercard pressured Steam to remove a bunch of NSFW games? The FTC says that's not cool—sort of",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/remember-when-mastercard-pressured-steam-to-remove-a-bunch-of-nsfw-games-the-ftc-says-thats-not-cool-sort-of/",
+      "draft_bucket": "signal",
+      "suggested_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "suggested_signal_types": [
+        "capital"
+      ],
+      "manual_review_priority": "medium",
+      "confidence_band": "medium",
+      "score_signal": 2,
+      "score_noise": 0,
+      "score_boundary": 0,
+      "issue_tags": [
+        "possible_type_mismatch"
+      ],
+      "review_focus": "type",
+      "priority_score": 4,
+      "rationale": [
+        "Draft signal type looks suspicious; keyword evidence leans toward `capital`."
+      ]
+    },
+    {
+      "sample_id": "B2D161",
+      "title": "Cancellation Of Almost-Complete Game From Eidos Montreal Resulted In Layoffs - Report",
+      "source_name": "GameSpot",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_url": "https://www.gamespot.com/articles/cancellation-of-almost-complete-game-from-eidos-montreal-resulted-in-layoffs-report/1100-6539139/?ftag=CAD-01-10abi2f",
+      "draft_bucket": "signal",
+      "suggested_bucket": "signal",
+      "draft_signal_types": [
+        "team"
+      ],
+      "suggested_signal_types": [
+        "team"
+      ],
+      "manual_review_priority": "medium",
+      "confidence_band": "medium",
+      "score_signal": 10,
+      "score_noise": 0,
+      "score_boundary": 8,
+      "issue_tags": [
+        "high_boundary_tension"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 4,
+      "rationale": [
+        "High boundary score suggests the sample is signal-like but still ambiguous."
+      ]
+    },
+    {
+      "sample_id": "B2D163",
+      "title": "New MindsEye Mission Will Reveal 'Evidence' the Game Was 'Sabotaged', Claims CEO",
+      "source_name": "IGN Game News",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_url": "https://www.ign.com/articles/new-mindseye-mission-will-reveal-evidence-the-game-was-sabotaged-claims-ceo",
+      "draft_bucket": "signal",
+      "suggested_bucket": "signal",
+      "draft_signal_types": [
+        "team"
+      ],
+      "suggested_signal_types": [
+        "technical"
+      ],
+      "manual_review_priority": "medium",
+      "confidence_band": "medium",
+      "score_signal": 2,
+      "score_noise": 0,
+      "score_boundary": 0,
+      "issue_tags": [
+        "possible_type_mismatch"
+      ],
+      "review_focus": "type",
+      "priority_score": 4,
+      "rationale": [
+        "Draft signal type looks suspicious; keyword evidence leans toward `technical`."
+      ]
+    },
+    {
+      "sample_id": "B2D166",
+      "title": "Disney could be interested in buying Fortnite maker Epic Games, but not everyone's on board with the idea",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/disney-could-be-looking-into-buying-fortnite-developer-epic-games",
+      "draft_bucket": "signal",
+      "suggested_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "suggested_signal_types": [
+        "capital"
+      ],
+      "manual_review_priority": "medium",
+      "confidence_band": "medium",
+      "score_signal": 6,
+      "score_noise": 3,
+      "score_boundary": 2,
+      "issue_tags": [
+        "possible_type_mismatch"
+      ],
+      "review_focus": "type",
+      "priority_score": 4,
+      "rationale": [
+        "Draft signal type looks suspicious; keyword evidence leans toward `capital`."
+      ]
+    },
+    {
+      "sample_id": "B2D173",
+      "title": "Price Hike or Discount? Nintendo's Changes to Physical and Digital Game Pricing Have Analysts Split, Too",
+      "source_name": "IGN Game News",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_url": "https://www.ign.com/articles/price-hike-or-discount-nintendos-changes-to-physical-and-digital-game-pricing-have-analysts-split-too",
+      "draft_bucket": "signal",
+      "suggested_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "suggested_signal_types": [
+        "market"
+      ],
+      "manual_review_priority": "medium",
+      "confidence_band": "medium",
+      "score_signal": 5,
+      "score_noise": 2,
+      "score_boundary": 0,
+      "issue_tags": [
+        "possible_type_mismatch"
+      ],
+      "review_focus": "type",
+      "priority_score": 4,
+      "rationale": [
+        "Draft signal type looks suspicious; keyword evidence leans toward `market`."
+      ]
+    },
+    {
+      "sample_id": "B2D176",
+      "title": "The Best PS5 Deals This Week: Save On Consoles, Games, And Accessories - March 31, 2026",
+      "source_name": "GameSpot",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_url": "https://www.gamespot.com/articles/the-best-ps5-deals-this-week-games-accessories-consoles-and-more/1100-6538557/?ftag=CAD-01-10abi2f",
+      "draft_bucket": "signal",
+      "suggested_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "suggested_signal_types": [
+        "capital"
+      ],
+      "manual_review_priority": "medium",
+      "confidence_band": "medium",
+      "score_signal": 5,
+      "score_noise": 0,
+      "score_boundary": 2,
+      "issue_tags": [
+        "possible_type_mismatch"
+      ],
+      "review_focus": "type",
+      "priority_score": 4,
+      "rationale": [
+        "Draft signal type looks suspicious; keyword evidence leans toward `capital`."
+      ]
+    },
+    {
+      "sample_id": "B2D063",
+      "title": "Fortnite developers say there will be a huge impact on development \"for the rest of the year and likely beyond\" following mass layoffs",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/fortnite-producer-comments-on-mass-layoffs-march-2026",
+      "draft_bucket": "signal",
+      "suggested_bucket": "signal",
+      "draft_signal_types": [
+        "team"
+      ],
+      "suggested_signal_types": [
+        "team"
+      ],
+      "manual_review_priority": "medium",
+      "confidence_band": "medium",
+      "score_signal": 7,
+      "score_noise": 5,
+      "score_boundary": 0,
+      "issue_tags": [
+        "signal_noise_tension"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 3,
+      "rationale": [
+        "Signal and noise evidence are relatively close; worth human confirmation."
+      ]
+    },
+    {
+      "sample_id": "B2D162",
+      "title": "Epic Games CEO Tim Sweeney apologises and seemingly rectifies life insurance situation of laid off worker with terminal brain cancer",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/epic-games-ceo-tim-sweeney-responds-after-fortnite-layoffs-include-worker-with-brain-cancer",
+      "draft_bucket": "signal",
+      "suggested_bucket": "signal",
+      "draft_signal_types": [
+        "team"
+      ],
+      "suggested_signal_types": [
+        "team"
+      ],
+      "manual_review_priority": "medium",
+      "confidence_band": "medium",
+      "score_signal": 9,
+      "score_noise": 6,
+      "score_boundary": 2,
+      "issue_tags": [
+        "signal_noise_tension"
+      ],
+      "review_focus": "confirm",
+      "priority_score": 3,
+      "rationale": [
+        "Signal and noise evidence are relatively close; worth human confirmation."
+      ]
+    }
+  ]
+}

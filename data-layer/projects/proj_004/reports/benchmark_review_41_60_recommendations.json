@@ -1,0 +1,377 @@
+{
+  "source_queue": "F:\\AIProjects\\DesignAssistant\\data-layer\\projects\\proj_004\\reports\\benchmark_review_queue_batch1.json",
+  "source_benchmark": "F:\\AIProjects\\DesignAssistant\\data-layer\\projects\\proj_004\\phase2.1_implementation\\data\\benchmark_samples_batch1_draft.json",
+  "range": "41-60",
+  "generated_for": "assisted second-pass review",
+  "items": [
+    {
+      "rank": 41,
+      "sample_id": "B1D016",
+      "title": "Dragon's Dogma 2 celebrates second anniversary with \"special celebratory artwork\" and a custom controller, as fans ponder: are we getting DLC?",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/dragons-dogma-2-celebrates-second-anniversary-with-no-dlc-news-but-we-might-have-a-solid-tease",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "recommended_bucket": "noise",
+      "recommended_signal_types": [],
+      "review_focus": "confirm",
+      "suggestion_confidence": "high",
+      "one_line_reason": "Celebratory anniversary artwork and DLC speculation remain routine fandom or promo coverage, not a structural industry signal.",
+      "review_note": "Keep as noise. Anniversary celebration plus DLC speculation is standard promotional coverage."
+    },
+    {
+      "rank": 42,
+      "sample_id": "B1D020",
+      "title": "Two more leadership exits take place at Xbox",
+      "source_name": "Game Developer",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_url": "https://www.gamedeveloper.com/business/two-more-leadership-exists-took-place-at-xbox",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "recommended_bucket": "signal",
+      "recommended_signal_types": [
+        "team"
+      ],
+      "review_focus": "type",
+      "suggestion_confidence": "high",
+      "one_line_reason": "Leadership exits are organizational change signals and fit team better than technical.",
+      "review_note": "Keep as signal, but retag to team because executive departures reflect org structure change."
+    },
+    {
+      "rank": 43,
+      "sample_id": "B1D025",
+      "title": "Report: Nintendo slashes Switch 2 production by a third due to weak U.S. sales",
+      "source_name": "Game Developer",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_url": "https://www.gamedeveloper.com/business/report-nintendo-slashes-switch-2-production-by-a-third-due-to-weak-u-s-sales",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "market"
+      ],
+      "recommended_bucket": "signal",
+      "recommended_signal_types": [
+        "market"
+      ],
+      "review_focus": "confirm",
+      "suggestion_confidence": "high",
+      "one_line_reason": "Production cuts tied to weak U.S. sales are a clear squeeze signal in hardware demand and supply planning.",
+      "review_note": "Keep as signal. This is a strong market squeeze indicator."
+    },
+    {
+      "rank": 44,
+      "sample_id": "B1D035",
+      "title": "\"It's essential to me that it's approached with care and love and caution\" - How Life is Strange: Reunion actors Hannah Telle and Rhianna DeVries are preparing to say farewell to Max and Chloe",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/its-essential-to-me-that-its-approached-with-care-and-love-and-caution-how-life-is-strange-reunion-actors-hannah-telle-and-rhianna-devries-are-preparing-to-say-farewell-to-max-and-chloe",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "recommended_bucket": "noise",
+      "recommended_signal_types": [],
+      "review_focus": "confirm",
+      "suggestion_confidence": "high",
+      "one_line_reason": "Actor interview and farewell framing is feature coverage, not a structural business or paradigm signal.",
+      "review_note": "Keep as noise. Human-interest or cast-interview content is outside benchmark scope."
+    },
+    {
+      "rank": 45,
+      "sample_id": "B1D039",
+      "title": "Super Mario Galaxy Movie age-rating accidentally confirms a 20-year-old fan theory",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/super-mario-galaxy-movie-age-rating-accidentally-confirms-a-20-year-fan-theory",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "recommended_bucket": "noise",
+      "recommended_signal_types": [],
+      "review_focus": "confirm",
+      "suggestion_confidence": "high",
+      "one_line_reason": "Fan-theory and movie age-rating speculation are entertainment-news noise, not structural game-industry change.",
+      "review_note": "Keep as noise."
+    },
+    {
+      "rank": 46,
+      "sample_id": "B1D046",
+      "title": "Epic Games layoffs serve as a timely reminder that accountability is dead",
+      "source_name": "Game Developer",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_url": "https://www.gamedeveloper.com/business/epic-games-layoffs-should-remind-you-that-accountability-is-dead",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "team"
+      ],
+      "recommended_bucket": "signal",
+      "recommended_signal_types": [
+        "team"
+      ],
+      "review_focus": "boundary",
+      "suggestion_confidence": "medium",
+      "one_line_reason": "It points at layoff consequences, but the piece may lean heavily editorial rather than reporting a fresh structural event.",
+      "review_note": "Keep as signal only if you accept commentary that crystallizes layoff consequences as paradigm evidence; otherwise boundary."
+    },
+    {
+      "rank": 47,
+      "sample_id": "B1D056",
+      "title": "Analyst says Epic Games layoffs send a clear signal: 'This will not get any easier'",
+      "source_name": "Game Developer",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_url": "https://www.gamedeveloper.com/business/analyst-says-epic-games-layoffs-send-a-clear-signal-this-will-not-get-any-easier-",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "team"
+      ],
+      "recommended_bucket": "signal",
+      "recommended_signal_types": [
+        "team",
+        "market"
+      ],
+      "review_focus": "type",
+      "suggestion_confidence": "high",
+      "one_line_reason": "Layoff analysis here functions as both workforce contraction evidence and a broader market squeeze signal.",
+      "review_note": "Keep as signal. Multi-type makes sense if your taxonomy allows team plus market for paradigm squeeze interpretation."
+    },
+    {
+      "rank": 48,
+      "sample_id": "B1D059",
+      "title": "That Hunter: The Reckoning game that was accidentally leaked on Steam is now officially revealed as a new FPS RPG",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/rpg/that-hunter-the-reckoning-game-that-was-accidentally-leaked-on-steam-is-now-officially-revealed-as-a-new-fps-rpg/",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "recommended_bucket": "noise",
+      "recommended_signal_types": [],
+      "review_focus": "confirm",
+      "suggestion_confidence": "high",
+      "one_line_reason": "Leak-followed-by-official-reveal coverage is standard announcement news rather than a structural signal.",
+      "review_note": "Keep as noise."
+    },
+    {
+      "rank": 49,
+      "sample_id": "B1D069",
+      "title": "Record Sales, Declining Stock Prices, Production Decreases: Is Switch 2 A Massive Success Or Not?",
+      "source_name": "GameSpot",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_url": "https://www.gamespot.com/articles/record-sales-declining-stock-production-decreases-is-switch-2-a-massive-success-or-not/1100-6539066/?ftag=CAD-01-10abi2f",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "market"
+      ],
+      "recommended_bucket": "signal",
+      "recommended_signal_types": [
+        "market"
+      ],
+      "review_focus": "confirm",
+      "suggestion_confidence": "high",
+      "one_line_reason": "This is a strong paradox or compression signal: record sales coexist with falling stock sentiment and reduced production expectations.",
+      "review_note": "Keep as signal. It captures a market contradiction rather than simple success reporting."
+    },
+    {
+      "rank": 50,
+      "sample_id": "B1D086",
+      "title": "A programmer with terminal brain cancer was caught in Epic's mass layoff, but CEO Tim Sweeney says the studio 'will solve the insurance for them'",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-29T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/gaming-industry/a-programmer-with-terminal-brain-cancer-was-caught-in-epics-mass-layoff-but-ceo-tim-sweeney-says-the-studio-will-solve-the-insurance-for-them/",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "team"
+      ],
+      "recommended_bucket": "signal",
+      "recommended_signal_types": [
+        "team"
+      ],
+      "review_focus": "boundary",
+      "suggestion_confidence": "medium",
+      "one_line_reason": "The human impact case is meaningful, but it may function more as anecdotal fallout of an already-known layoff event.",
+      "review_note": "Keep as signal if downstream worker fallout from layoffs is valid benchmark evidence; otherwise boundary."
+    },
+    {
+      "rank": 51,
+      "sample_id": "B1D090",
+      "title": "Epic's mass layoffs left a programmer with terminal brain cancer without life insurance, but Tim Sweeney says the company will \"solve\" the problem",
+      "source_name": "Rock Paper Shotgun",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_url": "https://www.rockpapershotgun.com/epics-mass-layoffs-left-a-programmer-with-terminal-brain-cancer-without-life-insurance-but-tim-sweeney-says-the-company-will-solve-the-problem",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "team"
+      ],
+      "recommended_bucket": "signal",
+      "recommended_signal_types": [
+        "team"
+      ],
+      "review_focus": "boundary",
+      "suggestion_confidence": "medium",
+      "one_line_reason": "Similar to B1D086, this is strong layoff fallout evidence but may be derivative of an already captured event.",
+      "review_note": "Keep as signal if second-order worker impact belongs in scope; otherwise boundary."
+    },
+    {
+      "rank": 52,
+      "sample_id": "B1D099",
+      "title": "Screamer’s multiplayer chases unleash the racer’s full chaotic potential, trapping you inside a relentlessly boosty, bashy, and boomy washing machine",
+      "source_name": "Rock Paper Shotgun",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_url": "https://www.rockpapershotgun.com/screamers-multiplayer-chases-unleash-the-racers-full-chaotic-potential-trapping-you-inside-a-relentlessly-boosty-bashy-and-boomy-washing-machine",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "recommended_bucket": "noise",
+      "recommended_signal_types": [],
+      "review_focus": "confirm",
+      "suggestion_confidence": "high",
+      "one_line_reason": "Hands-on multiplayer impressions are review-style product coverage, not a structural signal.",
+      "review_note": "Keep as noise."
+    },
+    {
+      "rank": 53,
+      "sample_id": "B1D001",
+      "title": "Fortnite back on Google Play worldwide after Epic and Google settle",
+      "source_name": "Game Developer",
+      "published_at": "2026-03-19T00:00:00Z",
+      "source_url": "https://www.gamedeveloper.com/business/fortnite-back-on-google-play-worldwide-after-epic-and-google-settle",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "recommended_bucket": "signal",
+      "recommended_signal_types": [
+        "regulatory",
+        "market"
+      ],
+      "review_focus": "type",
+      "suggestion_confidence": "medium-high",
+      "one_line_reason": "Settlement-driven return to Google Play is better understood as platform-regulatory distribution change than pure technical signal.",
+      "review_note": "Keep as signal. Prefer regulatory as primary; include market if your taxonomy allows distribution impact."
+    },
+    {
+      "rank": 54,
+      "sample_id": "B1D007",
+      "title": "2019's Call of Duty: Modern Warfare Is Blowing Up on Steam Thanks to a Big Sale and Positive Word of Mouth",
+      "source_name": "IGN Game News",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_url": "https://www.ign.com/articles/2019s-call-of-duty-modern-warfare-is-blowing-up-on-steam-thanks-to-a-big-sale-and-positive-word-of-mouth",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "market"
+      ],
+      "recommended_bucket": "signal",
+      "recommended_signal_types": [
+        "market"
+      ],
+      "review_focus": "confirm",
+      "suggestion_confidence": "medium-high",
+      "one_line_reason": "A price-cut driven player surge is still a market signal if your benchmark includes demand elasticity and long-tail monetization effects.",
+      "review_note": "Keep as signal if you accept concrete market response signals, not just strategic events."
+    },
+    {
+      "rank": 55,
+      "sample_id": "B1D012",
+      "title": "As controversy swamps Tekken 8 and Street Fighter 6, Guilty Gear Strive just announced a massive new update",
+      "source_name": "Eurogamer",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_url": "https://www.eurogamer.net/controversy-tekken-8-street-fighter-6-guilty-gear-strive-announced-massive-new-update",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "recommended_bucket": "noise",
+      "recommended_signal_types": [],
+      "review_focus": "confirm",
+      "suggestion_confidence": "high",
+      "one_line_reason": "Game update and controversy framing still reads as standard live-service or content update coverage.",
+      "review_note": "Keep as noise unless the full article contains a concrete business policy shift."
+    },
+    {
+      "rank": 56,
+      "sample_id": "B1D018",
+      "title": "Pearl Abyss forgot to mention it used generative AI to create assets for Crimson Desert",
+      "source_name": "Game Developer",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_url": "https://www.gamedeveloper.com/production/whoops-pearl-abyss-forgot-to-mention-it-used-generative-ai-to-create-crimson-desert",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "recommended_bucket": "signal",
+      "recommended_signal_types": [
+        "technical"
+      ],
+      "review_focus": "confirm",
+      "suggestion_confidence": "high",
+      "one_line_reason": "Undisclosed genAI asset use followed by an audit is a strong technical governance and AI-boundary signal.",
+      "review_note": "Keep as signal. This also fits reverse-paradigm or AI-boundary logic."
+    },
+    {
+      "rank": 57,
+      "sample_id": "B1D021",
+      "title": "I felt like playing a janky choice-driven RPG on my Steam Deck, and this gritty AA deepcut is hitting the spot for just 99 cents",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/rpg/i-felt-like-playing-a-janky-choice-driven-rpg-on-my-steam-deck-and-this-gritty-aa-deepcut-is-hitting-the-spot-for-just-99-cents/",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "recommended_bucket": "noise",
+      "recommended_signal_types": [],
+      "review_focus": "confirm",
+      "suggestion_confidence": "high",
+      "one_line_reason": "Discount recommendation and niche game praise are standard consumer-facing feature content.",
+      "review_note": "Keep as noise."
+    },
+    {
+      "rank": 58,
+      "sample_id": "B1D037",
+      "title": "Marathon review",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/games/fps/marathon-review/",
+      "draft_bucket": "noise",
+      "draft_signal_types": [],
+      "recommended_bucket": "noise",
+      "recommended_signal_types": [],
+      "review_focus": "confirm",
+      "suggestion_confidence": "high",
+      "one_line_reason": "Review content should remain a clean negative benchmark sample.",
+      "review_note": "Keep as noise."
+    },
+    {
+      "rank": 59,
+      "sample_id": "B1D038",
+      "title": "Official World Of Warcraft Music Video Is A Walk Down Memory Lane",
+      "source_name": "GameSpot",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_url": "https://www.gamespot.com/articles/official-world-of-warcraft-music-video-is-a-walk-down-memory-lane/1100-6538991/?ftag=CAD-01-10abi2f",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "technical"
+      ],
+      "recommended_bucket": "noise",
+      "recommended_signal_types": [],
+      "review_focus": "bucket",
+      "suggestion_confidence": "high",
+      "one_line_reason": "A commemorative music video is promotional nostalgia content, not a technical or structural industry signal.",
+      "review_note": "Downgrade to noise. This is promo/media content, not a structural signal."
+    },
+    {
+      "rank": 60,
+      "sample_id": "B1D043",
+      "title": "'Cripple their sales, tank their stock price. Stop collaborating with them as developers': New Blood CEO on fighting against DLSS 5",
+      "source_name": "PC Gamer",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_url": "https://www.pcgamer.com/hardware/graphics-cards/cripple-their-sales-tank-their-stock-price-stop-collaborating-with-them-as-developers-new-blood-ceo-on-fighting-against-dlss-5/",
+      "draft_bucket": "signal",
+      "draft_signal_types": [
+        "market"
+      ],
+      "recommended_bucket": "signal",
+      "recommended_signal_types": [
+        "technical",
+        "market"
+      ],
+      "review_focus": "type",
+      "suggestion_confidence": "high",
+      "one_line_reason": "The DLSS 5 dispute is not just a market reaction; it is a technical adoption conflict with market consequences.",
+      "review_note": "Keep as signal. This is a technical controversy with clear market and developer-ecosystem implications."
+    }
+  ]
+}
