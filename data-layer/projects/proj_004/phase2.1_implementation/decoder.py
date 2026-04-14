@@ -9,7 +9,7 @@ import re
 import time
 import os
 from datetime import datetime
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 import requests as _requests
 # anthropic SDK 为可选依赖：只在走官方端点（无 ANTHROPIC_BASE_URL）时才需要。
 # 不在顶层 import，避免云桌面等未安装 anthropic 包的环境启动即崩溃。
@@ -35,7 +35,10 @@ class IntelligenceDecoder:
                  base_url: str = None,
                  connect_timeout_seconds: int = 30,
                  read_timeout_seconds: int = 180,
-                 max_retries: int = 3):
+                 max_retries: int = 3,
+                 screen_provider: Optional[str] = None,
+                 screen_api_key: Optional[str] = None,
+                 screen_base_url: Optional[str] = None):
         """
         初始化解码器
 
@@ -49,6 +52,9 @@ class IntelligenceDecoder:
             connect_timeout_seconds: HTTP connect timeout（秒）
             read_timeout_seconds: HTTP read timeout（秒）
             max_retries: LLM 请求最大重试次数
+            screen_provider: 粗筛 provider（anthropic / openai / deepseek / gemini / custom）
+            screen_api_key: 粗筛 API key
+            screen_base_url: 粗筛 API 端点
         """
         self.api_key = api_key
         self.provider = str(provider or "anthropic").strip().lower()
@@ -72,8 +78,13 @@ class IntelligenceDecoder:
         default_base_url = default_base_url_map.get(self.provider, "")
         self.base_url = (base_url or env_base_url or default_base_url).rstrip("/")
         self.model = model
+        self.screen_provider = str(screen_provider or self.provider or "anthropic").strip().lower()
+        screen_env_base_url = env_base_url_map.get(self.screen_provider, "")
+        screen_default_base_url = default_base_url_map.get(self.screen_provider, "")
+        self.screen_api_key = screen_api_key if screen_api_key is not None else api_key
+        self.screen_base_url = (screen_base_url or screen_env_base_url or screen_default_base_url).rstrip("/")
         self.screen_model = screen_model or (
-            "claude-haiku-4-5-20251001" if self.provider == "anthropic" else model
+            "claude-haiku-4-5-20251001" if self.screen_provider == "anthropic" else model
         )
         self.enable_two_stage = enable_two_stage
         self.connect_timeout_seconds = max(1, int(connect_timeout_seconds or 30))
@@ -244,11 +255,22 @@ class IntelligenceDecoder:
                 warnings.append(f"规则预筛：report 类型含 {noise_hits} 个趋势预测关键词，判定为噪音，跳过 LLM")
                 return {"has_signal": False, "signal_types": [], "screen_method": "rule"}
 
+        # ── 本地规则粗筛层：完全绕过外部 API ───────────────────────
+        if self.screen_provider == "local_rule":
+            return self._local_rule_screen(text, source_type, warnings)
+
         # ── LLM 粗筛层：haiku 轻量判断 ───────────────────────────
         try:
             screen_prompt = build_screen_prompt(text)
             self._debug(f"screen.before_llm model={self.screen_model} text_len={len(text)}")
-            raw = self._call_llm(screen_prompt, model_override=self.screen_model, max_tokens=80)
+            raw = self._call_llm(
+                screen_prompt,
+                model_override=self.screen_model,
+                max_tokens=80,
+                provider_override=self.screen_provider,
+                api_key_override=self.screen_api_key,
+                base_url_override=self.screen_base_url,
+            )
             self._debug(f"screen.after_llm model={self.screen_model} response_len={len(raw)}")
             self._write_debug_artifact("screen", "screen_response", {
                 "provider": self.provider,
@@ -280,6 +302,59 @@ class IntelligenceDecoder:
 
         return {"has_signal": True, "signal_types": [], "screen_method": "fallback"}
 
+    def _local_rule_screen(self, text: str, source_type, warnings: List[str]) -> dict:
+        """本地规则粗筛：只做保守噪音过滤，避免误杀潜在 signal。"""
+        text_lower = (text or "").lower()
+        source_type_val = source_type.value if hasattr(source_type, 'value') else str(source_type)
+
+        explicit_noise_patterns = [
+            "analysts predict",
+            "is expected to",
+            "is projected to",
+            "market research",
+            "according to analysts",
+            "survey shows",
+            "survey reveals",
+            "预计将",
+            "有望",
+            "将改变",
+            "分析师认为",
+        ]
+        signal_hints = [
+            "announced",
+            "launch",
+            "released",
+            "acquired",
+            "funding",
+            "raised",
+            "approval",
+            "ban",
+            "partnership",
+            "layoff",
+            "hired",
+            "上线",
+            "发布",
+            "融资",
+            "收购",
+            "合作",
+            "裁员",
+            "批准",
+            "禁令",
+        ]
+
+        noise_hits = sum(1 for p in explicit_noise_patterns if p in text_lower)
+        signal_hits = sum(1 for p in signal_hints if p in text_lower)
+
+        if source_type_val == "report" and noise_hits >= 2 and signal_hits == 0 and len(text) < 1200:
+            warnings.append("本地规则粗筛：report 文本以泛趋势/分析表述为主，判定为噪音，跳过精筛")
+            return {"has_signal": False, "signal_types": [], "screen_method": "local_rule"}
+
+        if noise_hits >= 3 and signal_hits == 0 and len(text) < 800:
+            warnings.append("本地规则粗筛：未见明确事件型 signal 提示词，判定为噪音，跳过精筛")
+            return {"has_signal": False, "signal_types": [], "screen_method": "local_rule"}
+
+        return {"has_signal": True, "signal_types": [], "screen_method": "local_rule_pass"}
+
     def _preprocess(self, text: str) -> str:
         """
         文本预处理
@@ -297,7 +372,10 @@ class IntelligenceDecoder:
         return text
 
     def _call_llm(self, prompt: str, max_retries: int = None,
-                  model_override: str = None, max_tokens: int = 4096) -> str:
+                  model_override: str = None, max_tokens: int = 4096,
+                  provider_override: Optional[str] = None,
+                  api_key_override: Optional[str] = None,
+                  base_url_override: Optional[str] = None) -> str:
         """
         调用 LLM（带重试机制）
 
@@ -306,18 +384,27 @@ class IntelligenceDecoder:
             max_retries: 最大重试次数（未指定时使用实例配置）
             model_override: 覆盖模型名（粗筛时传 screen_model）
             max_tokens: 最大输出 token 数（粗筛时传 80）
+            provider_override: 覆盖 provider（粗筛时传 screen_provider）
+            api_key_override: 覆盖 API key（粗筛时传 screen_api_key）
+            base_url_override: 覆盖 API 端点（粗筛时传 screen_base_url）
         """
         model = model_override or self.model
+        provider = str(provider_override or self.provider or "anthropic").strip().lower()
+        api_key = api_key_override if api_key_override is not None else self.api_key
+        base_url = (base_url_override if base_url_override is not None else self.base_url).rstrip("/")
         retry_count = max(1, int(max_retries or self.max_retries))
         timeout_tuple = (self.connect_timeout_seconds, self.read_timeout_seconds)
         for attempt in range(retry_count):
             try:
-                if self.provider == "anthropic" and self.base_url == "https://api.anthropic.com":
+                if provider == "anthropic" and base_url == "https://api.anthropic.com":
                     self._debug(
                         f"llm.request provider=anthropic sdk model={model} attempt={attempt + 1}/{retry_count} max_tokens={max_tokens} timeout={timeout_tuple}"
                     )
-                    # 官方 Anthropic 端点：使用 SDK（self.client 在 __init__ 中初始化）
-                    message = self.client.messages.create(
+                    client = self.client
+                    if api_key != self.api_key:
+                        from anthropic import Anthropic as _Anthropic
+                        client = _Anthropic(api_key=api_key)
+                    message = client.messages.create(
                         model=model,
                         max_tokens=max_tokens,
                         temperature=0.0,
@@ -329,14 +416,14 @@ class IntelligenceDecoder:
                     )
                     return text
 
-                if self.provider == "anthropic":
+                if provider == "anthropic":
                     # Anthropic 中转代理：优先尝试 /messages，失败时回退到 /v1/messages
                     candidate_urls = [
-                        self.base_url.rstrip("/") + "/messages",
-                        self.base_url.rstrip("/") + "/v1/messages",
+                        base_url.rstrip("/") + "/messages",
+                        base_url.rstrip("/") + "/v1/messages",
                     ]
                     headers = {
-                        "Authorization": f"Bearer {self.api_key}",
+                        "Authorization": f"Bearer {api_key}",
                         "anthropic-version": "2023-06-01",
                         "content-type": "application/json",
                     }
@@ -376,10 +463,17 @@ class IntelligenceDecoder:
                             )
                     raise last_error
 
+                client = self.client
+                if provider != self.provider or base_url != self.base_url or api_key != self.api_key:
+                    client = LLMClient(
+                        api_key=api_key,
+                        base_url=base_url,
+                        provider=provider,
+                    )
                 self._debug(
-                    f"llm.request provider={self.provider} shared_client model={model} attempt={attempt + 1}/{retry_count} max_tokens={max_tokens} timeout={timeout_tuple}"
+                    f"llm.request provider={provider} shared_client model={model} attempt={attempt + 1}/{retry_count} max_tokens={max_tokens} timeout={timeout_tuple}"
                 )
-                text = self.client.call(
+                text = client.call(
                     prompt=prompt,
                     model=model,
                     max_tokens=max_tokens,
@@ -387,13 +481,13 @@ class IntelligenceDecoder:
                     max_retries=1,
                 )
                 self._debug(
-                    f"llm.response provider={self.provider} shared_client model={model} attempt={attempt + 1}/{retry_count} response_len={len(text)}"
+                    f"llm.response provider={provider} shared_client model={model} attempt={attempt + 1}/{retry_count} response_len={len(text)}"
                 )
                 return text
 
             except Exception as e:
                 self._debug(
-                    f"llm.error provider={self.provider} model={model} attempt={attempt + 1}/{retry_count} error={type(e).__name__}: {str(e)}"
+                    f"llm.error provider={provider} model={model} attempt={attempt + 1}/{retry_count} error={type(e).__name__}: {str(e)}"
                 )
                 if attempt < retry_count - 1:
                     wait_time = 2 ** attempt

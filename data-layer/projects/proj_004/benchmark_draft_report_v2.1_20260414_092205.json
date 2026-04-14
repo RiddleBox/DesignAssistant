@@ -1,0 +1,28 @@
+{
+  "prompt_version": "v2.1",
+  "run_at": "2026-04-14T09:22:05.460813Z",
+  "benchmark_path": "F:\\AIProjects\\DesignAssistant\\data-layer\\projects\\proj_004\\phase2.1_implementation\\data\\benchmark_samples_batch2_regression.json",
+  "total": 1,
+  "tp": 0,
+  "tn": 1,
+  "fp": 0,
+  "fn": 0,
+  "precision": 0,
+  "recall": 0,
+  "f1": 0,
+  "accuracy": 1.0,
+  "details": [
+    {
+      "sample_id": "B2D001",
+      "origin_file": null,
+      "expected_class": "noise",
+      "predicted_class": "noise",
+      "expected_labels": [],
+      "predicted_labels": [],
+      "verdict": "TN",
+      "signal_count": 0,
+      "processing_time_ms": 1983,
+      "warnings": []
+    }
+  ]
+}

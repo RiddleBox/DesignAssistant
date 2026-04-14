@@ -1,0 +1,3379 @@
+{
+  "generated_from": "F:\\AIProjects\\DesignAssistant\\data-layer\\projects\\proj_004\\phase2.1_implementation\\data\\benchmark_samples_batch2_draft.json",
+  "summary": {
+    "selected_total": 180,
+    "selected_positive": 17,
+    "selected_negative": 163
+  },
+  "labeling_policy": {
+    "truth_source": "human_review.final_bucket and human_review.final_types",
+    "expected_signals_policy": "annotation.expected_signals is synchronized to final confirmed signal types",
+    "noise_policy": "noise samples have empty expected_signals"
+  },
+  "samples": [
+    {
+      "sample_id": "B2D001",
+      "source_type": "news",
+      "title": "Ubisoft ends game development at Red Storm and lays off 105 workers",
+      "content": "The studio will continue operating in the form of global IT and Snowdrop engine support.",
+      "published_at": "2026-03-19T00:00:00Z",
+      "source_name": "Game Developer",
+      "source_url": "https://www.gamedeveloper.com/business/ubisoft-lays-off-105-staff-at-red-storm-ends-game-development",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D002",
+      "source_type": "news",
+      "title": "God is dead and I am a bullet hell boss of my own making in the physics-based dicerolling roguelike DeeSicks",
+      "content": "I'm going to say it: bullet hells are more stressful than Souls-likes. Why are there 10,000 orbs approaching me, promising me misery and death! And I have to both tactfully dodge them while also staging a front myself? …",
+      "published_at": "2026-03-21T00:00:00Z",
+      "source_name": "Rock Paper Shotgun",
+      "source_url": "https://www.rockpapershotgun.com/god-is-dead-and-i-am-a-bullet-hell-boss-of-my-own-making-in-the-physics-based-dicerolling-roguelike-deesicks",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D003",
+      "source_type": "news",
+      "title": "If you ask Yoshi-P, kids don't care about Final Fantasy anymore because they're taking too long to come out",
+      "content": "Last month, a post caught some kind of virus and did the rounds, pondering why kids don't care about Final Fantasy or Dragon Quest so much anymore, wondering what they do plan now, and anecdotally findering that most of…",
+      "published_at": "2026-03-21T00:00:00Z",
+      "source_name": "Rock Paper Shotgun",
+      "source_url": "https://www.rockpapershotgun.com/if-you-ask-yoshi-p-kids-dont-care-about-final-fantasy-anymore-because-theyre-taking-too-long-to-come-out",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D004",
+      "source_type": "news",
+      "title": "Thanks to EU consumer law, Nintendo is updating the Switch 2 design to enable European players to replace the battery",
+      "content": "Nintendo is set to launch a new Switch 2 model in Europe that will allow owners to replace the battery. Read more",
+      "published_at": "2026-03-22T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/thanks-to-eu-consumer-law-nintendo-is-updating-the-switch-2-design-to-enable-european-players-to-replace-the-battery",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D005",
+      "source_type": "news",
+      "title": "Minecraft World, a theme park with the world's first-ever Minecraft rollercoaster, to open in the UK next year",
+      "content": "Minecraft World, a new £50 million theme park based on Mojang's seminal sandbox world, will open at London's Chessington World of Adventures next year. Read more",
+      "published_at": "2026-03-22T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/minecraft-world-a-theme-park-with-the-worlds-first-ever-minecraft-rollercoaster-to-open-in-the-uk-next-year",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D006",
+      "source_type": "news",
+      "title": "New report claims Crimson Desert's development was plagued by \"a hodgepodge of features crammed together\" and leaders who \"don't acknowledge anyone who doesn't share their exact mindset\"",
+      "content": "Two Pearl Abyss developers have claimed Crimson Desert was developed in a troubled environment, characterised by an inverted management hierarchy and leaders who \"don't acknowledge anyone who doesn't share their exact m…",
+      "published_at": "2026-03-22T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/new-report-claims-crimson-deserts-development-was-plagued-by-a-hodgepodge-of-features-crammed-together-and-leaders-who-dont-acknowledge-anyone-who-doesnt-share-their-exact-mindset",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D007",
+      "source_type": "news",
+      "title": "Resident Evil Requiem Kills The Past So The Series Can Move Forward",
+      "content": "Warning! This post contains spoilers for the entirety of Resident Evil Requiem's story, as well as some spoilers for the larger Resident Evil canon. Finish the game before you read this. You don't get Resident Evil Requ…",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/articles/resident-evil-requiem-kills-the-past-so-the-series-can-move-forward/1100-6538964/?ftag=CAD-01-10abi2f",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D008",
+      "source_type": "news",
+      "title": "Dying Light: The Beast Announces Restored Land Edition That Adds Lots of Free Content",
+      "content": "Dying Light: The Beast developer Techland has announced a new edition of its first-person zombie-slaying game. It's called Dying Light: The Beast Restored Land, and it includes the full game, all post-release content, a…",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_name": "IGN Game News",
+      "source_url": "https://www.ign.com/articles/dying-light-the-beast-announces-restored-land-update-that-adds-lots-of-free-content",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D009",
+      "source_type": "news",
+      "title": "High On Life 2 Delayed For Switch 2, No Longer Releasing On 4/20",
+      "content": "High on Life 2 for Nintendo Switch 2 has been delayed. The game was originally set to launch on April 20--a date with the same humorous association as the game's title--but it's now coming out in July. The franchise is …",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/articles/high-on-life-2-delayed-for-switch-2-no-longer-releasing-on-4-20/1100-6538952/?ftag=CAD-01-10abi2f",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D010",
+      "source_type": "news",
+      "title": "Oops, ASRock says motherboards will support 'newly launched' AMD Ryzen 9 9950X3D2 CPU that has definitely not yet been launched",
+      "content": "I hope no one got yelled at for this.",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/hardware/processors/oops-asrock-says-motherboards-will-support-newly-launched-amd-ryzen-9-9950x3d2-cpu-that-has-definitely-not-yet-been-announced/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D011",
+      "source_type": "news",
+      "title": "'A firm announcement is dependent on this final stretch of work': Fans are spinning out over extraction shooter Sand's lack of a specific March release date",
+      "content": "We're running out of March.",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/games/fps/a-firm-announcement-is-dependent-on-this-final-stretch-of-work-fans-are-spinning-out-over-extraction-shooter-sands-lack-of-a-specific-march-release-date/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D012",
+      "source_type": "news",
+      "title": "Baldur's Gate 3 writer says its Dragon-Agey rep system is there to stop you totally breaking the NPCs, but it 'becomes a dice roll' at points to keep romance natural",
+      "content": "Work smarter, not harder. Still insanely hard, though.",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/games/baldurs-gate/baldurs-gate-3-writer-says-its-dragon-agey-rep-system-is-there-to-stop-you-totally-breaking-the-npcs-but-it-becomes-a-dice-roll-at-points-to-keep-romance-natural/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_confirmed"
+      }
+    },
+    {
+      "sample_id": "B2D013",
+      "source_type": "news",
+      "title": "Diablo 4 Season 12's Greatest Challenge Is Being Nerfed \"Significantly\"",
+      "content": "Diablo 4's Season of Slaughter brought new, bloody challenges to Blizzard's ARPG, among them one so difficult that many players couldn't \"reasonably\" complete it. As detailed in Diablo 4's most recent patch notes , an u…",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/articles/diablo-4-season-12-greatest-challenge-is-being-nerfed-significantly/1100-6538955/?ftag=CAD-01-10abi2f",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D014",
+      "source_type": "news",
+      "title": "Dragon's Dogma 2 Fans Are Convinced Capcom Is Teasing An Expansion",
+      "content": "Capcom's 2024 open-world RPG Dragon's Dogma 2 could be set to follow in the footsteps of its predeccesor with a major expansion, with the game's community convinced a recent piece of artwork celebrating the game's secon…",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/articles/dragons-dogma-2-fans-are-convinced-capcom-is-teasing-an-expansion/1100-6538950/?ftag=CAD-01-10abi2f",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D015",
+      "source_type": "news",
+      "title": "Google's Gemini will make its way into Dragon Quest X to power a \"Chatty Slimey\" AI companion, Square Enix has announced",
+      "content": "If you're still recovering from last week's DLSS 5 nightmare and Crimson Desert's gen-AI fiasco , we're sorry to re-open old wounds by telling you that Square Enix has announced it's teaming up with Google to put Gemini…",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/google-gemini-ai-to-power-chatbot-companion-in-dragon-quest-x-square-enix-says",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "technical",
+            "rationale": "manual_review_confirmed"
+          }
+        ]
+      },
+      "ground_truth": {
+        "bucket": "signal",
+        "signal_types": [
+          "technical"
+        ],
+        "is_signal": true,
+        "decision_source": "user_manual_review_round2_confirmed"
+      }
+    },
+    {
+      "sample_id": "B2D016",
+      "source_type": "news",
+      "title": "Grab this early gold bar in Crimson Desert to open a bank account and make some money",
+      "content": "Start earning some coin.",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/games/action/crimson-desert-gold-bar-locations/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D017",
+      "source_type": "news",
+      "title": "I love the pulpy floral palace of Journey of the Garden Rose, a 3D action fairytale with giant insect swordfights",
+      "content": "Get in the videogame, loser, it's time to break into an \"impossible palace\", stab insect gardeners with your saber, and rescue your mother from some bastard prince. Out today, Journey Of The Garden Rose is the latest \"o…",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_name": "Rock Paper Shotgun",
+      "source_url": "https://www.rockpapershotgun.com/i-love-the-pulpy-floral-palace-of-journey-of-the-garden-rose-a-3d-action-fairytale-with-giant-insect-swordfights",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D018",
+      "source_type": "news",
+      "title": "Peter Molyneux's Masters of Albion looks to have everything I love about those Bullfrog and Lionhead classics, but the scepticism is hard to shake",
+      "content": "Few developers can - even after all this time - get you quite so swept up in their enthusiasm as Peter Molyneux. It's an enthusiasm that has, famously, got him into trouble in the past, when passion and promise have fai…",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/masters-of-albion-looks-to-have-everything-i-love-in-those-bullfrog-and-lionhead-classics",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D019",
+      "source_type": "news",
+      "title": "Pokemon Pokopia Players Are Building Incredibly Complex Creations",
+      "content": "Pokemon Pokopia was created to give players the opportunity to build a comfortable home for their Pokemon, but some fans are already pushing the game's ability to craft and create to another level. At least two players …",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/articles/pokemon-pokopia-players-are-building-incredibly-complex-creations/1100-6538948/?ftag=CAD-01-10abi2f",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D020",
+      "source_type": "news",
+      "title": "Resident Evil Requiem devs Capcom say they'll use AI to \"improve efficiency and productivity\", but not to generate game assets",
+      "content": "Resident Evil Requiem makers Capcom have outlined their current stance on using AI in a summarised investor back-and-forth released alongside their latest financial results. The publishers plan on using the tech to try …",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_name": "Rock Paper Shotgun",
+      "source_url": "https://www.rockpapershotgun.com/resident-evil-requiem-devs-capcom-say-theyll-use-ai-to-improve-efficiency-and-productivity-but-not-to-generate-game-assets",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D021",
+      "source_type": "news",
+      "title": "Shadowheart and Lae'zel's Baldur's Gate 3 romance came naturally because their writers realised they 'were writing the same story from different directions'",
+      "content": "Green alien lady, goth cult lady: tom-ay-to, tom-ah-to.",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/games/baldurs-gate/shadowheart-and-laezels-baldurs-gate-3-romance-came-naturally-because-their-writers-realised-they-were-writing-the-same-story-from-different-directions/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D022",
+      "source_type": "news",
+      "title": "Square Enix Is Turning Slimes Into AI Chatbots In Dragon Quest X",
+      "content": "Square Enix and Google have partnered to inject the tech giant's AI, Gemini, to help advise and guide players in the popular Japan-only MMO, Dragon Quest X . Announced at a press event over the weekend, the partnership …",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/articles/square-enix-is-turning-slimes-into-ai-chatbots-in-dragon-quest-x/1100-6538960/?ftag=CAD-01-10abi2f",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D023",
+      "source_type": "news",
+      "title": "Super Mario Galaxy Movie's Big Canon Reveal Seemingly Spoiled by Ratings Board Listing",
+      "content": "A huge plot point from The Super Mario Galaxy Movie — and indeed, all of Nintendo canon — looks to have been spoiled by a ratings board listing.",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_name": "IGN Game News",
+      "source_url": "https://www.ign.com/articles/super-mario-galaxy-movies-big-canon-reveal-seemingly-spoiled-by-ratings-board-listing",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D024",
+      "source_type": "news",
+      "title": "The Rock is Losing This Season's Player-Decided Fortnite Storyline, Despite a Weekend Event Designed to Help Him Catch Up",
+      "content": "The Rock is currently losing Fortnite's new season vote that asks players to pick a side between his in-game character and a wintry villain.",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_name": "IGN Game News",
+      "source_url": "https://www.ign.com/articles/the-rock-is-losing-this-seasons-player-decided-fortnite-storyline-despite-a-weekend-event-designed-to-help-him-catch-up",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D025",
+      "source_type": "news",
+      "title": "There is nothing like Marathon's Cryo Archive map",
+      "content": "It's a raid. It's a heist. It's Marathon.",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/games/fps/there-is-nothing-like-marathons-cryo-archive-map/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D026",
+      "source_type": "news",
+      "title": "This week in PC games: a new Hooded Horse city-builder, some PS2-style horror, a school-day RPG and an absolutely tremendous catfish",
+      "content": "Urgh! What's happening? The air feels dreadfully recycled all of a sudden. Food dissatisfies, music grates, punchlines flop like stunned seagulls - everything seems somehow overfamiliar . We have entered a Lull. There a…",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_name": "Rock Paper Shotgun",
+      "source_url": "https://www.rockpapershotgun.com/this-week-in-pc-games-a-new-hooded-horse-city-builder-some-ps2-style-horror-a-school-day-rpg-and-an-absolutely-tremendous-catfish",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D027",
+      "source_type": "news",
+      "title": "Today's hefty Crimson Desert patch includes \"beginning of improvements\" to keyboard and mouse controls, plus much more",
+      "content": "Pearl Abyss has detailed a rather chunky patch for Crimson Desert, after its launch last week was marred by multiple issues and AI controversies. Read more",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/todays-hefty-crimson-desert-patch-includes-beginning-of-improvements-to-keyboard-and-mouse-controls-plus-much-more",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D028",
+      "source_type": "news",
+      "title": "Union workers send a message to game industry execs: 'Let go of the power now, or be forced to let go of it later.'",
+      "content": "CWA members are staking their claim for a better, fairer video game industry.",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_name": "Game Developer",
+      "source_url": "https://www.gamedeveloper.com/production/union-workers-send-a-message-to-game-industry-execs-let-go-of-the-power-now-or-be-forced-to-let-go-of-it-later-",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "team",
+            "rationale": "manual_review_confirmed"
+          }
+        ]
+      },
+      "ground_truth": {
+        "bucket": "signal",
+        "signal_types": [
+          "team"
+        ],
+        "is_signal": true,
+        "decision_source": "user_manual_review_round2_confirmed"
+      }
+    },
+    {
+      "sample_id": "B2D029",
+      "source_type": "news",
+      "title": "World of Warcraft: Midnight Review",
+      "content": "Enthralling zones and a satisfying endgame loop.",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_name": "IGN Game News",
+      "source_url": "https://www.ign.com/articles/world-of-warcraft-midnight-review",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D030",
+      "source_type": "news",
+      "title": "Your citizens don't stay put in Stellaris-style 4X strategy game Final Vanguard - start a war and \"entire waves of refugees can emerge\"",
+      "content": "Final Vanguard is a real-time sci-fi 4X grand strategy game that puts an unusually big emphasis on migration. We've seen migration mechanics in many 4X games – pops can shuffle about in Stellaris as you slop your coloni…",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_name": "Rock Paper Shotgun",
+      "source_url": "https://www.rockpapershotgun.com/your-citizens-dont-stay-put-in-stellaris-style-4x-strategy-game-final-vanguard-start-a-war-and-entire-waves-of-refugees-can-emerge",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D031",
+      "source_type": "news",
+      "title": "Crimson Desert Sells 3 Million in Just 5 Days",
+      "content": "Crimson Desert has sold an impressive 3 million copies in just five days.",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_name": "IGN Game News",
+      "source_url": "https://www.ign.com/articles/crimson-desert-sells-3-million-in-just-5-days",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D032",
+      "source_type": "news",
+      "title": "Reforged Studios acquires Super Meat Boy 3D co-publisher Headup",
+      "content": "Reforged acquired three studios in 2024 alone.",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_name": "Game Developer",
+      "source_url": "https://www.gamedeveloper.com/business/reforged-studios-acquires-super-meat-boy-3d-dev-headup",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D033",
+      "source_type": "news",
+      "title": "Screen Australia hands out $1.4 million to local developers",
+      "content": "The financing will support 26 projects 'centered on Australian stories and ideas.'",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_name": "Game Developer",
+      "source_url": "https://www.gamedeveloper.com/business/screen-australia-hands-out-1-4-million-to-local-developers",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D034",
+      "source_type": "news",
+      "title": "'We've Sportified Steam Charts' — Warframe Creative Director Rebecca Ford Reveals How Digital Extremes Is Keeping the Live Service Dream Alive",
+      "content": "Warframe interview with creative director Rebecca Ford on Steam charts obsession, upcoming updates, and the Nintendo Switch 2 version.",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_name": "IGN Game News",
+      "source_url": "https://www.ign.com/articles/weve-sportified-steam-charts-warframe-creative-director-rebecca-ford-reveals-how-digital-extremes-is-keeping-the-live-service-dream-alive",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D035",
+      "source_type": "news",
+      "title": "Atomfall players have munched 16.8m Cornish pasties in the last 12 months, eye-opening stats reveal as survival hit turns one",
+      "content": "Can you believe that Atomfall - Rebellion's pseudo-apocalyptic survival game, set in the rather splendid ol' chap that is 1950s rural England - is on the brink of its first birthday? It really doesn't seem that long ago…",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/atomfall-players-have-munched-168m-cornish-pasties-in-the-last-12-months",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D036",
+      "source_type": "news",
+      "title": "Crimson Desert sells another 1m, as Pearl Abyss pledges more fixes to address launch day struggles",
+      "content": "Crimson Desert has sold another 1m copies since Friday. This afternoon, Pearl Abyss announced its single player RPG spin-off from hit Korean MMO Black Desert had now surpassed 3m copies sold worldwide. Read more",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/crimson-desert-sells-another-1m-as-pearl-abyss-pledges-more-fixes",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D037",
+      "source_type": "news",
+      "title": "Pokémon Champions Launches Next Month With Paid Upgrade Pack to 'Support Early Progression'",
+      "content": "The Pokémon Company has announced a Nintendo Switch and Switch 2 release date for its upcoming free-to-play battler Pokémon Champions, alongside a paid starter pack which provides \"useful in-game items.\"",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_name": "IGN Game News",
+      "source_url": "https://www.ign.com/articles/pokemon-champions-launches-next-month-with-paid-upgrade-pack-to-support-early-progression",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D038",
+      "source_type": "news",
+      "title": "The Newest Payday Game Is Unexpected, And I Hope It's Better Than Payday 3",
+      "content": "A new Payday has been announced for virtual reality platforms. As the first new game in the series since the disappointing launch of Payday 3 , Payday: Aces High will certainly face a high level of scrutiny at launch. P…",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/articles/the-newest-payday-game-is-unexpected-and-i-hope-its-better-than-payday-3/1100-6538956/?ftag=CAD-01-10abi2f",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D039",
+      "source_type": "news",
+      "title": "Call of Duty veteran's new studio, which was just announced in 2025, is being closed by Sony",
+      "content": "A month after Sony closed Bluepoint Games, it looks like Jason Blundell's Dark Outlaw games, which was unveiled in March 2025, has met the same fate.",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/gaming-industry/call-of-duty-veterans-new-studio-which-was-just-announced-in-2025-is-reportedly-being-closed-by-sony/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D040",
+      "source_type": "news",
+      "title": "Even after ZA/UM's messy breakup, the writing team still has a cadre of sad communists—but you won't have to play Zero Parades as one if you don't want to",
+      "content": "But I will, though. Just so you know.",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/games/rpg/even-after-za-ums-messy-breakup-the-writing-team-still-has-a-cadre-of-sad-communists-but-you-wont-have-to-play-zero-parades-as-one-if-you-dont-want-to/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D041",
+      "source_type": "news",
+      "title": "New Xbox CEO \"Willing To Question Everything,\" Xbox Exec Says",
+      "content": "Microsoft Gaming's new CEO, Asha Sharma, is \"willing to question everything,\" according to Xbox vice president Jason Ronald. He told The Information that Sharma's ambition as the new CEO is to \"retain what makes Xbox gr…",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/articles/new-xbox-ceo-willing-to-question-everything-xbox-exec-says/1100-6538979/?ftag=CAD-01-10abi2f",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D042",
+      "source_type": "news",
+      "title": "Sony Shuts Down Former CoD Dev's Studio Amid Wider Cuts",
+      "content": "Dark Outlaw Games, the studio founded by former Call of Duty developer Jason Blundell, is shutting down amid bigger cuts to PlayStation overall, according to a report from Jason Schreier. Blundell's previous studio, Dev…",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/articles/sony-shuts-down-former-cod-devs-studio-amid-wider-cuts/1100-6538989/?ftag=CAD-01-10abi2f",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D043",
+      "source_type": "news",
+      "title": "13 Years of Warframe: The Shadowgrapher Update, Nintendo Switch 2 Version, and Plenty More to Come",
+      "content": "Warframe creative director Rebecca Ford explains the enduring appeal of the free-to-play action-RPG as it turns 13.",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_name": "IGN Game News",
+      "source_url": "https://www.ign.com/articles/13-years-of-warframe-the-shadowgrapher-update-nintendo-switch-2-version-and-plenty-more-to-come",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D044",
+      "source_type": "news",
+      "title": "As seminal oddball indie Superbrothers: Sword & Sworcery EP hits 15 years of age, you can pick it up for less than a coffee",
+      "content": "Let's travel back in time, roughly to the late 2000s and early 2010s. It was a time where indie games were becoming more of a defined Separate Thing from blockbuster games. It certainly wasn't the birth of indie games, …",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_name": "Rock Paper Shotgun",
+      "source_url": "https://www.rockpapershotgun.com/as-seminal-oddball-indie-superbrothers-sword-sworcery-ep-hits-15-years-of-age-you-can-pick-it-up-for-less-than-a-coffee",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D045",
+      "source_type": "news",
+      "title": "Fortnite developer Epic Games is cutting over 1,000 jobs",
+      "content": "Epic boss Tim Sweeney shared the news with employees while acknowledging Fortnite remains 'one of the most successful games in the world.'",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_name": "Game Developer",
+      "source_url": "https://www.gamedeveloper.com/business/fortnite-developer-epic-games-is-cutting-1-000-jobs",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D046",
+      "source_type": "news",
+      "title": "Marvel Rivals Devs Won't Introduce Original Characters Anytime Soon, Because There Are Simply Too Many Marvel Characters Already",
+      "content": "NetEase Games isn't worried about balance in Marvel Rivals as its roster expands with more playable heroes, but don't expect to see any original characters anytime soon.",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_name": "IGN Game News",
+      "source_url": "https://www.ign.com/articles/marvel-rivals-devs-wont-introduce-original-characters-anytime-soon-because-there-are-simply-too-many-marvel-characters-already",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D047",
+      "source_type": "news",
+      "title": "New Devil May Cry Season 2 Trailer Wastes No Time Giving Fans What They Want",
+      "content": "The second season of Netflix's animated Devil May Cry series is almost here, and ahead of its May 12 launch, a new trailer for the series has gone live. Building off of last season's cliffhanger, the teaser wastes no ti…",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/articles/new-devil-may-cry-season-2-trailer-wastes-no-time-giving-fans-what-they-want/1100-6538986/?ftag=CAD-01-10abi2f",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D048",
+      "source_type": "news",
+      "title": "Payday: Aces High Is a New 4-Player Co-op VR Game Coming to Steam and Meta Where You Can 'Pull Off Daring Jobs in VR Using Black-Market Tech'",
+      "content": "Payday Announces VR Game",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_name": "IGN Game News",
+      "source_url": "https://www.ign.com/articles/payday-aces-high-is-a-new-4-player-co-op-vr-game-coming-to-steam-and-meta-where-you-can-pull-off-daring-jobs-in-vr-using-black-market-tech",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D049",
+      "source_type": "news",
+      "title": "Popular Skyrim mod returns after 9 years with a major update and a full source code release to keep it relevant 'for many years to come'",
+      "content": "SkyUI 6 incorporates several of the mods people have been using in the interim.",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/games/rpg/popular-skyrim-mod-returns-after-9-years-with-a-major-update-and-a-full-source-code-release-to-keep-it-relevant-for-many-years-to-come/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D050",
+      "source_type": "news",
+      "title": "Switch 2 demand appears to be flagging as Nintendo reportedly lowers production",
+      "content": "Year-one for Nintendo's Switch 2 began brightly , with early, record-breaking sales success. But a new report has suggested demand for Nintendo's newest console is flagging, especially in the US. Read more",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/switch-2-flagging-nintendo-lowers-production",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "market",
+            "rationale": "manual_review_confirmed"
+          }
+        ]
+      },
+      "ground_truth": {
+        "bucket": "signal",
+        "signal_types": [
+          "market"
+        ],
+        "is_signal": true,
+        "decision_source": "user_manual_review_round2_confirmed"
+      }
+    },
+    {
+      "sample_id": "B2D051",
+      "source_type": "news",
+      "title": "The Best Pokemon Pokopia Builds We've Seen (So Far)",
+      "content": "It's been less than a month since Pokopia hit shelves, yet that seems to be all the time the charming Pokemon spin-off needed to take the world--and my Instagram feed--by storm. Whenever I'm not playing Pokopia, I find …",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/articles/the-best-pokemon-pokopia-builds/1100-6538965/?ftag=CAD-01-10abi2f",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D052",
+      "source_type": "news",
+      "title": "The Super Mario Galaxy Movie's Rating May Have Confirmed A Decades-Old Fan Theory",
+      "content": "The Super Mario Galaxy Movie has been rated PG in the UK, which doesn't seem like a particularly big deal… until you look at the reasons behind the rating. The British Board of Film Classification (BBFC) gave the film a…",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/articles/the-super-mario-galaxy-movies-rating-may-have-confirmed-a-decades-old-fan-theory/1100-6538981/?ftag=CAD-01-10abi2f",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D053",
+      "source_type": "news",
+      "title": "Tycoon god game Sintopia is Black & White above, Dungeon Keeper below, and it's releasing in April",
+      "content": "Sintopia , the very Bullfroggy strategy management game from developers Piraknights and publishers Team 17, will release on April 16th. I compared this one to The Screwtape Letters back at announcement, but the more obv…",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_name": "Rock Paper Shotgun",
+      "source_url": "https://www.rockpapershotgun.com/tycoon-god-game-sintopia-is-black-white-above-dungeon-keeper-below-and-its-releasing-in-april",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D054",
+      "source_type": "news",
+      "title": "Zero Parades Makes Failing Fun",
+      "content": "Lucy recently spent some extended time with Zero Parades: For Dead Spies, the upcoming spy CRPG from ZA/UM, creators of Disco Elysium. In the game, failure is a mechanic, and a pretty fun one at that.",
+      "published_at": "2026-03-24T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/videos/zero-parades-makes-failing-fun/2300-6466787/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D055",
+      "source_type": "news",
+      "title": "How multiplayer works in Slay the Spire 2",
+      "content": "No, you don't have to share. Yes, you can all be Ironclad.",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/games/roguelike/slay-the-spire-2-multiplayer-co-op/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D056",
+      "source_type": "news",
+      "title": "Meta And YouTube Lose Social-Media Addiction Lawsuit",
+      "content": "California jurors have found YouTube and Meta--the latter of which owns social apps like Instagram and Threads--liable in a civil court for getting a young adult woman addicted to social media and impairing her mental h…",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/articles/meta-and-youtube-lose-social-media-addiction-lawsuit/1100-6539014/?ftag=CAD-01-10abi2f",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D057",
+      "source_type": "news",
+      "title": "Pokémon Champions is releasing on Nintendo Switch consoles in early April, but its \"free-to-start\" package raises some questions about its pricing model",
+      "content": "2026 has just started, but Pokémon's 30th anniversary has already given us a winner in Pokémon Pokopia , the announcement of Winds & Waves , and even more reveals . But we're not done yet: yesterday, The Pokémon Company…",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/pokemon-champions-sets-release-date-and-details-free-to-play-model",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "market",
+            "rationale": "manual_review_confirmed"
+          }
+        ]
+      },
+      "ground_truth": {
+        "bucket": "signal",
+        "signal_types": [
+          "market"
+        ],
+        "is_signal": true,
+        "decision_source": "user_manual_review_round2_confirmed"
+      }
+    },
+    {
+      "sample_id": "B2D058",
+      "source_type": "news",
+      "title": "The Ghost In The Shell Legacy Edition Manga Set Is Steeply Discounted Right Now",
+      "content": "The Ghost in the Shell Legacy Edition Manga Box Set $107 (was $140) See at Amazon Ghost in the Shell is one of the most important franchises in manga and anime. The series began as a manga created by Masamune Shirow, wh…",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/articles/the-ghost-in-the-shell-legacy-edition-manga-set-is-steeply-discounted-right-now/1100-6539020/?ftag=CAD-01-10abi2f",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D059",
+      "source_type": "news",
+      "title": "EverQuest Legends Boasts 'All The Magic And Nostalgia of Classic EverQuest' With a Modern Twist",
+      "content": "A \"fan-driven collaboration designed to give players a new way\" to play EverQuest is on the way: EverQuest Legends.",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_name": "IGN Game News",
+      "source_url": "https://www.ign.com/articles/everquest-legends-boasts-all-the-magic-and-nostalgia-of-classic-everquest-with-a-modern-twist",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D060",
+      "source_type": "news",
+      "title": "Marathon may have sold roughly 1.2m copies worldwide, with the majority on Steam rather than PlayStation, according to analyst estimates",
+      "content": "Marathon may have surpassed 1.2m sales worldwide according to analyst estimations. Of that number, the majority appear to be present on PC, rather than PlayStation. Read more",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/marathon-may-have-sold-roughly-12m-copies-worldwide-with-the-majority-on-steam-rather-than-playstation-according-to-analyst-estimates",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D061",
+      "source_type": "news",
+      "title": "Pokémon Pokopia's second limited-time event adds Sableye in late April, but you can already cheat your way into it",
+      "content": "Pokémon Pokopia continues to be one of the most talked-about games of early 2026, and with the ' More Spores for Hoppip ' event adding three new creatures to Game Freak and Omega Force's life sim title right after launc…",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/pokemon-pokopia-second-limited-time-event-adds-sableye",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D062",
+      "source_type": "news",
+      "title": "The Best Deals On Razer Gaming Accessories In Amazon's Spring Sale",
+      "content": "Just about everything related to PC and console gaming seems to be increasing in price lately, but fortunately, these Amazon Spring Sale deals on Razer products are a welcome exception to that rule. Razer has establishe…",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/articles/amazon-spring-sale-razer-deals/1100-6538993/?ftag=CAD-01-10abi2f",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D063",
+      "source_type": "news",
+      "title": "Fortnite developers say there will be a huge impact on development \"for the rest of the year and likely beyond\" following mass layoffs",
+      "content": "Fortnite is one of the biggest games in the world, so it isn't overly surprising to see Epic Games make adjustments to how the title is run as the game nears its tenth birthday. Maintaining a massive multiplatform opera…",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/fortnite-producer-comments-on-mass-layoffs-march-2026",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D064",
+      "source_type": "news",
+      "title": "Hideo Kojima's Focus For Death Stranding 2 Was Ensuring Fans Enjoyed It 'All the Way to the End'",
+      "content": "Hideo Kojima stressed to his team that he wanted to ensure that players jumping into Death Stranding 2: On the Beach would have a great time \"all the way to the end.\"",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_name": "IGN Game News",
+      "source_url": "https://www.ign.com/articles/hideo-kojimas-focus-for-death-stranding-2-was-ensuring-fans-enjoyed-it-all-the-way-to-the-end",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D065",
+      "source_type": "news",
+      "title": "Peter Molyneux's Fable and Black & White mash-up Masters of Albion is getting a closed beta, but you'll have to be quick if you want to get involved",
+      "content": "Peter Molyneux's latest - and supposedly final - game, Masters of Albion, is poised to enter Steam early access on 22nd April. First, though, developer 22Cans has announced a closed beta test - but you'll need to be qui…",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/peter-molyneuxs-fable-and-black-white-mash-up-masters-of-albion-is-getting-a-closed-beta",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D066",
+      "source_type": "news",
+      "title": "Sony shutters internal studio Dark Outlaw Games",
+      "content": "The PlayStation studio was established by Call of Duty veteran Jason Blundell in 2024.",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_name": "Game Developer",
+      "source_url": "https://www.gamedeveloper.com/business/playstation-shutters-internal-studio-dark-outlaw-games",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D067",
+      "source_type": "news",
+      "title": "37 Things You Didn't Know In Crimson Desert",
+      "content": "We cover 37 simple and complex tips, tricks, and facts in Crimson Desert that aren’t quite as well known. The recently released Crimson Desert has a massive world with endless possibilities, and we're only starting to s…",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/videos/37-things-you-didnt-know-in-crimson-desert/2300-6466788/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D068",
+      "source_type": "news",
+      "title": "Amazon’s Has a Bunch of New Magic: The Gathering Deals as Part of Its Spring Sale",
+      "content": "From Commander decks to booster boxes, here are the best deals in Magic during Amazon's sales event.",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_name": "IGN Game News",
+      "source_url": "https://www.ign.com/articles/amazons-has-a-bunch-of-new-magic-the-gathering-deals-as-part-of-its-spring-sale",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D069",
+      "source_type": "news",
+      "title": "Bungie is shifting Marathon's endgame content around, so you won't have to pick between ranked or Cryo Archive this weekend",
+      "content": "If you found your schedule didn't quite fit with Marathon over the weekend, forcing you to choose between the Cryo Archive map and ranked queue , you may be a big fan of the latest change coming in from the developers a…",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/bungie-is-shifting-marathons-endgame-content-around-so-you-wont-have-to-pick-between-ranked-or-cryo-archive-this-weekend",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D070",
+      "source_type": "news",
+      "title": "Coexist with a capricious, rusty moon in Amberspire, the new isometric city-builder from the creator of The Banished Vault",
+      "content": "I am shocked to discover that this is the first time we've written about Amberspire , the new sci-fi city builder from Nic Tringali, developer of starfaring monastic strategy game The Banished Vault . Shocked, I tell yo…",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_name": "Rock Paper Shotgun",
+      "source_url": "https://www.rockpapershotgun.com/coexist-with-a-capricious-rusty-moon-in-amberspire-the-new-isometric-city-builder-from-the-creator-of-the-banished-vault",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D071",
+      "source_type": "news",
+      "title": "Crimson Desert is great because it's a total mess, not in spite of it, and I hope Pearl Abyss doesn't change too much",
+      "content": "Let's get weird.",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/games/rpg/crimson-desert-is-great-because-its-a-total-mess-not-in-spite-of-it-and-i-hope-pearl-abyss-doesnt-change-too-much/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D072",
+      "source_type": "news",
+      "title": "Get $100 Worth Of Robux For $80 Right Now",
+      "content": "Roblox is one of the most popular games on the planet, and if you're looking to stock up on the game's in-game currency, Robux, Amazon's Big Spring Sale has a nice offer to consider. As part of the sale, Amazon is offer…",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/articles/get-100-worth-of-robux-for-80-right-now/1100-6539019/?ftag=CAD-01-10abi2f",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D073",
+      "source_type": "news",
+      "title": "How to get the Frostcursed Armor in Crimson Desert",
+      "content": "Dress up like a lich king by collecting this fancy plate across Demeniss.",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/games/action/crimson-desert-frostcursed-armor-location/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D074",
+      "source_type": "news",
+      "title": "I was the untitled goose in Big Walk, the balmy new open world co-op puzzler from House House",
+      "content": "House House were kind enough to keep a video of my hands-on session with Big Walk , filmed by one of the participating PRs. Generally, a full video of a preview event including player audio is a lifesaver for a journali…",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_name": "Rock Paper Shotgun",
+      "source_url": "https://www.rockpapershotgun.com/i-was-the-untitled-goose-in-big-walk-the-balmy-new-open-world-co-op-puzzler-from-house-house",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D075",
+      "source_type": "news",
+      "title": "Marathon is rescheduling its frustrating endgame, but you're still against the clock: 'No schedule is perfect, but we're here to listen and learn'",
+      "content": "More mid-week crashouts are on the menu.",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/games/fps/marathon-is-rescheduling-its-frustrating-endgame-but-youre-still-against-the-clock-no-schedule-is-perfect-but-were-here-to-listen-and-learn/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D076",
+      "source_type": "news",
+      "title": "Mega Man Star Force Legacy Collection Review",
+      "content": "The best way to play as the most underrated version of the Blue Bomber.",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_name": "IGN Game News",
+      "source_url": "https://www.ign.com/articles/mega-man-star-force-legacy-collection-review",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D077",
+      "source_type": "news",
+      "title": "Nintendo Clarifies 'The Cost of Physical Games Is Not Going Up' Following Decision to Charge Different Prices for U.S. Physical and Digital Switch 2 Games",
+      "content": "Nintendo has announced that it will now charge different amounts for digital and physical copies of the same Switch 2 games, beginning with next month's launch of Yoshi and the Mysterious Book.",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_name": "IGN Game News",
+      "source_url": "https://www.ign.com/articles/nintendo-switch-2-physical-games-will-now-be-more-expensive-than-digital-versions-with-10-price-difference-for-yoshi-and-the-mysterious-book",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D078",
+      "source_type": "news",
+      "title": "Save On Xbox Controller Deals During Amazon's Spring Sale",
+      "content": "The current Xbox wireless controller is one of the best gaming peripherals, and with the Amazon Spring Sale , you can save on this device. Normally $65 for the Carbon Black version, it's now $45, and several other color…",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/articles/amazon-spring-sale-xbox-controller-deals/1100-6538995/?ftag=CAD-01-10abi2f",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D079",
+      "source_type": "news",
+      "title": "Stardew Valley farmer takes advice from AI, ends up brewing 136 useless bottles of rice juice",
+      "content": "\"Don't listen to Google and mill your rice for vinegar.\"",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/games/life-sim/stardew-valley-farmer-takes-advice-from-ai-ends-up-brewing-136-useless-bottles-of-rice-juice/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D080",
+      "source_type": "news",
+      "title": "The companions in Owlcat's new Mass Effect-inspired RPG stand ready to have heart-to-heart chats, drag you into their sidequests, and blow a lot of stuff up",
+      "content": "Meet the party of The Expanse: Osiris Reborn in our exclusive reveal.",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/games/rpg/the-companions-in-owlcats-new-mass-effect-inspired-rpg-stand-ready-to-have-heart-to-heart-chats-drag-you-into-their-sidequests-and-blow-a-lot-of-stuff-up/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D081",
+      "source_type": "news",
+      "title": "This Mario-Themed Switch Controller Is Only $30 Right Now",
+      "content": "Amazon's Big Spring Sale is underway, and there are numerous offers available on all manner of products. One nice deal you can grab right now is for PowerA's Mario-themed Switch controllers. Get on Amazon The PowerA wir…",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/articles/this-mario-themed-switch-controller-is-only-30-right-now/1100-6539013/?ftag=CAD-01-10abi2f",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D082",
+      "source_type": "news",
+      "title": "Tomodachi Life: Living the Dream's \"Welcome Version\" demo is available now, and you can transfer your saves to the full game",
+      "content": "Don't get too comfortable in Pokémon Pokopia , Nintendo fans. Tomodachi Life: Living the Dream is around the corner with a different flavour of life sim fun and nostalgic vibes. In fact, you can now download its demo. R…",
+      "published_at": "2026-03-25T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/tomodachi-life-living-the-dream-demo-released-save-data-transfer-to-full-game-confirmed",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D083",
+      "source_type": "news",
+      "title": "Netflix Is Getting More Expensive, And That Impacts Games, Too",
+      "content": "Netflix has raised the prices of all three of its subscription tiers again. Whether you use the service to watch TV and movies or play video games, this will impact you. Variety spotted that Netflix had modified its sub…",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/articles/netflix-is-getting-more-expensive-and-that-impacts-games-too/1100-6539050/?ftag=CAD-01-10abi2f",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D084",
+      "source_type": "news",
+      "title": "STALKER 2: Cost of Hope is a \"massive nonlinear expansion\" that includes the Chornobyl power plant visit the base game never made time for",
+      "content": "STALKER 2: Heart of Chornobyl is getting its first proper expansion this year, titled Cost of Hope, and it looks stuffed to its icky mutant gills with classic STALKER series beats that the base game – while a powerfully…",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_name": "Rock Paper Shotgun",
+      "source_url": "https://www.rockpapershotgun.com/stalker-2-cost-of-hope-expansion-announced",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D085",
+      "source_type": "news",
+      "title": "Bluey's Happy Snaps Trailer Reveals Fall 2026 Launch",
+      "content": "Bluey’s Happy Snaps will soon let gaming fans see a classic cartoon from a new perspective when it launches fall 2026.",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_name": "IGN Game News",
+      "source_url": "https://www.ign.com/articles/blueys-happy-snaps-trailer-reveals-fall-2026-launch",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D086",
+      "source_type": "news",
+      "title": "Here's This Week's Free Game From The Epic Games Store On Mobile",
+      "content": "For the last couple of years, the Epic Games Store has given away free games every week through its PC storefront. With the company having launched its own mobile store, it has also started a second free games program o…",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/articles/free-games-epic-games-store-mobile/1100-6530257/?ftag=CAD-01-10abi2f",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D087",
+      "source_type": "news",
+      "title": "Island city-builder Nova Roma releases today, and I'd have drowned all my Romans already if it weren't for those pesky gods",
+      "content": "I have two dreams as mayor of an island town in Nova Roma , the new early access city-building game from Lion Shield and Hooded Horse. One is to erect a fantastic water network for my people - a sturdy yet poetic lattic…",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_name": "Rock Paper Shotgun",
+      "source_url": "https://www.rockpapershotgun.com/island-city-builder-nova-roma-releases-today-and-id-have-drowned-all-my-romans-already-if-it-werent-for-those-pesky-gods",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D088",
+      "source_type": "news",
+      "title": "Save On Select Magic: The Gathering Lorwyn Eclipse Releases This Week",
+      "content": "If you're looking to fill out your backlog of Magic: The Gathering sets, you'll want to check out these limited-time deals on Lorwyn Eclipsed Commander decks and booster boxes at Amazon . The Lorwyn Eclipsed set launche…",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/articles/save-on-select-magic-the-gathering-lorwyn-eclipse-releases-this-week/1100-6539054/?ftag=CAD-01-10abi2f",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D089",
+      "source_type": "news",
+      "title": "The Legend of Zelda: Tears of the Kingdom Scores a Rare $20 Discount in Spring Sales",
+      "content": "## 我的判断 > （移到 05-Insights 前在这里写下你的想法，并添加 signal_type frontmatter） --- auto-collected 2026-03-27 08:00",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_name": "IGN Game News",
+      "source_url": "https://www.ign.com/articles/the-legend-of-zelda-tears-of-the-kingdom-scores-a-rare-20-discount-in-spring-sales",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D090",
+      "source_type": "news",
+      "title": "There are two different Jesus sims launching within a week of each other",
+      "content": "Just in time for Easter.",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/games/sim/there-are-two-different-jesus-sims-launching-within-a-week-of-each-other/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D091",
+      "source_type": "news",
+      "title": "Vaunted Is A Tactical RPG Where You Can’t Trust Your Own Team",
+      "content": "Today's Xbox Partner Preview was focused purely on third-party studios, and one of the brand-new games in the spotlight was Vaunted from Lost Lake Games. A tactical-RPG that challenges players to seize the ultimate scor…",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/articles/vaunted-is-a-tactical-rpg-where-you-cant-trust-your-own-team/1100-6539006/?ftag=CAD-01-10abi2f",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D092",
+      "source_type": "news",
+      "title": "Yakuza studio's new RPG, Stranger than Heaven, will span five distinct time periods and five Japanese cities",
+      "content": "At this evening's Xbox Partner Preview, we got a fresh look at Ryu Ga Gotoku's Stranger Than Heaven, as well as news that a dedicated broadcast will air this May. Read more",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/yakuza-studios-new-rpg-stranger-than-heaven-will-span-five-distinct-time-periods-and-five-japanese-cities",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D093",
+      "source_type": "news",
+      "title": "\"At this rate, why make game art at all?\": Nvidia DLSS 5 demands a sale damaging and stock tanking fightback, argues New Blood boss",
+      "content": "Players and developers should boycott Nvidia's AI-stuffed DLSS 5 tech , with hopes that it'll force the compny to \"think about going back to giving us what we want\". That's the appeal being made by Dave Oshry, CEO of in…",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_name": "Rock Paper Shotgun",
+      "source_url": "https://www.rockpapershotgun.com/at-this-rate-why-make-game-art-at-all-nvidia-dlss-5-demands-a-sale-damaging-and-stock-tanking-fightback-argues-new-blood-boss",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "technical",
+            "rationale": "manual_review_confirmed"
+          }
+        ]
+      },
+      "ground_truth": {
+        "bucket": "signal",
+        "signal_types": [
+          "technical"
+        ],
+        "is_signal": true,
+        "decision_source": "user_manual_review_round2_confirmed"
+      }
+    },
+    {
+      "sample_id": "B2D094",
+      "source_type": "news",
+      "title": "\"Everything in the final version will definitely 100% be human made\" - But Owlcat says gen-AI is being used during The Expanse: Osiris Reborn development",
+      "content": "The Expanse: Osiris Reborn developer Owlcat - known for making Pathfinder: Kingmaker, Pathfinder: Wrath of the Righteous, and Warhammer 40K: Rogue Trader - has confirmed it is using generative AI during the sci-fi game'…",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/owlcat-gen-ai-expanse-osiris-reborn",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D095",
+      "source_type": "news",
+      "title": "For better or worse, Max and Chloe are together again in Life is Strange: Reunion, which is out right now",
+      "content": "A new Life is Strange game doesn't always feel particularly odd given its sort of steady turn into a franchise. The last one was only in 2024 with Life Is Strange: Double Exposure, bringing back the original game's Max …",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_name": "Rock Paper Shotgun",
+      "source_url": "https://www.rockpapershotgun.com/for-better-or-worse-max-and-chloe-are-together-again-in-life-is-strange-reunion-which-is-out-right-now",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D096",
+      "source_type": "news",
+      "title": "Forza Horizon 6 system requirements confirm it’s no RAM guzzler - and it’ll run on Steam Deck too",
+      "content": "Perhaps sensing competition in the field of Japan-flavoured arcade racing games , Forza Horizon 6 devs Playground Games have revealed the open-world vroomer’s system requirements. Agreeably, they’re a sensible balance o…",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_name": "Rock Paper Shotgun",
+      "source_url": "https://www.rockpapershotgun.com/forza-horizon-6-system-requirements-confirm-its-no-ram-guzzler-and-itll-run-on-steam-deck-too",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D097",
+      "source_type": "news",
+      "title": "How to increase your Cryo Archive Security Clearance Level in Marathon",
+      "content": "Access more of the ship, and even crack open the vaults.",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/games/fps/marathon-security-clearance-level-cryo-archive/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D098",
+      "source_type": "news",
+      "title": "Hunter: The Reckoning - Deathwish kicks off the Xbox Partner Showcase, coming Summer 2027",
+      "content": "From Teyon, the same developers behind Robocop: Rogue City, this new action RPG is set within the same World of Darkness setting as Vampire the Masquerade, and according to a new Xbox Wire blog post, pulls from Baldur’s…",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/hunter-the-reckoning-deathwish-xbox-partner-showcase-summer-2027",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D099",
+      "source_type": "news",
+      "title": "If Pragmata's fake New York looks AI-generated to you, good, it's meant to, but the tech itself hasn't touched the game",
+      "content": "The appearance of AI in art is nothing new, hell, Mr. Movies himself Steven Spielberg literally made A.I. Artificial Intelligence near the start of the millenia. But that was the Cool AI, where robots could be people, t…",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_name": "Rock Paper Shotgun",
+      "source_url": "https://www.rockpapershotgun.com/if-pragmatas-fake-new-york-looks-ai-generated-to-you-good-its-meant-to-but-the-tech-itself-hasnt-touched-the-game",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D100",
+      "source_type": "news",
+      "title": "Neuralink patient raiding in World of Warcraft after only 100 days of having the implant installed calls it 'pure magic… exploring Azeroth hands-free at full speed'",
+      "content": "\"No mouse, no keyboard, just intention.\"",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/games/world-of-warcraft/neuralink-patient-raiding-in-world-of-warcraft-after-only-100-days-of-having-the-implant-installed-calls-it-pure-magic-exploring-azeroth-hands-free-at-full-speed/",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "technical",
+            "rationale": "manual_review_confirmed"
+          }
+        ]
+      },
+      "ground_truth": {
+        "bucket": "signal",
+        "signal_types": [
+          "technical"
+        ],
+        "is_signal": true,
+        "decision_source": "user_manual_review_round2_confirmed"
+      }
+    },
+    {
+      "sample_id": "B2D101",
+      "source_type": "news",
+      "title": "PlayStation Store's rumoured \"dynamic pricing\" has reportedly been spotted in the wild, and the differences appear to be huge",
+      "content": "Something's happening behind the PlayStation Store's front. Earlier this month, we learned that Sony appears to be testing \"dynamic pricing\" for users in some territories . This could affect both first-party and third-p…",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/playstation-store-dynamic-pricing-reportedly-spotted-march-2026",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "market",
+            "rationale": "manual_review_confirmed"
+          }
+        ]
+      },
+      "ground_truth": {
+        "bucket": "signal",
+        "signal_types": [
+          "market"
+        ],
+        "is_signal": true,
+        "decision_source": "user_manual_review_round2_confirmed"
+      }
+    },
+    {
+      "sample_id": "B2D102",
+      "source_type": "news",
+      "title": "The Expanse: Osiris Reborn Gets a Debut Gameplay Trailer With Big Mass Effect Vibes, a Closed Beta, and a Spring 2027 Release Window",
+      "content": "The Expanse: Osiris Reborn is making a big splash with a slew of announcements, all revolving around its first gameplay trailer.",
+      "published_at": "2026-03-26T00:00:00Z",
+      "source_name": "IGN Game News",
+      "source_url": "https://www.ign.com/articles/the-expanse-osiris-reborn-gets-a-debut-gameplay-trailer-with-big-mass-effect-vibes-a-closed-beta-and-a-spring-2027-release-window",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "market",
+            "rationale": "manual_review_confirmed"
+          }
+        ]
+      },
+      "ground_truth": {
+        "bucket": "signal",
+        "signal_types": [
+          "market"
+        ],
+        "is_signal": true,
+        "decision_source": "user_manual_review_round2_confirmed"
+      }
+    },
+    {
+      "sample_id": "B2D103",
+      "source_type": "news",
+      "title": "Slay the Spire 2 Dev Adjusts Update That Led To Review Bombing",
+      "content": "Earlier this month, Mega Crit shared the first major update for Slay the Spire 2 , which included nerfs and buffs that angered some players enough to review bomb the game . Now, Mega Crit is rolling back some of those c…",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/articles/slay-the-spire-2-dev-adjusts-update-that-led-to-review-bombing/1100-6539079/?ftag=CAD-01-10abi2f",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D104",
+      "source_type": "news",
+      "title": "New Resident Evil Requiem patch adds highly-anticipated photo mode feature",
+      "content": "As promised, the powers that be at Capcom have released an update for Resident Evil Requiem, which along with other fixes and such also adds the much-requested photo mode, so you can really capture all those nasties in …",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/new-resident-evil-requiem-patch-adds-highly-anticipated-photo-mode-feature",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D105",
+      "source_type": "news",
+      "title": "PUBG: Blindspot is going offline forever after just two months in early access, despite Krafton's record Battlegrounds revenues",
+      "content": "Free-to-play tactical shooter PUBG: Blindspot is being shut down by developers Arc Team and publishers Krafton a whole couple of months into its early access career. Launched on February 5th, it will cease service on Ma…",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_name": "Rock Paper Shotgun",
+      "source_url": "https://www.rockpapershotgun.com/pubg-blindspot-is-going-offline-forever-after-just-two-months-in-early-access-despite-kraftons-record-battlegrounds-revenues",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D106",
+      "source_type": "news",
+      "title": "Slay the Spire 2's 'anti-infinite' balance patch has now itself been patched, much to the relief of some Silent and Necrobinder players",
+      "content": "Slay the Spire 2 developers Mega Crit have rolled back aspects of last week's big STS2 balancing update , which nerfed a number of cards according to the broad objective of making infinites – that is, cunning combos tha…",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_name": "Rock Paper Shotgun",
+      "source_url": "https://www.rockpapershotgun.com/slay-the-spire-2s-anti-infinite-balance-patch-has-now-itself-been-patched-much-to-the-relief-of-some-silent-and-necrobinder-players",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D107",
+      "source_type": "news",
+      "title": "Boy, There Sure Was A Lot Of Bad News This Week, Right?",
+      "content": "The final full week of March is coming to a close, and it has been a rollercoaster of emotions if you've been following the recent gaming news. Between showcases and turmoil in the industry, you never know what you're i…",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/articles/boy-there-sure-was-a-lot-of-bad-news-this-week-right/1100-6539070/?ftag=CAD-01-10abi2f",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D108",
+      "source_type": "news",
+      "title": "The New PUBG Game Is Closing After Less Than 2 Months",
+      "content": "Near the beginning of February, Krafton gave an early-access release to PUBG: Blindspot , a spin-off from PlayerUnknown's Battlegrounds . However, Blindspot won't make it to its two-month anniversary as the game is sche…",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/articles/the-new-pubg-game-is-closing-after-less-than-2-months/1100-6539078/?ftag=CAD-01-10abi2f",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D109",
+      "source_type": "news",
+      "title": "'I Don't Really Want to Do That Again' - Baldur's Gate 3's Astarion Doesn't Want to Keep Rehashing the Same Type of Roles",
+      "content": "Neil Newbon's performance as Astarion in Baldur's Gate 3 is among the most memorable in the game, and that's saying a lot given how many amazing actors are in there cooking. Newbon's clearly proud of the good work he di…",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_name": "IGN Game News",
+      "source_url": "https://www.ign.com/articles/i-dont-really-want-to-do-that-again-baldurs-gate-3s-astarion-doesnt-want-to-keep-rehashing-the-same-type-of-roles",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D110",
+      "source_type": "news",
+      "title": "D&D Beyond's slick new online character creator lets you make a hero in seconds",
+      "content": "The updated 'Quickbuilder' is a brilliantly fast way of getting a newbie on board.",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/games/d-and-d-beyonds-slick-new-online-character-creator-lets-you-make-a-hero-in-seconds/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D111",
+      "source_type": "news",
+      "title": "In spreading itself across five cities, Stranger than Heaven might not lean as heavily on one of Like A Dragon's key strengths as I expected",
+      "content": "As hinted at by previous peeks at it, which were set in 1915 and 1943 , Like A Dragon devs RGG Studio are jumping around in time with their upcoming historical brawler Stranger than Heaven. They've confirmed via a fresh…",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_name": "Rock Paper Shotgun",
+      "source_url": "https://www.rockpapershotgun.com/in-spreading-itself-across-five-cities-stranger-than-heaven-might-not-lean-as-heavily-on-one-of-like-a-dragons-key-strengths-as-i-expected",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D112",
+      "source_type": "news",
+      "title": "Magic's TMNT Draft Night Box Is Discounted For Amazon's Big Spring Sale",
+      "content": "Amazon has plenty of Magic: The Gathering deals right now as part of its Big Spring Sale, including the TMNT Draft Night box for about $40 off the regular price.",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_name": "IGN Game News",
+      "source_url": "https://www.ign.com/articles/magics-tmnt-draft-night-box-is-discounted-for-amazons-big-spring-sale",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_confirmed"
+      }
+    },
+    {
+      "sample_id": "B2D113",
+      "source_type": "news",
+      "title": "Magic: The Gathering's Lord of the Rings Scene Boxes Are Back on Sale at Amazon",
+      "content": "One of the best deals we've spotted amongst the many Magic: The Gathering deals is for the full set of Scene Boxes from The Lord of the Rings: Tales of Middle-earth set, which is currently on sale for $60 off its regula…",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_name": "IGN Game News",
+      "source_url": "https://www.ign.com/articles/magic-the-gathering-lord-of-the-rings-scene-boxes-are-back-on-sale-at-amazon",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D114",
+      "source_type": "news",
+      "title": "Overwatch reveals that only 32% of players stayed loyal to Winston until the end: 'You are not to be trusted'",
+      "content": "Snakes don't hiss, they switch sides during the Conquest event.",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/games/fps/overwatch-reveals-that-only-32-percent-of-players-stayed-loyal-to-winston-until-the-end-you-are-not-to-be-trusted/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D115",
+      "source_type": "news",
+      "title": "Play a reclusive witch living on a flying fish in this enchanting, Zelda-ish photography game",
+      "content": "In ZIPIT's splendid story-driven photography sim The Wide Open Sky is Running out of Catfish , you are a young witch living on the back of a huge, aerial catfish – a benevolent flying island of trees, fountains and wind…",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_name": "Rock Paper Shotgun",
+      "source_url": "https://www.rockpapershotgun.com/play-a-reclusive-witch-living-on-a-flying-fish-in-this-enchanting-zelda-ish-photography-game",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D116",
+      "source_type": "news",
+      "title": "Pragmata Contains a Stage That's a 'Fake New York Generated by AI,' but It's Entirely Made by Humans",
+      "content": "In the latest interview from the dev team behind Pragmata, they said that they're hand-crafting one of the levels in the game to look like it was AI-generated, despite it being fully made by humans.",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_name": "IGN Game News",
+      "source_url": "https://www.ign.com/articles/pragmata-contains-a-stage-thats-a-fake-new-york-generated-by-ai-but-its-entirely-made-by-humans",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_confirmed"
+      }
+    },
+    {
+      "sample_id": "B2D117",
+      "source_type": "news",
+      "title": "Sony confirms PS5 hardware is about to become even more expensive",
+      "content": "A global price hike will be implemented on April 2, 2026.",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_name": "Game Developer",
+      "source_url": "https://www.gamedeveloper.com/console/sony-confirms-ps5-hardware-is-about-to-become-more-expensive",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "capital",
+            "rationale": "manual_review_confirmed"
+          }
+        ]
+      },
+      "ground_truth": {
+        "bucket": "signal",
+        "signal_types": [
+          "capital"
+        ],
+        "is_signal": true,
+        "decision_source": "user_manual_review_round2_confirmed"
+      }
+    },
+    {
+      "sample_id": "B2D118",
+      "source_type": "news",
+      "title": "Super Smash Bros. Amiibo Figures Are Discounted At Target",
+      "content": "One of the coolest--and most affordable--Nintendo collectibles you can get right now is an Amiibo. These miniature figures capture the likeness of Nintendo's many recognizable characters from series like Super Mario, Ki…",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/articles/super-smash-bros-series-amiibo-at-target/1100-6539072/?ftag=CAD-01-10abi2f",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D119",
+      "source_type": "news",
+      "title": "The Super Mario Galaxy Movie Recruited A Top Gun To Voice Fox McCloud",
+      "content": "It's official: Running Man star Glen Powell is the voice of Fox McCloud in The Super Mario Galaxy Movie . Earlier this week, Nintendo revealed that the ace pilot of the Star Fox series will appear in the sequel to The S…",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/articles/the-super-mario-galaxy-movie-recruited-a-top-gun-to-voice-fox-mccloud/1100-6539068/?ftag=CAD-01-10abi2f",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D120",
+      "source_type": "news",
+      "title": "This legendary Baldur's Gate 3 exploit has taken my latest solo Durge run to a new level of immersion and god-tier power",
+      "content": "I am fire. I am death.",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/games/rpg/this-legendary-baldurs-gate-3-exploit-has-taken-my-latest-solo-durge-run-to-a-new-level-of-immersion-and-god-tier-power/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D121",
+      "source_type": "news",
+      "title": "Unity sunsetting Ads Network and divesting publishing label Supersonic",
+      "content": "The company has claimed jettisoning both businesses will help drive revenue growth.",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_name": "Game Developer",
+      "source_url": "https://www.gamedeveloper.com/business/unity-sunsetting-ads-network-and-divesting-publishing-label-supersonic",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "capital",
+            "rationale": "manual_review_confirmed"
+          }
+        ]
+      },
+      "ground_truth": {
+        "bucket": "signal",
+        "signal_types": [
+          "capital"
+        ],
+        "is_signal": true,
+        "decision_source": "user_manual_review_round2_confirmed"
+      }
+    },
+    {
+      "sample_id": "B2D122",
+      "source_type": "news",
+      "title": "With Bloodlines 2 behind us, it's time for a new open world Hunter: The Reckoning RPG from the creators of RoboCop: Rogue City",
+      "content": "Teyon and Nacon have revealed Hunter: The Reckoning – Deathwish , a new \"semi open world \" first-person single-player RPG set in the World of Darkness table-top universe. Where stablemate series Vampire: The Masquerade …",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_name": "Rock Paper Shotgun",
+      "source_url": "https://www.rockpapershotgun.com/with-bloodlines-2-behind-us-its-time-for-a-new-open-world-hunter-the-reckoning-rpg-from-the-creators-of-robocop-rogue-city",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D123",
+      "source_type": "news",
+      "title": "Amazon Spring Sale - Grab This Commodore 64 Replica Console For Just $85",
+      "content": "In the earliest days of PC gaming, before everything got homogenized with Windows and Mac, the Commodore 64 reigned supreme. It still has a passionate homebrew community making their own original C64 games to this day--…",
+      "published_at": "2026-03-27T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/articles/amazon-spring-sale-grab-this-commodore-64-replica-console-for-just-85/1100-6539039/?ftag=CAD-01-10abi2f",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D124",
+      "source_type": "news",
+      "title": "Wanderstop studio Ivy Road to close after funding for second game \"didn't come to fruition\"",
+      "content": "Ivy Road, the studio formed by talent behind games like The Stanley Parable , Gone Home , and Minecraft, is closing down. Read more",
+      "published_at": "2026-03-28T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/wanderstop-studio-ivy-road-to-close-after-funding-for-second-game-didnt-come-to-fruition",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "capital",
+            "rationale": "manual_review_confirmed"
+          }
+        ]
+      },
+      "ground_truth": {
+        "bucket": "signal",
+        "signal_types": [
+          "capital"
+        ],
+        "is_signal": true,
+        "decision_source": "user_manual_review_round2_confirmed"
+      }
+    },
+    {
+      "sample_id": "B2D125",
+      "source_type": "news",
+      "title": "Discussion: Is it okay for an MMO expansion's launch to be buggy?",
+      "content": "How many bugs is too many?",
+      "published_at": "2026-03-28T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/games/mmo/discussion-is-it-okay-for-an-mmo-expansions-launch-to-be-buggy/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D126",
+      "source_type": "news",
+      "title": "Elder Scrolls mobile spinoff Blades is shutting down this summer after eight years, but at least all its store items are ultra-cheap now",
+      "content": "In the end, it never made it to PC.",
+      "published_at": "2026-03-28T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/games/the-elder-scrolls/elder-scrolls-mobile-spinoff-blades-is-shutting-down-this-summer-after-eight-years-but-at-least-all-its-store-items-are-ultra-cheap-now/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D127",
+      "source_type": "news",
+      "title": "Forgotten FPS sequel Heretic 2 gets a 'reverse-engineered sourceport' that fixes bugs, improves the framerate and adds 'lots of cosmetic improvements'",
+      "content": "\"The game plays as you remember it.\"",
+      "published_at": "2026-03-28T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/games/action/forgotten-fps-sequel-heretic-2-gets-a-reverse-engineered-sourceport-that-fixes-bugs-improves-the-framerate-and-adds-lots-of-cosmetic-improvements/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D128",
+      "source_type": "news",
+      "title": "\"I think it’s unfair to kind of geofence the genre\": Original Stalker designer talks Eurojank in not-so-Euro games",
+      "content": "Video games, or more so the people who play them, I suppose, have this annoying thing where they assign a genre name as an insult. I don't want to reignite the discourse around JRPG as a term, but it certainly was used …",
+      "published_at": "2026-03-28T00:00:00Z",
+      "source_name": "Rock Paper Shotgun",
+      "source_url": "https://www.rockpapershotgun.com/i-think-its-unfair-to-kind-of-geofence-the-genre-original-stalker-designer-talks-eurojank-in-not-so-euro-games",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D129",
+      "source_type": "news",
+      "title": "Lawn Mowing Simulator 2 takes to Kickstarter with the lushest virtual grass I've ever seen",
+      "content": "Seriously, look at it.",
+      "published_at": "2026-03-28T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/games/sim/lawn-mowing-simulator-2-takes-to-kickstarter-with-the-lushest-virtual-grass-ive-ever-seen/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D130",
+      "source_type": "news",
+      "title": "Slay the Spire 2 beta patch rolls back some prior changes following player feedback",
+      "content": "Slay the Spire 2 has pushed out another beta patch, reverting a number of changes the prior patch introduced , including changes made to the Prepared (Silent), Borrowed Time, and Capture Spirit (Necrobinder) cards. Read…",
+      "published_at": "2026-03-28T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/slay-the-spire-2-beta-patch-rolls-back-some-prior-changes-following-player-feedback",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D131",
+      "source_type": "news",
+      "title": "Starship Troopers: Extermination's latest update adds a big stompy mech, ideal for squashing the shooter's newly polished bug holes",
+      "content": "Patch 1.10 also adds a new location and improved arachnid ambushes.",
+      "published_at": "2026-03-28T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/games/fps/starship-troopers-exterminations-latest-update-adds-a-big-stompy-mech-ideal-for-squashing-the-shooters-newly-polished-bug-holes/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D132",
+      "source_type": "news",
+      "title": "\"Suck my toes, my darling\" - Inkle's book of essays by game writers reveals the secrets behind the worlds we play in",
+      "content": "Have you ever wondered what game writers think about games, or about how game writers think about games? When a story doesn't click for you or when the writing jars, do you take a moment to wonder why? What is the thoug…",
+      "published_at": "2026-03-28T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/inkle-kaleidoscope-book",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D133",
+      "source_type": "news",
+      "title": "Death Stranding 2: On the Beach's PC release takes sequel's total sales past 2 million",
+      "content": "Death Stranding 2 's PC release has pushed the sequel's cumulative sales past 2 million. Read more",
+      "published_at": "2026-03-29T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/death-stranding-2-on-the-beachs-pc-release-takes-sequels-total-sales-past-2-million",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D134",
+      "source_type": "news",
+      "title": "Altera is a hardcore, realistic, unforgiving military survival sandbox, so of course it features penguin soldiers with reflex sights on their heads",
+      "content": "Finally, someone invented the Humboldt-action rifle.",
+      "published_at": "2026-03-29T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/games/fps/altera-is-a-hardcore-realistic-unforgiving-military-survival-sandbox-so-of-course-it-features-penguin-soldiers-with-reflex-sights-on-their-heads/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D135",
+      "source_type": "news",
+      "title": "Dataminers think they've found evidence of an unannounced Game Pass tier showing only older first-party games",
+      "content": "It looks like Xbox may be considering introducing a Game Pass tier dedicated to its first-party games. Read more",
+      "published_at": "2026-03-29T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/dataminers-think-theyve-found-evidence-of-an-unannounced-game-pass-tier-showing-only-older-first-party-games",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D136",
+      "source_type": "news",
+      "title": "DLSS 5 Isn't Anywhere Near As Impressive As V-Rally 3 on the Game Boy Advance",
+      "content": "DLSS 5's AI generated game \"enhancement\" has gone down like a lead balloon in the gaming community. But there's plenty of love out there for the humble Game Boy Advance, a dinky little machine with a 16MHz processor tha…",
+      "published_at": "2026-03-29T00:00:00Z",
+      "source_name": "IGN Game News",
+      "source_url": "https://www.ign.com/articles/dlss-5-isnt-anywhere-near-as-impressive-as-v-rally-3-on-the-game-boy-advance",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D137",
+      "source_type": "news",
+      "title": "I'm unsure how much of a detective game Artificial Detective will be, but I enjoyed the bit in the trailer when your character attacks a robot with a massive drill",
+      "content": "Former Dead Space and Control developers are involved in the project.",
+      "published_at": "2026-03-29T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/games/action/im-unsure-how-much-of-a-detective-game-artificial-detective-will-be-but-i-enjoyed-the-bit-in-the-trailer-when-your-character-attacks-a-robot-with-a-massive-drill/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D138",
+      "source_type": "news",
+      "title": "I Bought a Nintendo Switch Lite in 2026...",
+      "content": "The year is 2026 and Jake went out and bought a Nintendo Switch Lite. He explains why as he unboxes the special edition Dialga and Palkia console.",
+      "published_at": "2026-03-29T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/videos/i-bought-a-nintendo-switch-lite-in-2026/2300-6466791/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D139",
+      "source_type": "news",
+      "title": "Surprise! 9-year-old Hollow Knight's brutal final boss fight may be just that little bit easier after this patch",
+      "content": "Surprise! Team Cherry has just rolled out a patch not for Hollow Knight: Silksong , but its nine-year-old predecessor, Hollow Knight , and it addresses a \"slightly longer than intended\" mechanic in the very final boss f…",
+      "published_at": "2026-03-29T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/surprise-9-year-old-hollow-knights-brutal-final-boss-fight-may-be-just-that-little-bit-easier-after-this-patch",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D140",
+      "source_type": "news",
+      "title": "'Nintendo Is Absolutely Furious': Former Employee Says Mario, Zelda Developer in 'Uncharted Territory' Following Major Leaks",
+      "content": "Nintendo will be \"furious\" with last week's major leaks that detailed numerous Switch 2 games set to launch throughout the rest of 2026 and into 2027, including a Zelda: Ocarina of Time remake and launch details for the…",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_name": "IGN Game News",
+      "source_url": "https://www.ign.com/articles/nintendo-is-absolutely-furious-former-employee-says-mario-zelda-developer-in-uncharted-territory-following-major-leaks",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D141",
+      "source_type": "news",
+      "title": "Kena: Bridge of Spirits' Switch 2 port is fine, but doesn't offer an upgrade over handheld PC or last-gen experiences",
+      "content": "After a frustrating drought of native Nintendo Switch 2 ports ( with some special exceptions ) during the console's first six months, reportedly due to the lack of development kits going out to developers, more studios …",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/kena-bridge-of-spirits-nintendo-switch-2-impressions",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "technical",
+            "rationale": "manual_review_confirmed"
+          }
+        ]
+      },
+      "ground_truth": {
+        "bucket": "signal",
+        "signal_types": [
+          "technical"
+        ],
+        "is_signal": true,
+        "decision_source": "user_manual_review_round2_confirmed"
+      }
+    },
+    {
+      "sample_id": "B2D142",
+      "source_type": "news",
+      "title": "'I Don't Want to Say They Started Panicking…' — Actor Behind Crimson Desert's Kliff Reveals 'Bridge Point' Where Pearl Abyss Realized the Story and Characters Needed to Change",
+      "content": "Alec Newman, the actor who plays Crimson Desert protagonist Kliff, has discussed his work on the game, and revealed how the story and characters changed significantly during development.",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_name": "IGN Game News",
+      "source_url": "https://www.ign.com/articles/i-dont-want-to-say-they-started-panicking-actor-behind-crimson-deserts-kliff-reveals-bridge-point-where-pearl-abyss-realized-the-story-and-characters-needed-to-change",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D143",
+      "source_type": "news",
+      "title": "'The most boring protocol on the internet is also, quietly, one of the most abusable': Doom has been broken down into 1,964 DNS text records and can be run via a PowerShell script",
+      "content": "Is there anything on earth that can't run Doom at this point?",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/hardware/networking/the-most-boring-protocol-on-the-internet-is-also-quietly-one-of-the-most-abusable-doom-has-been-broken-down-into-1-964-dns-text-records-and-can-be-run-via-a-powershell-script/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D144",
+      "source_type": "news",
+      "title": "13 years later, one of the rarest Platinum trophies ever on the PlayStation Vita has finally been earned",
+      "content": "A player has achieved what many had thought impossible, earning one of the most legendary, most elusive Platinum trophies in the history of PlayStation consoles: Ninja Gaiden Sigma 2 's Platinum trophy Master of the Sec…",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/one-of-the-rarest-platinum-trophies-ever-has-finally-been-earned",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D145",
+      "source_type": "news",
+      "title": "A Forgotten Elder Scrolls Game Is Shutting Down Soon",
+      "content": "One of Bethesda Game Studio's Elder Scrolls spin-offs, The Elder Scrolls: Blades , will be shutting down in June, according to a post on the Nintendo eShop. The free-to-play dungeon crawler and town-builder's last day w…",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/articles/a-forgotten-elder-scrolls-game-is-shutting-down-soon/1100-6539102/?ftag=CAD-01-10abi2f",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D146",
+      "source_type": "news",
+      "title": "Clair Obscur: Expedition 33 devs never imagined to achieve the kind of massive success it did: 'Our official goal towards the end of production was to reach for 85 in Metacritic'",
+      "content": "Shoot for the moon and you'll land among the stars.",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/games/rpg/clair-obscur-expedition-33-devs-never-imagined-to-achieve-the-kind-of-massive-success-it-did-our-official-goal-towards-the-end-of-production-was-to-reach-for-85-in-metacritic/",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "team",
+            "rationale": "manual_review_confirmed"
+          }
+        ]
+      },
+      "ground_truth": {
+        "bucket": "signal",
+        "signal_types": [
+          "team"
+        ],
+        "is_signal": true,
+        "decision_source": "user_manual_review_round2_confirmed"
+      }
+    },
+    {
+      "sample_id": "B2D147",
+      "source_type": "news",
+      "title": "Flawless victory was never on the cards for eurojank, but I honestly can't tell if it won or lost",
+      "content": "An ode to the wonky yet wonderful projects of yesteryear, and their modern successors.",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/gaming-industry/flawless-victory-was-never-on-the-cards-for-eurojank-but-i-honestly-cant-tell-if-it-won-or-lost/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D148",
+      "source_type": "news",
+      "title": "Get The Complete Castlevania Anime Series On Blu-ray For 26% Off",
+      "content": "Castlevania fans can now sink their teeth into the entire Netflix anime without breaking the bank. Castlevania: The Complete Series Limited Edition Box Set features all four seasons of the Netflix anime based on Konami'…",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/articles/get-the-complete-castlevania-anime-series-on-blu-ray-for-26-off/1100-6539100/?ftag=CAD-01-10abi2f",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D149",
+      "source_type": "news",
+      "title": "How to get the White Bear mount in Crimson Desert",
+      "content": "Ride into battle on a polar bear.",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/games/action/crimson-desert-white-bear-mount-location/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D150",
+      "source_type": "news",
+      "title": "\"It is meant to be lived in\" - grand strategy game Riftborne offers \"months\" of galactic scheming and no actual graphics",
+      "content": "Some people like to ease into the week, as though dipping toes into a frigid northern sea, and some people Monday Hard by wrapping their arms around an iceberg. Are you the latter kind of bather? Try this on for size, t…",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_name": "Rock Paper Shotgun",
+      "source_url": "https://www.rockpapershotgun.com/it-is-meant-to-be-lived-in-grand-strategy-game-riftborne-offers-months-of-galactic-scheming-and-no-actual-graphics",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D151",
+      "source_type": "news",
+      "title": "Marathon's developers say they are \"in it for the long haul\" amidst fears the game has underperformed in this live service hell",
+      "content": "Marathon developers have stated that the development team are \"in it for the long haul\" as part of a fresh PC performance guide. Read more",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/marathons-developers-say-they-are-in-it-for-the-long-haul-amidst-fears-the-game-has-underperformed-in-this-live-service-hell",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D152",
+      "source_type": "news",
+      "title": "Remember when Mastercard pressured Steam to remove a bunch of NSFW games? The FTC says that's not cool—sort of",
+      "content": "The FTC warned Mastercard, PayPal, and others against denying consumers the right to buy what they want, saying that \"access to such infrastructure and services is essential for Americans’ participation in everyday comm…",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/games/remember-when-mastercard-pressured-steam-to-remove-a-bunch-of-nsfw-games-the-ftc-says-thats-not-cool-sort-of/",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "market",
+            "rationale": "manual_review_confirmed"
+          }
+        ]
+      },
+      "ground_truth": {
+        "bucket": "signal",
+        "signal_types": [
+          "market"
+        ],
+        "is_signal": true,
+        "decision_source": "user_manual_review_round2_confirmed"
+      }
+    },
+    {
+      "sample_id": "B2D153",
+      "source_type": "news",
+      "title": "The Back to the Future Trilogy 40th Anniversary Edition 4K UHD and Blu-ray Set Drops to $29.99",
+      "content": "This is heavy.",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_name": "IGN Game News",
+      "source_url": "https://www.ign.com/articles/back-to-the-future-trilogy-4k-movie-deal-amazon-spring-sale",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D154",
+      "source_type": "news",
+      "title": "The Elder Scrolls: Blades, the mobile RPG you probably forgot about long ago, has been delisted and will stop working this summer",
+      "content": "Even if The Elder Scrolls 6 is still (potentially) years away, Bethesda has kept fans busy with countless Skyrim remasters/ports and TESO 's yearly Chapters and many seasonal updates. In the background, mobile-oriented …",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/the-elder-scrolls-blades-delisted-from-mobile-stores-and-eshop-goes-offline-this-summer",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D155",
+      "source_type": "news",
+      "title": "The Next Piece Of World Of Warcraft Merch Is Nothing You'd Guess",
+      "content": "Blizzard has teamed up with Lodge to create a cast iron skillet themed around World of Warcraft, and it comes with an in-game pet. The 10.25-inch, 5.66-pound skillet features the World of Warcraft logo on the bottom, an…",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/articles/the-next-piece-of-world-of-warcraft-merch-is-nothing-youd-guess/1100-6539104/?ftag=CAD-01-10abi2f",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D156",
+      "source_type": "news",
+      "title": "The PS5 Pro Is Still Worth It--For Now",
+      "content": "Sony announced massive price increases for its PS5 consoles last week, with the PS5 Pro getting slapped with the biggest price hike out of all of them: a whopping $150, pushing the MSRP of the hardware to $900. The good…",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/articles/the-ps5-pro-is-still-worth-it-for-now/1100-6539101/?ftag=CAD-01-10abi2f",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D157",
+      "source_type": "news",
+      "title": "Xbox Games Showcase 2026 promises \"huge\" game news and a dedicated Gears of War: E-Day segment",
+      "content": "The time and date for the Xbox Games Showcase 2026 has been set. This year, it'll take place on Sunday, 7th June, at the respectable hour of 6pm UK time. Read more",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/xbox-games-showcase-2026-time-date",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D158",
+      "source_type": "news",
+      "title": "You're missing out on getting Marathon's best loot for free because it's hidden in a menu",
+      "content": "A free WSTR? Thank you, Arachne.",
+      "published_at": "2026-03-30T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/games/fps/marathon-priority-access-armory/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D159",
+      "source_type": "news",
+      "title": "The Biggest New Game Releases Of April 2026",
+      "content": "Goodbye, first quarter of the 2026 gaming year, hello to the second quarter! We're officially starting the fourth month of the year with a bang, as the month ahead is packed with several highly anticipated releases, int…",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/gallery/the-biggest-new-game-releases-of-april-2026/2900-7623/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D160",
+      "source_type": "news",
+      "title": "The Last Of Us Season 3 Cast: Everyone Who's Coming Back And Joining The Show",
+      "content": "HBO's popular The Last of Us TV show, based on Naughty Dog's game series, is coming back for its third and possibly final season . Ahead of its expected 2027 premiere, The Last of Us Season 3 is now in production in Can…",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/gallery/the-last-of-us-season-3-cast-everyone-whos-coming-back-and-joining-the-show/2900-7644/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D161",
+      "source_type": "news",
+      "title": "Cancellation Of Almost-Complete Game From Eidos Montreal Resulted In Layoffs - Report",
+      "content": "Recent mass layoffs at developer Eidos Montreal were the result of a long-in-development project at the studio that was close to completion being canceled, according to a new report. As reported by Insider Gaming , the …",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/articles/cancellation-of-almost-complete-game-from-eidos-montreal-resulted-in-layoffs-report/1100-6539139/?ftag=CAD-01-10abi2f",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "capital",
+            "rationale": "manual_review_confirmed"
+          },
+          {
+            "signal_type": "team",
+            "rationale": "manual_review_confirmed"
+          }
+        ]
+      },
+      "ground_truth": {
+        "bucket": "signal",
+        "signal_types": [
+          "capital",
+          "team"
+        ],
+        "is_signal": true,
+        "decision_source": "user_manual_review_round2_confirmed"
+      }
+    },
+    {
+      "sample_id": "B2D162",
+      "source_type": "news",
+      "title": "Epic Games CEO Tim Sweeney apologises and seemingly rectifies life insurance situation of laid off worker with terminal brain cancer",
+      "content": "On 24th March, Fortnite developer Epic Games announced mass layoffs that affected over 1,000 workers , including key veterans behind the hit online game. Read more",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/epic-games-ceo-tim-sweeney-responds-after-fortnite-layoffs-include-worker-with-brain-cancer",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D163",
+      "source_type": "news",
+      "title": "New MindsEye Mission Will Reveal 'Evidence' the Game Was 'Sabotaged', Claims CEO",
+      "content": "Build a Rocket Boy CEO Mark Gerhard says that the studio is preparing to add a new mission to its game, MindsEye, which will include \"evidence\" supporting his repeated claims that the game was sabotaged by bad actors.",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_name": "IGN Game News",
+      "source_url": "https://www.ign.com/articles/new-mindseye-mission-will-reveal-evidence-the-game-was-sabotaged-claims-ceo",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D164",
+      "source_type": "news",
+      "title": "Arc Raiders Furtive Meetings Quest Guide",
+      "content": "The hardest quests in Arc Raiders tend to be the ones that require you to complete a variety of steps during a single visit to a map. When that map is Stella Montis, things can be even trickier. That's the case with the…",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/articles/arc-raiders-furtive-meetings-quest-guide/1100-6539144/?ftag=CAD-01-10abi2f",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D165",
+      "source_type": "news",
+      "title": "Bungie nerfs Marathon's slide cancel movement tech, says no movement freaks allowed: 'Unbounded movement, while expressive and clip-worthy, is ultimately unhealthy for the pace of play'",
+      "content": "Please just kill me like a normal person.",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/games/fps/bungie-patches-marathons-slide-cancel-movement-tech-says-no-movement-freaks-allowed-unbounded-movement-while-expressive-and-clip-worthy-is-ultimately-unhealthy-for-the-pace-of-play/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D166",
+      "source_type": "news",
+      "title": "Disney could be interested in buying Fortnite maker Epic Games, but not everyone's on board with the idea",
+      "content": "Fortnite maker Epic Games has had a rough start to the year, with Fortnite's players dropping noticeably , and now over 1,000 jobs being cut as a result. Now, there's talk of entertainment giant Disney looking to buy th…",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/disney-could-be-looking-into-buying-fortnite-developer-epic-games",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "capital",
+            "rationale": "manual_review_confirmed"
+          }
+        ]
+      },
+      "ground_truth": {
+        "bucket": "signal",
+        "signal_types": [
+          "capital"
+        ],
+        "is_signal": true,
+        "decision_source": "user_manual_review_round2_confirmed"
+      }
+    },
+    {
+      "sample_id": "B2D167",
+      "source_type": "news",
+      "title": "Fourth Wing Is Getting the Monopoly Treatment With an Officially Licensed Board Game for Adults Only",
+      "content": "Monopoly Fourth Wing Edition is up for preorder at Amazon now with a release date of July 15, 2026. Just like the books themselves, this board game adaptation is meant for adults only with a 17+ age rating.",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_name": "IGN Game News",
+      "source_url": "https://www.ign.com/articles/monopoly-fourth-wing-edition-where-to-buy",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D168",
+      "source_type": "news",
+      "title": "I've only had my cyberpunk ripperdoc license for a week and the mob are already coming after me because I spent all my money upgrading my friend's robotic arms",
+      "content": "Steel Soul Shaper is like playing Cyberpunk 2077 from a totally different perspective.",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/games/sim/ive-only-had-my-cyberpunk-ripperdoc-license-for-a-week-and-the-mob-are-already-coming-after-me-because-i-spent-all-my-money-upgrading-my-friends-robotic-arms/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D169",
+      "source_type": "news",
+      "title": "I opened my own store in Stardew Valley so now Pierre has to buy my seeds. MY SEEDS",
+      "content": "The Merchant mod for Stardew Valley mod lets you open a shop, decorate it, and sell your goods.",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/games/life-sim/i-opened-my-own-store-in-stardew-valley-so-now-pierre-has-to-buy-my-seeds-my-seeds/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D170",
+      "source_type": "news",
+      "title": "Magic The Gathering: Secrets Of Strixhaven Includes Banned Power Nine Spell And A Powerful Tutor",
+      "content": "Following its reveal last year, Secrets of Strixhaven quickly became my most anticipated Magic the Gathering set of 2026. While I adored our brief stop in the wilds of Lorwyn, there's just something about Strixhaven's d…",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/articles/magic-the-gathering-secrets-of-strixhaven-includes-banned-power-nine-spell-and-a-powerful-tutor/1100-6539119/?ftag=CAD-01-10abi2f",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D171",
+      "source_type": "news",
+      "title": "Marathon review",
+      "content": "If Arc Raiders showed the world what an extraction shooter is, Marathon demonstrates, in unambiguous fashion, what extractions shooters are about . Whatever anomalous conditions coalesced to make Embark's game so oddly …",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/marathon-review",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D172",
+      "source_type": "news",
+      "title": "Microsoft Is Celebrating 25 Years of Xbox by Putting Master Chief on a Fanta Pineapple Can",
+      "content": "Ever wanted to see Master Chief longingly looking into the horizon from the confines of a carbonated can? Your dream has finally come true.",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_name": "IGN Game News",
+      "source_url": "https://www.ign.com/articles/microsoft-is-celebrating-25-years-of-xbox-by-putting-master-chief-on-a-fanta-pineapple-can",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D173",
+      "source_type": "news",
+      "title": "Price Hike or Discount? Nintendo's Changes to Physical and Digital Game Pricing Have Analysts Split, Too",
+      "content": "Nintendo games are about to get more expensive. Or less. Depending on whether or not you want a physical copy, and how you read its recent decision to charge different prices for physical and digital games in the U.S. W…",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_name": "IGN Game News",
+      "source_url": "https://www.ign.com/articles/price-hike-or-discount-nintendos-changes-to-physical-and-digital-game-pricing-have-analysts-split-too",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "market",
+            "rationale": "manual_review_confirmed"
+          }
+        ]
+      },
+      "ground_truth": {
+        "bucket": "signal",
+        "signal_types": [
+          "market"
+        ],
+        "is_signal": true,
+        "decision_source": "user_manual_review_round2_confirmed"
+      }
+    },
+    {
+      "sample_id": "B2D174",
+      "source_type": "news",
+      "title": "Skyblivion devs are \"on the hunt\" for some \"final, vital\" veteran hands to get the Oblivion remake mod over the line this year",
+      "content": "With the first few months of its latest target release year drawing to a close, the modders behind Skyblivion are looking to make some \"final\" and \"vital\" veteran additions to their team in order to get the ambitious re…",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_name": "Rock Paper Shotgun",
+      "source_url": "https://www.rockpapershotgun.com/skyblivion-devs-are-on-the-hunt-for-some-final-vital-veteran-hands-to-get-the-oblivion-remake-mod-over-the-line-this-year",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D175",
+      "source_type": "news",
+      "title": "Somehow a movie that gave me nightmares as a kid has been turned into the delightful Metroidvania palate cleanser I needed after Silksong",
+      "content": "Little Nemo and the Guardians of Slumberland is more daydream than nightmare.",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/games/action/somehow-a-movie-that-gave-me-nightmares-as-a-kid-has-been-turned-into-the-delightful-metroidvania-palate-cleanser-i-needed-after-silksong/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D176",
+      "source_type": "news",
+      "title": "The Best PS5 Deals This Week: Save On Consoles, Games, And Accessories - March 31, 2026",
+      "content": "Well, folks, the price hike for PS5 consoles is almost here. On April 2, you'll be paying the highest prices ever for PS5, PS5 Pro, and PS Portal--with PS5 Pro clocking in at a hefty $900. Sony says this is the result o…",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/articles/the-best-ps5-deals-this-week-games-accessories-consoles-and-more/1100-6538557/?ftag=CAD-01-10abi2f",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D177",
+      "source_type": "news",
+      "title": "The Call of Duty schism: Why fans are trapped in a forever war with each other",
+      "content": "For longtime fans, the name at the bottom of the box is everything.",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/games/call-of-duty/the-call-of-duty-schism-why-fans-are-trapped-in-a-forever-war-with-each-other/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D178",
+      "source_type": "news",
+      "title": "The Super Mario Galaxy Movie is set to stomp the global box office this week with the biggest debut of 2026 so far, say analysts",
+      "content": "The Super Mario Galaxy Movie finally arrives tomorrow, 1st April, and box office tracking is already looking out of this world. With a five-day weekend ahead of it across the US, Canada, and other international territor…",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/the-super-mario-galaxy-movie-opening-weekend-box-office-predictions-aim-high",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D179",
+      "source_type": "news",
+      "title": "Vaporizer swarms are wiping out squads en masse as Arc Raiders diehards finally get the tougher Arc they were asking for",
+      "content": "Steer clear, or live in cover.",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/games/third-person-shooter/vaporizer-swarms-are-wiping-out-squads-en-masse-as-arc-raiders-diehards-finally-get-the-tougher-arc-they-were-asking-for/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D180",
+      "source_type": "news",
+      "title": "What the heck: A superhuman has beaten Dark Souls at level 1, hitless, and without using dodge roll or ranged weapons",
+      "content": "You probably can't do this.",
+      "published_at": "2026-03-31T00:00:00Z",
+      "source_name": "PC Gamer",
+      "source_url": "https://www.pcgamer.com/games/rpg/what-the-heck-a-superhuman-has-beaten-dark-souls-at-level-1-hitless-and-without-using-dodge-roll-or-ranged-weapons/",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    }
+  ]
+}

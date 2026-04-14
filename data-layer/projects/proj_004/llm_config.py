@@ -129,6 +129,7 @@ def get_llm_config(phase: str = None) -> dict:
 
     Returns:
         dict with keys: provider, api_key, base_url, model, max_tokens, temperature,
+        screen_provider, screen_model, screen_api_key, screen_base_url,
         connect_timeout_seconds, read_timeout_seconds, max_retries,
         max_parallel_samples, request_spacing_ms, step1_cooldown_seconds
     """
@@ -142,6 +143,10 @@ def get_llm_config(phase: str = None) -> dict:
         "api_key":                default.get("api_key", ""),
         "base_url":               default.get("base_url", ""),
         "model":                  default.get("model", "claude-sonnet-4-6"),
+        "screen_provider":        default.get("screen_provider", ""),
+        "screen_model":           default.get("screen_model", ""),
+        "screen_api_key":         default.get("screen_api_key", ""),
+        "screen_base_url":        default.get("screen_base_url", ""),
         "max_tokens":             default.get("max_tokens", 4096),
         "temperature":            default.get("temperature", 0.0),
         "connect_timeout_seconds": default.get("connect_timeout_seconds", 30),
@@ -167,8 +172,21 @@ def get_llm_config(phase: str = None) -> dict:
     if not cfg["base_url"]:
         cfg["base_url"] = provider_env["base_url"]
 
+    screen_provider = str(cfg.get("screen_provider") or cfg["provider"] or "anthropic").strip().lower()
+    screen_provider_env = _provider_env_defaults(screen_provider)
+    if not cfg["screen_provider"]:
+        cfg["screen_provider"] = screen_provider
+    if not cfg["screen_model"]:
+        cfg["screen_model"] = cfg["model"]
+    if not cfg["screen_api_key"]:
+        cfg["screen_api_key"] = cfg["api_key"] or screen_provider_env["api_key"]
+    if not cfg["screen_base_url"]:
+        cfg["screen_base_url"] = screen_provider_env["base_url"] if cfg["screen_provider"] != cfg["provider"] else cfg["base_url"]
+
     if cfg["provider"] in {"deepseek", "doubao"} and cfg["base_url"]:
         cfg["base_url"] = cfg["base_url"].rstrip("/")
+    if cfg["screen_provider"] in {"deepseek", "doubao"} and cfg["screen_base_url"]:
+        cfg["screen_base_url"] = cfg["screen_base_url"].rstrip("/")
 
     return cfg
 

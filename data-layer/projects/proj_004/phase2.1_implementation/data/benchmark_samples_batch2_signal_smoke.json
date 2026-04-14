@@ -1,0 +1,30 @@
+{
+  "dataset_name": "benchmark_samples_batch2_signal_smoke",
+  "samples": [
+    {
+      "sample_id": "B2D015",
+      "source_type": "news",
+      "title": "Google's Gemini will make its way into Dragon Quest X to power a \"Chatty Slimey\" AI companion, Square Enix has announced",
+      "content": "If you're still recovering from last week's DLSS 5 nightmare and Crimson Desert's gen-AI fiasco , we're sorry to re-open old wounds by telling you that Square Enix has announced it's teaming up with Google to put Gemini…",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/google-gemini-ai-to-power-chatbot-companion-in-dragon-quest-x-square-enix-says",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "technical",
+            "rationale": "manual_review_confirmed"
+          }
+        ]
+      },
+      "ground_truth": {
+        "bucket": "signal",
+        "signal_types": [
+          "technical"
+        ],
+        "is_signal": true,
+        "decision_source": "user_manual_review_round2_confirmed"
+      }
+    }
+  ]
+}

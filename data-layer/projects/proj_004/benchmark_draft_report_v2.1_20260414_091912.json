@@ -1,0 +1,33 @@
+{
+  "prompt_version": "v2.1",
+  "run_at": "2026-04-14T09:19:12.181329Z",
+  "benchmark_path": "F:\\AIProjects\\DesignAssistant\\data-layer\\projects\\proj_004\\phase2.1_implementation\\data\\benchmark_samples_batch2_signal_smoke.json",
+  "total": 1,
+  "tp": 0,
+  "tn": 0,
+  "fp": 0,
+  "fn": 1,
+  "precision": 0,
+  "recall": 0.0,
+  "f1": 0,
+  "accuracy": 0.0,
+  "details": [
+    {
+      "sample_id": "B2D015",
+      "origin_file": null,
+      "expected_class": "signal",
+      "predicted_class": "noise",
+      "expected_labels": [
+        "technical:None"
+      ],
+      "predicted_labels": [],
+      "verdict": "FN",
+      "signal_count": 0,
+      "processing_time_ms": 164557,
+      "warnings": [
+        "粗筛失败（500 Server Error: Internal Server Error for url: https://maas-coding-api.cn-huabei-1.xf-yun.com/anthropic/v1/messages），放行进入精筛",
+        "JSON 解析失败: Expecting ',' delimiter: line 30 column 73 (char 939)"
+      ]
+    }
+  ]
+}

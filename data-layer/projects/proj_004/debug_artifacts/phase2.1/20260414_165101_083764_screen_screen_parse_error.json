@@ -1,0 +1,8 @@
+{
+  "provider": "anthropic",
+  "model": "claude-haiku-4-5-20251001",
+  "error_type": "HTTPError",
+  "error": "429 Client Error: Too Many Requests for url: https://ark.cn-beijing.volces.com/api/coding/v1/messages",
+  "raw_response": "",
+  "text_len": 88
+}
