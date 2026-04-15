@@ -5,6 +5,106 @@ Phase 2.1 情报解码模块 - Prompt 模板
 
 from schemas import SCORING_CRITERIA
 
+
+def _truncate_text(value: str, limit: int = 1200) -> str:
+    text = str(value or "").strip()
+    if len(text) <= limit:
+        return text
+    return text[:limit] + "..."
+
+
+def _format_retrieval_context(retrieval_context) -> str:
+    packets = retrieval_context or []
+    if not packets:
+        return ""
+
+    grouped = {
+        "constraint": [],
+        "glossary": [],
+        "few_shot": [],
+        "boundary_case": [],
+        "background": [],
+    }
+    limits = {
+        "constraint": 2,
+        "glossary": 2,
+        "few_shot": 2,
+        "boundary_case": 1,
+        "background": 1,
+    }
+
+    for packet in packets:
+        if not isinstance(packet, dict):
+            continue
+        use_as = str(packet.get("use_as", "")).strip().lower()
+        if use_as not in grouped:
+            continue
+        if len(grouped[use_as]) >= limits[use_as]:
+            continue
+        grouped[use_as].append(packet)
+
+    sections = []
+    title_map = {
+        "constraint": "约束上下文",
+        "glossary": "术语上下文",
+        "few_shot": "补充 few-shot 上下文",
+        "boundary_case": "边界案例上下文",
+        "background": "背景上下文",
+    }
+
+    for use_as, items in grouped.items():
+        if not items:
+            continue
+        lines = [f"[{title_map[use_as]}]"]
+        for idx, item in enumerate(items, start=1):
+            excerpt = _truncate_text(item.get("excerpt", ""), limit=500)
+            reason = str(item.get("reason_for_match", "") or "").strip()
+            source = str(item.get("source", "") or item.get("source_id", "") or "").strip()
+            lines.append(f"- 包 {idx}:")
+            if reason:
+                lines.append(f"  - reason_for_match: {reason}")
+            if source:
+                lines.append(f"  - source: {source}")
+            if excerpt:
+                lines.append(f"  - excerpt: {excerpt}")
+        sections.append("\n".join(lines))
+
+    if not sections:
+        return ""
+
+    return "\n\n以下补充上下文仅用于帮助理解与边界校准，不可当作原文事实直接抽取：\n\n" + "\n\n".join(sections)
+
+
+def _build_input_packet(content: str, source_id: str, title: str = None,
+                        source_type: str = None, source_name: str = None,
+                        retrieval_context=None) -> str:
+    title_text = str(title or "").strip()
+    source_type_text = str(source_type or "").strip()
+    source_name_text = str(source_name or "").strip()
+    body_text = str(content or "").strip()
+
+    lines = [
+        "[输入上下文包]",
+        f"- source_id: {source_id}",
+    ]
+    if source_type_text:
+        lines.append(f"- source_type: {source_type_text}")
+    if source_name_text:
+        lines.append(f"- source_name: {source_name_text}")
+    if title_text:
+        lines.append(f"- title: {title_text}")
+    lines.extend([
+        "- body:",
+        body_text or "(empty)",
+    ])
+
+    retrieval_block = _format_retrieval_context(retrieval_context)
+    if retrieval_block:
+        lines.append(retrieval_block)
+
+    return "\n".join(lines)
+
+
 # System Prompt
 SYSTEM_PROMPT = """你是一个游戏行业范式信号解码器，服务于战略研究、项目孵化与生态投资工作流。
 你的职责是：把非结构化外部情报，压缩成可进入后续战略判断流程的低歧义信号单元。
@@ -562,7 +662,9 @@ def build_screen_prompt(content: str) -> str:
 输出 JSON："""
 
 
-def build_prompt(content: str, source_id: str) -> str:
+def build_prompt(content: str, source_id: str, title: str = None,
+                 source_type: str = None, source_name: str = None,
+                 retrieval_context=None) -> str:
     """构建完整的 Prompt"""
 
     # 构建 few-shot 部分
@@ -570,6 +672,15 @@ def build_prompt(content: str, source_id: str) -> str:
         f"示例 {i+1}：\n输入：{ex['input']}\n输出：{ex['output']}"
         for i, ex in enumerate(FEW_SHOT_EXAMPLES)
     ])
+
+    input_packet = _build_input_packet(
+        content=content,
+        source_id=source_id,
+        title=title,
+        source_type=source_type,
+        source_name=source_name,
+        retrieval_context=retrieval_context,
+    )
 
     # 完整 Prompt
     prompt = f"""{SYSTEM_PROMPT}
@@ -580,7 +691,7 @@ def build_prompt(content: str, source_id: str) -> str:
 
 现在请分析以下文本：
 
-输入：{content}
+{input_packet}
 
 请输出 JSON 格式的结果（只输出 JSON，不要其他说明文字）：
 """

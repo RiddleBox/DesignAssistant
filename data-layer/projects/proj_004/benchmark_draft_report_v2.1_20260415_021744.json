@@ -1,0 +1,33 @@
+{
+  "prompt_version": "v2.1",
+  "run_at": "2026-04-15T02:17:44.093113Z",
+  "benchmark_path": "F:\\AIProjects\\DesignAssistant\\data-layer\\projects\\proj_004\\phase2.1_implementation\\data\\benchmark_samples_batch2_signal_smoke.json",
+  "total": 1,
+  "tp": 1,
+  "tn": 0,
+  "fp": 0,
+  "fn": 0,
+  "precision": 1.0,
+  "recall": 1.0,
+  "f1": 1.0,
+  "accuracy": 1.0,
+  "details": [
+    {
+      "sample_id": "B2D015",
+      "origin_file": null,
+      "expected_class": "signal",
+      "predicted_class": "signal",
+      "expected_labels": [
+        "technical:None"
+      ],
+      "predicted_labels": [
+        "SignalType.TECHNICAL:DLSS 5 负面信号",
+        "SignalType.TECHNICAL:Crimson Desert gen-AI 风波"
+      ],
+      "verdict": "TP",
+      "signal_count": 2,
+      "processing_time_ms": 45392,
+      "warnings": []
+    }
+  ]
+}

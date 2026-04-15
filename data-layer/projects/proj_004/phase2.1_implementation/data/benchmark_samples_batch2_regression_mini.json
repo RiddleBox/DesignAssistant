@@ -1,0 +1,119 @@
+{
+  "generated_from": "F:\\AIProjects\\DesignAssistant\\data-layer\\projects\\proj_004\\phase2.1_implementation\\data\\benchmark_samples_batch2_draft.json",
+  "summary": {
+    "selected_total": 180,
+    "selected_positive": 17,
+    "selected_negative": 163
+  },
+  "labeling_policy": {
+    "truth_source": "human_review.final_bucket and human_review.final_types",
+    "expected_signals_policy": "annotation.expected_signals is synchronized to final confirmed signal types",
+    "noise_policy": "noise samples have empty expected_signals"
+  },
+  "samples": [
+    {
+      "sample_id": "B2D001",
+      "source_type": "news",
+      "title": "Ubisoft ends game development at Red Storm and lays off 105 workers",
+      "content": "The studio will continue operating in the form of global IT and Snowdrop engine support.",
+      "published_at": "2026-03-19T00:00:00Z",
+      "source_name": "Game Developer",
+      "source_url": "https://www.gamedeveloper.com/business/ubisoft-lays-off-105-staff-at-red-storm-ends-game-development",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D015",
+      "source_type": "news",
+      "title": "Google's Gemini will make its way into Dragon Quest X to power a \"Chatty Slimey\" AI companion, Square Enix has announced",
+      "content": "If you're still recovering from last week's DLSS 5 nightmare and Crimson Desert's gen-AI fiasco , we're sorry to re-open old wounds by telling you that Square Enix has announced it's teaming up with Google to put Gemini…",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_name": "Eurogamer",
+      "source_url": "https://www.eurogamer.net/google-gemini-ai-to-power-chatbot-companion-in-dragon-quest-x-square-enix-says",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "technical",
+            "rationale": "manual_review_confirmed"
+          }
+        ]
+      },
+      "ground_truth": {
+        "bucket": "signal",
+        "signal_types": [
+          "technical"
+        ],
+        "is_signal": true,
+        "decision_source": "user_manual_review_round2_confirmed"
+      }
+    },
+    {
+      "sample_id": "B2D020",
+      "source_type": "news",
+      "title": "Resident Evil Requiem devs Capcom say they'll use AI to \"improve efficiency and productivity\", but not to generate game assets",
+      "content": "Resident Evil Requiem makers Capcom have outlined their current stance on using AI in a summarised investor back-and-forth released alongside their latest financial results. The publishers plan on using the tech to try …",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_name": "Rock Paper Shotgun",
+      "source_url": "https://www.rockpapershotgun.com/resident-evil-requiem-devs-capcom-say-theyll-use-ai-to-improve-efficiency-and-productivity-but-not-to-generate-game-assets",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D022",
+      "source_type": "news",
+      "title": "Square Enix Is Turning Slimes Into AI Chatbots In Dragon Quest X",
+      "content": "Square Enix and Google have partnered to inject the tech giant's AI, Gemini, to help advise and guide players in the popular Japan-only MMO, Dragon Quest X . Announced at a press event over the weekend, the partnership …",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_name": "GameSpot",
+      "source_url": "https://www.gamespot.com/articles/square-enix-is-turning-slimes-into-ai-chatbots-in-dragon-quest-x/1100-6538960/?ftag=CAD-01-10abi2f",
+      "annotation": {
+        "expected_signals": []
+      },
+      "ground_truth": {
+        "bucket": "noise",
+        "signal_types": [],
+        "is_signal": false,
+        "decision_source": "user_manual_review_round2_default_noise"
+      }
+    },
+    {
+      "sample_id": "B2D028",
+      "source_type": "news",
+      "title": "Union workers send a message to game industry execs: 'Let go of the power now, or be forced to let go of it later.'",
+      "content": "CWA members are staking their claim for a better, fairer video game industry.",
+      "published_at": "2026-03-23T00:00:00Z",
+      "source_name": "Game Developer",
+      "source_url": "https://www.gamedeveloper.com/production/union-workers-send-a-message-to-game-industry-execs-let-go-of-the-power-now-or-be-forced-to-let-go-of-it-later-",
+      "annotation": {
+        "expected_signals": [
+          {
+            "signal_type": "team",
+            "rationale": "manual_review_confirmed"
+          }
+        ]
+      },
+      "ground_truth": {
+        "bucket": "signal",
+        "signal_types": [
+          "team"
+        ],
+        "is_signal": true,
+        "decision_source": "user_manual_review_round2_confirmed"
+      }
+    }
+  ]
+}

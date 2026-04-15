@@ -1,0 +1,88 @@
+{
+  "prompt_version": "v2.1",
+  "run_at": "2026-04-15T02:20:27.800312Z",
+  "benchmark_path": "F:\\AIProjects\\DesignAssistant\\data-layer\\projects\\proj_004\\phase2.1_implementation\\data\\benchmark_samples_batch2_regression_mini.json",
+  "total": 5,
+  "tp": 1,
+  "tn": 0,
+  "fp": 3,
+  "fn": 1,
+  "precision": 0.25,
+  "recall": 0.5,
+  "f1": 0.3333,
+  "accuracy": 0.2,
+  "details": [
+    {
+      "sample_id": "B2D001",
+      "origin_file": null,
+      "expected_class": "noise",
+      "predicted_class": "signal",
+      "expected_labels": [],
+      "predicted_labels": [
+        "SignalType.TEAM:工作室运营模式转型"
+      ],
+      "verdict": "FP",
+      "signal_count": 1,
+      "processing_time_ms": 9996,
+      "warnings": []
+    },
+    {
+      "sample_id": "B2D015",
+      "origin_file": null,
+      "expected_class": "signal",
+      "predicted_class": "signal",
+      "expected_labels": [
+        "technical:None"
+      ],
+      "predicted_labels": [
+        "SignalType.TECHNICAL:主流厂商跟进 DLSS 5 风格技术"
+      ],
+      "verdict": "TP",
+      "signal_count": 1,
+      "processing_time_ms": 7235,
+      "warnings": []
+    },
+    {
+      "sample_id": "B2D020",
+      "origin_file": null,
+      "expected_class": "noise",
+      "predicted_class": "signal",
+      "expected_labels": [],
+      "predicted_labels": [
+        "SignalType.TECHNICAL:Capcom AI 技术路线表态"
+      ],
+      "verdict": "FP",
+      "signal_count": 1,
+      "processing_time_ms": 8515,
+      "warnings": []
+    },
+    {
+      "sample_id": "B2D022",
+      "origin_file": null,
+      "expected_class": "noise",
+      "predicted_class": "signal",
+      "expected_labels": [],
+      "predicted_labels": [
+        "SignalType.TECHNICAL:Gemini AI 咨询系统集成"
+      ],
+      "verdict": "FP",
+      "signal_count": 1,
+      "processing_time_ms": 11151,
+      "warnings": []
+    },
+    {
+      "sample_id": "B2D028",
+      "origin_file": null,
+      "expected_class": "signal",
+      "predicted_class": "noise",
+      "expected_labels": [
+        "team:None"
+      ],
+      "predicted_labels": [],
+      "verdict": "FN",
+      "signal_count": 0,
+      "processing_time_ms": 1534,
+      "warnings": []
+    }
+  ]
+}

@@ -188,6 +188,10 @@ def run_e2e(case_id: str, raw_text: str, source_type, llm_config_21: dict):
         model=llm_config_21.get("model", "claude-opus-4-6"),
         provider=llm_config_21.get("provider", "anthropic"),
         base_url=llm_config_21.get("base_url", ""),
+        screen_provider=llm_config_21.get("screen_provider"),
+        screen_model=llm_config_21.get("screen_model"),
+        screen_api_key=llm_config_21.get("screen_api_key"),
+        screen_base_url=llm_config_21.get("screen_base_url"),
     )
     req21 = IntelligenceDecodeRequest(
         source_id=case_id,

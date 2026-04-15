@@ -163,6 +163,10 @@ def run_step1(llm_config_21: dict) -> list:
         model=llm_config_21.get("model", "claude-opus-4-6"),
         provider=llm_config_21.get("provider", "anthropic"),
         base_url=llm_config_21.get("base_url", ""),
+        screen_provider=llm_config_21.get("screen_provider"),
+        screen_model=llm_config_21.get("screen_model"),
+        screen_api_key=llm_config_21.get("screen_api_key"),
+        screen_base_url=llm_config_21.get("screen_base_url"),
     )
     all_signals = []
     decode_results = []

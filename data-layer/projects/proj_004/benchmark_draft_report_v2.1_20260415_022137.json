@@ -1,0 +1,106 @@
+{
+  "prompt_version": "v2.1",
+  "run_at": "2026-04-15T02:21:37.380153Z",
+  "benchmark_path": "F:\\AIProjects\\DesignAssistant\\data-layer\\projects\\proj_004\\phase2.1_implementation\\data\\benchmark_samples_batch2_regression_mini.json",
+  "run_mode": "screen_only",
+  "total": 5,
+  "tp": 2,
+  "tn": 0,
+  "fp": 3,
+  "fn": 0,
+  "precision": 0.4,
+  "recall": 1.0,
+  "f1": 0.5714,
+  "accuracy": 0.4,
+  "details": [
+    {
+      "sample_id": "B2D001",
+      "origin_file": null,
+      "expected_class": "noise",
+      "predicted_class": "signal",
+      "expected_labels": [],
+      "predicted_labels": [],
+      "verdict": "FP",
+      "signal_count": 0,
+      "processing_time_ms": 0,
+      "warnings": [],
+      "screen_result": {
+        "has_signal": true,
+        "signal_types": [],
+        "screen_method": "local_rule_pass"
+      }
+    },
+    {
+      "sample_id": "B2D015",
+      "origin_file": null,
+      "expected_class": "signal",
+      "predicted_class": "signal",
+      "expected_labels": [
+        "technical:None"
+      ],
+      "predicted_labels": [],
+      "verdict": "TP",
+      "signal_count": 0,
+      "processing_time_ms": 0,
+      "warnings": [],
+      "screen_result": {
+        "has_signal": true,
+        "signal_types": [],
+        "screen_method": "local_rule_pass"
+      }
+    },
+    {
+      "sample_id": "B2D020",
+      "origin_file": null,
+      "expected_class": "noise",
+      "predicted_class": "signal",
+      "expected_labels": [],
+      "predicted_labels": [],
+      "verdict": "FP",
+      "signal_count": 0,
+      "processing_time_ms": 0,
+      "warnings": [],
+      "screen_result": {
+        "has_signal": true,
+        "signal_types": [],
+        "screen_method": "local_rule_pass"
+      }
+    },
+    {
+      "sample_id": "B2D022",
+      "origin_file": null,
+      "expected_class": "noise",
+      "predicted_class": "signal",
+      "expected_labels": [],
+      "predicted_labels": [],
+      "verdict": "FP",
+      "signal_count": 0,
+      "processing_time_ms": 0,
+      "warnings": [],
+      "screen_result": {
+        "has_signal": true,
+        "signal_types": [],
+        "screen_method": "local_rule_pass"
+      }
+    },
+    {
+      "sample_id": "B2D028",
+      "origin_file": null,
+      "expected_class": "signal",
+      "predicted_class": "signal",
+      "expected_labels": [
+        "team:None"
+      ],
+      "predicted_labels": [],
+      "verdict": "TP",
+      "signal_count": 0,
+      "processing_time_ms": 0,
+      "warnings": [],
+      "screen_result": {
+        "has_signal": true,
+        "signal_types": [],
+        "screen_method": "local_rule_pass"
+      }
+    }
+  ]
+}

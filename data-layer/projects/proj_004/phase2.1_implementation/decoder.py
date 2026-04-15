@@ -177,7 +177,14 @@ class IntelligenceDecoder:
                     )
 
             # [2] 构建 Prompt
-            prompt = build_prompt(cleaned_text, request.source_id)
+            prompt = build_prompt(
+                cleaned_text,
+                request.source_id,
+                title=request.title,
+                source_type=request.source_type.value if hasattr(request.source_type, 'value') else str(request.source_type),
+                source_name=request.source_name,
+                retrieval_context=request.retrieval_context,
+            )
 
             # [3] LLM 调用
             self._debug(f"decode.before_main_llm source_id={request.source_id} model={self.model}")

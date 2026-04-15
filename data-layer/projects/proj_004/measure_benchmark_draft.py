@@ -61,6 +61,8 @@ def main():
                         help="限制样本数量（调试用）")
     parser.add_argument("--verbose", action="store_true",
                         help="输出每条样本的判断详情")
+    parser.add_argument("--screen-only", action="store_true",
+                        help="仅运行粗筛诊断，不调用主精筛模型")
     args = parser.parse_args()
 
     _load_env_file(os.path.join(BASE, '..', '..', '..', '.env'))
@@ -106,6 +108,8 @@ def main():
     print(f"Model: {llm_config.get('model', 'claude-opus-4-6')}")
     print(f"Provider: {llm_config.get('provider', 'anthropic')}")
     print(f"Benchmark: {benchmark_path}")
+    print(f"Run mode: {'screen_only' if args.screen_only else 'full_decode'}")
+    print(f"Screen provider: {llm_config.get('screen_provider') or llm_config.get('provider', 'anthropic')}")
     print(f"\n样本总数: {len(samples)}")
     print(f"{'='*65}")
 
@@ -127,16 +131,26 @@ def main():
                 mode=sample.get("mode", "prompt_first"),
             )
             started = time.time()
-            result = decoder.decode(req)
-            elapsed_ms = int((time.time() - started) * 1000)
-            signals = result.signals
-            predicted_class = classify_predicted(signals)
-            warnings = result.warnings or []
+            screen_result = None
+            if args.screen_only:
+                warnings = []
+                cleaned_text = decoder._preprocess(req.content)
+                screen_result = decoder._screen(cleaned_text, req.source_type, warnings)
+                elapsed_ms = int((time.time() - started) * 1000)
+                signals = []
+                predicted_class = "signal" if screen_result.get("has_signal") else "noise"
+            else:
+                result = decoder.decode(req)
+                elapsed_ms = int((time.time() - started) * 1000)
+                signals = result.signals
+                predicted_class = classify_predicted(signals)
+                warnings = result.warnings or []
         except Exception as e:
             elapsed_ms = 0
             signals = []
             predicted_class = "noise"
             warnings = [f"decode_exception: {e}"]
+            screen_result = None
 
         if expected_class == "signal" and predicted_class == "signal":
             verdict = "TP"
@@ -156,24 +170,47 @@ def main():
             for s in signals
         ]
 
-        results.append({
-            "sample_id": sample.get("sample_id"),
-            "origin_file": (sample.get("draft_meta") or {}).get("origin_file"),
-            "expected_class": expected_class,
-            "predicted_class": predicted_class,
-            "expected_labels": expected_labels,
-            "predicted_labels": predicted_labels,
-            "verdict": verdict,
-            "signal_count": len(signals),
-            "processing_time_ms": elapsed_ms,
-            "warnings": warnings,
-        })
+        if args.screen_only:
+            results.append({
+                "sample_id": sample.get("sample_id"),
+                "origin_file": (sample.get("draft_meta") or {}).get("origin_file"),
+                "expected_class": expected_class,
+                "predicted_class": predicted_class,
+                "expected_labels": expected_labels,
+                "predicted_labels": predicted_labels,
+                "verdict": verdict,
+                "signal_count": len(signals),
+                "processing_time_ms": elapsed_ms,
+                "warnings": warnings,
+                "screen_result": screen_result,
+            })
 
-        icon = "✅" if verdict in ("TP", "TN") else "❌"
-        print(f"  {icon} [{verdict}] GT:{expected_class:<6} Pred:{predicted_class:<6} Signals:{len(signals):<2}  {sample.get('sample_id')}  {sample.get('title')}")
-        if args.verbose and predicted_labels:
-            for label in predicted_labels:
-                print(f"         - {label}")
+            icon = "✅" if verdict in ("TP", "TN") else "❌"
+            print(f"  {icon} [{verdict}] GT:{expected_class:<6} Pred:{predicted_class:<6} Signals:{len(signals):<2}  {sample.get('sample_id')}  {sample.get('title')}")
+            if args.verbose and screen_result:
+                print(f"         screen={screen_result}")
+            if args.verbose and predicted_labels:
+                for label in predicted_labels:
+                    print(f"         - {label}")
+        else:
+            results.append({
+                "sample_id": sample.get("sample_id"),
+                "origin_file": (sample.get("draft_meta") or {}).get("origin_file"),
+                "expected_class": expected_class,
+                "predicted_class": predicted_class,
+                "expected_labels": expected_labels,
+                "predicted_labels": predicted_labels,
+                "verdict": verdict,
+                "signal_count": len(signals),
+                "processing_time_ms": elapsed_ms,
+                "warnings": warnings,
+            })
+
+            icon = "✅" if verdict in ("TP", "TN") else "❌"
+            print(f"  {icon} [{verdict}] GT:{expected_class:<6} Pred:{predicted_class:<6} Signals:{len(signals):<2}  {sample.get('sample_id')}  {sample.get('title')}")
+            if args.verbose and predicted_labels:
+                for label in predicted_labels:
+                    print(f"         - {label}")
 
     tp = sum(1 for r in results if r["verdict"] == "TP")
     tn = sum(1 for r in results if r["verdict"] == "TN")
@@ -198,6 +235,7 @@ def main():
         "prompt_version": m21_prompts.PROMPT_VERSION,
         "run_at": datetime.utcnow().isoformat() + "Z",
         "benchmark_path": benchmark_path,
+        "run_mode": "screen_only" if args.screen_only else "full_decode",
         "total": len(results),
         "tp": tp,
         "tn": tn,

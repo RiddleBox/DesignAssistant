@@ -29,6 +29,10 @@ def build_decoder() -> IntelligenceDecoder:
         model=llm_config.get("model", "claude-opus-4-6"),
         provider=llm_config.get("provider", "anthropic"),
         base_url=llm_config.get("base_url", ""),
+        screen_provider=llm_config.get("screen_provider"),
+        screen_model=llm_config.get("screen_model"),
+        screen_api_key=llm_config.get("screen_api_key"),
+        screen_base_url=llm_config.get("screen_base_url"),
     )
 
 

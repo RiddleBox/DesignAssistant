@@ -199,6 +199,10 @@ def run_step1_decode(samples, llm_config_21):
             connect_timeout_seconds=llm_config_21.get("connect_timeout_seconds", 30),
             read_timeout_seconds=llm_config_21.get("read_timeout_seconds", 180),
             max_retries=llm_config_21.get("max_retries", 3),
+            screen_provider=llm_config_21.get("screen_provider"),
+            screen_model=llm_config_21.get("screen_model"),
+            screen_api_key=llm_config_21.get("screen_api_key"),
+            screen_base_url=llm_config_21.get("screen_base_url"),
         )
         patch_decoder(decoder)
 
