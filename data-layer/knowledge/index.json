@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "lastUpdated": "2026-07-09T11:40:00+08:00",
+  "lastUpdated": "2026-07-09T21:18:00+08:00",
   "knowledge": [
     {
       "id": "know_20260213_001",
@@ -103,6 +103,26 @@
       "keywords": ["游戏设计", "意图复盘", "文明演化", "Roguelite", "事件系统", "瓶颈升级", "身份生成", "失败遗产", "时代Boss"]
     },
     {
+      "id": "know_20260709_civ_roguelite_resource_deepdive",
+      "title": "资源经济深度拆解：文明演化 Roguelite — 73款游戏逐款资源公式卡片集",
+      "category": "最佳实践",
+      "type": "document",
+      "scope": "team",
+      "projectId": null,
+      "projectName": null,
+      "authorId": "system",
+      "authorName": "OpenClaw Research",
+      "createdAt": "2026-07-09T19:12:00+08:00",
+      "updatedAt": "2026-07-09T21:18:00+08:00",
+      "tags": ["游戏设计", "资源公式", "资源收集", "资源消耗", "节奏设计", "深度拆解", "卡片集", "73游戏"],
+      "summary": "73款游戏逐款资源公式深度拆解卡片集。分7个批次：B1非传统短循环(9款)、B2文明身份与路线(10款)、B3少资源高压决策(10款)、B4模拟经营瓶颈升级(12款)、B5卡牌骰子构筑(11款)、B6文明演化神话(12款)、B7叙事策略治理(10款)。每款包含资源类型、收集公式、消耗公式、转化机制、节奏波形和可迁移原则。附73游戏公式×节奏全矩阵终表。",
+      "path": "data-layer/assets/knowledge/practices/civ-roguelite-resource-deepdive/",
+      "referenceCount": 7,
+      "viewCount": 0,
+      "relatedKnowledge": ["know_20260627_civ_roguelite_fun_001", "know_20260709_civ_roguelite_resource_economy"],
+      "keywords": ["资源公式", "资源收集", "资源消耗", "转化机制", "节奏设计", "深度拆解", "73游戏", "卡片集"]
+    },
+    {
       "id": "know_20260709_civ_roguelite_resource_economy",
       "title": "游戏系统意图复盘：文明演化 Roguelite 的资源经济公式与节奏",
       "category": "最佳实践",
@@ -124,16 +144,16 @@
     }
   ],
   "statistics": {
-    "total": 6,
+    "total": 7,
     "byScope": {
-      "team": 6,
+      "team": 7,
       "personal": 0
     },
     "byCategory": {
       "技术方案": 0,
       "业务规范": 0,
       "行业趋势": 0,
-      "最佳实践": 6
+      "最佳实践": 7
     },
     "byProject": {
       "proj_003": 1
