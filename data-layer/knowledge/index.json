@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "lastUpdated": "2026-03-01T01:00:00Z", 
+  "lastUpdated": "2026-07-09T11:40:00+08:00",
   "knowledge": [
     {
       "id": "know_20260213_001",
@@ -55,7 +55,7 @@
       "createdAt": "2026-02-15T10:00:00Z",
       "updatedAt": "2026-02-15T10:00:00Z",
       "tags": ["游戏设计", "案例分析", "迭代开发", "系统演进", "自动化", "生产链", "Factorio"],
-      "summary": "以“旁观者视角”对《Factorio》进行逆向复盘式推演，按迭代顺序解释设计者如何用研究吞吐/资源枯竭/污染压力三条引擎，把系统从手工原型一步步推到可控的复杂工业网络，并用蓝图/统计等工具让复杂变得可操作。",
+      "summary": "以"旁观者视角"对《Factorio》进行逆向复盘式推演，按迭代顺序解释设计者如何用研究吞吐/资源枯竭/污染压力三条引擎，把系统从手工原型一步步推到可控的复杂工业网络，并用蓝图/统计等工具让复杂变得可操作。",
       "path": "data-layer/assets/knowledge/practices/游戏系统设计演进复盘_Factorio复杂系统的诞生.md",
       "referenceCount": 0,
       "viewCount": 0,
@@ -75,25 +75,65 @@
       "createdAt": "2026-03-01T00:00:00Z",
       "updatedAt": "2026-03-01T01:00:00Z",
       "tags": ["游戏设计", "战术射击", "R6S", "Rainbow Six Siege", "设计复盘", "信息博弈", "节奏治理", "拒止", "硬破"],
-      "summary": "以首发干员为锚点，拆解硬破轴、拒止/节奏轴与信息轴如何共同塑造‘从开局到进点’的节奏表，并以星露谷式卡片方式继续整理信息类转折点与治理链路（缺证据处标注INFERENCE/UNKNOWN）。",
+      "summary": "以首发干员为锚点，拆解硬破轴、拒止/节奏轴与信息轴如何共同塑造'从开局到进点'的节奏表，并以星露谷式卡片方式继续整理信息类转折点与治理链路（缺证据处标注INFERENCE/UNKNOWN）。",
       "path": "data-layer/assets/knowledge/practices/游戏系统设计演进复盘_R6围攻硬破-节奏-信息轴_第1-4章.md",
       "referenceCount": 0,
       "viewCount": 0,
       "relatedKnowledge": ["know_20260213_001", "know_20260214_001", "know_20260215_001"],
       "keywords": ["hard breach", "tempo", "information", "execute", "utility", "meta", "governance"]
+    },
+    {
+      "id": "know_20260627_civ_roguelite_fun_001",
+      "title": "游戏系统意图复盘：文明演化 Roguelite 的好玩机制研究",
+      "category": "最佳实践",
+      "type": "document",
+      "scope": "team",
+      "projectId": null,
+      "projectName": null,
+      "authorId": "system",
+      "authorName": "OpenClaw Research",
+      "createdAt": "2026-06-27T21:25:00+08:00",
+      "updatedAt": "2026-06-27T21:25:00+08:00",
+      "tags": ["游戏设计", "意图复盘", "模拟经营", "4X", "Roguelite", "文明演化", "事件系统", "好玩机制"],
+      "summary": "以73款游戏为样本，反推'设计师想解决什么体验问题→用什么机制解→对文明演化Roguelite有什么可迁移原则'。核心发现：好玩来自瓶颈链、身份机、失败遗产、时代Boss和事件作为系统接口，而非内容量。",
+      "path": "data-layer/assets/knowledge/practices/游戏系统意图复盘_文明演化Roguelite好玩机制研究.md",
+      "referenceCount": 0,
+      "viewCount": 0,
+      "relatedKnowledge": ["know_20260709_civ_roguelite_resource_economy"],
+      "keywords": ["游戏设计", "意图复盘", "文明演化", "Roguelite", "事件系统", "瓶颈升级", "身份生成", "失败遗产", "时代Boss"]
+    },
+    {
+      "id": "know_20260709_civ_roguelite_resource_economy",
+      "title": "游戏系统意图复盘：文明演化 Roguelite 的资源经济公式与节奏",
+      "category": "最佳实践",
+      "type": "document",
+      "scope": "team",
+      "projectId": null,
+      "projectName": null,
+      "authorId": "system",
+      "authorName": "OpenClaw Research",
+      "createdAt": "2026-07-09T11:40:00+08:00",
+      "updatedAt": "2026-07-09T11:40:00+08:00",
+      "tags": ["游戏设计", "资源经济", "节奏设计", "模拟经营", "4X", "Roguelite", "文明演化", "公式体系", "数值设计"],
+      "summary": "基于73款游戏的资源系统深度拆解，提取6种资源经济公式模式（行动权/周期审判/瓶颈链/需求驱动/概率塑形/关系网络）和5种节奏原型（脉冲/流动/倒计时/棘轮/呼吸），并给出文明演化Roguelite的双层嵌套节奏设计建议。",
+      "path": "data-layer/assets/knowledge/practices/游戏系统意图复盘_文明演化Roguelite资源经济公式与节奏.md",
+      "referenceCount": 0,
+      "viewCount": 0,
+      "relatedKnowledge": ["know_20260627_civ_roguelite_fun_001"],
+      "keywords": ["资源经济", "公式体系", "节奏设计", "行动权", "瓶颈链", "周期审判", "概率塑形", "关系网络", "文明演化", "数值设计"]
     }
   ],
   "statistics": {
-    "total": 4,
+    "total": 6,
     "byScope": {
-      "team": 4,
+      "team": 6,
       "personal": 0
     },
     "byCategory": {
       "技术方案": 0,
       "业务规范": 0,
       "行业趋势": 0,
-      "最佳实践": 4
+      "最佳实践": 6
     },
     "byProject": {
       "proj_003": 1
