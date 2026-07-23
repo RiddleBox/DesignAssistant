@@ -1,0 +1,191 @@
+# 自然/灵力科技线 — 结构化数据
+# civil-game | timeline: 自然灵力 | stages: 1-3
+
+meta:
+  timeline: "nature_spirit"
+  theme: "自然/灵力"
+  unlock_driver: "random_blueprint"
+  total_stages: 3
+  buildings_per_stage: { fixed: 1, random_candidates: 3, select: 1 }
+
+# ========== STAGE 1: 部落起源 ==========
+stage_1:
+  name: "部落起源"
+  description: "原始部落与自然初识——学会利用灵脉和采集自然馈赠"
+  time_budget_min: 5
+  time_budget_max: 10
+
+  fixed_buildings:
+    - id: "gatherers_hut"
+      name: "采集小屋"
+      function: "生产"
+      ability: "在灵脉附近区域自动收集自然馈赠（果实/草药/水源）"
+      build_time_s: 15
+      prerequisites: []
+      notes: "K-01 不可省略项：基础原料获取"
+
+    - id: "spirit_spring"
+      name: "灵泉"
+      function: "生产"
+      ability: "从灵脉中提取灵能，转化为文明火种能量。火种补充速率: +0.5/分钟"
+      build_time_s: 20
+      prerequisites: []
+      notes: "K-07 火种驱动约束；自然主题的'基础加工'替代"
+
+    - id: "thatched_dwelling"
+      name: "茅草居所"
+      function: "Build"
+      ability: "提供 5 个单位人口的居住空间。居住质量: 基础"
+      build_time_s: 12
+      prerequisites: []
+      notes: "K-01 不可省略项：人口/居住"
+
+    - id: "nature_altar"
+      name: "自然祭坛"
+      function: "通道"
+      ability: "图腾崇拜枢纽——连接自然灵脉网络的初始节点。解锁'通灵仪式'科技线。灵脉范围: 半径20格"
+      build_time_s: 25
+      prerequisites: []
+      notes: "K-01 不可省略项：存储/枢纽的通道替代"
+
+  random_candidates: # 每局随机 3 选 1
+    - id: "herb_garden"
+      name: "药草园"
+      function: "生产"
+      ability: "种植基础草药，提高采集效率 50%。解锁后续'草药学'科技方向"
+      build_time_s: 18
+      prerequisites: ["gatherers_hut"]
+      tier: 1
+
+    - id: "watch_totem"
+      name: "警戒图腾"
+      function: "事件应对"
+      ability: "预警外来威胁——动物迁徙/邻近部落入侵。预警提前: 60秒，火种消耗减免: -20%"
+      build_time_s: 22
+      prerequisites: ["nature_altar"]
+      tier: 1
+
+    - id: "spirit_hut"
+      name: "灵能小屋"
+      function: "科技"
+      ability: "早期灵能研究——研究速度 +30%。解锁科技'元素感应'（感知灵脉位置）"
+      build_time_s: 20
+      prerequisites: ["spirit_spring"]
+      tier: 1
+
+# ========== STAGE 2: 定居聚落 ==========
+stage_2:
+  name: "定居聚落"
+  description: "从游牧转向定居——灵脉网络扩展，系统性祭祀诞生"
+  time_budget_min: 8
+  time_budget_max: 15
+
+  fixed_buildings:
+    - id: "ancestral_totem"
+      name: "祖灵图腾"
+      function: "科技"
+      ability: "文明记忆载体——每局永久记录已解锁科技树。灵脉连接数: +3。解锁 Stage 2 随机候选池"
+      build_time_s: 30
+      prerequisites: ["nature_altar"]
+      notes: "Stage 2 入口建筑——必须先建造才能进入随机蓝图阶段"
+
+  random_candidates:
+    - id: "wind_tower"
+      name: "风语塔"
+      function: "事件应对"
+      ability: "解读自然征兆——预测天气事件（风暴/旱灾/丰年）。预测准确率: 70%。事件影响减免: -30%"
+      build_time_s: 28
+      prerequisites: ["ancestral_totem"]
+      tier: 2
+
+    - id: "spirit_grove"
+      name: "灵木林"
+      function: "生产"
+      ability: "人工培育灵脉植物——灵能产量 +100%。每棵灵木提供: 0.3/分钟火种补充"
+      build_time_s: 35
+      prerequisites: ["spirit_spring"]
+      tier: 2
+
+    - id: "shaman_lodge"
+      name: "萨满小屋"
+      function: "科技"
+      ability: "灵能熟练度提升——研究速度 +50%。解锁科技'灵魂对话'（动物伙伴机制）"
+      build_time_s: 30
+      prerequisites: ["ancestral_totem", "nature_altar"]
+      tier: 2
+
+# ========== STAGE 3: 区域发展 ==========
+stage_3:
+  name: "区域发展"
+  description: "从聚落到区域文明——灵脉网覆盖整片区域，自然之力可被主动操控"
+  time_budget_min: 10
+  time_budget_max: 20
+
+  fixed_buildings:
+    - id: "greater_altar"
+      name: "大祭坛"
+      function: "通道"
+      ability: "灵脉网核心枢纽——灵脉覆盖范围翻倍，所有连接建筑获得: +20%效率。解锁 Stage 3 随机候选池"
+      build_time_s: 45
+      prerequisites: ["ancestral_totem"]
+      notes: "Stage 3 入口建筑"
+
+  random_candidates:
+    - id: "rain_callers_peak"
+      name: "祈雨峰"
+      function: "事件应对"
+      ability: "主动操控天气——消耗灵能触发'及时雨'事件。冷却: 180秒。效果: 所有灵木林产量×3，持续60秒"
+      build_time_s: 40
+      prerequisites: ["greater_altar", "wind_tower"]
+      tier: 3
+
+    - id: "nature_guardian_shrine"
+      name: "自然守护圣殿"
+      function: "Build"
+      ability: "文明中心建筑——提供 15 人口空间。被动: 每 30 秒治愈 1 名受伤居民。解锁后续'大精灵契约'事件链"
+      build_time_s: 50
+      prerequisites: ["greater_altar", "shaman_lodge"]
+      tier: 3
+
+    - id: "spirit_nexus"
+      name: "灵脉枢纽"
+      function: "生产"
+      ability: "终极产能建筑——灵能产量 +200%。火种补充速率: +2/分钟。可连接 5 个灵泉/灵木林形成供应链"
+      build_time_s: 60
+      prerequisites: ["greater_altar", "spirit_grove"]
+      tier: 3
+
+# ========== 全局科技（非建筑） ==========
+technologies:
+  - id: "elemental_sensing"
+    name: "元素感应"
+    effect: "揭示地图上灵脉位置（地图标记）"
+    unlock_stage: 1
+    unlocked_by: "spirit_hut"
+
+  - id: "spirit_speech"
+    name: "灵魂对话"
+    effect: "每阶段获得1个随机动物伙伴（熊/鹰/鹿），提供被动加成"
+    unlock_stage: 2
+    unlocked_by: "shaman_lodge"
+
+  - id: "great_rain_ritual"
+    name: "大祈雨术"
+    effect: "主动技能——消耗 50 灵能触发区域降雨，持续时间延长至 90 秒"
+    unlock_stage: 3
+    unlocked_by: "rain_callers_peak"
+
+# ========== 职能覆盖统计 ==========
+function_coverage:
+  stage_1:
+    buildings: 7
+    functions: ["生产", "事件应对", "Build", "科技", "通道"]
+    coverage: 5/5
+  stage_2:
+    buildings: 4
+    functions: ["事件应对", "生产", "科技"]
+    coverage: 3/5
+  stage_3:
+    buildings: 4
+    functions: ["事件应对", "Build", "生产"]
+    coverage: 3/5
